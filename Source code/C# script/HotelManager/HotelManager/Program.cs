@@ -19,7 +19,8 @@ namespace HotelManager
             //Application.Run(new fAccess());
 
             //Application.Run(new fPrintBill(1,19));
-            Application.Run(new fLogin());
+            //Application.Run(new fLogin());
+            Application.Run(new fManagement("admin"));
         }
     }
 }
