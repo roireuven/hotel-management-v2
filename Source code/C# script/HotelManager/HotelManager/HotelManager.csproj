@@ -33,22 +33,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Bunifu_UI_v1.52">
-      <HintPath>..\..\..\UI for Visual Studio 2017\Bunifu_UI_v1.52.dll</HintPath>
+      <HintPath>..\lib\Bunifu_UI_v1.52.dll</HintPath>
     </Reference>
     <Reference Include="FlashControlV71, Version=1.0.3187.32366, Culture=neutral, PublicKeyToken=692fbea5521e1304">
       <HintPath>..\packages\CrystalReports.FlashControlV71.13.0.3501\lib\net20\FlashControlV71.dll</HintPath>
     </Reference>
     <Reference Include="MaterialSkin">
-      <HintPath>..\..\..\UI for Visual Studio 2017\MaterialSkin.0.2.1\lib\MaterialSkin.dll</HintPath>
+      <HintPath>..\packages\MaterialSkin.0.2.1\lib\MaterialSkin.dll</HintPath>
     </Reference>
     <Reference Include="MetroFramework">
-      <HintPath>..\..\UI\MetroModernUI.1.4.0.0\lib\net\MetroFramework.dll</HintPath>
+      <HintPath>..\packages\MetroModernUI.1.4.0.0\lib\net\MetroFramework.dll</HintPath>
     </Reference>
     <Reference Include="MetroFramework.Design">
-      <HintPath>..\..\UI\MetroModernUI.1.4.0.0\lib\net\MetroFramework.Design.dll</HintPath>
+      <HintPath>..\packages\MetroModernUI.1.4.0.0\lib\net\MetroFramework.Design.dll</HintPath>
     </Reference>
     <Reference Include="MetroFramework.Fonts">
-      <HintPath>..\..\UI\MetroModernUI.1.4.0.0\lib\net\MetroFramework.Fonts.dll</HintPath>
+      <HintPath>..\packages\MetroModernUI.1.4.0.0\lib\net\MetroFramework.Fonts.dll</HintPath>
     </Reference>
     <Reference Include="ShockwaveFlashObjects, Version=1.0.0.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
       <HintPath>..\packages\CrystalReports.FlashControlV71.13.0.3501\lib\net20\ShockwaveFlashObjects.dll</HintPath>
@@ -80,6 +80,7 @@
     <Compile Include="DAO\ParameterDAO.cs" />
     <Compile Include="DAO\ReceiveRoomDAO.cs" />
     <Compile Include="DAO\ReceiveRoomDetailsDAO.cs" />
+    <Compile Include="DAO\ReceiveRoomInfoDAO.cs" />
     <Compile Include="DAO\ReportDAO.cs" />
     <Compile Include="DAO\RoomDAO.cs" />
     <Compile Include="DAO\RoomTypeDAO.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="DTO\Parameter.cs" />
     <Compile Include="DTO\ReceiveRoom.cs" />
     <Compile Include="DTO\ReceiveRoomDetails.cs" />
+    <Compile Include="DTO\ReceiveRoomInfo.cs" />
     <Compile Include="DTO\Room.cs" />
     <Compile Include="DTO\RoomType.cs" />
     <Compile Include="DTO\AccountType.cs" />
@@ -394,33 +396,9 @@
     <None Include="Resources\Room.png" />
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="Microsoft.Office.Core">
-      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
-      <VersionMajor>2</VersionMajor>
-      <VersionMinor>8</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-    <COMReference Include="Microsoft.Office.Interop.Excel">
-      <Guid>{00020813-0000-0000-C000-000000000046}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>9</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-    <COMReference Include="VBIDE">
-      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
-      <VersionMajor>5</VersionMajor>
-      <VersionMinor>3</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
+    <Reference Include="Microsoft.Office.Interop.Excel">
+      <HintPath>..\lib\Microsoft.Office.Interop.Excel.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Procs.sql" />
