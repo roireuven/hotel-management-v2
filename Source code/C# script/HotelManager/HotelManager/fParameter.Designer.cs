@@ -114,7 +114,7 @@
             this.groupBox2.Size = new System.Drawing.Size(220, 141);
             this.groupBox2.TabIndex = 68;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Chức Năng";
+            this.groupBox2.Text = "Actions";
             // 
             // btnCLose1
             // 
@@ -125,7 +125,7 @@
             this.btnCLose1.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnCLose1.BackColor = System.Drawing.Color.White;
             this.btnCLose1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnCLose1.BackgroundImage")));
-            this.btnCLose1.ButtonText = "Đóng";
+            this.btnCLose1.ButtonText = "Close";
             this.btnCLose1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnCLose1.Font = new System.Drawing.Font("Segoe UI", 11.25F);
             this.btnCLose1.ForeColor = System.Drawing.Color.SeaGreen;
@@ -152,7 +152,7 @@
             this.btnUpdate.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnUpdate.BackColor = System.Drawing.Color.White;
             this.btnUpdate.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnUpdate.BackgroundImage")));
-            this.btnUpdate.ButtonText = "Cập Nhật";
+            this.btnUpdate.ButtonText = "Update";
             this.btnUpdate.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnUpdate.Font = new System.Drawing.Font("Segoe UI", 11.25F);
             this.btnUpdate.ForeColor = System.Drawing.Color.SeaGreen;
@@ -181,7 +181,7 @@
             this.groupBox1.Size = new System.Drawing.Size(609, 494);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Danh Sách Qui Định";
+            this.groupBox1.Text = "Rules List";
             // 
             // dataGridViewParameter
             // 
@@ -238,7 +238,7 @@
             // 
             this.colName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.colName.DataPropertyName = "name";
-            this.colName.HeaderText = "Tên";
+            this.colName.HeaderText = "Name";
             this.colName.Name = "colName";
             this.colName.ReadOnly = true;
             this.colName.Width = 58;
@@ -247,7 +247,7 @@
             // 
             this.colValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.colValue.DataPropertyName = "value";
-            this.colValue.HeaderText = "Giá trị";
+            this.colValue.HeaderText = "Value";
             this.colValue.Name = "colValue";
             this.colValue.ReadOnly = true;
             this.colValue.Width = 77;
@@ -256,7 +256,7 @@
             // 
             this.colDescribe.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.colDescribe.DataPropertyName = "describe";
-            this.colDescribe.HeaderText = "Miêu tả";
+            this.colDescribe.HeaderText = "Description";
             this.colDescribe.Name = "colDescribe";
             this.colDescribe.ReadOnly = true;
             this.colDescribe.Width = 87;
@@ -265,7 +265,7 @@
             // 
             this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.Column1.DataPropertyName = "datemodify";
-            this.Column1.HeaderText = "Ngày cập nhật";
+            this.Column1.HeaderText = "Last Updated";
             this.Column1.Name = "Column1";
             this.Column1.ReadOnly = true;
             // 
@@ -373,7 +373,7 @@
             this.toolStripLabel1.AutoSize = false;
             this.toolStripLabel1.Name = "toolStripLabel1";
             this.toolStripLabel1.Size = new System.Drawing.Size(40, 22);
-            this.toolStripLabel1.Text = "Xuất";
+            this.toolStripLabel1.Text = "Export";
             this.toolStripLabel1.Click += new System.EventHandler(this.ToolStripLabel1_Click);
             // 
             // groupBox3
@@ -389,7 +389,7 @@
             this.groupBox3.Size = new System.Drawing.Size(220, 140);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Tìm kiếm";
+            this.groupBox3.Text = "Search";
             // 
             // btnSearch
             // 
@@ -400,7 +400,7 @@
             this.btnSearch.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnSearch.BackColor = System.Drawing.Color.White;
             this.btnSearch.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnSearch.BackgroundImage")));
-            this.btnSearch.ButtonText = "Tìm Kiếm";
+            this.btnSearch.ButtonText = "Search";
             this.btnSearch.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnSearch.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSearch.ForeColor = System.Drawing.Color.SeaGreen;
@@ -444,7 +444,7 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(35, 20);
             this.label5.TabIndex = 28;
-            this.label5.Text = "Tên:";
+            this.label5.Text = "Name:";
             // 
             // btnCancel
             // 
@@ -455,7 +455,7 @@
             this.btnCancel.ActiveLineColor = System.Drawing.Color.Red;
             this.btnCancel.BackColor = System.Drawing.Color.White;
             this.btnCancel.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnCancel.BackgroundImage")));
-            this.btnCancel.ButtonText = "Huỷ Tìm";
+            this.btnCancel.ButtonText = "Clear Search";
             this.btnCancel.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnCancel.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCancel.ForeColor = System.Drawing.Color.SeaGreen;
@@ -489,7 +489,7 @@
             this.groupParameter.Size = new System.Drawing.Size(220, 209);
             this.groupParameter.TabIndex = 1;
             this.groupParameter.TabStop = false;
-            this.groupParameter.Text = "Thông tin qui định";
+            this.groupParameter.Text = "Rule Information";
             // 
             // comboboxName
             // 
@@ -511,7 +511,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(62, 20);
             this.label2.TabIndex = 26;
-            this.label2.Text = "Miêu tả:";
+            this.label2.Text = "Description:";
             // 
             // txbDescribe
             // 
@@ -539,7 +539,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(52, 20);
             this.label1.TabIndex = 24;
-            this.label1.Text = "Giá trị:";
+            this.label1.Text = "Value:";
             // 
             // txbValue
             // 
@@ -568,7 +568,7 @@
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(35, 20);
             this.label16.TabIndex = 22;
-            this.label16.Text = "Tên:";
+            this.label16.Text = "Name:";
             // 
             // labelName
             // 
@@ -580,7 +580,7 @@
             this.labelName.Name = "labelName";
             this.labelName.Size = new System.Drawing.Size(122, 37);
             this.labelName.TabIndex = 63;
-            this.labelName.Text = "Qui Định";
+            this.labelName.Text = "Rules";
             this.labelName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // bunifuSeparator1
@@ -598,7 +598,7 @@
             // 
             // saveParameter
             // 
-            this.saveParameter.FileName = "Danh sách phụ thu";
+            this.saveParameter.FileName = "Rules List";
             this.saveParameter.Filter = "Excel File(*.xls)|*.xls|Excel File (*.xlsx) |.xlsx|PDF File(*.pdf)|*.pdf";
             // 
             // fParameter

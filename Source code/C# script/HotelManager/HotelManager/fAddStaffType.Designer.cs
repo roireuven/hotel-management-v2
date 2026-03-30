@@ -76,7 +76,7 @@
             this.bunifuThinButton25.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bunifuThinButton25.BackColor = System.Drawing.Color.White;
             this.bunifuThinButton25.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("bunifuThinButton25.BackgroundImage")));
-            this.bunifuThinButton25.ButtonText = "Đóng";
+            this.bunifuThinButton25.ButtonText = "Close";
             this.bunifuThinButton25.Cursor = System.Windows.Forms.Cursors.Hand;
             this.bunifuThinButton25.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bunifuThinButton25.ForeColor = System.Drawing.Color.SeaGreen;
@@ -103,7 +103,7 @@
             this.btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btn.BackColor = System.Drawing.Color.White;
             this.btn.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btn.BackgroundImage")));
-            this.btn.ButtonText = "Cập Nhật";
+            this.btn.ButtonText = "Update";
             this.btn.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btn.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn.ForeColor = System.Drawing.Color.SeaGreen;
@@ -147,7 +147,7 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(131, 20);
             this.label5.TabIndex = 58;
-            this.label5.Text = "Tên loại nhân viên:";
+            this.label5.Text = "Staff Type Name:";
             // 
             // groupBox3
             // 
@@ -160,7 +160,7 @@
             this.groupBox3.Size = new System.Drawing.Size(380, 69);
             this.groupBox3.TabIndex = 68;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Loại Nhân Viên";
+            this.groupBox3.Text = "Staff Type";
             // 
             // title
             // 
@@ -171,7 +171,7 @@
             this.title.Name = "title";
             this.title.Size = new System.Drawing.Size(271, 37);
             this.title.TabIndex = 69;
-            this.title.Text = "Thêm Loại Nhân Viên";
+            this.title.Text = "Add Staff Type";
             // 
             // groupBox1
             // 
@@ -184,7 +184,7 @@
             this.groupBox1.Size = new System.Drawing.Size(380, 69);
             this.groupBox1.TabIndex = 70;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Chức Năng";
+            this.groupBox1.Text = "Actions";
             // 
             // fAddStaffType
             // 

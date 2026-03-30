@@ -98,7 +98,7 @@
             this.groupBox3.Size = new System.Drawing.Size(840, 69);
             this.groupBox3.TabIndex = 74;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Chức năng";
+            this.groupBox3.Text = "Actions";
             // 
             // label1
             // 
@@ -109,7 +109,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(53, 20);
             this.label1.TabIndex = 65;
-            this.label1.Text = "Tháng:";
+            this.label1.Text = "Month:";
             // 
             // btnSearch
             // 
@@ -120,7 +120,7 @@
             this.btnSearch.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnSearch.BackColor = System.Drawing.Color.White;
             this.btnSearch.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnSearch.BackgroundImage")));
-            this.btnSearch.ButtonText = "Xem Kết Quả";
+            this.btnSearch.ButtonText = "View Results";
             this.btnSearch.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnSearch.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSearch.ForeColor = System.Drawing.Color.SeaGreen;
@@ -201,13 +201,13 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(44, 20);
             this.label2.TabIndex = 66;
-            this.label2.Text = "Năm:";
+            this.label2.Text = "Year:";
             // 
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
             this.toolStripLabel1.Size = new System.Drawing.Size(31, 40);
-            this.toolStripLabel1.Text = "Xuất";
+            this.toolStripLabel1.Text = "Export";
             this.toolStripLabel1.Click += new System.EventHandler(this.ToolStripLabel1_Click);
             // 
             // bindingNavigatorSeparator2
@@ -269,7 +269,7 @@
             title2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             title2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             title2.Name = "Title1";
-            title2.Text = "Tỉ lệ doanh thu theo loại phòng";
+            title2.Text = "Revenue Share by Room Type";
             this.chartReport.Titles.Add(title2);
             // 
             // bindingNavigatorPositionItem
@@ -399,7 +399,7 @@
             // 
             this.colId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.colId.DataPropertyName = "name";
-            this.colId.HeaderText = "Tên Loại Phòng";
+            this.colId.HeaderText = "Room Type Name";
             this.colId.Name = "colId";
             this.colId.ReadOnly = true;
             this.colId.Width = 122;
@@ -408,7 +408,7 @@
             // 
             this.col.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.col.DataPropertyName = "rate_new";
-            this.col.HeaderText = "Tỷ lệ";
+            this.col.HeaderText = "Share";
             this.col.Name = "col";
             this.col.ReadOnly = true;
             this.col.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
@@ -418,7 +418,7 @@
             // 
             this.colRevenue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.colRevenue.DataPropertyName = "value";
-            this.colRevenue.HeaderText = "Doanh Thu";
+            this.colRevenue.HeaderText = "Revenue";
             this.colRevenue.Name = "colRevenue";
             this.colRevenue.ReadOnly = true;
             this.colRevenue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
@@ -467,7 +467,7 @@
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(253, 37);
             this.label6.TabIndex = 71;
-            this.label6.Text = "Báo Cáo Doanh Thu";
+            this.label6.Text = "Revenue Report";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btnClose
@@ -498,7 +498,7 @@
             this.bunifuThinButton21.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.bunifuThinButton21.BackColor = System.Drawing.Color.White;
             this.bunifuThinButton21.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("bunifuThinButton21.BackgroundImage")));
-            this.bunifuThinButton21.ButtonText = "Đóng";
+            this.bunifuThinButton21.ButtonText = "Close";
             this.bunifuThinButton21.Cursor = System.Windows.Forms.Cursors.Hand;
             this.bunifuThinButton21.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bunifuThinButton21.ForeColor = System.Drawing.Color.SeaGreen;

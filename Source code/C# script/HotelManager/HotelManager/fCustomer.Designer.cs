@@ -135,7 +135,7 @@
             this.groupCustomer.Size = new System.Drawing.Size(414, 314);
             this.groupCustomer.TabIndex = 1;
             this.groupCustomer.TabStop = false;
-            this.groupCustomer.Text = "Thông tin khách hàng";
+            this.groupCustomer.Text = "Customer Information";
             // 
             // txbNationality
             // 
@@ -144,23 +144,23 @@
             this.txbNationality.FormattingEnabled = true;
             this.txbNationality.ItemHeight = 23;
             this.txbNationality.Items.AddRange(new object[] {
-            "Việt Nam",
-            "Trung Quốc",
-            "Hàn Quốc",
-            "Nhật Bản",
-            "Đài Loan",
+            "Vietnam",
+            "China",
+            "South Korea",
+            "Japan",
+            "Taiwan",
             "Malaysia",
-            "Thái Lan",
+            "Thailand",
             "Singapore",
-            "Nga",
-            "Anh",
-            "Pháp",
-            "Đức",
-            "Hoa Kỳ",
-            "Hà Lan",
-            "Tây Ban Nha",
-            "Ý",
-            "Khác"});
+            "Russia",
+            "United Kingdom",
+            "France",
+            "Germany",
+            "United States",
+            "Netherlands",
+            "Spain",
+            "Italy",
+            "Other"});
             this.txbNationality.Location = new System.Drawing.Point(216, 211);
             this.txbNationality.Name = "txbNationality";
             this.txbNationality.Size = new System.Drawing.Size(179, 29);
@@ -180,7 +180,7 @@
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(100, 20);
             this.label14.TabIndex = 55;
-            this.label14.Text = "Số điện thoại:";
+            this.label14.Text = "Phone Number:";
             // 
             // txbAddress
             // 
@@ -226,7 +226,7 @@
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(58, 20);
             this.label11.TabIndex = 57;
-            this.label11.Text = "Địa chỉ:";
+            this.label11.Text = "Address:";
             // 
             // label12
             // 
@@ -237,7 +237,7 @@
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(75, 20);
             this.label12.TabIndex = 56;
-            this.label12.Text = "Quốc tịch:";
+            this.label12.Text = "Nationality:";
             // 
             // comboBoxSex
             // 
@@ -247,9 +247,9 @@
             this.comboBoxSex.FormattingEnabled = true;
             this.comboBoxSex.ItemHeight = 23;
             this.comboBoxSex.Items.AddRange(new object[] {
-            "Nam",
-            "Nữ",
-            "Khác"});
+            "Male",
+            "Female",
+            "Other"});
             this.comboBoxSex.Location = new System.Drawing.Point(12, 267);
             this.comboBoxSex.Name = "comboBoxSex";
             this.comboBoxSex.Size = new System.Drawing.Size(175, 29);
@@ -297,7 +297,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(112, 20);
             this.label2.TabIndex = 51;
-            this.label2.Text = "Mã khách hàng:";
+            this.label2.Text = "Customer ID:";
             // 
             // txbFullName
             // 
@@ -342,7 +342,7 @@
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(68, 20);
             this.label13.TabIndex = 28;
-            this.label13.Text = "Giới tính:";
+            this.label13.Text = "Gender:";
             // 
             // label20
             // 
@@ -353,7 +353,7 @@
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(119, 20);
             this.label20.TabIndex = 41;
-            this.label20.Text = "Loại khách hàng:";
+            this.label20.Text = "Customer Type:";
             // 
             // label15
             // 
@@ -364,7 +364,7 @@
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(77, 20);
             this.label15.TabIndex = 24;
-            this.label15.Text = "Số CMND:";
+            this.label15.Text = "ID Card:";
             // 
             // label1
             // 
@@ -375,7 +375,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(77, 20);
             this.label1.TabIndex = 49;
-            this.label1.Text = "Ngày sinh:";
+            this.label1.Text = "Date of Birth:";
             // 
             // txbIDCard
             // 
@@ -405,7 +405,7 @@
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(76, 20);
             this.label16.TabIndex = 22;
-            this.label16.Text = "Họ và tên:";
+            this.label16.Text = "Full Name:";
             // 
             // dataGridViewCustomer
             // 
@@ -472,7 +472,7 @@
             // 
             this.colID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.colID.DataPropertyName = "id";
-            this.colID.HeaderText = "Mã";
+            this.colID.HeaderText = "ID";
             this.colID.Name = "colID";
             this.colID.ReadOnly = true;
             this.colID.Width = 57;
@@ -481,7 +481,7 @@
             // 
             this.colNameCustomer.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.colNameCustomer.DataPropertyName = "Name";
-            this.colNameCustomer.HeaderText = "Tên";
+            this.colNameCustomer.HeaderText = "Name";
             this.colNameCustomer.Name = "colNameCustomer";
             this.colNameCustomer.ReadOnly = true;
             this.colNameCustomer.Width = 58;
@@ -490,7 +490,7 @@
             // 
             this.colIDCard.DataPropertyName = "idcard";
             this.colIDCard.FillWeight = 90F;
-            this.colIDCard.HeaderText = "Số CMND";
+            this.colIDCard.HeaderText = "ID Card";
             this.colIDCard.Name = "colIDCard";
             this.colIDCard.ReadOnly = true;
             this.colIDCard.Width = 90;
@@ -499,7 +499,7 @@
             // 
             this.colNameCustomerType.DataPropertyName = "NameCustomerType";
             this.colNameCustomerType.FillWeight = 70F;
-            this.colNameCustomerType.HeaderText = "Loại";
+            this.colNameCustomerType.HeaderText = "Type";
             this.colNameCustomerType.Name = "colNameCustomerType";
             this.colNameCustomerType.ReadOnly = true;
             this.colNameCustomerType.Width = 70;
@@ -508,7 +508,7 @@
             // 
             this.colSex.DataPropertyName = "sex";
             this.colSex.FillWeight = 85F;
-            this.colSex.HeaderText = "Giới Tính";
+            this.colSex.HeaderText = "Gender";
             this.colSex.Name = "colSex";
             this.colSex.ReadOnly = true;
             this.colSex.Visible = false;
@@ -518,7 +518,7 @@
             // 
             this.colDateOfBirth.DataPropertyName = "dateofbirth";
             this.colDateOfBirth.FillWeight = 90F;
-            this.colDateOfBirth.HeaderText = "Ngày Sinh";
+            this.colDateOfBirth.HeaderText = "Date of Birth";
             this.colDateOfBirth.Name = "colDateOfBirth";
             this.colDateOfBirth.ReadOnly = true;
             this.colDateOfBirth.Visible = false;
@@ -527,7 +527,7 @@
             // colPhone
             // 
             this.colPhone.DataPropertyName = "phoneNumber";
-            this.colPhone.HeaderText = "SĐT";
+            this.colPhone.HeaderText = "Phone";
             this.colPhone.Name = "colPhone";
             this.colPhone.ReadOnly = true;
             // 
@@ -535,7 +535,7 @@
             // 
             this.colAddress.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.colAddress.DataPropertyName = "address";
-            this.colAddress.HeaderText = "Địa Chỉ";
+            this.colAddress.HeaderText = "Address";
             this.colAddress.Name = "colAddress";
             this.colAddress.ReadOnly = true;
             // 
@@ -543,7 +543,7 @@
             // 
             this.colNationality.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.colNationality.DataPropertyName = "nationality";
-            this.colNationality.HeaderText = "Quốc Tịch";
+            this.colNationality.HeaderText = "Nationality";
             this.colNationality.Name = "colNationality";
             this.colNationality.ReadOnly = true;
             this.colNationality.Width = 104;
@@ -567,7 +567,7 @@
             this.groupBox1.Size = new System.Drawing.Size(659, 555);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Danh Sách Khách Hàng";
+            this.groupBox1.Text = "Customer List";
             // 
             // bindingCustomer
             // 
@@ -575,7 +575,7 @@
             this.bindingCustomer.AutoSize = false;
             this.bindingCustomer.BackColor = System.Drawing.Color.Transparent;
             this.bindingCustomer.CountItem = this.bindingNavigatorCountItem;
-            this.bindingCustomer.CountItemFormat = "của {0}";
+            this.bindingCustomer.CountItemFormat = "of {0}";
             this.bindingCustomer.DeleteItem = null;
             this.bindingCustomer.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bindingCustomer.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
@@ -604,8 +604,8 @@
             // 
             this.bindingNavigatorCountItem.Name = "bindingNavigatorCountItem";
             this.bindingNavigatorCountItem.Size = new System.Drawing.Size(47, 40);
-            this.bindingNavigatorCountItem.Text = "của {0}";
-            this.bindingNavigatorCountItem.ToolTipText = "Tổng số khách hàng";
+            this.bindingNavigatorCountItem.Text = "of {0}";
+            this.bindingNavigatorCountItem.ToolTipText = "Total number of customers";
             // 
             // bindingNavigatorMoveFirstItem
             // 
@@ -616,7 +616,7 @@
             this.bindingNavigatorMoveFirstItem.RightToLeftAutoMirrorImage = true;
             this.bindingNavigatorMoveFirstItem.Size = new System.Drawing.Size(50, 22);
             this.bindingNavigatorMoveFirstItem.Text = "Move first";
-            this.bindingNavigatorMoveFirstItem.ToolTipText = "Khách hàng đầu tiên";
+            this.bindingNavigatorMoveFirstItem.ToolTipText = "First customer";
             // 
             // bindingNavigatorMovePreviousItem
             // 
@@ -627,7 +627,7 @@
             this.bindingNavigatorMovePreviousItem.RightToLeftAutoMirrorImage = true;
             this.bindingNavigatorMovePreviousItem.Size = new System.Drawing.Size(50, 22);
             this.bindingNavigatorMovePreviousItem.Text = "Move previous";
-            this.bindingNavigatorMovePreviousItem.ToolTipText = "Khách hàng trước đó";
+            this.bindingNavigatorMovePreviousItem.ToolTipText = "Previous customer";
             // 
             // bindingNavigatorSeparator
             // 
@@ -641,7 +641,7 @@
             this.bindingNavigatorPositionItem.Name = "bindingNavigatorPositionItem";
             this.bindingNavigatorPositionItem.Size = new System.Drawing.Size(50, 25);
             this.bindingNavigatorPositionItem.Text = "0";
-            this.bindingNavigatorPositionItem.ToolTipText = "Vị trí khách hàng";
+            this.bindingNavigatorPositionItem.ToolTipText = "Customer position";
             // 
             // bindingNavigatorSeparator1
             // 
@@ -657,7 +657,7 @@
             this.bindingNavigatorMoveNextItem.RightToLeftAutoMirrorImage = true;
             this.bindingNavigatorMoveNextItem.Size = new System.Drawing.Size(50, 22);
             this.bindingNavigatorMoveNextItem.Text = "Move next";
-            this.bindingNavigatorMoveNextItem.ToolTipText = "Khách hàng kế tiếp";
+            this.bindingNavigatorMoveNextItem.ToolTipText = "Next customer";
             // 
             // bindingNavigatorMoveLastItem
             // 
@@ -668,14 +668,14 @@
             this.bindingNavigatorMoveLastItem.RightToLeftAutoMirrorImage = true;
             this.bindingNavigatorMoveLastItem.Size = new System.Drawing.Size(50, 22);
             this.bindingNavigatorMoveLastItem.Text = "Move last";
-            this.bindingNavigatorMoveLastItem.ToolTipText = "Khách hàng cuối cùng";
+            this.bindingNavigatorMoveLastItem.ToolTipText = "Last customer";
             // 
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
             this.toolStripLabel1.Size = new System.Drawing.Size(34, 40);
-            this.toolStripLabel1.Text = "Xuất";
-            this.toolStripLabel1.ToolTipText = "Xuất";
+            this.toolStripLabel1.Text = "Export";
+            this.toolStripLabel1.ToolTipText = "Export";
             this.toolStripLabel1.Click += new System.EventHandler(this.ToolStripLabel1_Click);
             // 
             // groupBox3
@@ -692,7 +692,7 @@
             this.groupBox3.Size = new System.Drawing.Size(414, 115);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Tìm kiếm";
+            this.groupBox3.Text = "Search";
             // 
             // cbCustomerSearch
             // 
@@ -701,10 +701,10 @@
             this.cbCustomerSearch.FormattingEnabled = true;
             this.cbCustomerSearch.ItemHeight = 23;
             this.cbCustomerSearch.Items.AddRange(new object[] {
-            "Mã khách hàng",
-            "Tên khách hàng",
-            "Số CMND",
-            "Số điện thoại"});
+            "Customer ID",
+            "Customer Name",
+            "ID Card",
+            "Phone Number"});
             this.cbCustomerSearch.Location = new System.Drawing.Point(16, 68);
             this.cbCustomerSearch.Name = "cbCustomerSearch";
             this.cbCustomerSearch.Size = new System.Drawing.Size(175, 29);
@@ -740,7 +740,7 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(132, 26);
             this.label5.TabIndex = 28;
-            this.label5.Text = "Tìm kiếm theo:";
+            this.label5.Text = "Search by:";
             // 
             // btnSearch
             // 
@@ -751,7 +751,7 @@
             this.btnSearch.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnSearch.BackColor = System.Drawing.Color.White;
             this.btnSearch.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnSearch.BackgroundImage")));
-            this.btnSearch.ButtonText = "Tìm Kiếm";
+            this.btnSearch.ButtonText = "Search";
             this.btnSearch.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnSearch.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSearch.ForeColor = System.Drawing.Color.SeaGreen;
@@ -777,7 +777,7 @@
             this.btnCancel.ActiveLineColor = System.Drawing.Color.Red;
             this.btnCancel.BackColor = System.Drawing.Color.White;
             this.btnCancel.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnCancel.BackgroundImage")));
-            this.btnCancel.ButtonText = "Huỷ Tìm";
+            this.btnCancel.ButtonText = "Clear Search";
             this.btnCancel.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnCancel.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCancel.ForeColor = System.Drawing.Color.SeaGreen;
@@ -797,7 +797,7 @@
             // 
             // SaveCustomer
             // 
-            this.SaveCustomer.FileName = "Danh Sách Khách hàng";
+            this.SaveCustomer.FileName = "Customer List";
             this.SaveCustomer.Filter = "Excel File(*.xls)|*.xls|Excel File (*.xlsx) |.xlsx|PDF File(*.pdf)|*.pdf";
             // 
             // groupBox2
@@ -813,7 +813,7 @@
             this.groupBox2.Size = new System.Drawing.Size(414, 118);
             this.groupBox2.TabIndex = 36;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Chức Năng";
+            this.groupBox2.Text = "Actions";
             // 
             // btnClose1
             // 
@@ -824,7 +824,7 @@
             this.btnClose1.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnClose1.BackColor = System.Drawing.Color.White;
             this.btnClose1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnClose1.BackgroundImage")));
-            this.btnClose1.ButtonText = "Đóng";
+            this.btnClose1.ButtonText = "Close";
             this.btnClose1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnClose1.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnClose1.ForeColor = System.Drawing.Color.SeaGreen;
@@ -851,7 +851,7 @@
             this.btnUpdate.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnUpdate.BackColor = System.Drawing.Color.White;
             this.btnUpdate.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnUpdate.BackgroundImage")));
-            this.btnUpdate.ButtonText = "Cập Nhật";
+            this.btnUpdate.ButtonText = "Update";
             this.btnUpdate.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnUpdate.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnUpdate.ForeColor = System.Drawing.Color.SeaGreen;
@@ -878,7 +878,7 @@
             this.btnAddCustomer.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnAddCustomer.BackColor = System.Drawing.Color.White;
             this.btnAddCustomer.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnAddCustomer.BackgroundImage")));
-            this.btnAddCustomer.ButtonText = "Thêm";
+            this.btnAddCustomer.ButtonText = "Add";
             this.btnAddCustomer.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnAddCustomer.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAddCustomer.ForeColor = System.Drawing.Color.SeaGreen;
@@ -906,7 +906,7 @@
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(258, 37);
             this.label6.TabIndex = 42;
-            this.label6.Text = "Quản Lí Khách Hàng";
+            this.label6.Text = "Customer Management";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // bunifuSeparator1

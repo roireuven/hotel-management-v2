@@ -111,7 +111,7 @@
             this.groupBox3.Size = new System.Drawing.Size(444, 94);
             this.groupBox3.TabIndex = 32;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Tìm kiếm";
+            this.groupBox3.Text = "Search";
             // 
             // btnSearch
             // 
@@ -122,7 +122,7 @@
             this.btnSearch.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnSearch.BackColor = System.Drawing.Color.White;
             this.btnSearch.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnSearch.BackgroundImage")));
-            this.btnSearch.ButtonText = "Tìm Kiếm";
+            this.btnSearch.ButtonText = "Search";
             this.btnSearch.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnSearch.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSearch.ForeColor = System.Drawing.Color.SeaGreen;
@@ -148,7 +148,7 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(113, 20);
             this.label5.TabIndex = 28;
-            this.label5.Text = "Mã/ Tên phòng:";
+            this.label5.Text = "Room ID / Name:";
             // 
             // txbSearch
             // 
@@ -177,7 +177,7 @@
             this.btnCancel.ActiveLineColor = System.Drawing.Color.Red;
             this.btnCancel.BackColor = System.Drawing.Color.White;
             this.btnCancel.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnCancel.BackgroundImage")));
-            this.btnCancel.ButtonText = "Huỷ Tìm";
+            this.btnCancel.ButtonText = "Clear Search";
             this.btnCancel.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnCancel.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCancel.ForeColor = System.Drawing.Color.SeaGreen;
@@ -217,7 +217,7 @@
             this.groupRoom.Size = new System.Drawing.Size(444, 199);
             this.groupRoom.TabIndex = 33;
             this.groupRoom.TabStop = false;
-            this.groupRoom.Text = "Thông tin phòng";
+            this.groupRoom.Text = "Room Information";
             // 
             // comboboxID
             // 
@@ -239,7 +239,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(115, 20);
             this.label2.TabIndex = 45;
-            this.label2.Text = "Số người tối đa:";
+            this.label2.Text = "Maximum guests:";
             // 
             // label16
             // 
@@ -250,7 +250,7 @@
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(80, 20);
             this.label16.TabIndex = 22;
-            this.label16.Text = "Mã phòng:";
+            this.label16.Text = "Room ID:";
             // 
             // label20
             // 
@@ -261,7 +261,7 @@
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(86, 20);
             this.label20.TabIndex = 41;
-            this.label20.Text = "Loại Phòng:";
+            this.label20.Text = "Room Type:";
             // 
             // txbLimitPerson
             // 
@@ -291,7 +291,7 @@
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(81, 20);
             this.label13.TabIndex = 28;
-            this.label13.Text = "Trạng Thái:";
+            this.label13.Text = "Status:";
             // 
             // label15
             // 
@@ -302,7 +302,7 @@
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(81, 20);
             this.label15.TabIndex = 24;
-            this.label15.Text = "Tên Phòng:";
+            this.label15.Text = "Room Name:";
             // 
             // label1
             // 
@@ -313,7 +313,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(81, 20);
             this.label1.TabIndex = 43;
-            this.label1.Text = "Giá phòng:";
+            this.label1.Text = "Room rate:";
             // 
             // comboBoxStatusRoom
             // 
@@ -399,7 +399,7 @@
             this.groupBox1.Size = new System.Drawing.Size(652, 435);
             this.groupBox1.TabIndex = 34;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Danh Sách Phòng";
+            this.groupBox1.Text = "Room List";
             // 
             // dataGridViewRoom
             // 
@@ -461,7 +461,7 @@
             this.colIDRoom.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.colIDRoom.DataPropertyName = "id";
             this.colIDRoom.FillWeight = 90F;
-            this.colIDRoom.HeaderText = "Mã";
+            this.colIDRoom.HeaderText = "ID";
             this.colIDRoom.Name = "colIDRoom";
             this.colIDRoom.ReadOnly = true;
             this.colIDRoom.Width = 57;
@@ -470,7 +470,7 @@
             // 
             this.colName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.colName.DataPropertyName = "name";
-            this.colName.HeaderText = "Tên";
+            this.colName.HeaderText = "Name";
             this.colName.Name = "colName";
             this.colName.ReadOnly = true;
             this.colName.Width = 58;
@@ -479,7 +479,7 @@
             // 
             this.colNameRoomType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.colNameRoomType.DataPropertyName = "nameRoomType";
-            this.colNameRoomType.HeaderText = "Loại Phòng";
+            this.colNameRoomType.HeaderText = "Room Type";
             this.colNameRoomType.Name = "colNameRoomType";
             this.colNameRoomType.ReadOnly = true;
             this.colNameRoomType.Width = 113;
@@ -488,7 +488,7 @@
             // 
             this.colPrice.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.colPrice.DataPropertyName = "price_New";
-            this.colPrice.HeaderText = "Giá";
+            this.colPrice.HeaderText = "Price";
             this.colPrice.Name = "colPrice";
             this.colPrice.ReadOnly = true;
             this.colPrice.Width = 58;
@@ -497,7 +497,7 @@
             // 
             this.colLimitPerson.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.colLimitPerson.DataPropertyName = "limitPerson";
-            this.colLimitPerson.HeaderText = "Số người tối đa";
+            this.colLimitPerson.HeaderText = "Max Guests";
             this.colLimitPerson.Name = "colLimitPerson";
             this.colLimitPerson.ReadOnly = true;
             this.colLimitPerson.Width = 141;
@@ -506,7 +506,7 @@
             // 
             this.colStatus.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.colStatus.DataPropertyName = "nameStatusRoom";
-            this.colStatus.HeaderText = "Trạng Thái";
+            this.colStatus.HeaderText = "Status";
             this.colStatus.Name = "colStatus";
             this.colStatus.ReadOnly = true;
             // 
@@ -532,7 +532,7 @@
             this.bindingRoom.AutoSize = false;
             this.bindingRoom.BackColor = System.Drawing.Color.Transparent;
             this.bindingRoom.CountItem = this.bindingNavigatorCountItem;
-            this.bindingRoom.CountItemFormat = "của {0}";
+            this.bindingRoom.CountItemFormat = "of {0}";
             this.bindingRoom.DeleteItem = null;
             this.bindingRoom.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bindingRoom.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
@@ -561,7 +561,7 @@
             // 
             this.bindingNavigatorCountItem.Name = "bindingNavigatorCountItem";
             this.bindingNavigatorCountItem.Size = new System.Drawing.Size(47, 40);
-            this.bindingNavigatorCountItem.Text = "của {0}";
+            this.bindingNavigatorCountItem.Text = "of {0}";
             this.bindingNavigatorCountItem.ToolTipText = "Total number of items";
             // 
             // bindingNavigatorMoveFirstItem
@@ -627,7 +627,7 @@
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
             this.toolStripLabel1.Size = new System.Drawing.Size(34, 40);
-            this.toolStripLabel1.Text = "Xuất";
+            this.toolStripLabel1.Text = "Export";
             this.toolStripLabel1.Click += new System.EventHandler(this.ToolStripLabel1_Click);
             // 
             // labelName
@@ -640,7 +640,7 @@
             this.labelName.Name = "labelName";
             this.labelName.Size = new System.Drawing.Size(192, 37);
             this.labelName.TabIndex = 50;
-            this.labelName.Text = "Quản Lí Phòng";
+            this.labelName.Text = "Room Management";
             this.labelName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // bunifuSeparator1
@@ -657,7 +657,7 @@
             // 
             // saveRoom
             // 
-            this.saveRoom.FileName = "Danh sách Phòng";
+            this.saveRoom.FileName = "Room List";
             this.saveRoom.Filter = "Excel File(*.xls)|*.xls|Excel File (*.xlsx) |.xlsx|PDF File(*.pdf)|*.pdf";
             // 
             // groupBox4
@@ -674,7 +674,7 @@
             this.groupBox4.Size = new System.Drawing.Size(444, 138);
             this.groupBox4.TabIndex = 58;
             this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Chức năng";
+            this.groupBox4.Text = "Actions";
             // 
             // btnCLose1
             // 
@@ -685,7 +685,7 @@
             this.btnCLose1.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnCLose1.BackColor = System.Drawing.Color.White;
             this.btnCLose1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnCLose1.BackgroundImage")));
-            this.btnCLose1.ButtonText = "Đóng";
+            this.btnCLose1.ButtonText = "Close";
             this.btnCLose1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnCLose1.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCLose1.ForeColor = System.Drawing.Color.SeaGreen;
@@ -712,7 +712,7 @@
             this.btnAddRoom.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnAddRoom.BackColor = System.Drawing.Color.White;
             this.btnAddRoom.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnAddRoom.BackgroundImage")));
-            this.btnAddRoom.ButtonText = "Thêm Phòng";
+            this.btnAddRoom.ButtonText = "Add Room";
             this.btnAddRoom.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnAddRoom.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAddRoom.ForeColor = System.Drawing.Color.SeaGreen;
@@ -739,7 +739,7 @@
             this.btnRoomType.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnRoomType.BackColor = System.Drawing.Color.White;
             this.btnRoomType.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnRoomType.BackgroundImage")));
-            this.btnRoomType.ButtonText = "Sửa Loại Phòng";
+            this.btnRoomType.ButtonText = "Edit Room Type";
             this.btnRoomType.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnRoomType.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRoomType.ForeColor = System.Drawing.Color.SeaGreen;
@@ -766,7 +766,7 @@
             this.btnUpdate.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnUpdate.BackColor = System.Drawing.Color.White;
             this.btnUpdate.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnUpdate.BackgroundImage")));
-            this.btnUpdate.ButtonText = "Cập Nhật Phòng";
+            this.btnUpdate.ButtonText = "Update Room";
             this.btnUpdate.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnUpdate.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnUpdate.ForeColor = System.Drawing.Color.SeaGreen;

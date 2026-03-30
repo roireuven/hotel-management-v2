@@ -112,7 +112,7 @@
             this.groupBox3.Size = new System.Drawing.Size(220, 143);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Tìm kiếm";
+            this.groupBox3.Text = "Search";
             // 
             // txbSearch
             // 
@@ -141,7 +141,7 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(142, 20);
             this.label5.TabIndex = 28;
-            this.label5.Text = "Mã/ Tên loại phòng:";
+            this.label5.Text = "Room Type ID / Name:";
             // 
             // btnSearch
             // 
@@ -152,7 +152,7 @@
             this.btnSearch.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnSearch.BackColor = System.Drawing.Color.White;
             this.btnSearch.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnSearch.BackgroundImage")));
-            this.btnSearch.ButtonText = "Tìm Kiếm";
+            this.btnSearch.ButtonText = "Search";
             this.btnSearch.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnSearch.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSearch.ForeColor = System.Drawing.Color.SeaGreen;
@@ -178,7 +178,7 @@
             this.btnCancel.ActiveLineColor = System.Drawing.Color.Red;
             this.btnCancel.BackColor = System.Drawing.Color.White;
             this.btnCancel.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnCancel.BackgroundImage")));
-            this.btnCancel.ButtonText = "Huỷ Tìm";
+            this.btnCancel.ButtonText = "Clear Search";
             this.btnCancel.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnCancel.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCancel.ForeColor = System.Drawing.Color.SeaGreen;
@@ -207,7 +207,7 @@
             this.groupBox1.Size = new System.Drawing.Size(545, 541);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Danh Sách Loại Phòng";
+            this.groupBox1.Text = "Room Type List";
             // 
             // dataGridViewRoomType
             // 
@@ -268,7 +268,7 @@
             // 
             this.colID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.colID.DataPropertyName = "id";
-            this.colID.HeaderText = "Mã";
+            this.colID.HeaderText = "ID";
             this.colID.Name = "colID";
             this.colID.ReadOnly = true;
             this.colID.Width = 57;
@@ -278,7 +278,7 @@
             this.colName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.colName.DataPropertyName = "name";
             this.colName.FillWeight = 90F;
-            this.colName.HeaderText = "Tên Loại Phòng";
+            this.colName.HeaderText = "Room Type Name";
             this.colName.Name = "colName";
             this.colName.ReadOnly = true;
             this.colName.Width = 140;
@@ -287,7 +287,7 @@
             // 
             this.colLimitPerson.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.colLimitPerson.DataPropertyName = "limitPerson";
-            this.colLimitPerson.HeaderText = "Số người tối đa";
+            this.colLimitPerson.HeaderText = "Max Guests";
             this.colLimitPerson.Name = "colLimitPerson";
             this.colLimitPerson.ReadOnly = true;
             this.colLimitPerson.Width = 141;
@@ -296,7 +296,7 @@
             // 
             this.colPrice.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.colPrice.DataPropertyName = "price_New";
-            this.colPrice.HeaderText = "Giá";
+            this.colPrice.HeaderText = "Price";
             this.colPrice.Name = "colPrice";
             this.colPrice.ReadOnly = true;
             // 
@@ -410,7 +410,7 @@
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
             this.toolStripLabel1.Size = new System.Drawing.Size(31, 22);
-            this.toolStripLabel1.Text = "Xuất";
+            this.toolStripLabel1.Text = "Export";
             this.toolStripLabel1.Click += new System.EventHandler(this.ToolStripLabel1_Click);
             // 
             // bunifuDragControl1
@@ -429,7 +429,7 @@
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(80, 20);
             this.label16.TabIndex = 22;
-            this.label16.Text = "Mã phòng:";
+            this.label16.Text = "Room Type ID:";
             // 
             // txbName
             // 
@@ -459,7 +459,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(111, 20);
             this.label1.TabIndex = 24;
-            this.label1.Text = "Tên loại phòng:";
+            this.label1.Text = "Room Type Name:";
             // 
             // txbPrice
             // 
@@ -490,7 +490,7 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(34, 20);
             this.label3.TabIndex = 26;
-            this.label3.Text = "Giá:";
+            this.label3.Text = "Price:";
             // 
             // label2
             // 
@@ -501,7 +501,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(115, 20);
             this.label2.TabIndex = 28;
-            this.label2.Text = "Số người tối đa:";
+            this.label2.Text = "Maximum guests:";
             // 
             // groupRoomType
             // 
@@ -521,7 +521,7 @@
             this.groupRoomType.Size = new System.Drawing.Size(220, 265);
             this.groupRoomType.TabIndex = 1;
             this.groupRoomType.TabStop = false;
-            this.groupRoomType.Text = "Thông tin loại phòng";
+            this.groupRoomType.Text = "Room Type Information";
             // 
             // comboboxID
             // 
@@ -565,7 +565,7 @@
             this.groupBox2.Size = new System.Drawing.Size(220, 129);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Chức Năng";
+            this.groupBox2.Text = "Actions";
             // 
             // btnClose
             // 
@@ -576,7 +576,7 @@
             this.btnClose.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnClose.BackColor = System.Drawing.Color.White;
             this.btnClose.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnClose.BackgroundImage")));
-            this.btnClose.ButtonText = "Đóng";
+            this.btnClose.ButtonText = "Close";
             this.btnClose.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnClose.Font = new System.Drawing.Font("Segoe UI", 11.25F);
             this.btnClose.ForeColor = System.Drawing.Color.SeaGreen;
@@ -603,7 +603,7 @@
             this.btnUpdate.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnUpdate.BackColor = System.Drawing.Color.White;
             this.btnUpdate.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnUpdate.BackgroundImage")));
-            this.btnUpdate.ButtonText = "Cập Nhật";
+            this.btnUpdate.ButtonText = "Update";
             this.btnUpdate.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnUpdate.Font = new System.Drawing.Font("Segoe UI", 11.25F);
             this.btnUpdate.ForeColor = System.Drawing.Color.SeaGreen;
@@ -631,7 +631,7 @@
             this.labelName.Name = "labelName";
             this.labelName.Size = new System.Drawing.Size(249, 37);
             this.labelName.TabIndex = 49;
-            this.labelName.Text = "Quản Lí Loại Phòng";
+            this.labelName.Text = "Room Type Management";
             this.labelName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // bunifuSeparator1
@@ -648,7 +648,7 @@
             // 
             // saveRoomType
             // 
-            this.saveRoomType.FileName = "Danh sách loại phòng";
+            this.saveRoomType.FileName = "Room Type List";
             this.saveRoomType.Filter = "Excel File(*.xls)|*.xls|Excel File (*.xlsx) |.xlsx|PDF File(*.pdf)|*.pdf";
             // 
             // fRoomType

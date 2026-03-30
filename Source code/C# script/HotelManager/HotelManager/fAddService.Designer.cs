@@ -65,7 +65,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(182, 37);
             this.label2.TabIndex = 27;
-            this.label2.Text = "Thêm Dịch Vụ";
+            this.label2.Text = "Add Service";
             // 
             // bunifuSeparator1
             // 
@@ -90,7 +90,7 @@
             this.groupBox1.Size = new System.Drawing.Size(453, 71);
             this.groupBox1.TabIndex = 51;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Chức năng";
+            this.groupBox1.Text = "Actions";
             // 
             // btnClose_
             // 
@@ -101,7 +101,7 @@
             this.btnClose_.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnClose_.BackColor = System.Drawing.Color.White;
             this.btnClose_.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnClose_.BackgroundImage")));
-            this.btnClose_.ButtonText = "Đóng";
+            this.btnClose_.ButtonText = "Close";
             this.btnClose_.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnClose_.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnClose_.ForeColor = System.Drawing.Color.SeaGreen;
@@ -127,7 +127,7 @@
             this.btnAddCustomer.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnAddCustomer.BackColor = System.Drawing.Color.White;
             this.btnAddCustomer.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnAddCustomer.BackgroundImage")));
-            this.btnAddCustomer.ButtonText = "Thêm Dịch Vụ";
+            this.btnAddCustomer.ButtonText = "Add Service";
             this.btnAddCustomer.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnAddCustomer.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAddCustomer.ForeColor = System.Drawing.Color.SeaGreen;
@@ -160,7 +160,7 @@
             this.groupService.Size = new System.Drawing.Size(451, 145);
             this.groupService.TabIndex = 53;
             this.groupService.TabStop = false;
-            this.groupService.Text = "Thông tin dịch vụ";
+            this.groupService.Text = "Service Information";
             // 
             // comboBoxServiceType
             // 
@@ -225,7 +225,7 @@
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(86, 20);
             this.label15.TabIndex = 24;
-            this.label15.Text = "Tên dịch vụ:";
+            this.label15.Text = "Service Name:";
             // 
             // label13
             // 
@@ -236,7 +236,7 @@
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(34, 20);
             this.label13.TabIndex = 57;
-            this.label13.Text = "Giá:";
+            this.label13.Text = "Price:";
             // 
             // label20
             // 
@@ -247,7 +247,7 @@
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(91, 20);
             this.label20.TabIndex = 58;
-            this.label20.Text = "Loại dịch vụ:";
+            this.label20.Text = "Service Type:";
             // 
             // btnClose
             // 
