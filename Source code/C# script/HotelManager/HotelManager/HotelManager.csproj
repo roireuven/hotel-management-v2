@@ -279,6 +279,7 @@
     <Compile Include="fUseService.Designer.cs">
       <DependentUpon>fUseService.cs</DependentUpon>
     </Compile>
+    <Compile Include="LanguageManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="fAbout.resx">

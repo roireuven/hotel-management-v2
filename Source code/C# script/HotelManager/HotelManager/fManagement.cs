@@ -20,17 +20,43 @@ namespace HotelManager
             this.userName = userName;
             InitializeComponent();
             fLoad();
+            ApplyLanguage();
+            LanguageManager.LanguageChanged += (s, e) => ApplyLanguage();
         }
         public bool IsAdmin()
         {
-            return AccountTypeDAO.Instance.GetStaffTypeByUserName(userName).Id == 1;
+            var staffType = AccountTypeDAO.Instance.GetStaffTypeByUserName(userName);
+            return staffType != null && staffType.Id == 1;
         }
         void fLoad()
         {
-
-            panelLeft.Width = 177;
-            
+            panelLeft.Width = 220;
         }
+
+        private void ApplyLanguage()
+        {
+            label2.Text = LanguageManager.Get("hotel_management");
+            titleBookRoom.Text = LanguageManager.Get("tile_book_room");
+            titleRecieveRoom.Text = LanguageManager.Get("tile_check_in");
+            title.Text = LanguageManager.Get("tile_revenue");
+            titleManageRoom.Text = LanguageManager.Get("tile_rooms");
+            metroTile8.Text = LanguageManager.Get("tile_staff");
+            metroTile2.Text = LanguageManager.Get("tile_services");
+            titlePay.Text = LanguageManager.Get("tile_payment");
+            metroTile17.Text = LanguageManager.Get("tile_customers");
+            metroTile16.Text = LanguageManager.Get("tile_invoices");
+            metroTile13.Text = LanguageManager.Get("tile_regulations");
+            btnAccountProfile.ButtonText = "    " + LanguageManager.Get("btn_profile");
+            btnLogOut.ButtonText = "    " + LanguageManager.Get("btn_logout");
+            btnHelp.ButtonText = "    " + LanguageManager.Get("btn_help");
+            btnIntroduce.ButtonText = "    " + LanguageManager.Get("btn_language");
+            btnAccountProfile.Text = btnAccountProfile.ButtonText;
+            btnLogOut.Text = btnLogOut.ButtonText;
+            btnHelp.Text = btnHelp.ButtonText;
+            btnIntroduce.Text = btnIntroduce.ButtonText;
+            panelLeft.Invalidate(true);
+        }
+
         private bool CheckAccess(string nameform)
         {
             return AccessDAO.Instance.CheckAccess(userName, nameform);
@@ -38,27 +64,13 @@ namespace HotelManager
        
         private void btnClose_Click_1(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Bạn có muốn thoát không?", "Thông báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show(LanguageManager.Get("confirm_exit"), LanguageManager.Get("notification"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 Application.Exit();
         }
 
- 
-
-       
         private void btnNavigationPanel_Click_1(object sender, EventArgs e)
         {
-            if (panelLeft.Width == 42)
-            {
-                panelLeft.Width = 177;
-                panelRight.Width = 939;
-                this.Width = 1116;
-            }
-            else
-            {
-                panelLeft.Width = 42;
-                panelRight.Width = 807;
-                this.Width = 981;
-            }
+            // no-op in full-screen mode
         }
 
         private void titleSignUpRoom_Click(object sender, EventArgs e)
@@ -70,16 +82,12 @@ namespace HotelManager
                 f.ShowDialog();
                 Show();
             }
-            else MessageBox.Show("Bạn không quyền truy cập.", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
+            else MessageBox.Show(LanguageManager.Get("no_access"), LanguageManager.Get("warning"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void btnLogOut_Click(object sender, EventArgs e)
         {
-            
-            this.Hide();
-            fLogin login = new fLogin();
-            login.ShowDialog();
+            this.Close();
         }
 
         private void titleRecieveRoom_Click(object sender, EventArgs e)
@@ -91,7 +99,7 @@ namespace HotelManager
                 f.ShowDialog();
                 this.Show();
             }
-            else MessageBox.Show("Bạn không quyền truy cập.", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            else MessageBox.Show(LanguageManager.Get("no_access"), LanguageManager.Get("warning"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void titleSendRoom_Click(object sender, EventArgs e)
@@ -103,7 +111,7 @@ namespace HotelManager
                 f.ShowDialog();
                 this.Show();
             }
-            else MessageBox.Show("Bạn không quyền truy cập.", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            else MessageBox.Show(LanguageManager.Get("no_access"), LanguageManager.Get("warning"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void titlePay_Click(object sender, EventArgs e)
@@ -115,8 +123,7 @@ namespace HotelManager
                 f.ShowDialog();
                 this.Show();
             }
-            else MessageBox.Show("Bạn không quyền truy cập.", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
+            else MessageBox.Show(LanguageManager.Get("no_access"), LanguageManager.Get("warning"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void titleManageRoom_Click(object sender, EventArgs e)
@@ -128,11 +135,9 @@ namespace HotelManager
                 fProfile.ShowDialog();
                 this.Show();
             }
-            else
-                MessageBox.Show("Bạn không quyền truy cập.", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            
-
+            else MessageBox.Show(LanguageManager.Get("no_access"), LanguageManager.Get("warning"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
+
         private void btnAccountProfile_Click(object sender, EventArgs e)
         {
             this.Hide();
@@ -150,9 +155,7 @@ namespace HotelManager
                 customer.ShowDialog();
                 this.Show();
             }
-            else
-              MessageBox.Show( "Bạn không quyền truy cập.", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-           
+            else MessageBox.Show(LanguageManager.Get("no_access"), LanguageManager.Get("warning"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void metroTile13_Click(object sender, EventArgs e)
@@ -164,8 +167,7 @@ namespace HotelManager
                 parameter.ShowDialog();
                 this.Show();
             }
-            else
-                MessageBox.Show( "Bạn không quyền truy cập.", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            else MessageBox.Show(LanguageManager.Get("no_access"), LanguageManager.Get("warning"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void metroTile8_Click(object sender, EventArgs e)
@@ -177,8 +179,7 @@ namespace HotelManager
                 fProfile.ShowDialog();
                 this.Show();
             }
-            else
-                MessageBox.Show( "Bạn không quyền truy cập.", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            else MessageBox.Show(LanguageManager.Get("no_access"), LanguageManager.Get("warning"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void metroTile2_Click(object sender, EventArgs e)
@@ -190,16 +191,12 @@ namespace HotelManager
                 fProfile.ShowDialog();
                 this.Show();
             }
-            else
-               MessageBox.Show( "Bạn không quyền truy cập.", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            else MessageBox.Show(LanguageManager.Get("no_access"), LanguageManager.Get("warning"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void btnIntroduce_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            fAbout fAbout = new fAbout();
-            fAbout.ShowDialog();
-            this.Show();
+            LanguageManager.Toggle();
         }
 
         private void title_Click(object sender, EventArgs e)
@@ -211,9 +208,7 @@ namespace HotelManager
                 fAbout.ShowDialog();
                 this.Show();
             }
-            else
-              MessageBox.Show( "Bạn không quyền truy cập.", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-          
+            else MessageBox.Show(LanguageManager.Get("no_access"), LanguageManager.Get("warning"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void metroTile16_Click(object sender, EventArgs e)
@@ -225,13 +220,11 @@ namespace HotelManager
                 fAbout.ShowDialog();
                 this.Show();
             }
-            else
-                MessageBox.Show( "Bạn không quyền truy cập.", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            else MessageBox.Show(LanguageManager.Get("no_access"), LanguageManager.Get("warning"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void panelRight_Paint(object sender, PaintEventArgs e)
         {
-
         }
     }
 }

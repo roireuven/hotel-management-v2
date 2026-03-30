@@ -19,36 +19,49 @@ namespace HotelManager
         public fLogin()
         {
             InitializeComponent();
+            ApplyLanguage();
+            LanguageManager.LanguageChanged += (s, e) => ApplyLanguage();
         }
+
+        private void ApplyLanguage()
+        {
+            label1.Text = LanguageManager.Get("username_label");
+            label4.Text = LanguageManager.Get("password_label");
+            btnLogin.ButtonText = LanguageManager.Get("btn_login");
+            btnExit_.ButtonText = LanguageManager.Get("btn_exit");
+            btnLogin.Invalidate();
+            btnExit_.Invalidate();
+        }
+
         public bool Login()
         {
             if (string.IsNullOrWhiteSpace(txbUserName.Text) || string.IsNullOrWhiteSpace(txbPassWord.Text))
                 return false;
             return AccountDAO.Instance.Login(txbUserName.Text.Trim(), txbPassWord.Text);
         }
+
         private void btnClose_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-       
         private void btnLogin_Click_1(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txbUserName.Text))
             {
-                MessageBox.Show("Please enter your username.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(LanguageManager.Get("validation_username"), LanguageManager.Get("validation"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             if (string.IsNullOrWhiteSpace(txbPassWord.Text))
             {
-                MessageBox.Show("Please enter your password.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(LanguageManager.Get("validation_password"), LanguageManager.Get("validation"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             if (DateTime.Now < lockoutUntil)
             {
                 int seconds = (int)(lockoutUntil - DateTime.Now).TotalSeconds;
-                MessageBox.Show("Too many failed attempts. Please wait " + seconds + " seconds.", "Locked", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(LanguageManager.Get("login_locked_wait", seconds), LanguageManager.Get("locked"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -69,17 +82,17 @@ namespace HotelManager
                     if (failedAttempts >= 5)
                     {
                         lockoutUntil = DateTime.Now.AddSeconds(30);
-                        MessageBox.Show("Too many failed attempts. Account locked for 30 seconds.", "Locked", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(LanguageManager.Get("login_locked"), LanguageManager.Get("locked"), MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     else
                     {
-                        MessageBox.Show("Invalid username or password.\nPlease try again! (" + (5 - failedAttempts) + " attempts remaining)", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(LanguageManager.Get("login_failed") + LanguageManager.Get("attempts_remaining", 5 - failedAttempts), LanguageManager.Get("error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Connection error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(LanguageManager.Get("connection_error") + ex.Message, LanguageManager.Get("error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
