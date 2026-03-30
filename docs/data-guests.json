@@ -1,0 +1,12 @@
+[
+  {"ID":1,"Name":"John Smith","IDCard":"US12345678","CustomerType":"Tourist","Sex":"Male","DateOfBirth":"1985-06-15T00:00:00.000Z","PhoneNumber":5551234567,"Address":"New York, USA","Nationality":"United States"},
+  {"ID":2,"Name":"Maria Garcia","IDCard":"ES98765432","CustomerType":"Tourist","Sex":"Female","DateOfBirth":"1990-03-22T00:00:00.000Z","PhoneNumber":5559876543,"Address":"Madrid, Spain","Nationality":"Spain"},
+  {"ID":3,"Name":"David Chen","IDCard":"CN45678901","CustomerType":"Walk-in Guest","Sex":"Male","DateOfBirth":"1988-11-08T00:00:00.000Z","PhoneNumber":5554567890,"Address":"Shanghai, China","Nationality":"China"},
+  {"ID":4,"Name":"Emma Wilson","IDCard":"UK78901234","CustomerType":"Local Guest","Sex":"Female","DateOfBirth":"1995-01-30T00:00:00.000Z","PhoneNumber":5557890123,"Address":"London, UK","Nationality":"United Kingdom"},
+  {"ID":5,"Name":"Robert Johnson","IDCard":"US32145678","CustomerType":"Tourist","Sex":"Male","DateOfBirth":"1978-09-12T00:00:00.000Z","PhoneNumber":5553214567,"Address":"Los Angeles, USA","Nationality":"United States"},
+  {"ID":6,"Name":"Sophie Martin","IDCard":"FR65432109","CustomerType":"Tourist","Sex":"Female","DateOfBirth":"1992-07-25T00:00:00.000Z","PhoneNumber":5556543210,"Address":"Paris, France","Nationality":"France"},
+  {"ID":7,"Name":"James Lee","IDCard":"KR89012345","CustomerType":"Walk-in Guest","Sex":"Male","DateOfBirth":"1983-04-18T00:00:00.000Z","PhoneNumber":5558901234,"Address":"Seoul, South Korea","Nationality":"South Korea"},
+  {"ID":8,"Name":"Anna Petrov","IDCard":"RU12340987","CustomerType":"Tourist","Sex":"Female","DateOfBirth":"1997-12-03T00:00:00.000Z","PhoneNumber":5552345678,"Address":"Moscow, Russia","Nationality":"Russia"},
+  {"ID":9,"Name":"Carlos Santos","IDCard":"BR56789012","CustomerType":"Local Guest","Sex":"Male","DateOfBirth":"1991-08-20T00:00:00.000Z","PhoneNumber":5556789012,"Address":"Sao Paulo, Brazil","Nationality":"Brazil"},
+  {"ID":10,"Name":"Yuki Tanaka","IDCard":"JP34567890","CustomerType":"Tourist","Sex":"Female","DateOfBirth":"1993-05-14T00:00:00.000Z","PhoneNumber":5553456789,"Address":"Tokyo, Japan","Nationality":"Japan"}
+]

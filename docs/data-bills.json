@@ -1,0 +1,10 @@
+[
+  {"ID":2001,"StaffSetUp":"admin","DateOfCreate":"2026-03-30T10:30:00.000Z","RoomPrice":500,"ServicePrice":85,"TotalPrice":585,"Discount":0,"Surcharge":0,"Status":"Paid"},
+  {"ID":2002,"StaffSetUp":"admin","DateOfCreate":"2026-03-29T14:15:00.000Z","RoomPrice":350,"ServicePrice":120,"TotalPrice":470,"Discount":5,"Surcharge":0,"Status":"Paid"},
+  {"ID":2003,"StaffSetUp":"admin","DateOfCreate":"2026-03-28T09:00:00.000Z","RoomPrice":200,"ServicePrice":45,"TotalPrice":245,"Discount":0,"Surcharge":0,"Status":"Paid"},
+  {"ID":2004,"StaffSetUp":"admin","DateOfCreate":"2026-03-30T16:00:00.000Z","RoomPrice":100,"ServicePrice":0,"TotalPrice":100,"Discount":0,"Surcharge":0,"Status":"Unpaid"},
+  {"ID":2005,"StaffSetUp":"admin","DateOfCreate":"2026-03-27T11:45:00.000Z","RoomPrice":500,"ServicePrice":200,"TotalPrice":700,"Discount":10,"Surcharge":0,"Status":"Paid"},
+  {"ID":2006,"StaffSetUp":"admin","DateOfCreate":"2026-03-30T08:30:00.000Z","RoomPrice":350,"ServicePrice":0,"TotalPrice":350,"Discount":0,"Surcharge":0,"Status":"Unpaid"},
+  {"ID":2007,"StaffSetUp":"admin","DateOfCreate":"2026-03-26T15:00:00.000Z","RoomPrice":200,"ServicePrice":150,"TotalPrice":350,"Discount":0,"Surcharge":0,"Status":"Paid"},
+  {"ID":2008,"StaffSetUp":"admin","DateOfCreate":"2026-03-25T12:00:00.000Z","RoomPrice":100,"ServicePrice":30,"TotalPrice":130,"Discount":0,"Surcharge":0,"Status":"Paid"}
+]

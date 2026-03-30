@@ -1,0 +1,23 @@
+[
+  {"ID":1,"RoomName":"Room 101","RoomType":"Suite (SUT)","Price":500,"MaxOccupancy":6,"Status":"Available"},
+  {"ID":2,"RoomName":"Room 102","RoomType":"Deluxe (DLX)","Price":350,"MaxOccupancy":4,"Status":"Available"},
+  {"ID":3,"RoomName":"Room 103","RoomType":"Superior (SUP)","Price":200,"MaxOccupancy":3,"Status":"Available"},
+  {"ID":4,"RoomName":"Room 104","RoomType":"Standard (STD)","Price":100,"MaxOccupancy":2,"Status":"Available"},
+  {"ID":5,"RoomName":"Room 105","RoomType":"Suite (SUT)","Price":500,"MaxOccupancy":6,"Status":"Occupied"},
+  {"ID":6,"RoomName":"Room 106","RoomType":"Standard (STD)","Price":100,"MaxOccupancy":2,"Status":"Available"},
+  {"ID":7,"RoomName":"Room 107","RoomType":"Standard (STD)","Price":100,"MaxOccupancy":2,"Status":"Available"},
+  {"ID":8,"RoomName":"Room 108","RoomType":"Standard (STD)","Price":100,"MaxOccupancy":2,"Status":"Available"},
+  {"ID":9,"RoomName":"Room 109","RoomType":"Superior (SUP)","Price":200,"MaxOccupancy":3,"Status":"Occupied"},
+  {"ID":10,"RoomName":"Room 201","RoomType":"Superior (SUP)","Price":200,"MaxOccupancy":3,"Status":"Occupied"},
+  {"ID":11,"RoomName":"Room 202","RoomType":"Superior (SUP)","Price":200,"MaxOccupancy":3,"Status":"Available"},
+  {"ID":12,"RoomName":"Room 203","RoomType":"Deluxe (DLX)","Price":350,"MaxOccupancy":4,"Status":"Available"},
+  {"ID":13,"RoomName":"Room 204","RoomType":"Deluxe (DLX)","Price":350,"MaxOccupancy":4,"Status":"Available"},
+  {"ID":14,"RoomName":"Room 205","RoomType":"Standard (STD)","Price":100,"MaxOccupancy":2,"Status":"Available"},
+  {"ID":15,"RoomName":"Room 206","RoomType":"Superior (SUP)","Price":200,"MaxOccupancy":3,"Status":"Available"},
+  {"ID":16,"RoomName":"Room 207","RoomType":"Deluxe (DLX)","Price":350,"MaxOccupancy":4,"Status":"Occupied"},
+  {"ID":17,"RoomName":"Room 208","RoomType":"Suite (SUT)","Price":500,"MaxOccupancy":6,"Status":"Occupied"},
+  {"ID":18,"RoomName":"Room 209","RoomType":"Deluxe (DLX)","Price":350,"MaxOccupancy":4,"Status":"Available"},
+  {"ID":19,"RoomName":"Room 210","RoomType":"Standard (STD)","Price":100,"MaxOccupancy":2,"Status":"Available"},
+  {"ID":20,"RoomName":"Room 211","RoomType":"Standard (STD)","Price":100,"MaxOccupancy":2,"Status":"Available"},
+  {"ID":21,"RoomName":"Room 212","RoomType":"Superior (SUP)","Price":200,"MaxOccupancy":3,"Status":"Available"}
+]
