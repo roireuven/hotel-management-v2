@@ -152,6 +152,11 @@
       .stats-grid { grid-template-columns: repeat(2, 1fr); } .dash-grid { grid-template-columns: 1fr !important; }
     }
     @media (max-width: 480px) { .stats-grid { grid-template-columns: 1fr; } .room-grid { grid-template-columns: repeat(2, 1fr); } .search-bar { width: 140px; } }
+    .btn { -webkit-tap-highlight-color: rgba(0,0,0,0.1); touch-action: manipulation; min-height: 36px; }
+    .btn-sm { min-height: 30px; min-width: 40px; }
+    .cell-actions { flex-wrap: wrap; }
+    .xgrid td .cell.editing { display: flex; align-items: center; }
+    .modal-footer .btn { min-height: 40px; min-width: 80px; font-size: 0.9rem; }
   </style>
 </head>
 <body>
@@ -281,6 +286,7 @@ class XGrid {
     this.data = opts.data || [];
     this.onEdit = opts.onEdit || null;
     this.onDelete = opts.onDelete || null;
+    this.onAdd = opts.onAdd || null;
     this.actions = opts.actions || [];
     this.sortCol = null; this.sortDir = 'asc';
     this.filters = {};
@@ -329,7 +335,9 @@ class XGrid {
   render() {
     const paged = this.getPaged(); const filtered = this.getFiltered();
     const totalPages = this.getTotalPages();
+    const addBtn = this.onAdd ? `<button class="btn btn-sm btn-primary" onclick="window._xg_${this.container.id}.onAdd()">+ Add Row</button>` : '';
     let html = `<div class="xgrid-toolbar">
+      ${addBtn}
       <button class="btn btn-sm btn-outline" onclick="window._xg_${this.container.id}.exportCSV()">📥 Export CSV</button>
       <span class="xg-info">${filtered.length} row${filtered.length !== 1 ? 's' : ''}</span>
     </div>`;
@@ -359,16 +367,16 @@ class XGrid {
           const isEditing = this.editingCell && this.editingCell.row === globalIdx && this.editingCell.col === ci;
           if (isEditing && col.editable) {
             if (col.editType === 'select' && col.editOptions) {
-              html += `<td><div class="cell editing"><select onchange="window._xg_${this.container.id}.commitEdit(${globalIdx},${ci},this.value)" onblur="window._xg_${this.container.id}.cancelEdit()">`;
-              col.editOptions.forEach(o => { html += `<option value="${o}" ${o === val ? 'selected' : ''}>${o}</option>`; });
+              html += `<td><div class="cell editing"><select onchange="window._xg_${this.container.id}.commitEdit(${globalIdx},${ci},this.value)">`;
+              col.editOptions.forEach(o => { html += `<option value="${o}" ${String(o) === String(val) ? 'selected' : ''}>${o}</option>`; });
               html += `</select></div></td>`;
             } else {
               const inputType = col.editType || 'text';
-              html += `<td><div class="cell editing"><input type="${inputType}" value="${val}" onblur="window._xg_${this.container.id}.commitEdit(${globalIdx},${ci},this.value)" onkeydown="if(event.key==='Enter')this.blur();if(event.key==='Escape')window._xg_${this.container.id}.cancelEdit()" autofocus></div></td>`;
+              html += `<td><div class="cell editing"><input type="${inputType}" value="${val}" onkeydown="if(event.key==='Enter'){event.preventDefault();window._xg_${this.container.id}.commitEdit(${globalIdx},${ci},this.value);}if(event.key==='Escape')window._xg_${this.container.id}.cancelEdit()"><button class="btn btn-sm btn-primary" style="margin-left:2px;padding:0.2rem 0.5rem;" onclick="var inp=this.previousElementSibling;window._xg_${this.container.id}.commitEdit(${globalIdx},${ci},inp.value)">✓</button></div></td>`;
             }
           } else {
-            const dblclick = col.editable ? `ondblclick="window._xg_${this.container.id}.startEdit(${globalIdx},${ci})"` : '';
-            html += `<td><div class="cell" ${dblclick}>${displayVal}</div></td>`;
+            const tap = col.editable ? `onclick="window._xg_${this.container.id}.startEdit(${globalIdx},${ci})"` : '';
+            html += `<td><div class="cell" ${tap}>${displayVal}</div></td>`;
           }
         });
         if (this.actions.length) {
@@ -586,6 +594,7 @@ function renderBookings() {
       {field:'status',label:'Status',format:v=>`<span class="status status-${v}">${v.replace('-',' ')}</span>`,editable:true,editType:'select',editOptions:['pending','reserved','checked-in','checked-out'],filterable:true},
     ],
     data: sorted,
+    onAdd: () => showAddBooking(),
     onEdit: (row, field, val) => { const b = bookings.find(x=>x.id===row.id); if(b){b[field]=val;save('bookings',bookings);toast('Booking updated');} },
     actions: [
       {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditBooking(id)},
@@ -695,6 +704,7 @@ function renderGuests() {
       {field:'visits',label:'Visits',editable:true,editType:'number',width:'70px'},
     ],
     data: guests,
+    onAdd: () => showAddGuest(),
     onEdit: (row, field, val) => { const g = guests.find(x=>x.id===row.id); if(g){g[field]=val;save('guests',guests);toast('Guest updated');} },
     actions: [
       {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditGuest(id)},
@@ -744,6 +754,7 @@ function renderServices() {
       {field:'price',label:'Price',format:v=>fmt$(v),editable:true,editType:'number',filterable:true},
     ],
     data: services,
+    onAdd: () => showAddService(),
     onEdit: (row, field, val) => { const s = services.find(x=>x.id===row.id); if(s){s[field]=val;save('services',services);toast(s.name+' updated');} },
     actions: [
       {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditService(id)},
@@ -798,6 +809,7 @@ function renderInvoices() {
       {field:'status',label:'Status',format:v=>`<span class="status status-${v}">${v==='paid'?'Paid':'Pending'}</span>`,editable:true,editType:'select',editOptions:['pending','paid'],filterable:true},
     ],
     data: invData,
+    onAdd: () => showAddInvoice(),
     onEdit: (row, field, val) => { const inv = invoices.find(x=>x.id===row.id); if(inv){inv[field]=val; if(field==='roomCharge'||field==='serviceCharge'||field==='nights'){inv.total=(parseFloat(inv.roomCharge)||0)+(parseFloat(inv.serviceCharge)||0);} save('invoices',invoices);toast('Invoice updated');renderInvoices();} },
     actions: [
       {name:'pay',label:'Pay',cls:'btn-success',condition:r=>r.status!=='paid',handler:id=>{ payInvoice(id); renderInvoices(); }},
@@ -892,6 +904,7 @@ function renderAccounts() {
       {field:'status',label:'Status',format:v=>`<span class="status status-${v}">${v==='active'?'Active':'Inactive'}</span>`,editable:true,editType:'select',editOptions:['active','inactive'],filterable:true},
     ],
     data: accounts,
+    onAdd: () => showAddAccount(),
     onEdit: (row, field, val) => { const a = accounts.find(x=>x.id===row.id); if(a){a[field]=val;save('accounts',accounts);toast('Account updated');} },
     actions: [
       {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditAccount(id)},
