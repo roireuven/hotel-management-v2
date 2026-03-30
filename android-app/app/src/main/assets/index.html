@@ -609,20 +609,21 @@ function renderBookings() {
 window.showAddBooking = function() {
   const avail = rooms.filter(r=>r.status==='available');
   openModal(`<div class="modal-header"><h2>New Booking</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
-    <div class="modal-body"><div class="form-group"><label>Guest</label><select class="form-control" id="mBkGuest">${guests.map(g=>`<option value="${g.id}">${g.firstName} ${g.lastName}</option>`).join('')}</select></div>
+    <div class="modal-body"><div class="form-group"><label>Guest</label><input type="text" class="form-control" id="mBkGuest" placeholder="Enter guest name"></div>
     <div class="form-group"><label>Room</label><select class="form-control" id="mBkRoom">${avail.length?avail.map(r=>`<option value="${r.id}">${r.number} - ${r.type} (${fmt$(r.price)}/night)</option>`).join(''):'<option disabled>No rooms available</option>'}</select></div>
     <div class="form-row"><div class="form-group"><label>Check-in Date</label><input type="date" class="form-control" id="mBkIn" value="${today()}"></div><div class="form-group"><label>Check-out Date</label><input type="date" class="form-control" id="mBkOut"></div></div>
     <div class="form-group"><label>Notes</label><textarea class="form-control" id="mBkNotes" rows="2" placeholder="Special requests..."></textarea></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addBooking()">Create Booking</button></div>`);
 };
 window.addBooking = function() {
-  const gId = document.getElementById('mBkGuest').value; const rId = document.getElementById('mBkRoom').value;
+  const guestName = document.getElementById('mBkGuest').value.trim(); const rId = document.getElementById('mBkRoom').value;
   const checkin = document.getElementById('mBkIn').value; const checkout = document.getElementById('mBkOut').value;
-  if(!gId||!rId||!checkin||!checkout) { toast('Fill all fields'); return; }
+  if(!guestName||!rId||!checkin||!checkout) { toast('Fill all fields'); return; }
   if(checkout<=checkin) { toast('Check-out must be after check-in'); return; }
-  const g = guests.find(x=>x.id===gId); const r = rooms.find(x=>x.id===rId); if(!g||!r) return;
+  const r = rooms.find(x=>x.id===rId); if(!r) return;
   r.status = 'reserved'; save('rooms',rooms);
-  bookings.push({id:genId(),guestId:g.id,guestName:g.firstName+' '+g.lastName,roomId:r.id,roomNumber:r.number,roomType:r.type,checkin,checkout,status:'reserved',services:[],notes:document.getElementById('mBkNotes').value});
+  const g = guests.find(x=>(x.firstName+' '+x.lastName).toLowerCase()===guestName.toLowerCase());
+  bookings.push({id:genId(),guestId:g?g.id:'',guestName:guestName,roomId:r.id,roomNumber:r.number,roomType:r.type,checkin,checkout,status:'reserved',services:[],notes:document.getElementById('mBkNotes').value});
   save('bookings',bookings); closeModal(); renderBookings(); toast('Booking created');
 };
 window.checkIn = function(id) {
