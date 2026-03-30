@@ -139,7 +139,9 @@ namespace HotelManager
                     {
                         int idBookRoom;
                         if (IDBookRoom != -1) idBookRoom = IDBookRoom;
-                        else idBookRoom = int.Parse(btnSearch.Tag.ToString());
+                        else if (btnSearch.Tag != null) idBookRoom = int.Parse(btnSearch.Tag.ToString());
+                        else { MessageBox.Show("Vui lòng tìm kiếm mã đặt phòng trước.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
+                        if (cbRoom.SelectedItem == null) { MessageBox.Show("Vui lòng chọn phòng.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
                         int idRoom = (cbRoom.SelectedItem as Room).Id;
                         if (InsertReceiveRoom(idBookRoom, idRoom))
                         {

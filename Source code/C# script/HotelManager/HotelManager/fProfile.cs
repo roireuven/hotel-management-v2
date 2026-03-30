@@ -23,6 +23,7 @@ namespace HotelManager
         public void LoadProfile(string username)
         {
             Account staff = AccountDAO.Instance.LoadStaffInforByUserName(username);
+            if (staff == null) return;
             lblUserName.Text = txbUserName.Text = staff.UserName;
             lblDisplayName.Text = txbDisplayName.Text = staff.DisplayName;
             txbStaffType.Text = AccountTypeDAO.Instance.GetStaffTypeByUserName(username).Name;

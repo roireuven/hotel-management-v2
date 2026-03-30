@@ -40,7 +40,10 @@ namespace HotelManager
         }
         private void BtnSearch_Click(object sender, EventArgs e)
         {
-            LoadFullReport(int.Parse(comboBoxMonth.Text), (int)(numericYear.Value));
+            if (int.TryParse(comboBoxMonth.Text, out int parsedMonth))
+                LoadFullReport(parsedMonth, (int)(numericYear.Value));
+            else
+                MessageBox.Show("Tháng không hợp lệ.\nVui lòng nhập lại.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         private void ToolStripLabel1_Click(object sender, EventArgs e)
         {

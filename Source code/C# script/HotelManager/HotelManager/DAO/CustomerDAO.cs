@@ -27,7 +27,9 @@ namespace HotelManager.DAO
         public Customer GetInfoByIdCard(string idCard)
         {
             string query = "USP_IsIdCardExists @idCard";
-            Customer customer =new Customer(DataProvider.Instance.ExecuteQuery(query, new object[] { idCard }).Rows[0]);
+            DataTable data = DataProvider.Instance.ExecuteQuery(query, new object[] { idCard });
+            if (data.Rows.Count == 0) return null;
+            Customer customer = new Customer(data.Rows[0]);
             return customer;
 
         }
@@ -74,7 +76,8 @@ namespace HotelManager.DAO
         public int GetIDCustomerFromBookRoom(int idReceiveRoom)
         {
             string query = "USP_GetIDCustomerFromBookRoom @idReceiveRoom";
-            return (int)DataProvider.Instance.ExecuteScalar(query, new object[] { idReceiveRoom });
+            object result = DataProvider.Instance.ExecuteScalar(query, new object[] { idReceiveRoom });
+            return result != null && result != DBNull.Value ? (int)result : -1;
         }
         #endregion
         public static CustomerDAO Instance { get { if (instance == null) instance = new CustomerDAO();return instance; }
