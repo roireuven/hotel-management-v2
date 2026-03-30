@@ -66,7 +66,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(153, 37);
             this.label2.TabIndex = 3;
-            this.label2.Text = "Đăng Nhập";
+            this.label2.Text = "Login";
             // 
             // label1
             // 
@@ -77,7 +77,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(110, 20);
             this.label1.TabIndex = 5;
-            this.label1.Text = "Tên đăng nhập:";
+            this.label1.Text = "Username:";
             // 
             // label4
             // 
@@ -88,7 +88,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(73, 20);
             this.label4.TabIndex = 6;
-            this.label4.Text = "Mật khẩu:";
+            this.label4.Text = "Password:";
             // 
             // txbUserName
             // 
@@ -181,7 +181,7 @@
             this.btnLogin.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnLogin.BackColor = System.Drawing.Color.White;
             this.btnLogin.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnLogin.BackgroundImage")));
-            this.btnLogin.ButtonText = "Đăng Nhập";
+            this.btnLogin.ButtonText = "Login";
             this.btnLogin.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnLogin.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLogin.ForeColor = System.Drawing.Color.SeaGreen;
@@ -219,7 +219,7 @@
             this.btnExit_.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnExit_.BackColor = System.Drawing.Color.White;
             this.btnExit_.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnExit_.BackgroundImage")));
-            this.btnExit_.ButtonText = "Thoát";
+            this.btnExit_.ButtonText = "Exit";
             this.btnExit_.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnExit_.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnExit_.ForeColor = System.Drawing.Color.SeaGreen;
@@ -271,7 +271,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "fLogin";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Đăng nhập";
+            this.Text = "Login";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();

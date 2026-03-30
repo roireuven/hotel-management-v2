@@ -108,7 +108,7 @@
             this.metroTile17.Name = "metroTile17";
             this.metroTile17.Size = new System.Drawing.Size(276, 135);
             this.metroTile17.TabIndex = 47;
-            this.metroTile17.Text = "Quản Lí Khách Hàng";
+            this.metroTile17.Text = "Customer Management";
             this.metroTile17.TileImage = ((System.Drawing.Image)(resources.GetObject("metroTile17.TileImage")));
             this.metroTile17.TileImageAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.metroTile17.UseCustomBackColor = true;
@@ -127,7 +127,7 @@
             this.metroTile16.Name = "metroTile16";
             this.metroTile16.Size = new System.Drawing.Size(135, 276);
             this.metroTile16.TabIndex = 44;
-            this.metroTile16.Text = "Quản Lí Hóa Đơn";
+            this.metroTile16.Text = "Invoice Management";
             this.metroTile16.TileImage = ((System.Drawing.Image)(resources.GetObject("metroTile16.TileImage")));
             this.metroTile16.TileImageAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.metroTile16.UseCustomBackColor = true;
@@ -146,7 +146,7 @@
             this.metroTile13.Name = "metroTile13";
             this.metroTile13.Size = new System.Drawing.Size(276, 135);
             this.metroTile13.TabIndex = 41;
-            this.metroTile13.Text = "Quy Định";
+            this.metroTile13.Text = "Regulations";
             this.metroTile13.TileImage = ((System.Drawing.Image)(resources.GetObject("metroTile13.TileImage")));
             this.metroTile13.TileImageAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.metroTile13.UseCustomBackColor = true;
@@ -165,7 +165,7 @@
             this.title.Name = "title";
             this.title.Size = new System.Drawing.Size(276, 135);
             this.title.TabIndex = 36;
-            this.title.Text = "Thống kê doanh thu";
+            this.title.Text = "Reports and Revenue";
             this.title.TileImage = ((System.Drawing.Image)(resources.GetObject("title.TileImage")));
             this.title.TileImageAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.title.UseCustomBackColor = true;
@@ -184,7 +184,7 @@
             this.titleManageRoom.Name = "titleManageRoom";
             this.titleManageRoom.Size = new System.Drawing.Size(135, 135);
             this.titleManageRoom.TabIndex = 34;
-            this.titleManageRoom.Text = "Quản Lí Phòng";
+            this.titleManageRoom.Text = "Room Management";
             this.titleManageRoom.TileImage = ((System.Drawing.Image)(resources.GetObject("titleManageRoom.TileImage")));
             this.titleManageRoom.TileImageAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.titleManageRoom.UseCustomBackColor = true;
@@ -203,7 +203,7 @@
             this.metroTile2.Name = "metroTile2";
             this.metroTile2.Size = new System.Drawing.Size(135, 276);
             this.metroTile2.TabIndex = 32;
-            this.metroTile2.Text = "Quản Lí Dịch Vụ";
+            this.metroTile2.Text = "Service Management";
             this.metroTile2.TileImage = ((System.Drawing.Image)(resources.GetObject("metroTile2.TileImage")));
             this.metroTile2.TileImageAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.metroTile2.UseCustomBackColor = true;
@@ -222,7 +222,7 @@
             this.metroTile8.Name = "metroTile8";
             this.metroTile8.Size = new System.Drawing.Size(135, 135);
             this.metroTile8.TabIndex = 29;
-            this.metroTile8.Text = "Quản Lí Nhân Viên";
+            this.metroTile8.Text = "Staff Management";
             this.metroTile8.TileImage = ((System.Drawing.Image)(resources.GetObject("metroTile8.TileImage")));
             this.metroTile8.TileImageAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.metroTile8.UseCustomBackColor = true;
@@ -241,7 +241,7 @@
             this.titlePay.Name = "titlePay";
             this.titlePay.Size = new System.Drawing.Size(276, 135);
             this.titlePay.TabIndex = 27;
-            this.titlePay.Text = "Sử Dụng Dịch Vụ VàThanh Toán";
+            this.titlePay.Text = "Services and Payment";
             this.titlePay.TileImage = ((System.Drawing.Image)(resources.GetObject("titlePay.TileImage")));
             this.titlePay.TileImageAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.titlePay.UseCustomBackColor = true;
@@ -260,7 +260,7 @@
             this.titleRecieveRoom.Name = "titleRecieveRoom";
             this.titleRecieveRoom.Size = new System.Drawing.Size(135, 276);
             this.titleRecieveRoom.TabIndex = 25;
-            this.titleRecieveRoom.Text = "Nhận Phòng";
+            this.titleRecieveRoom.Text = "Check In";
             this.titleRecieveRoom.TileImage = ((System.Drawing.Image)(resources.GetObject("titleRecieveRoom.TileImage")));
             this.titleRecieveRoom.TileImageAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.titleRecieveRoom.UseCustomBackColor = true;
@@ -279,7 +279,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(237, 37);
             this.label2.TabIndex = 21;
-            this.label2.Text = "Quản Lí Khách Sạn";
+            this.label2.Text = "Hotel Management";
             // 
             // btnClose
             // 
@@ -305,7 +305,7 @@
             this.titleBookRoom.Name = "titleBookRoom";
             this.titleBookRoom.Size = new System.Drawing.Size(135, 276);
             this.titleBookRoom.TabIndex = 17;
-            this.titleBookRoom.Text = "Đặt Phòng";
+            this.titleBookRoom.Text = "Book Room";
             this.titleBookRoom.TileImage = ((System.Drawing.Image)(resources.GetObject("titleBookRoom.TileImage")));
             this.titleBookRoom.TileImageAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.titleBookRoom.UseCustomBackColor = true;
@@ -377,7 +377,7 @@
             this.btnAccountProfile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(139)))), ((int)(((byte)(87)))));
             this.btnAccountProfile.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnAccountProfile.BorderRadius = 0;
-            this.btnAccountProfile.ButtonText = "    Thông Tin Cá Nhân";
+            this.btnAccountProfile.ButtonText = "    Personal Information";
             this.btnAccountProfile.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnAccountProfile.DisabledColor = System.Drawing.Color.Gray;
             this.btnAccountProfile.Iconcolor = System.Drawing.Color.Transparent;
@@ -400,7 +400,7 @@
             this.btnAccountProfile.selected = false;
             this.btnAccountProfile.Size = new System.Drawing.Size(177, 40);
             this.btnAccountProfile.TabIndex = 5;
-            this.btnAccountProfile.Text = "    Thông Tin Cá Nhân";
+            this.btnAccountProfile.Text = "    Personal Information";
             this.btnAccountProfile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnAccountProfile.Textcolor = System.Drawing.Color.White;
             this.btnAccountProfile.TextFont = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -413,7 +413,7 @@
             this.btnLogOut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(139)))), ((int)(((byte)(87)))));
             this.btnLogOut.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnLogOut.BorderRadius = 0;
-            this.btnLogOut.ButtonText = "    Đăng Xuất";
+            this.btnLogOut.ButtonText = "    Log Out";
             this.btnLogOut.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnLogOut.DisabledColor = System.Drawing.Color.Gray;
             this.btnLogOut.Iconcolor = System.Drawing.Color.Transparent;
@@ -436,7 +436,7 @@
             this.btnLogOut.selected = false;
             this.btnLogOut.Size = new System.Drawing.Size(177, 40);
             this.btnLogOut.TabIndex = 4;
-            this.btnLogOut.Text = "    Đăng Xuất";
+            this.btnLogOut.Text = "    Log Out";
             this.btnLogOut.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnLogOut.Textcolor = System.Drawing.Color.White;
             this.btnLogOut.TextFont = new System.Drawing.Font("Segoe UI", 9.75F);
@@ -449,7 +449,7 @@
             this.btnHelp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(139)))), ((int)(((byte)(87)))));
             this.btnHelp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnHelp.BorderRadius = 0;
-            this.btnHelp.ButtonText = "    Trợ Giúp";
+            this.btnHelp.ButtonText = "    Help";
             this.btnHelp.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnHelp.DisabledColor = System.Drawing.Color.Gray;
             this.btnHelp.Iconcolor = System.Drawing.Color.Transparent;
@@ -472,7 +472,7 @@
             this.btnHelp.selected = false;
             this.btnHelp.Size = new System.Drawing.Size(177, 40);
             this.btnHelp.TabIndex = 3;
-            this.btnHelp.Text = "    Trợ Giúp";
+            this.btnHelp.Text = "    Help";
             this.btnHelp.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnHelp.Textcolor = System.Drawing.Color.White;
             this.btnHelp.TextFont = new System.Drawing.Font("Segoe UI", 9.75F);
@@ -484,7 +484,7 @@
             this.btnIntroduce.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(139)))), ((int)(((byte)(87)))));
             this.btnIntroduce.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnIntroduce.BorderRadius = 0;
-            this.btnIntroduce.ButtonText = "    Giới Thiệu";
+            this.btnIntroduce.ButtonText = "    About";
             this.btnIntroduce.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnIntroduce.DisabledColor = System.Drawing.Color.Gray;
             this.btnIntroduce.Iconcolor = System.Drawing.Color.Transparent;
@@ -507,7 +507,7 @@
             this.btnIntroduce.selected = false;
             this.btnIntroduce.Size = new System.Drawing.Size(177, 40);
             this.btnIntroduce.TabIndex = 2;
-            this.btnIntroduce.Text = "    Giới Thiệu";
+            this.btnIntroduce.Text = "    About";
             this.btnIntroduce.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnIntroduce.Textcolor = System.Drawing.Color.White;
             this.btnIntroduce.TextFont = new System.Drawing.Font("Segoe UI", 9.75F);
@@ -519,7 +519,7 @@
             this.bunifuFlatButton1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(139)))), ((int)(((byte)(87)))));
             this.bunifuFlatButton1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.bunifuFlatButton1.BorderRadius = 0;
-            this.bunifuFlatButton1.ButtonText = "Giới Thiệu";
+            this.bunifuFlatButton1.ButtonText = "About";
             this.bunifuFlatButton1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.bunifuFlatButton1.DisabledColor = System.Drawing.Color.Gray;
             this.bunifuFlatButton1.Iconcolor = System.Drawing.Color.Transparent;
@@ -542,7 +542,7 @@
             this.bunifuFlatButton1.selected = false;
             this.bunifuFlatButton1.Size = new System.Drawing.Size(206, 46);
             this.bunifuFlatButton1.TabIndex = 1;
-            this.bunifuFlatButton1.Text = "Giới Thiệu";
+            this.bunifuFlatButton1.Text = "About";
             this.bunifuFlatButton1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.bunifuFlatButton1.Textcolor = System.Drawing.Color.White;
             this.bunifuFlatButton1.TextFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -560,7 +560,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "fManagement";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Quản lí khách sạn";
+            this.Text = "Hotel Management";
             this.panelRight.ResumeLayout(false);
             this.panelRight.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnClose)).EndInit();

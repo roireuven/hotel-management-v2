@@ -74,7 +74,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(143, 37);
             this.label2.TabIndex = 27;
-            this.label2.Text = "Đổi Phòng";
+            this.label2.Text = "Change Room";
             // 
             // bunifuSeparator1
             // 
@@ -99,7 +99,7 @@
             this.groupBox1.Size = new System.Drawing.Size(252, 114);
             this.groupBox1.TabIndex = 51;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Chức năng";
+            this.groupBox1.Text = "Actions";
             // 
             // btnClose_
             // 
@@ -110,7 +110,7 @@
             this.btnClose_.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnClose_.BackColor = System.Drawing.Color.White;
             this.btnClose_.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnClose_.BackgroundImage")));
-            this.btnClose_.ButtonText = "Đóng";
+            this.btnClose_.ButtonText = "Close";
             this.btnClose_.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnClose_.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnClose_.ForeColor = System.Drawing.Color.SeaGreen;
@@ -136,7 +136,7 @@
             this.btnAddCustomer.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnAddCustomer.BackColor = System.Drawing.Color.White;
             this.btnAddCustomer.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnAddCustomer.BackgroundImage")));
-            this.btnAddCustomer.ButtonText = "Lưu Thay Đổi";
+            this.btnAddCustomer.ButtonText = "Save Changes";
             this.btnAddCustomer.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnAddCustomer.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAddCustomer.ForeColor = System.Drawing.Color.SeaGreen;
@@ -181,7 +181,7 @@
             this.groupBox3.Size = new System.Drawing.Size(252, 150);
             this.groupBox3.TabIndex = 54;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Danh sách phòng trống";
+            this.groupBox3.Text = "Available Rooms";
             // 
             // cbRoom
             // 
@@ -209,7 +209,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(54, 20);
             this.label1.TabIndex = 53;
-            this.label1.Text = "Phòng:";
+            this.label1.Text = "Room:";
             // 
             // cbRoomType
             // 
@@ -237,7 +237,7 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(87, 20);
             this.label3.TabIndex = 51;
-            this.label3.Text = "Loại phòng:";
+            this.label3.Text = "Room Type:";
             // 
             // groupBox2
             // 
@@ -258,7 +258,7 @@
             this.groupBox2.Size = new System.Drawing.Size(252, 266);
             this.groupBox2.TabIndex = 55;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Thông tin loại phòng";
+            this.groupBox2.Text = "Room Type Information";
             // 
             // checkBoxReceiveRoom
             // 
@@ -300,7 +300,7 @@
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(34, 20);
             this.label10.TabIndex = 36;
-            this.label10.Text = "Giá:";
+            this.label10.Text = "Price:";
             // 
             // txbLimitPerson
             // 
@@ -329,7 +329,7 @@
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(158, 20);
             this.label8.TabIndex = 31;
-            this.label8.Text = "Số lượng người tối đa:";
+            this.label8.Text = "Maximum Occupancy:";
             // 
             // txbRoomTypeName
             // 
@@ -358,7 +358,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(111, 20);
             this.label4.TabIndex = 24;
-            this.label4.Text = "Tên loại phòng:";
+            this.label4.Text = "Room Type Name:";
             // 
             // txbRoomName
             // 
@@ -387,7 +387,7 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(82, 20);
             this.label5.TabIndex = 22;
-            this.label5.Text = "Tên phòng:";
+            this.label5.Text = "Room Name:";
             // 
             // fChangeRoom
             // 

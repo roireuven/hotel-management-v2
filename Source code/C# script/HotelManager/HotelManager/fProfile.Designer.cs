@@ -103,7 +103,7 @@
             this.groupBox3.Size = new System.Drawing.Size(252, 269);
             this.groupBox3.TabIndex = 58;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Bảo mật";
+            this.groupBox3.Text = "Security";
             // 
             // bunifuThinButton22
             // 
@@ -114,7 +114,7 @@
             this.bunifuThinButton22.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.bunifuThinButton22.BackColor = System.Drawing.Color.White;
             this.bunifuThinButton22.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("bunifuThinButton22.BackgroundImage")));
-            this.bunifuThinButton22.ButtonText = "Lưu Thay Đổi";
+            this.bunifuThinButton22.ButtonText = "Save Changes";
             this.bunifuThinButton22.Cursor = System.Windows.Forms.Cursors.Hand;
             this.bunifuThinButton22.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bunifuThinButton22.ForeColor = System.Drawing.Color.SeaGreen;
@@ -157,7 +157,7 @@
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(167, 20);
             this.label14.TabIndex = 67;
-            this.label14.Text = "Xác nhận mật khẩu mới:";
+            this.label14.Text = "Confirm new password:";
             // 
             // txbNewPass
             // 
@@ -185,7 +185,7 @@
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(103, 20);
             this.label15.TabIndex = 65;
-            this.label15.Text = "Mật khẩu mới:";
+            this.label15.Text = "New password:";
             // 
             // txbPass
             // 
@@ -213,7 +213,7 @@
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(73, 20);
             this.label17.TabIndex = 63;
-            this.label17.Text = "Mật khẩu:";
+            this.label17.Text = "Password:";
             // 
             // bunifuCheckbox2
             // 
@@ -263,7 +263,7 @@
             this.groupBox2.Size = new System.Drawing.Size(723, 204);
             this.groupBox2.TabIndex = 54;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Thông tin cơ bản";
+            this.groupBox2.Text = "Basic Information";
             // 
             // txbIDCard
             // 
@@ -291,7 +291,7 @@
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(153, 20);
             this.label10.TabIndex = 71;
-            this.label10.Text = "Thẻ căn cước/ CMND:";
+            this.label10.Text = "ID Card:";
             // 
             // bunifuThinButton21
             // 
@@ -302,7 +302,7 @@
             this.bunifuThinButton21.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.bunifuThinButton21.BackColor = System.Drawing.Color.White;
             this.bunifuThinButton21.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("bunifuThinButton21.BackgroundImage")));
-            this.bunifuThinButton21.ButtonText = "Lưu Thay Đổi";
+            this.bunifuThinButton21.ButtonText = "Save Changes";
             this.bunifuThinButton21.Cursor = System.Windows.Forms.Cursors.Hand;
             this.bunifuThinButton21.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bunifuThinButton21.ForeColor = System.Drawing.Color.SeaGreen;
@@ -346,7 +346,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(104, 20);
             this.label4.TabIndex = 61;
-            this.label4.Text = "Ngày vào làm:";
+            this.label4.Text = "Start date:";
             // 
             // label13
             // 
@@ -357,7 +357,7 @@
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(68, 20);
             this.label13.TabIndex = 59;
-            this.label13.Text = "Giới tính:";
+            this.label13.Text = "Gender:";
             // 
             // label6
             // 
@@ -368,7 +368,7 @@
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(77, 20);
             this.label6.TabIndex = 56;
-            this.label6.Text = "Ngày sinh:";
+            this.label6.Text = "Date of birth:";
             // 
             // txbAddress
             // 
@@ -396,7 +396,7 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(58, 20);
             this.label5.TabIndex = 55;
-            this.label5.Text = "Địa chỉ:";
+            this.label5.Text = "Address:";
             // 
             // txbPhoneNumber
             // 
@@ -424,7 +424,7 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(100, 20);
             this.label3.TabIndex = 53;
-            this.label3.Text = "Số điện thoại:";
+            this.label3.Text = "Phone number:";
             // 
             // bunifuCheckbox1
             // 
@@ -457,7 +457,7 @@
             this.groupBox1.Size = new System.Drawing.Size(252, 269);
             this.groupBox1.TabIndex = 53;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Thông tin tài khoản";
+            this.groupBox1.Text = "Account Information";
             // 
             // txbStaffType
             // 
@@ -486,7 +486,7 @@
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(105, 20);
             this.label11.TabIndex = 70;
-            this.label11.Text = "Loại tài khoản:";
+            this.label11.Text = "Account type:";
             // 
             // btnBookRoom
             // 
@@ -497,7 +497,7 @@
             this.btnBookRoom.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnBookRoom.BackColor = System.Drawing.Color.White;
             this.btnBookRoom.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnBookRoom.BackgroundImage")));
-            this.btnBookRoom.ButtonText = "Lưu Thay Đổi";
+            this.btnBookRoom.ButtonText = "Save Changes";
             this.btnBookRoom.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnBookRoom.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnBookRoom.ForeColor = System.Drawing.Color.SeaGreen;
@@ -540,7 +540,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(88, 20);
             this.label1.TabIndex = 51;
-            this.label1.Text = "Tên hiển thị:";
+            this.label1.Text = "Display name:";
             // 
             // txbUserName
             // 
@@ -569,7 +569,7 @@
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(110, 20);
             this.label16.TabIndex = 49;
-            this.label16.Text = "Tên đăng nhập:";
+            this.label16.Text = "Username:";
             // 
             // checkBoxReceiveRoom
             // 
@@ -641,7 +641,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(245, 37);
             this.label2.TabIndex = 50;
-            this.label2.Text = "Thông Tin Cá Nhân";
+            this.label2.Text = "Personal Information";
             // 
             // btnClose_
             // 
@@ -652,7 +652,7 @@
             this.btnClose_.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnClose_.BackColor = System.Drawing.Color.White;
             this.btnClose_.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnClose_.BackgroundImage")));
-            this.btnClose_.ButtonText = "Đóng";
+            this.btnClose_.ButtonText = "Close";
             this.btnClose_.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnClose_.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnClose_.ForeColor = System.Drawing.Color.SeaGreen;
@@ -691,9 +691,9 @@
             this.cbSex.FormattingEnabled = true;
             this.cbSex.ItemHeight = 23;
             this.cbSex.Items.AddRange(new object[] {
-            "Nam",
-            "Nữ",
-            "Khác"});
+            "Male",
+            "Female",
+            "Other"});
             this.cbSex.Location = new System.Drawing.Point(494, 54);
             this.cbSex.Name = "cbSex";
             this.cbSex.Size = new System.Drawing.Size(203, 29);

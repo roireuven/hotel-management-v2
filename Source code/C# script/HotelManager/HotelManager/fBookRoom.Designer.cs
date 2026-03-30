@@ -117,7 +117,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(143, 37);
             this.label2.TabIndex = 4;
-            this.label2.Text = "Đặt Phòng";
+            this.label2.Text = "Book Room";
             // 
             // groupBox5
             // 
@@ -133,7 +133,7 @@
             this.groupBox5.Size = new System.Drawing.Size(252, 247);
             this.groupBox5.TabIndex = 45;
             this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Chức năng";
+            this.groupBox5.Text = "Actions";
             // 
             // btnClose_
             // 
@@ -144,7 +144,7 @@
             this.btnClose_.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnClose_.BackColor = System.Drawing.Color.White;
             this.btnClose_.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnClose_.BackgroundImage")));
-            this.btnClose_.ButtonText = "Đóng";
+            this.btnClose_.ButtonText = "Close";
             this.btnClose_.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnClose_.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnClose_.ForeColor = System.Drawing.Color.SeaGreen;
@@ -183,7 +183,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(169, 20);
             this.label1.TabIndex = 47;
-            this.label1.Text = "Chuyển đến nhận phòng";
+            this.label1.Text = "Go to Check-In";
             // 
             // btnCancel
             // 
@@ -194,7 +194,7 @@
             this.btnCancel.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnCancel.BackColor = System.Drawing.Color.White;
             this.btnCancel.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnCancel.BackgroundImage")));
-            this.btnCancel.ButtonText = "Hủy";
+            this.btnCancel.ButtonText = "Cancel";
             this.btnCancel.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnCancel.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCancel.ForeColor = System.Drawing.Color.SeaGreen;
@@ -220,7 +220,7 @@
             this.btnBookRoom.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnBookRoom.BackColor = System.Drawing.Color.White;
             this.btnBookRoom.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnBookRoom.BackgroundImage")));
-            this.btnBookRoom.ButtonText = "Đặt Phòng";
+            this.btnBookRoom.ButtonText = "Book Room";
             this.btnBookRoom.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnBookRoom.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnBookRoom.ForeColor = System.Drawing.Color.SeaGreen;
@@ -264,7 +264,7 @@
             this.groupBox2.Size = new System.Drawing.Size(453, 247);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Thông tin khách hàng";
+            this.groupBox2.Text = "Customer Information";
             // 
             // cbNationality
             // 
@@ -273,23 +273,23 @@
             this.cbNationality.FormattingEnabled = true;
             this.cbNationality.ItemHeight = 23;
             this.cbNationality.Items.AddRange(new object[] {
-            "Việt Nam",
-            "Trung Quốc",
-            "Hàn Quốc",
-            "Nhật Bản",
-            "Đài Loan",
+            "Vietnam",
+            "China",
+            "South Korea",
+            "Japan",
+            "Taiwan",
             "Malaysia",
-            "Thái Lan",
+            "Thailand",
             "Singapore",
-            "Nga",
-            "Anh",
-            "Pháp",
-            "Đức",
-            "Hoa Kỳ",
-            "Hà Lan",
-            "Tây Ban Nha",
-            "Ý",
-            "Khác"});
+            "Russia",
+            "United Kingdom",
+            "France",
+            "Germany",
+            "United States",
+            "Netherlands",
+            "Spain",
+            "Italy",
+            "Other"});
             this.cbNationality.Location = new System.Drawing.Point(240, 207);
             this.cbNationality.Name = "cbNationality";
             this.cbNationality.Size = new System.Drawing.Size(203, 29);
@@ -324,7 +324,7 @@
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(77, 20);
             this.label6.TabIndex = 46;
-            this.label6.Text = "Ngày sinh:";
+            this.label6.Text = "Date of birth:";
             // 
             // cbCustomerType
             // 
@@ -351,7 +351,7 @@
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(119, 20);
             this.label20.TabIndex = 41;
-            this.label20.Text = "Loại khách hàng:";
+            this.label20.Text = "Customer type:";
             // 
             // DatepickerDateOfReceive
             // 
@@ -393,7 +393,7 @@
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(58, 20);
             this.label11.TabIndex = 35;
-            this.label11.Text = "Địa chỉ:";
+            this.label11.Text = "Address:";
             // 
             // cbSex
             // 
@@ -402,9 +402,9 @@
             this.cbSex.FormattingEnabled = true;
             this.cbSex.ItemHeight = 23;
             this.cbSex.Items.AddRange(new object[] {
-            "Nam",
-            "Nữ",
-            "Khác"});
+            "Male",
+            "Female",
+            "Other"});
             this.cbSex.Location = new System.Drawing.Point(240, 152);
             this.cbSex.Name = "cbSex";
             this.cbSex.Size = new System.Drawing.Size(203, 29);
@@ -424,7 +424,7 @@
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(75, 20);
             this.label12.TabIndex = 29;
-            this.label12.Text = "Quốc tịch:";
+            this.label12.Text = "Nationality:";
             // 
             // label13
             // 
@@ -435,7 +435,7 @@
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(68, 20);
             this.label13.TabIndex = 28;
-            this.label13.Text = "Giới tính:";
+            this.label13.Text = "Gender:";
             // 
             // txbPhoneNumber
             // 
@@ -464,7 +464,7 @@
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(100, 20);
             this.label14.TabIndex = 26;
-            this.label14.Text = "Số điện thoại:";
+            this.label14.Text = "Phone number:";
             // 
             // txbIDCard
             // 
@@ -493,7 +493,7 @@
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(153, 20);
             this.label15.TabIndex = 24;
-            this.label15.Text = "Thẻ căn cước/ CMND:";
+            this.label15.Text = "ID Card:";
             // 
             // txbFullName
             // 
@@ -521,7 +521,7 @@
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(76, 20);
             this.label16.TabIndex = 22;
-            this.label16.Text = "Họ và tên:";
+            this.label16.Text = "Full name:";
             // 
             // groupBox1
             // 
@@ -542,7 +542,7 @@
             this.groupBox1.Size = new System.Drawing.Size(252, 258);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Thông tin loại phòng";
+            this.groupBox1.Text = "Room Type Information";
             // 
             // checkBoxReceiveRoom
             // 
@@ -584,7 +584,7 @@
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(34, 20);
             this.label10.TabIndex = 36;
-            this.label10.Text = "Giá:";
+            this.label10.Text = "Price:";
             // 
             // txbAmountPeople
             // 
@@ -613,7 +613,7 @@
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(158, 20);
             this.label8.TabIndex = 31;
-            this.label8.Text = "Số lượng người tối đa:";
+            this.label8.Text = "Maximum Occupancy:";
             // 
             // txbRoomTypeName
             // 
@@ -642,7 +642,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(111, 20);
             this.label4.TabIndex = 24;
-            this.label4.Text = "Tên loại phòng:";
+            this.label4.Text = "Room Type Name:";
             // 
             // txbRoomTypeID
             // 
@@ -671,7 +671,7 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(109, 20);
             this.label3.TabIndex = 22;
-            this.label3.Text = "Mã loại phòng:";
+            this.label3.Text = "Room type code:";
             // 
             // btnClose
             // 
@@ -714,7 +714,7 @@
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(87, 20);
             this.label17.TabIndex = 32;
-            this.label17.Text = "Loại phòng:";
+            this.label17.Text = "Room Type:";
             // 
             // bunifuSeparator1
             // 
@@ -738,7 +738,7 @@
             this.groupBox4.Size = new System.Drawing.Size(453, 508);
             this.groupBox4.TabIndex = 28;
             this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Danh sách đặt phòng trong ngày";
+            this.groupBox4.Text = "Today's Bookings";
             // 
             // panel2
             // 
@@ -760,7 +760,7 @@
             this.btnDetails.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnDetails.BackColor = System.Drawing.Color.White;
             this.btnDetails.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnDetails.BackgroundImage")));
-            this.btnDetails.ButtonText = "Xem Chi Tiết";
+            this.btnDetails.ButtonText = "View Details";
             this.btnDetails.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnDetails.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDetails.ForeColor = System.Drawing.Color.SeaGreen;
@@ -852,7 +852,7 @@
             this.groupBox6.Size = new System.Drawing.Size(453, 150);
             this.groupBox6.TabIndex = 34;
             this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Thông tin đăng kí";
+            this.groupBox6.Text = "Registration Information";
             // 
             // dpkDateCheckOut
             // 
@@ -879,7 +879,7 @@
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(69, 20);
             this.label23.TabIndex = 40;
-            this.label23.Text = "Ngày trả:";
+            this.label23.Text = "Check-Out Date:";
             // 
             // txbDays
             // 
@@ -909,7 +909,7 @@
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(63, 20);
             this.label19.TabIndex = 38;
-            this.label19.Text = "Số đêm:";
+            this.label19.Text = "Nights:";
             // 
             // dpkDateCheckIn
             // 
@@ -936,7 +936,7 @@
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(83, 20);
             this.label21.TabIndex = 34;
-            this.label21.Text = "Ngày nhận:";
+            this.label21.Text = "Check-In Date:";
             // 
             // groupBox3
             // 
@@ -950,7 +950,7 @@
             this.groupBox3.Size = new System.Drawing.Size(454, 106);
             this.groupBox3.TabIndex = 46;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Tìm kiếm khách hàng";
+            this.groupBox3.Text = "Search Customers";
             // 
             // btnSearch
             // 
@@ -961,7 +961,7 @@
             this.btnSearch.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnSearch.BackColor = System.Drawing.Color.White;
             this.btnSearch.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnSearch.BackgroundImage")));
-            this.btnSearch.ButtonText = "Tìm Kiếm";
+            this.btnSearch.ButtonText = "Search";
             this.btnSearch.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnSearch.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSearch.ForeColor = System.Drawing.Color.SeaGreen;
@@ -1005,7 +1005,7 @@
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(153, 20);
             this.label9.TabIndex = 28;
-            this.label9.Text = "Thẻ căn cước/ CMND:";
+            this.label9.Text = "ID Card:";
             // 
             // fBookRoom
             // 
