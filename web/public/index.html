@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        :root { --primary: #1877F2; --bg: #F0F2F5; }
+        body { background: var(--bg); font-family: 'Segoe UI', sans-serif; }
+        .navbar-brand { font-weight: 700; font-size: 1.4rem; }
+        .kpi-card { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); text-align: center; }
+        .kpi-card h2 { color: var(--primary); font-size: 2.2rem; font-weight: 700; margin: 8px 0 4px; }
+        .kpi-card .label { color: #65676B; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .card { border: none; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .card-header { background: var(--primary); color: #fff; border-radius: 12px 12px 0 0 !important; font-weight: 600; }
+        .nav-pills .nav-link.active { background: var(--primary); }
+        .nav-pills .nav-link { color: var(--primary); }
+        .badge-high-value { background: #42B72A; }
+        .badge-high-maint { background: #FA383E; }
+        .table th { background: var(--primary); color: #fff; font-weight: 500; font-size: 0.85rem; }
+        .pricing-surge { color: #FA383E; font-weight: 700; }
+        .pricing-discount { color: #42B72A; font-weight: 700; }
+        .pricing-normal { color: #65676B; }
+        #loginPage { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .login-card { max-width: 400px; width: 100%; }
+        .login-card .btn-primary { background: var(--primary); border: none; padding: 12px; font-size: 1.1rem; font-weight: 600; }
+        .login-card .btn-success { background: #42B72A; border: none; }
+        @media (max-width: 768px) {
+            .kpi-card h2 { font-size: 1.6rem; }
+            .kpi-card { padding: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- LOGIN PAGE -->
+<div id="loginPage">
+    <div class="login-card">
+        <div class="text-center mb-4">
+            <i class="bi bi-building" style="font-size:3rem;color:var(--primary)"></i>
+            <h3 style="color:var(--primary);font-weight:700">Hotel Management</h3>
+            <p class="text-muted">Property Management System</p>
+        </div>
+        <div class="card p-4">
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" id="loginUser" class="form-control form-control-lg" placeholder="Enter username">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" id="loginPass" class="form-control form-control-lg" placeholder="Enter password">
+            </div>
+            <div id="loginError" class="alert alert-danger d-none"></div>
+            <button class="btn btn-primary w-100 mb-2" onclick="doLogin()">Log In</button>
+            <button class="btn btn-success w-100" onclick="window.location.reload()">Reset</button>
+        </div>
+    </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="appPage" class="d-none">
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark" style="background:var(--primary)">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#"><i class="bi bi-building me-2"></i>Hotel Management</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link active" href="#" onclick="showSection('dashboard')"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('rooms')"><i class="bi bi-door-open"></i> Rooms</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('bookings')"><i class="bi bi-calendar-check"></i> Bookings</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('guests')"><i class="bi bi-people"></i> Guests</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('services')"><i class="bi bi-cup-straw"></i> Services</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('bills')"><i class="bi bi-receipt"></i> Bills</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('ai')"><i class="bi bi-robot"></i> AI Tools</a></li>
+            </ul>
+            <span class="navbar-text text-white me-3" id="welcomeUser"></span>
+            <button class="btn btn-outline-light btn-sm" onclick="doLogout()"><i class="bi bi-box-arrow-right"></i> Logout</button>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid p-3 p-md-4">
+
+<!-- DASHBOARD SECTION -->
+<div id="sec-dashboard">
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3"><div class="kpi-card"><div class="label">Today's Arrivals</div><h2 id="kpiArrivals">-</h2><i class="bi bi-box-arrow-in-right text-primary" style="font-size:1.5rem"></i></div></div>
+        <div class="col-6 col-md-3"><div class="kpi-card"><div class="label">Today's Departures</div><h2 id="kpiDepartures">-</h2><i class="bi bi-box-arrow-right text-danger" style="font-size:1.5rem"></i></div></div>
+        <div class="col-6 col-md-3"><div class="kpi-card"><div class="label">Occupancy</div><h2 id="kpiOccupancy">-</h2><div class="progress mt-2" style="height:8px"><div id="kpiOccBar" class="progress-bar" style="width:0%"></div></div></div></div>
+        <div class="col-6 col-md-3"><div class="kpi-card"><div class="label">RevPAR</div><h2 id="kpiRevpar">-</h2><i class="bi bi-currency-dollar text-success" style="font-size:1.5rem"></i></div></div>
+    </div>
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="card"><div class="card-header"><i class="bi bi-door-open me-2"></i>Room Overview</div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between mb-2"><span>Total Rooms</span><strong id="statTotal">-</strong></div>
+                <div class="d-flex justify-content-between mb-2"><span>Occupied</span><strong id="statOccupied" class="text-danger">-</strong></div>
+                <div class="d-flex justify-content-between"><span>Available</span><strong id="statAvailable" class="text-success">-</strong></div>
+            </div></div>
+        </div>
+        <div class="col-md-4">
+            <div class="card"><div class="card-header"><i class="bi bi-graph-up me-2"></i>Dynamic Pricing</div>
+            <div class="card-body text-center">
+                <div id="pricingBadge" class="fs-4 fw-bold mb-2">-</div>
+                <div id="pricingDesc" class="text-muted">-</div>
+            </div></div>
+        </div>
+        <div class="col-md-4">
+            <div class="card"><div class="card-header"><i class="bi bi-clock-history me-2"></i>Quick Actions</div>
+            <div class="card-body">
+                <button class="btn btn-primary w-100 mb-2" onclick="showSection('bookings')"><i class="bi bi-plus-circle"></i> View Bookings</button>
+                <button class="btn btn-outline-primary w-100 mb-2" onclick="showSection('rooms')"><i class="bi bi-door-open"></i> Manage Rooms</button>
+                <button class="btn btn-outline-primary w-100" onclick="showSection('ai')"><i class="bi bi-robot"></i> AI Tools</button>
+            </div></div>
+        </div>
+    </div>
+</div>
+
+<!-- ROOMS SECTION -->
+<div id="sec-rooms" class="d-none">
+    <div class="card"><div class="card-header d-flex justify-content-between align-items-center"><span><i class="bi bi-door-open me-2"></i>Room Management</span><button class="btn btn-sm btn-light" onclick="loadRooms()"><i class="bi bi-arrow-clockwise"></i></button></div>
+    <div class="card-body p-0"><div class="table-responsive"><table class="table table-hover mb-0"><thead><tr><th>ID</th><th>Room</th><th>Type</th><th>Price</th><th>Max</th><th>Status</th></tr></thead><tbody id="roomsTable"></tbody></table></div></div></div>
+</div>
+
+<!-- BOOKINGS SECTION -->
+<div id="sec-bookings" class="d-none">
+    <div class="card"><div class="card-header"><i class="bi bi-calendar-check me-2"></i>Bookings</div>
+    <div class="card-body p-0"><div class="table-responsive"><table class="table table-hover mb-0"><thead><tr><th>ID</th><th>Guest</th><th>Room Type</th><th>Check-In</th><th>Check-Out</th><th>Booked On</th></tr></thead><tbody id="bookingsTable"></tbody></table></div></div></div>
+</div>
+
+<!-- GUESTS SECTION -->
+<div id="sec-guests" class="d-none">
+    <div class="card"><div class="card-header"><i class="bi bi-people me-2"></i>Guests</div>
+    <div class="card-body p-0"><div class="table-responsive"><table class="table table-hover mb-0"><thead><tr><th>Name</th><th>ID Card</th><th>Type</th><th>Gender</th><th>Phone</th><th>Nationality</th></tr></thead><tbody id="guestsTable"></tbody></table></div></div></div>
+</div>
+
+<!-- SERVICES SECTION -->
+<div id="sec-services" class="d-none">
+    <div class="card"><div class="card-header"><i class="bi bi-cup-straw me-2"></i>Services</div>
+    <div class="card-body p-0"><div class="table-responsive"><table class="table table-hover mb-0"><thead><tr><th>ID</th><th>Service</th><th>Type</th><th>Price</th></tr></thead><tbody id="servicesTable"></tbody></table></div></div></div>
+</div>
+
+<!-- BILLS SECTION -->
+<div id="sec-bills" class="d-none">
+    <div class="card"><div class="card-header"><i class="bi bi-receipt me-2"></i>Bills / Invoices</div>
+    <div class="card-body p-0"><div class="table-responsive"><table class="table table-hover mb-0"><thead><tr><th>ID</th><th>Staff</th><th>Date</th><th>Room</th><th>Service</th><th>Total</th><th>Status</th></tr></thead><tbody id="billsTable"></tbody></table></div></div></div>
+</div>
+
+<!-- AI TOOLS SECTION -->
+<div id="sec-ai" class="d-none">
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div class="card"><div class="card-header"><i class="bi bi-robot me-2"></i>AI Smart Check-In</div>
+            <div class="card-body">
+                <p class="text-muted">Paste a booking email or text and AI will extract guest details automatically.</p>
+                <textarea id="aiEmailInput" class="form-control mb-3" rows="4" placeholder="Guest Name: John Smith&#10;Check-in: 2026-04-01&#10;Check-out: 2026-04-05&#10;Price: $500"></textarea>
+                <button class="btn btn-primary w-100 mb-3" onclick="parseBooking()"><i class="bi bi-magic"></i> Parse Booking</button>
+                <div id="parseResults" class="d-none">
+                    <div class="alert alert-success">
+                        <div class="row">
+                            <div class="col-6"><strong>Name:</strong> <span id="parsedName">-</span></div>
+                            <div class="col-6"><strong>Price:</strong> <span id="parsedPrice">-</span></div>
+                            <div class="col-6"><strong>Check-In:</strong> <span id="parsedIn">-</span></div>
+                            <div class="col-6"><strong>Check-Out:</strong> <span id="parsedOut">-</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div></div>
+        </div>
+        <div class="col-md-6">
+            <div class="card"><div class="card-header"><i class="bi bi-emoji-smile me-2"></i>Guest Sentiment Analysis</div>
+            <div class="card-body">
+                <p class="text-muted">Enter guest notes or special requests to analyze sentiment.</p>
+                <textarea id="sentimentInput" class="form-control mb-3" rows="4" placeholder="VIP guest celebrating anniversary, needs champagne and flowers..."></textarea>
+                <button class="btn btn-primary w-100 mb-3" onclick="analyzeSentiment()"><i class="bi bi-search"></i> Analyze Sentiment</button>
+                <div id="sentimentResult" class="text-center d-none">
+                    <span id="sentimentBadge" class="badge fs-5 px-4 py-2">-</span>
+                </div>
+            </div></div>
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+let currentUser = null;
+
+function fmt(n) { return n ? n.toLocaleString('en-US') : '0'; }
+function fmtDate(d) { return d ? new Date(d).toLocaleDateString() : '-'; }
+function fmtPrice(p) { return p ? p.toLocaleString('en-US') + ' đ' : '0 đ'; }
+
+async function doLogin() {
+    const user = document.getElementById('loginUser').value;
+    const pass = document.getElementById('loginPass').value;
+    const errEl = document.getElementById('loginError');
+    errEl.classList.add('d-none');
+    try {
+        const res = await fetch('/api/login', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({username:user,password:pass}) });
+        if (res.ok) {
+            currentUser = user;
+            document.getElementById('loginPage').classList.add('d-none');
+            document.getElementById('appPage').classList.remove('d-none');
+            document.getElementById('welcomeUser').textContent = 'Welcome, ' + user;
+            loadDashboard();
+        } else {
+            errEl.textContent = 'Invalid username or password';
+            errEl.classList.remove('d-none');
+        }
+    } catch(e) { errEl.textContent = 'Connection error: ' + e.message; errEl.classList.remove('d-none'); }
+}
+
+function doLogout() { currentUser = null; location.reload(); }
+
+document.getElementById('loginPass').addEventListener('keypress', e => { if(e.key==='Enter') doLogin(); });
+
+function showSection(name) {
+    document.querySelectorAll('[id^="sec-"]').forEach(el => el.classList.add('d-none'));
+    document.getElementById('sec-' + name).classList.remove('d-none');
+    document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+    event.target.closest('.nav-link')?.classList.add('active');
+    if (name === 'dashboard') loadDashboard();
+    else if (name === 'rooms') loadRooms();
+    else if (name === 'bookings') loadBookings();
+    else if (name === 'guests') loadGuests();
+    else if (name === 'services') loadServices();
+    else if (name === 'bills') loadBills();
+}
+
+async function loadDashboard() {
+    try {
+        const res = await fetch('/api/dashboard');
+        const d = await res.json();
+        document.getElementById('kpiArrivals').textContent = d.arrivals;
+        document.getElementById('kpiDepartures').textContent = d.departures;
+        document.getElementById('kpiOccupancy').textContent = d.occupancy + '%';
+        document.getElementById('kpiOccBar').style.width = d.occupancy + '%';
+        document.getElementById('kpiOccBar').className = 'progress-bar ' + (d.occupancy > 80 ? 'bg-danger' : d.occupancy > 50 ? 'bg-warning' : 'bg-success');
+        document.getElementById('kpiRevpar').textContent = '$' + fmt(d.revpar);
+        document.getElementById('statTotal').textContent = d.totalRooms;
+        document.getElementById('statOccupied').textContent = d.occupied;
+        document.getElementById('statAvailable').textContent = d.available;
+        const pb = document.getElementById('pricingBadge');
+        const pd = document.getElementById('pricingDesc');
+        if (d.pricing === 'SURGE') { pb.className = 'fs-4 fw-bold pricing-surge'; pb.textContent = '▲ SURGE PRICING'; pd.textContent = 'High demand — rates increased by 20%'; }
+        else if (d.pricing === 'DISCOUNT') { pb.className = 'fs-4 fw-bold pricing-discount'; pb.textContent = '▼ DISCOUNT ACTIVE'; pd.textContent = 'Low demand — 10% discount applied'; }
+        else { pb.className = 'fs-4 fw-bold pricing-normal'; pb.textContent = '● STANDARD RATES'; pd.textContent = 'Normal occupancy — base rates apply'; }
+    } catch(e) { console.error(e); }
+}
+
+async function loadRooms() {
+    const res = await fetch('/api/rooms'); const data = await res.json();
+    document.getElementById('roomsTable').innerHTML = data.map(r => `<tr><td>${r.ID}</td><td><strong>${r.RoomName}</strong></td><td><span class="badge bg-primary">${r.RoomType}</span></td><td>${fmtPrice(r.Price)}</td><td>${r.MaxOccupancy}</td><td><span class="badge ${r.Status==='Trống'?'bg-success':r.Status==='Có người'?'bg-danger':'bg-warning'}">${r.Status}</span></td></tr>`).join('');
+}
+
+async function loadBookings() {
+    const res = await fetch('/api/bookings'); const data = await res.json();
+    document.getElementById('bookingsTable').innerHTML = data.map(b => `<tr><td>${b.ID}</td><td><strong>${b.GuestName}</strong></td><td><span class="badge bg-primary">${b.RoomType}</span></td><td>${fmtDate(b.DateCheckIn)}</td><td>${fmtDate(b.DateCheckOut)}</td><td>${fmtDate(b.DateBookRoom)}</td></tr>`).join('');
+}
+
+async function loadGuests() {
+    const res = await fetch('/api/guests'); const data = await res.json();
+    document.getElementById('guestsTable').innerHTML = data.map(g => `<tr><td><strong>${g.Name}</strong></td><td>${g.IDCard}</td><td>${g.CustomerType}</td><td>${g.Sex}</td><td>${g.PhoneNumber}</td><td>${g.Nationality}</td></tr>`).join('');
+}
+
+async function loadServices() {
+    const res = await fetch('/api/services'); const data = await res.json();
+    document.getElementById('servicesTable').innerHTML = data.map(s => `<tr><td>${s.ID}</td><td><strong>${s.Name}</strong></td><td><span class="badge bg-info">${s.ServiceType}</span></td><td>${fmtPrice(s.Price)}</td></tr>`).join('');
+}
+
+async function loadBills() {
+    const res = await fetch('/api/bills'); const data = await res.json();
+    document.getElementById('billsTable').innerHTML = data.map(b => `<tr><td>${b.ID}</td><td>${b.StaffSetUp}</td><td>${fmtDate(b.DateOfCreate)}</td><td>${fmtPrice(b.RoomPrice)}</td><td>${fmtPrice(b.ServicePrice)}</td><td><strong>${fmtPrice(b.TotalPrice)}</strong></td><td><span class="badge ${b.Status.includes('Đã')?'bg-success':'bg-warning'}">${b.Status.includes('Đã')?'Paid':'Unpaid'}</span></td></tr>`).join('');
+}
+
+async function parseBooking() {
+    const text = document.getElementById('aiEmailInput').value;
+    if (!text) return;
+    const res = await fetch('/api/parse-booking', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({text}) });
+    const d = await res.json();
+    document.getElementById('parsedName').textContent = d.name || 'Not found';
+    document.getElementById('parsedIn').textContent = d.checkIn || 'Not found';
+    document.getElementById('parsedOut').textContent = d.checkOut || 'Not found';
+    document.getElementById('parsedPrice').textContent = d.price ? '$' + d.price : 'Not found';
+    document.getElementById('parseResults').classList.remove('d-none');
+}
+
+async function analyzeSentiment() {
+    const text = document.getElementById('sentimentInput').value;
+    if (!text) return;
+    const res = await fetch('/api/sentiment', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({text}) });
+    const d = await res.json();
+    const badge = document.getElementById('sentimentBadge');
+    badge.textContent = d.sentiment;
+    badge.className = 'badge fs-5 px-4 py-2 bg-' + d.badge;
+    document.getElementById('sentimentResult').classList.remove('d-none');
+}
+</script>
+</body>
+</html>
