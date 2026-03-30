@@ -12,15 +12,17 @@ namespace HotelManager.DAO
         private static AccountDAO instance;
         internal string HashPass(string text)
         {
-            MD5 md5 = MD5.Create();
-            byte[] temp = Encoding.ASCII.GetBytes(text);
-            byte[] hashData = md5.ComputeHash(temp);
-            string hashPass = "";
-            foreach (var item in hashData)
+            using (MD5 md5 = MD5.Create())
             {
-                hashPass += item.ToString("x2");
+                byte[] temp = Encoding.UTF8.GetBytes(text);
+                byte[] hashData = md5.ComputeHash(temp);
+                StringBuilder sb = new StringBuilder();
+                foreach (var item in hashData)
+                {
+                    sb.Append(item.ToString("x2"));
+                }
+                return sb.ToString();
             }
-            return hashPass;
         }
         internal bool Login(string userName, string passWord)
         {
@@ -31,10 +33,9 @@ namespace HotelManager.DAO
         }
         internal Account LoadStaffInforByUserName(string username)
         {
-            //string query = "USP_GetNameStaffTypeByUserName @username";
-            //DataTable dataTable = DataProvider.Instance.ExecuteQuery(query, new object[] { username });
-            string query = "select * from Staff where UserName='" + username + "'";
-            DataTable dataTable = DataProvider.Instance.ExecuteQuery(query);
+            string query = "select * from Staff where UserName= @username";
+            DataTable dataTable = DataProvider.Instance.ExecuteQuery(query, new object[] { username });
+            if (dataTable.Rows.Count == 0) return null;
             Account account = new Account(dataTable.Rows[0]);
             return account;
         }
@@ -61,8 +62,9 @@ namespace HotelManager.DAO
         internal Account GetStaffSetUp(int idBill)
         {
             string query = "USP_GetStaffSetUp @idBill";
-            Account account = new Account(DataProvider.Instance.ExecuteQuery(query, new object[] { idBill }).Rows[0]);
-            return account;
+            DataTable data = DataProvider.Instance.ExecuteQuery(query, new object[] { idBill });
+            if (data.Rows.Count == 0) return null;
+            return new Account(data.Rows[0]);
         }
         internal DataTable LoadFullStaff()
         {
@@ -72,7 +74,7 @@ namespace HotelManager.DAO
         internal bool InsertAccount(Account account)
         {
             string query = "EXEC USP_InsertStaff @user , @name , @pass , @idStaffType , @idCard , @dateOfBirth , @sex , @address , @phoneNumber , @startDay";
-            object[] parameter = new object[] {account.UserName, account.DisplayName, account.PassWord, account.IdStaffType,
+            object[] parameter = new object[] {account.UserName, account.DisplayName, HashPass(account.PassWord), account.IdStaffType,
                                                 account.IdCard, account.DateOfBirth, account.Sex,
                                                 account.Address, account.PhoneNumber, account.StartDay};
             return DataProvider.Instance.ExecuteNoneQuery(query, parameter) > 0;
