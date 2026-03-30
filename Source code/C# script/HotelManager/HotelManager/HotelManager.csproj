@@ -423,8 +423,6 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Procs.sql" />
-    <Content Include="Tables.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
