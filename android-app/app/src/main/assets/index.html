@@ -513,6 +513,7 @@ function renderBookings() {
     data: sorted,
     onEdit: (row, field, val) => { const b = bookings.find(x=>x.id===row.id); if(b){b[field]=val;save('bookings',bookings);toast('Booking updated');} },
     actions: [
+      {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditBooking(id)},
       {name:'checkin',label:'Check In',cls:'btn-primary',condition:r=>r.status==='pending'||r.status==='reserved',handler:id=>checkIn(id)},
       {name:'checkout',label:'Check Out',cls:'btn-danger',condition:r=>r.status==='checked-in',handler:id=>checkOut(id)},
       {name:'services',label:'🛎️',cls:'btn-warning',condition:r=>r.status==='checked-in',handler:id=>showOrderService(id)},
@@ -570,6 +571,27 @@ window.orderService = function(bId) {
   if(!b.services) b.services = [];
   b.services.push({name:svc.name,price:svc.price,icon:svc.icon,qty});
   save('bookings',bookings); toast(svc.name+' added'); showOrderService(bId);
+};
+window.showEditBooking = function(id) {
+  const b = bookings.find(x=>x.id===id); if(!b) return;
+  const avail = rooms.filter(r=>r.status==='available'||r.id===b.roomId);
+  openModal(`<div class="modal-header"><h2>Edit Booking</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body"><div class="form-group"><label>Guest</label><select class="form-control" id="eBkGuest">${guests.map(g=>`<option value="${g.id}" ${g.id===b.guestId?'selected':''}>${g.firstName} ${g.lastName}</option>`).join('')}</select></div>
+    <div class="form-group"><label>Room</label><select class="form-control" id="eBkRoom">${avail.map(r=>`<option value="${r.id}" ${r.id===b.roomId?'selected':''}>${r.number} - ${r.type} (${fmt$(r.price)}/night)</option>`).join('')}</select></div>
+    <div class="form-row"><div class="form-group"><label>Check-in</label><input type="date" class="form-control" id="eBkIn" value="${b.checkin}"></div><div class="form-group"><label>Check-out</label><input type="date" class="form-control" id="eBkOut" value="${b.checkout}"></div></div>
+    <div class="form-group"><label>Status</label><select class="form-control" id="eBkStatus">${['pending','reserved','checked-in','checked-out'].map(s=>`<option value="${s}" ${s===b.status?'selected':''}>${s.replace('-',' ')}</option>`).join('')}</select></div>
+    <div class="form-group"><label>Notes</label><textarea class="form-control" id="eBkNotes" rows="2">${b.notes||''}</textarea></div></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateBooking('${b.id}')">Save</button></div>`);
+};
+window.updateBooking = function(id) {
+  const b = bookings.find(x=>x.id===id); if(!b) return;
+  const gId = document.getElementById('eBkGuest').value; const rId = document.getElementById('eBkRoom').value;
+  const g = guests.find(x=>x.id===gId); const r = rooms.find(x=>x.id===rId);
+  if(g) { b.guestId = g.id; b.guestName = g.firstName+' '+g.lastName; }
+  if(r) { b.roomId = r.id; b.roomNumber = r.number; b.roomType = r.type; }
+  b.checkin = document.getElementById('eBkIn').value||b.checkin; b.checkout = document.getElementById('eBkOut').value||b.checkout;
+  b.status = document.getElementById('eBkStatus').value; b.notes = document.getElementById('eBkNotes').value;
+  save('bookings',bookings); closeModal(); renderBookings(); toast('Booking updated');
 };
 window.deleteBooking = function(id) {
   if(!confirm('Delete this booking?')) return;
@@ -687,28 +709,66 @@ let invoiceGrid;
 function renderInvoices() {
   const invData = invoices.map((inv,i) => ({...inv, invNumber:'INV-'+String(2001+i).padStart(4,'0')}));
   document.getElementById('page-invoices').innerHTML = `
-    <div class="card"><div class="card-header"><h2>Invoices</h2></div><div class="card-body"><div id="invoiceGrid"></div></div></div>`;
+    <div class="card"><div class="card-header"><h2>Invoices</h2><button class="btn btn-primary" onclick="showAddInvoice()">+ Add Invoice</button></div><div class="card-body"><div id="invoiceGrid"></div></div></div>`;
   invoiceGrid = new XGrid('invoiceGrid', {
     columns: [
       {field:'invNumber',label:'Invoice #',filterable:true,width:'100px'},
-      {field:'date',label:'Date',format:v=>fmtDate(v),filterable:true},
-      {field:'guestName',label:'Guest',filterable:true},
-      {field:'roomNumber',label:'Room',filterable:true,width:'70px'},
-      {field:'nights',label:'Nights',width:'60px'},
-      {field:'roomCharge',label:'Room $',format:v=>fmt$(v)},
-      {field:'serviceCharge',label:'Services $',format:v=>fmt$(v)},
+      {field:'date',label:'Date',format:v=>fmtDate(v),editable:true,editType:'date',filterable:true},
+      {field:'guestName',label:'Guest',editable:true,filterable:true},
+      {field:'roomNumber',label:'Room',editable:true,filterable:true,width:'70px'},
+      {field:'nights',label:'Nights',editable:true,editType:'number',width:'60px'},
+      {field:'roomCharge',label:'Room $',format:v=>fmt$(v),editable:true,editType:'number'},
+      {field:'serviceCharge',label:'Services $',format:v=>fmt$(v),editable:true,editType:'number'},
       {field:'total',label:'Total',format:v=>'<strong>'+fmt$(v)+'</strong>'},
       {field:'status',label:'Status',format:v=>`<span class="status status-${v}">${v==='paid'?'Paid':'Pending'}</span>`,editable:true,editType:'select',editOptions:['pending','paid'],filterable:true},
     ],
     data: invData,
-    onEdit: (row, field, val) => { const inv = invoices.find(x=>x.id===row.id); if(inv){inv[field]=val;save('invoices',invoices);toast('Invoice updated');renderInvoices();} },
+    onEdit: (row, field, val) => { const inv = invoices.find(x=>x.id===row.id); if(inv){inv[field]=val; if(field==='roomCharge'||field==='serviceCharge'||field==='nights'){inv.total=(parseFloat(inv.roomCharge)||0)+(parseFloat(inv.serviceCharge)||0);} save('invoices',invoices);toast('Invoice updated');renderInvoices();} },
     actions: [
       {name:'pay',label:'Pay',cls:'btn-success',condition:r=>r.status!=='paid',handler:id=>{ payInvoice(id); renderInvoices(); }},
+      {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditInvoice(id)},
       {name:'view',label:'View',cls:'btn-outline',handler:id=>showInvoiceDetail(id)},
+      {name:'delete',label:'✕',cls:'btn-danger',handler:id=>deleteInvoice(id)},
     ]
   });
 }
 window.payInvoice = function(id) { const inv = invoices.find(i=>i.id===id); if(inv) { inv.status='paid'; save('invoices',invoices); renderInvoices(); toast('Invoice marked as paid'); } };
+window.deleteInvoice = function(id) { if(!confirm('Delete this invoice?')) return; invoices = invoices.filter(i=>i.id!==id); save('invoices',invoices); renderInvoices(); toast('Invoice deleted'); };
+window.showAddInvoice = function() {
+  openModal(`<div class="modal-header"><h2>Add Invoice</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body">
+    <div class="form-group"><label>Guest Name</label><select class="form-control" id="mInvGuest">${guests.map(g=>`<option value="${g.firstName} ${g.lastName}">${g.firstName} ${g.lastName}</option>`).join('')}</select></div>
+    <div class="form-row"><div class="form-group"><label>Room Number</label><input type="text" class="form-control" id="mInvRoom" placeholder="e.g. 201"></div><div class="form-group"><label>Date</label><input type="date" class="form-control" id="mInvDate" value="${today()}"></div></div>
+    <div class="form-row"><div class="form-group"><label>Nights</label><input type="number" class="form-control" id="mInvNights" value="1" min="1"></div><div class="form-group"><label>Room Charge ($)</label><input type="number" class="form-control" id="mInvRoom$" step="0.01" placeholder="0.00"></div></div>
+    <div class="form-row"><div class="form-group"><label>Service Charge ($)</label><input type="number" class="form-control" id="mInvSvc$" step="0.01" value="0"></div><div class="form-group"><label>Status</label><select class="form-control" id="mInvStatus"><option value="pending">Pending</option><option value="paid">Paid</option></select></div></div></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addInvoice()">Add Invoice</button></div>`);
+};
+window.addInvoice = function() {
+  const guestName = document.getElementById('mInvGuest').value; const roomNumber = document.getElementById('mInvRoom').value;
+  if(!guestName||!roomNumber) { toast('Fill guest and room'); return; }
+  const nights = parseInt(document.getElementById('mInvNights').value)||1; const roomCharge = parseFloat(document.getElementById('mInvRoom$').value)||0;
+  const serviceCharge = parseFloat(document.getElementById('mInvSvc$').value)||0;
+  invoices.push({id:genId(),bookingId:null,guestName,roomNumber,nights,roomCharge,serviceCharge,total:roomCharge+serviceCharge,services:[],status:document.getElementById('mInvStatus').value,date:document.getElementById('mInvDate').value||today()});
+  save('invoices',invoices); closeModal(); renderInvoices(); toast('Invoice added');
+};
+window.showEditInvoice = function(id) {
+  const inv = invoices.find(i=>i.id===id); if(!inv) return;
+  openModal(`<div class="modal-header"><h2>Edit Invoice</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body">
+    <div class="form-group"><label>Guest Name</label><input type="text" class="form-control" id="eInvGuest" value="${inv.guestName}"></div>
+    <div class="form-row"><div class="form-group"><label>Room Number</label><input type="text" class="form-control" id="eInvRoom" value="${inv.roomNumber}"></div><div class="form-group"><label>Date</label><input type="date" class="form-control" id="eInvDate" value="${inv.date}"></div></div>
+    <div class="form-row"><div class="form-group"><label>Nights</label><input type="number" class="form-control" id="eInvNights" value="${inv.nights}" min="1"></div><div class="form-group"><label>Room Charge ($)</label><input type="number" class="form-control" id="eInvRoom$" step="0.01" value="${inv.roomCharge}"></div></div>
+    <div class="form-row"><div class="form-group"><label>Service Charge ($)</label><input type="number" class="form-control" id="eInvSvc$" step="0.01" value="${inv.serviceCharge}"></div><div class="form-group"><label>Status</label><select class="form-control" id="eInvStatus"><option value="pending" ${inv.status==='pending'?'selected':''}>Pending</option><option value="paid" ${inv.status==='paid'?'selected':''}>Paid</option></select></div></div></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateInvoice('${inv.id}')">Save</button></div>`);
+};
+window.updateInvoice = function(id) {
+  const inv = invoices.find(i=>i.id===id); if(!inv) return;
+  inv.guestName = document.getElementById('eInvGuest').value||inv.guestName; inv.roomNumber = document.getElementById('eInvRoom').value||inv.roomNumber;
+  inv.date = document.getElementById('eInvDate').value||inv.date; inv.nights = parseInt(document.getElementById('eInvNights').value)||inv.nights;
+  inv.roomCharge = parseFloat(document.getElementById('eInvRoom$').value)||0; inv.serviceCharge = parseFloat(document.getElementById('eInvSvc$').value)||0;
+  inv.total = inv.roomCharge + inv.serviceCharge; inv.status = document.getElementById('eInvStatus').value;
+  save('invoices',invoices); closeModal(); renderInvoices(); toast('Invoice updated');
+};
 window.showInvoiceDetail = function(id) {
   const inv = invoices.find(i=>i.id===id); if(!inv) return;
   const idx = invoices.indexOf(inv);
@@ -759,6 +819,7 @@ function renderAccounts() {
     data: accounts,
     onEdit: (row, field, val) => { const a = accounts.find(x=>x.id===row.id); if(a){a[field]=val;save('accounts',accounts);toast('Account updated');} },
     actions: [
+      {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditAccount(id)},
       {name:'toggle',label:'Toggle',cls:'btn-warning',handler:id=>{ toggleAccount(id); renderAccounts(); }},
       {name:'delete',label:'✕',cls:'btn-danger',handler:id=>{ deleteAccount(id); }},
     ]
