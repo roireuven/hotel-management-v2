@@ -243,13 +243,21 @@ class XGrid {
   getTotalPages() { return Math.max(1, Math.ceil(this.getFiltered().length / this.pageSize)); }
   exportCSV() {
     const rows = this.getFiltered();
+    const strip = s => String(s).replace(/<[^>]*>/g, '').trim();
     const hdr = this.columns.filter(c => !c.hidden).map(c => '"' + c.label + '"').join(',');
     const body = rows.map(r => this.columns.filter(c => !c.hidden).map(c => {
-      let v = c.format ? c.format(r[c.field], r) : (r[c.field] ?? '');
+      let v = c.format ? strip(c.format(r[c.field], r)) : (r[c.field] ?? '');
       return '"' + String(v).replace(/"/g, '""') + '"';
     }).join(',')).join('\n');
-    const blob = new Blob([hdr + '\n' + body], { type: 'text/csv' });
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'export.csv'; a.click();
+    const csv = hdr + '\n' + body;
+    try {
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'export.csv'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+    } catch(e) {
+      const w = window.open(''); if(w) { w.document.write('<pre>'+csv.replace(/</g,'&lt;')+'</pre>'); w.document.title='export.csv'; }
+    }
+    toast('CSV exported');
   }
   render() {
     const paged = this.getPaged(); const filtered = this.getFiltered();
