@@ -21,7 +21,8 @@ namespace HotelManager.DAO
         public int GetIDCurrent()
         {
             string query = "GetIDReceiveRoomCurrent";
-            return (int)DataProvider.Instance.ExecuteScalar(query);
+            object result = DataProvider.Instance.ExecuteScalar(query);
+            return result != null && result != DBNull.Value ? (int)result : -1;
         }
         public DataTable LoadReceiveRoomInfo()
         {
@@ -32,6 +33,7 @@ namespace HotelManager.DAO
         {
             string query = "USP_GetIdReceiRoomFromIdRoom @idRoom";
             DataTable dataTable = DataProvider.Instance.ExecuteQuery(query, new object[] { idRoom });
+            if (dataTable.Rows.Count == 0) return -1;
             ReceiveRoom receiveRoom = new ReceiveRoom(dataTable.Rows[0]);
             return receiveRoom.Id;
         }

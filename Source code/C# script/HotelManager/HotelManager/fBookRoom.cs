@@ -191,6 +191,7 @@ namespace HotelManager
 
         private void btnDetails_Click(object sender, EventArgs e)
         {
+            if (dataGridViewBookRoom.SelectedRows.Count == 0) return;
             int idBookRoom = (int)dataGridViewBookRoom.SelectedRows[0].Cells[0].Value;
             string idCard= dataGridViewBookRoom.SelectedRows[0].Cells[2].Value.ToString();
             fBookRoomDetails f = new fBookRoomDetails(idBookRoom, idCard);

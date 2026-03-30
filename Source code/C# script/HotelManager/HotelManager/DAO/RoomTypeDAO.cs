@@ -39,8 +39,9 @@ namespace HotelManager.DAO
         internal int GetMaxPersonByRoomType(int idRoomType)
         {
             string query = "USP_GetMaxPersonByRoomType @idRoomType";
-            DataRow data = DataProvider.Instance.ExecuteQuery(query, new object[] { idRoomType }).Rows[0];
-            return Convert.ToInt32((double)data["Value"]);
+            DataTable table = DataProvider.Instance.ExecuteQuery(query, new object[] { idRoomType });
+            if (table.Rows.Count == 0) return 0;
+            return Convert.ToInt32(table.Rows[0]["Value"]);
         }
         public static RoomTypeDAO Instance { get { if (instance == null) instance = new RoomTypeDAO(); return instance; }
             private set => instance = value; }
@@ -49,6 +50,7 @@ namespace HotelManager.DAO
         {
             string query = "USP_RoomTypeInfo @id";
             DataTable data = DataProvider.Instance.ExecuteQuery(query, new object[] { id });
+            if (data.Rows.Count == 0) return null;
             RoomType roomType = new RoomType(data.Rows[0]);
             return roomType;
         }
@@ -68,6 +70,7 @@ namespace HotelManager.DAO
         {
             string query = "USP_GetRoomTypeByIdRoom @idRoom";
             DataTable data = DataProvider.Instance.ExecuteQuery(query,new object[] { idRoom });
+            if (data.Rows.Count == 0) return null;
             RoomType roomType = new RoomType(data.Rows[0]);
             return roomType;
         }
@@ -75,6 +78,7 @@ namespace HotelManager.DAO
         {
             string query = "USP_GetRoomTypeByIdBookRoom @idBookRoom";
             DataTable data = DataProvider.Instance.ExecuteQuery(query, new object[] { idBookRoom });
+            if (data.Rows.Count == 0) return null;
             RoomType roomType = new RoomType(data.Rows[0]);
             return roomType;
         }

@@ -16,7 +16,9 @@ namespace HotelManager.DAO
         public AccountType GetStaffTypeByUserName(string username)
         {
             string query = "USP_GetNameStaffTypeByUserName @username";
-            AccountType staffType = new AccountType(DataProvider.Instance.ExecuteQuery(query, new object[] { username }).Rows[0]);
+            DataTable data = DataProvider.Instance.ExecuteQuery(query, new object[] { username });
+            if (data.Rows.Count == 0) return null;
+            AccountType staffType = new AccountType(data.Rows[0]);
             return staffType;
         }
         internal bool Delete(int idStaffType)

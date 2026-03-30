@@ -96,10 +96,14 @@ namespace HotelManager
 
         private void titleSendRoom_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            fUseService f = new fUseService(userName);
-            f.ShowDialog();
-            this.Show();
+            if (CheckAccess("fUseService"))
+            {
+                this.Hide();
+                fUseService f = new fUseService(userName);
+                f.ShowDialog();
+                this.Show();
+            }
+            else MessageBox.Show("Bạn không quyền truy cập.", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void titlePay_Click(object sender, EventArgs e)

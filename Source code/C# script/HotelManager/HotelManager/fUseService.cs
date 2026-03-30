@@ -363,6 +363,7 @@ namespace HotelManager
         {
             totalPrice = 0;
             Room room = flowLayoutRooms.Tag as Room;
+            if (room == null) { MessageBox.Show("Vui lòng chọn phòng trước.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
             AddBill(room.Id, (cbService.SelectedItem as Service).Id, int.Parse(numericUpDownCount.Value.ToString()));
             ShowBill(room.Id);
             numericUpDownCount.Value = 1;

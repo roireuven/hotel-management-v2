@@ -14,13 +14,15 @@ namespace HotelManager.DAO
         internal int GetIdBillMax()
         {
             string query = "USP_GetIdBillMax";
-            return (int)DataProvider.Instance.ExecuteScalar(query);
+            object result = DataProvider.Instance.ExecuteScalar(query);
+            return result != null && result != DBNull.Value ? (int)result : -1;
         }
         internal int GetIdBillFromIdRoom(int idRoom)
         {
             string query = "USP_GetIdBillFromIdRoom @idRoom";
-            DataRow dataRow = DataProvider.Instance.ExecuteQuery(query, new object[] { idRoom }).Rows[0];
-            Bill bill = new Bill(dataRow);
+            DataTable data = DataProvider.Instance.ExecuteQuery(query, new object[] { idRoom });
+            if (data.Rows.Count == 0) return -1;
+            Bill bill = new Bill(data.Rows[0]);
             return bill.Id;
         }
         internal bool IsExistsBill(int idRoom)// > 0 Tồn tại Bill
@@ -46,7 +48,9 @@ namespace HotelManager.DAO
         internal DataRow ShowBillRoom(int idRoom)
         {
             string query = "USP_ShowBillRoom @getToday , @idRoom";
-            return DataProvider.Instance.ExecuteQuery(query, new object[] { DateTime.Now.Date, idRoom }).Rows[0];
+            DataTable data = DataProvider.Instance.ExecuteQuery(query, new object[] { DateTime.Now.Date, idRoom });
+            if (data.Rows.Count == 0) return null;
+            return data.Rows[0];
         }
         internal bool UpdateRoomPrice(int idBill)
         {

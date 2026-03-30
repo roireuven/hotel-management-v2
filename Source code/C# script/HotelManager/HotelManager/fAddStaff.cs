@@ -62,7 +62,7 @@ namespace HotelManager
 
         private void InsertStaff()
         {
-            bool isFill = fCustomer.CheckFillInText(new Control[] { txbName, comboBoxStaffType, txbName ,
+            bool isFill = fCustomer.CheckFillInText(new Control[] { txbName, comboBoxStaffType, txbFullName ,
                                                             txbIDcard , comboBoxSex , txbPhoneNumber, txbAddress});
             if (isFill)
             {
@@ -100,7 +100,7 @@ namespace HotelManager
             account.UserName = txbName.Text.ToLower();
             int index = comboBoxStaffType.SelectedIndex;
             account.IdStaffType = (int)((DataTable)comboBoxStaffType.DataSource).Rows[index]["id"];
-            account.DisplayName = txbName.Text;
+            account.DisplayName = txbFullName.Text;
             account.IdCard = txbIDcard.Text;
             account.Sex = comboBoxSex.Text;
             account.DateOfBirth = datepickerDateOfBirth.Value;
