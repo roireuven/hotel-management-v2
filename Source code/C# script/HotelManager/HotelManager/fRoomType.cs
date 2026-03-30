@@ -57,19 +57,19 @@ namespace HotelManager
         }
         //private void BtnAddRoomType_Click(object sender, EventArgs e)
         //{
-        //    DialogResult result = MessageBox.Show( "Bạn có muốn thêm loại phòng mới?", "Thông báo", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+        //    DialogResult result = MessageBox.Show( "Do you want to add a new room type?", "Notification", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
         //    if(result == DialogResult.OK)
         //        InsertRoomType();
         //}
         private void BindingNavigatorAddNewItem_Click(object sender, EventArgs e)
         {
-            comboboxID.Text = "Tự Động";
+            comboboxID.Text = "Auto";
             txbName.Text = string.Empty;
             txbPrice.Text = "0";
         }
         private void BtnUpdate_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show( "Bạn có muốn cập nhật loại phòng này không?", "Thông báo", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+            DialogResult result = MessageBox.Show( "Do you want to update this room type?", "Notification", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
             if (result == DialogResult.OK)
                 UpdateRoomType();
             comboboxID.Focus();
@@ -100,13 +100,13 @@ namespace HotelManager
                             break;
                     }
                     if (check)
-                        MessageBox.Show( "Xuất thành công", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show( "Export successful", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     else
-                        MessageBox.Show( "Lỗi xuất thất bại", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show( "Export failed", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 catch
                 {
-                    MessageBox.Show( "Lỗi (Cần cài đặt Office)", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show( "Error (Microsoft Office required)", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -168,30 +168,30 @@ namespace HotelManager
         //            RoomType roomTypeNow = GetRoomTypeNow();
         //            if (RoomTypeDAO.Instance.InsertRoomType(roomTypeNow))
         //            {
-        //                MessageBox.Show( "Thêm Thành Công", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //                MessageBox.Show( "Added successfully", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
         //                this.LoadFullRoomType();
         //            }
         //            else
-        //                MessageBox.Show( "Loại phòng này đã tồn tại", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //                MessageBox.Show( "This room type already exists", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         //        }
         //        catch
         //        {
-        //            MessageBox.Show( "Lỗi loại phòng này đã tồn tại", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+        //            MessageBox.Show( "This room type already exists", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Stop);
         //        }
         //    }
         //    else
-        //        MessageBox.Show( "Không được để trống", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //        MessageBox.Show( "Fields cannot be empty", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         //}
         private void UpdateRoomType()
         {
             if(comboboxID.Text == string.Empty)
             {
-                MessageBox.Show( "Loại phòng này chưa tồn tại", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show( "This room type does not exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
             }
             else
             if (!fCustomer.CheckFillInText(new Control[] { txbName, txbPrice }))
             {
-                MessageBox.Show( "Không được để trống", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show( "Fields cannot be empty", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             else
@@ -201,13 +201,13 @@ namespace HotelManager
                 {
                     RoomType roomTypeNow = GetRoomTypeNow();
                     if (roomTypeNow.Equals(roomTypePre))
-                        MessageBox.Show( "Bạn chưa thay đổi dữ liệu", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show( "You have not changed any data", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     else
                     {
                         bool check = RoomTypeDAO.Instance.UpdateRoomType(roomTypeNow, roomTypePre);
                         if(check)
                         {
-                            MessageBox.Show( "Cập nhật thành Công", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show( "Updated successfully", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             groupRoomType.Tag = roomTypeNow;
                             if (btnCancel.Visible == false)
                             {
@@ -219,13 +219,13 @@ namespace HotelManager
                                 BtnCancel_Click(null, null);
                         }
                         else
-                            MessageBox.Show( "Loại phòng này chưa tồn tại", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                            MessageBox.Show( "This room type does not exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     }
                 }
                 catch
                 {
                     
-                    MessageBox.Show( "Lỗi Nhập dữ liệu", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show( "Data entry error", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -267,7 +267,7 @@ namespace HotelManager
             table.Columns.Add("price_New", typeof(string));
             for (int i = 0; i < table.Rows.Count; i++)
             {
-                table.Rows[i]["price_New"] = ((int)table.Rows[i]["price"]).ToString("C0", CultureInfo.CreateSpecificCulture("vi-VN"));
+                table.Rows[i]["price_New"] = ((int)table.Rows[i]["price"]).ToString("C0", CultureInfo.CreateSpecificCulture("en-US"));
             }         
         }
         private string StringToInt(string text)
@@ -287,11 +287,11 @@ namespace HotelManager
         private string IntToString(string text)
         {
             if (text == string.Empty)
-                return 0.ToString("C0", CultureInfo.CreateSpecificCulture("vi-VN"));
+                return 0.ToString("C0", CultureInfo.CreateSpecificCulture("en-US"));
             if (text.Contains(".") || text.Contains(" "))
                 return text;
             else
-                return (int.Parse(text).ToString("C0", CultureInfo.CreateSpecificCulture("vi-VN")));
+                return (int.Parse(text).ToString("C0", CultureInfo.CreateSpecificCulture("en-US")));
         }
 
         #endregion

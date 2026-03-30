@@ -78,7 +78,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(214, 37);
             this.label2.TabIndex = 27;
-            this.label2.Text = "Thêm Nhân Viên";
+            this.label2.Text = "Add Staff";
             // 
             // bunifuSeparator1
             // 
@@ -121,7 +121,7 @@
             this.groupBox2.Size = new System.Drawing.Size(453, 313);
             this.groupBox2.TabIndex = 49;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Thông tin khách hàng";
+            this.groupBox2.Text = "Employee Information";
             // 
             // label1
             // 
@@ -132,7 +132,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(110, 20);
             this.label1.TabIndex = 64;
-            this.label1.Text = "Tên đăng nhập:";
+            this.label1.Text = "Username:";
             // 
             // txbName
             // 
@@ -191,7 +191,7 @@
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(104, 20);
             this.label7.TabIndex = 62;
-            this.label7.Text = "Ngày vào làm:";
+            this.label7.Text = "Start Date:";
             // 
             // label6
             // 
@@ -202,7 +202,7 @@
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(77, 20);
             this.label6.TabIndex = 46;
-            this.label6.Text = "Ngày sinh:";
+            this.label6.Text = "Date of Birth:";
             // 
             // comboBoxStaffType
             // 
@@ -228,7 +228,7 @@
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(107, 20);
             this.label20.TabIndex = 41;
-            this.label20.Text = "Loại nhân viên:";
+            this.label20.Text = "Staff Type:";
             // 
             // DatepickerDateOfReceive
             // 
@@ -270,7 +270,7 @@
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(58, 20);
             this.label11.TabIndex = 35;
-            this.label11.Text = "Địa chỉ:";
+            this.label11.Text = "Address:";
             // 
             // comboBoxSex
             // 
@@ -279,9 +279,9 @@
             this.comboBoxSex.FormattingEnabled = true;
             this.comboBoxSex.ItemHeight = 23;
             this.comboBoxSex.Items.AddRange(new object[] {
-            "Nam",
-            "Nữ",
-            "Khác"});
+            "Male",
+            "Female",
+            "Other"});
             this.comboBoxSex.Location = new System.Drawing.Point(240, 152);
             this.comboBoxSex.Name = "comboBoxSex";
             this.comboBoxSex.Size = new System.Drawing.Size(203, 29);
@@ -301,7 +301,7 @@
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(68, 20);
             this.label13.TabIndex = 28;
-            this.label13.Text = "Giới tính:";
+            this.label13.Text = "Gender:";
             // 
             // txbPhoneNumber
             // 
@@ -330,7 +330,7 @@
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(100, 20);
             this.label14.TabIndex = 26;
-            this.label14.Text = "Số điện thoại:";
+            this.label14.Text = "Phone Number:";
             // 
             // txbIDcard
             // 
@@ -358,7 +358,7 @@
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(153, 20);
             this.label15.TabIndex = 24;
-            this.label15.Text = "Thẻ căn cước/ CMND:";
+            this.label15.Text = "ID Card:";
             // 
             // txbFullName
             // 
@@ -386,7 +386,7 @@
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(76, 20);
             this.label16.TabIndex = 22;
-            this.label16.Text = "Họ và tên:";
+            this.label16.Text = "Full Name:";
             // 
             // groupBox1
             // 
@@ -399,7 +399,7 @@
             this.groupBox1.Size = new System.Drawing.Size(453, 74);
             this.groupBox1.TabIndex = 51;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Chức năng";
+            this.groupBox1.Text = "Actions";
             // 
             // btnClose_
             // 
@@ -410,7 +410,7 @@
             this.btnClose_.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnClose_.BackColor = System.Drawing.Color.White;
             this.btnClose_.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnClose_.BackgroundImage")));
-            this.btnClose_.ButtonText = "Đóng";
+            this.btnClose_.ButtonText = "Close";
             this.btnClose_.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnClose_.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnClose_.ForeColor = System.Drawing.Color.SeaGreen;
@@ -436,7 +436,7 @@
             this.btnAddCustomer.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnAddCustomer.BackColor = System.Drawing.Color.White;
             this.btnAddCustomer.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnAddCustomer.BackgroundImage")));
-            this.btnAddCustomer.ButtonText = "Thêm Nhân Viên";
+            this.btnAddCustomer.ButtonText = "Add Staff";
             this.btnAddCustomer.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnAddCustomer.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAddCustomer.ForeColor = System.Drawing.Color.SeaGreen;

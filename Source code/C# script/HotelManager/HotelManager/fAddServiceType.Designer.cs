@@ -61,7 +61,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(239, 37);
             this.label2.TabIndex = 27;
-            this.label2.Text = "Thêm Loại Dịch Vụ";
+            this.label2.Text = "Add Service Type";
             // 
             // bunifuSeparator1
             // 
@@ -86,7 +86,7 @@
             this.groupBox1.Size = new System.Drawing.Size(227, 124);
             this.groupBox1.TabIndex = 51;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Chức năng";
+            this.groupBox1.Text = "Actions";
             // 
             // btnClose_
             // 
@@ -97,7 +97,7 @@
             this.btnClose_.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnClose_.BackColor = System.Drawing.Color.White;
             this.btnClose_.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnClose_.BackgroundImage")));
-            this.btnClose_.ButtonText = "Đóng";
+            this.btnClose_.ButtonText = "Close";
             this.btnClose_.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnClose_.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnClose_.ForeColor = System.Drawing.Color.SeaGreen;
@@ -123,7 +123,7 @@
             this.btnAddCustomer.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnAddCustomer.BackColor = System.Drawing.Color.White;
             this.btnAddCustomer.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnAddCustomer.BackgroundImage")));
-            this.btnAddCustomer.ButtonText = "Thêm Loại Dịch Vụ";
+            this.btnAddCustomer.ButtonText = "Add Service Type";
             this.btnAddCustomer.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnAddCustomer.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAddCustomer.ForeColor = System.Drawing.Color.SeaGreen;
@@ -167,7 +167,7 @@
             this.groupServiceType.Size = new System.Drawing.Size(227, 92);
             this.groupServiceType.TabIndex = 55;
             this.groupServiceType.TabStop = false;
-            this.groupServiceType.Text = "Thông tin loại dịch vụ";
+            this.groupServiceType.Text = "Service Type Information";
             // 
             // label1
             // 
@@ -178,7 +178,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(115, 20);
             this.label1.TabIndex = 24;
-            this.label1.Text = "Tên loại dịch vụ:";
+            this.label1.Text = "Service Type Name:";
             // 
             // txbName
             // 

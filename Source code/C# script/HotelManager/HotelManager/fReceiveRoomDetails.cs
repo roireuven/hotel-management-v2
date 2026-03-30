@@ -24,10 +24,10 @@ namespace HotelManager
         public void ShowReceiveRoom(int idReceiveRoom)
         {
             DataRow data = ReceiveRoomDAO.Instance.ShowReceiveRoom(idReceiveRoom).Rows[0];
-            txbIDReceiveRoom.Text = ((int)data["Mã nhận phòng"]).ToString();
-            txbRoomName.Text = data["Tên phòng"].ToString();
-            txbDateCheckIn.Text = ((DateTime)data["Ngày nhận"]).ToString().Split(' ')[0];
-            txbDateCheckOut.Text= ((DateTime)data["Ngày trả"]).ToString().Split(' ')[0];
+            txbIDReceiveRoom.Text = ((int)data["Check-In ID"]).ToString();
+            txbRoomName.Text = data["Room Name"].ToString();
+            txbDateCheckIn.Text = ((DateTime)data["Check-In Date"]).ToString().Split(' ')[0];
+            txbDateCheckOut.Text= ((DateTime)data["Check-Out Date"]).ToString().Split(' ')[0];
         }
         public void ShowCustomers(int idReceiveRoom)
         {
@@ -63,11 +63,11 @@ namespace HotelManager
             if (idCustomer != CustomerDAO.Instance.GetIDCustomerFromBookRoom(idReceiveRoom))
             {
                 ReceiveRoomDetailsDAO.Instance.DeleteReceiveRoomDetails(idReceiveRoom, idCustomer);
-                MessageBox.Show("Xóa khách hàng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Customer removed successfully!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 ShowCustomers(idReceiveRoom);
             }
             else
-                MessageBox.Show("Không thể xóa!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Cannot delete!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void bunifuThinButton23_Click(object sender, EventArgs e)

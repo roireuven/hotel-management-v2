@@ -64,8 +64,8 @@ namespace HotelManager
             table.Columns.Add("finalprice_New", typeof(string));
             for (int i = 0; i < table.Rows.Count; i++)
             {
-                table.Rows[i]["finalprice_New"] = ((int)table.Rows[i]["finalprice"]).ToString("C0", CultureInfo.CreateSpecificCulture("vi-VN"));
-                table.Rows[i]["totalPrice_New"] = ((int)table.Rows[i]["totalPrice"]).ToString("C0", CultureInfo.CreateSpecificCulture("vi-VN"));
+                table.Rows[i]["finalprice_New"] = ((int)table.Rows[i]["finalprice"]).ToString("C0", CultureInfo.CreateSpecificCulture("en-US"));
+                table.Rows[i]["totalPrice_New"] = ((int)table.Rows[i]["totalPrice"]).ToString("C0", CultureInfo.CreateSpecificCulture("en-US"));
             }
             table.Columns.Remove("finalprice");
             table.Columns.Remove("totalPrice");
@@ -83,7 +83,7 @@ namespace HotelManager
                     fPrintBill.ShowDialog();
                 }
                 else
-                    MessageBox.Show("Hoá đơn chưa thanh toán\nBạn không có quyền truy cập", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Invoice is unpaid\nYou do not have access", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
         #endregion

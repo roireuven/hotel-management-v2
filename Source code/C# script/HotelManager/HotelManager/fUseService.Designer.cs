@@ -157,7 +157,7 @@
             this.groupBox3.Size = new System.Drawing.Size(360, 559);
             this.groupBox3.TabIndex = 31;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Danh sách phòng";
+            this.groupBox3.Text = "Room List";
             // 
             // label13
             // 
@@ -167,7 +167,7 @@
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(110, 36);
             this.label13.TabIndex = 63;
-            this.label13.Text = "Phòng đang chọn";
+            this.label13.Text = "Selected room";
             this.label13.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // pictureBox6
@@ -187,7 +187,7 @@
             this.lblRoomType5.Name = "lblRoomType5";
             this.lblRoomType5.Size = new System.Drawing.Size(110, 36);
             this.lblRoomType5.TabIndex = 61;
-            this.lblRoomType5.Text = "Phòng khác";
+            this.lblRoomType5.Text = "Other room";
             this.lblRoomType5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // color5
@@ -207,7 +207,7 @@
             this.lblRoomType3.Name = "lblRoomType3";
             this.lblRoomType3.Size = new System.Drawing.Size(110, 36);
             this.lblRoomType3.TabIndex = 59;
-            this.lblRoomType3.Text = "Phòng Standard (STD)";
+            this.lblRoomType3.Text = "Standard room (STD)";
             this.lblRoomType3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // color3
@@ -227,7 +227,7 @@
             this.lblRoomType2.Name = "lblRoomType2";
             this.lblRoomType2.Size = new System.Drawing.Size(110, 36);
             this.lblRoomType2.TabIndex = 57;
-            this.lblRoomType2.Text = "Phòng Superior (SUP)";
+            this.lblRoomType2.Text = "Superior room (SUP)";
             this.lblRoomType2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // color2
@@ -247,7 +247,7 @@
             this.lblRoomType1.Name = "lblRoomType1";
             this.lblRoomType1.Size = new System.Drawing.Size(110, 36);
             this.lblRoomType1.TabIndex = 55;
-            this.lblRoomType1.Text = "Phòng Deluxe (DLX)";
+            this.lblRoomType1.Text = "Deluxe room (DLX)";
             this.lblRoomType1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // lblRoomType4
@@ -258,7 +258,7 @@
             this.lblRoomType4.Name = "lblRoomType4";
             this.lblRoomType4.Size = new System.Drawing.Size(110, 36);
             this.lblRoomType4.TabIndex = 53;
-            this.lblRoomType4.Text = "Phòng Suite (SUT)";
+            this.lblRoomType4.Text = "Suite room (SUT)";
             this.lblRoomType4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // color1
@@ -309,7 +309,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(397, 37);
             this.label2.TabIndex = 32;
-            this.label2.Text = "Sử Dụng Dịch Vụ Và Thanh Toán";
+            this.label2.Text = "Services and Payment";
             // 
             // groupBox1
             // 
@@ -329,7 +329,7 @@
             this.groupBox1.Size = new System.Drawing.Size(236, 291);
             this.groupBox1.TabIndex = 34;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Danh sách dịch vụ";
+            this.groupBox1.Text = "Service List";
             // 
             // txbPrice
             // 
@@ -358,7 +358,7 @@
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(34, 20);
             this.label8.TabIndex = 59;
-            this.label8.Text = "Giá:";
+            this.label8.Text = "Price:";
             // 
             // numericUpDownCount
             // 
@@ -390,7 +390,7 @@
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(72, 20);
             this.label6.TabIndex = 56;
-            this.label6.Text = "Số lượng:";
+            this.label6.Text = "Quantity:";
             // 
             // cbService
             // 
@@ -418,7 +418,7 @@
             this.btnAdd.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnAdd.BackColor = System.Drawing.Color.White;
             this.btnAdd.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnAdd.BackgroundImage")));
-            this.btnAdd.ButtonText = "Thêm Dịch Vụ";
+            this.btnAdd.ButtonText = "Add Service";
             this.btnAdd.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnAdd.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAdd.ForeColor = System.Drawing.Color.SeaGreen;
@@ -444,7 +444,7 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(61, 20);
             this.label3.TabIndex = 53;
-            this.label3.Text = "Dịch vụ:";
+            this.label3.Text = "Service:";
             // 
             // cbServiceType
             // 
@@ -472,7 +472,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(91, 20);
             this.label4.TabIndex = 51;
-            this.label4.Text = "Loại dịch vụ:";
+            this.label4.Text = "Service Type:";
             // 
             // groupBox5
             // 
@@ -489,7 +489,7 @@
             this.groupBox5.Size = new System.Drawing.Size(236, 265);
             this.groupBox5.TabIndex = 50;
             this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Chức năng";
+            this.groupBox5.Text = "Actions";
             // 
             // btnAddCustomer
             // 
@@ -500,7 +500,7 @@
             this.btnAddCustomer.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnAddCustomer.BackColor = System.Drawing.Color.White;
             this.btnAddCustomer.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnAddCustomer.BackgroundImage")));
-            this.btnAddCustomer.ButtonText = "Thanh Toán";
+            this.btnAddCustomer.ButtonText = "Payment";
             this.btnAddCustomer.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnAddCustomer.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAddCustomer.ForeColor = System.Drawing.Color.SeaGreen;
@@ -536,7 +536,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(72, 20);
             this.label1.TabIndex = 61;
-            this.label1.Text = "Giảm giá:";
+            this.label1.Text = "Discount:";
             // 
             // btnClose_
             // 
@@ -547,7 +547,7 @@
             this.btnClose_.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnClose_.BackColor = System.Drawing.Color.White;
             this.btnClose_.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnClose_.BackgroundImage")));
-            this.btnClose_.ButtonText = "Đóng";
+            this.btnClose_.ButtonText = "Close";
             this.btnClose_.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnClose_.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnClose_.ForeColor = System.Drawing.Color.SeaGreen;
@@ -591,7 +591,7 @@
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(75, 20);
             this.label7.TabIndex = 59;
-            this.label7.Text = "Tổng tiền:";
+            this.label7.Text = "Total:";
             // 
             // groupBoxBill
             // 
@@ -603,7 +603,7 @@
             this.groupBoxBill.Size = new System.Drawing.Size(637, 348);
             this.groupBoxBill.TabIndex = 51;
             this.groupBoxBill.TabStop = false;
-            this.groupBoxBill.Text = "Hóa đơn dịch vụ";
+            this.groupBoxBill.Text = "Service Invoice";
             // 
             // panel2
             // 
@@ -644,21 +644,21 @@
             // 
             // columnHeader2
             // 
-            this.columnHeader2.Text = "Tên dịch vụ";
+            this.columnHeader2.Text = "Service Name";
             this.columnHeader2.Width = 330;
             // 
             // columnHeader3
             // 
-            this.columnHeader3.Text = "Đơn giá";
+            this.columnHeader3.Text = "Unit Price";
             this.columnHeader3.Width = 100;
             // 
             // columnHeader4
             // 
-            this.columnHeader4.Text = "Số lượng";
+            this.columnHeader4.Text = "Quantity";
             // 
             // columnHeader5
             // 
-            this.columnHeader5.Text = "Thành tiền";
+            this.columnHeader5.Text = "Amount";
             this.columnHeader5.Width = 100;
             // 
             // dataGridViewBookRoom
@@ -725,7 +725,7 @@
             this.groupBillRoom.Size = new System.Drawing.Size(638, 70);
             this.groupBillRoom.TabIndex = 53;
             this.groupBillRoom.TabStop = false;
-            this.groupBillRoom.Text = "Hóa đơn tiền phòng";
+            this.groupBillRoom.Text = "Room Invoice";
             // 
             // listViewBillRoom
             // 
@@ -753,42 +753,42 @@
             // 
             // columnHeader6
             // 
-            this.columnHeader6.Text = "Tên phòng";
+            this.columnHeader6.Text = "Room Name";
             this.columnHeader6.Width = 90;
             // 
             // columnHeader7
             // 
-            this.columnHeader7.Text = "Đơn giá";
+            this.columnHeader7.Text = "Unit Price";
             this.columnHeader7.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.columnHeader7.Width = 100;
             // 
             // columnHeader8
             // 
-            this.columnHeader8.Text = "Ngày nhận";
+            this.columnHeader8.Text = "Check-In Date";
             this.columnHeader8.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.columnHeader8.Width = 70;
             // 
             // columnHeader9
             // 
-            this.columnHeader9.Text = "Ngày trả";
+            this.columnHeader9.Text = "Check-Out Date";
             this.columnHeader9.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.columnHeader9.Width = 70;
             // 
             // columnHeader10
             // 
-            this.columnHeader10.Text = "Tiền phòng";
+            this.columnHeader10.Text = "Room Charge";
             this.columnHeader10.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.columnHeader10.Width = 100;
             // 
             // columnHeader13
             // 
-            this.columnHeader13.Text = "Phụ thu";
+            this.columnHeader13.Text = "Surcharge";
             this.columnHeader13.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.columnHeader13.Width = 100;
             // 
             // columnHeader14
             // 
-            this.columnHeader14.Text = "Thành tiền";
+            this.columnHeader14.Text = "Amount";
             this.columnHeader14.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.columnHeader14.Width = 100;
             // 
@@ -802,7 +802,7 @@
             this.groupBox2.Size = new System.Drawing.Size(638, 135);
             this.groupBox2.TabIndex = 54;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Chính sách phụ thu";
+            this.groupBox2.Text = "Surcharge policy";
             // 
             // listViewSurcharge
             // 
@@ -832,17 +832,17 @@
             // 
             // columnHeader11
             // 
-            this.columnHeader11.Text = "Tên quy định";
+            this.columnHeader11.Text = "Rule Name";
             this.columnHeader11.Width = 100;
             // 
             // columnHeader12
             // 
-            this.columnHeader12.Text = "Hệ số";
+            this.columnHeader12.Text = "Coefficient";
             this.columnHeader12.Width = 42;
             // 
             // columnHeader15
             // 
-            this.columnHeader15.Text = "Mô tả";
+            this.columnHeader15.Text = "Description";
             this.columnHeader15.Width = 430;
             // 
             // fUseService

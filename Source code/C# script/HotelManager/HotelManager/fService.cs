@@ -65,7 +65,7 @@ namespace HotelManager
         }
         private void BtnUpdate_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show( "Bạn có muốn cập nhật lại dịch vụ?", "Thông báo", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+            DialogResult result = MessageBox.Show( "Do you want to update this service?", "Notification", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
             if (result == DialogResult.OK)
                 UpdateService();
             comboboxID.Focus();
@@ -113,13 +113,13 @@ namespace HotelManager
                             break;
                     }
                     if (check)
-                        MessageBox.Show( "Xuất thành công", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show( "Export successful", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     else
-                        MessageBox.Show( "Lỗi xuất thất bại", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show( "Export failed", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 catch
                 {
-                    MessageBox.Show( "Lỗi (Cần cài đặt Office)", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show( "Error (Microsoft Office required)", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -157,7 +157,7 @@ namespace HotelManager
             {
                 txbName.Text = row.Cells["colName"].Value.ToString();
                 comboBoxServiceType.SelectedIndex = (int)row.Cells["colIdServiceType"].Value - 1;
-                txbPrice.Text = ((int)row.Cells[col.Name].Value).ToString("c0", CultureInfo.CreateSpecificCulture("vi-vn"));
+                txbPrice.Text = ((int)row.Cells[col.Name].Value).ToString("c0", CultureInfo.CreateSpecificCulture("en-US"));
                 Service room = new Service(((DataRowView)row.DataBoundItem).Row);
                 groupService.Tag = room;
                 bindingNavigatorMoveFirstItem.Enabled = true;
@@ -168,11 +168,11 @@ namespace HotelManager
         private void UpdateService()
         {
             if (comboboxID.Text == string.Empty)
-                MessageBox.Show( "Dịch vụ không tồn tại", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show( "Service does not exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
             else
             if (!fCustomer.CheckFillInText(new Control[] { txbName, comboBoxServiceType, txbPrice }))
             {
-                MessageBox.Show( "Không được để trống", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show( "Fields cannot be empty", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             else
@@ -183,14 +183,14 @@ namespace HotelManager
                     Service serviceNow = GetServiceNow();
                     if (serviceNow.Equals(servicePre))
                     {
-                        MessageBox.Show( "Bạn chưa thay đổi dữ liệu", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show( "You have not changed any data", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                     else
                     {
                         bool check = ServiceDAO.Instance.UpdateService(serviceNow, servicePre);
                         if (check)
                         {
-                            MessageBox.Show( "Thành Công", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show( "Success", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             groupService.Tag = serviceNow;
                             if (btnCancel.Visible == false)
                             {
@@ -202,12 +202,12 @@ namespace HotelManager
                                 BtnCancel_Click(null, null);
                         }
                         else
-                            MessageBox.Show( "Dịch vụ không tồn tại", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                            MessageBox.Show( "Service does not exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     }
                 }
                 catch
                 {
-                    MessageBox.Show( "Lỗi", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show( "Error", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -263,7 +263,7 @@ namespace HotelManager
             table.Columns.Add("price_New", typeof(string));
             for (int i = 0; i < table.Rows.Count; i++)
             {
-                table.Rows[i]["price_New"] = ((int)table.Rows[i]["price"]).ToString("C0", CultureInfo.CreateSpecificCulture("vi-VN"));
+                table.Rows[i]["price_New"] = ((int)table.Rows[i]["price"]).ToString("C0", CultureInfo.CreateSpecificCulture("en-US"));
             }
         }
         private string StringToInt(string text)
@@ -283,11 +283,11 @@ namespace HotelManager
         private string IntToString(string text)
         {
             if (text == string.Empty)
-                return 0.ToString("C0", CultureInfo.CreateSpecificCulture("vi-VN"));
+                return 0.ToString("C0", CultureInfo.CreateSpecificCulture("en-US"));
             if (text.Contains(".") || text.Contains(" "))
                 return text;
             else
-                return (int.Parse(text).ToString("C0", CultureInfo.CreateSpecificCulture("vi-VN")));
+                return (int.Parse(text).ToString("C0", CultureInfo.CreateSpecificCulture("en-US")));
         }
         #endregion
 

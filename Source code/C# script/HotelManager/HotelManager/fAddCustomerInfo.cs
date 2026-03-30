@@ -80,12 +80,12 @@ namespace HotelManager
                     int idCustomerType = (cbCustomerType.SelectedItem as CustomerType).Id;
                     InsertCustomer(txbIDCard.Text, txbFullName.Text, idCustomerType, dpkDateOfBirth.Value, txbAddress.Text, int.Parse(txbPhoneNumber.Text), cbSex.Text, cbNationality.Text);
                 }
-                MessageBox.Show("Thêm khách hàng thành công.", "Thông báo.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Customer added successfully.", "Notification.", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 AddIdCustomer(CustomerDAO.Instance.GetInfoByIdCard(txbIDCard.Text).Id);
                 ClearData();
             }
             else
-                MessageBox.Show("Vui lòng nhập đầy đủ thông tin.", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please enter all required information.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
         private void btnClose_Click(object sender, EventArgs e)
         {
@@ -99,7 +99,7 @@ namespace HotelManager
                 if (IsIdCardExists(txbIDCardSearch.Text))
                     GetInfoByIdCard(txbIDCardSearch.Text);
                 else
-                    MessageBox.Show("Thẻ căn cước/ CMND không tồn tại.\nVui lòng nhập lại.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("ID card does not exist.\nPlease try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

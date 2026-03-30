@@ -41,20 +41,20 @@ namespace HotelManager
         {
             listViewUseService.Items.Clear();
             DataTable dataTable = BillDAO.Instance.ShowBillPreView(idBill);
-            CultureInfo cultureInfo = new CultureInfo("vi-vn");
+            CultureInfo cultureInfo = new CultureInfo("en-US");
             int _totalPrice = 0;
             foreach (DataRow item in dataTable.Rows)
             {
                 ListViewItem listViewItem = new ListViewItem(id.ToString());
                 id++;
 
-                ListViewItem.ListViewSubItem subItem1 = new ListViewItem.ListViewSubItem(listViewItem, item["Tên dịch vụ"].ToString());
-                ListViewItem.ListViewSubItem subItem2 = new ListViewItem.ListViewSubItem(listViewItem, ((int)item["Đơn giá"]).ToString("c0", cultureInfo));
-                ListViewItem.ListViewSubItem subItem3 = new ListViewItem.ListViewSubItem(listViewItem, ((int)item["Số lượng"]).ToString());
-                ListViewItem.ListViewSubItem subItem4 = new ListViewItem.ListViewSubItem(listViewItem, ((int)item["Thành tiền"]).ToString("c0", cultureInfo));
+                ListViewItem.ListViewSubItem subItem1 = new ListViewItem.ListViewSubItem(listViewItem, item["Service Name"].ToString());
+                ListViewItem.ListViewSubItem subItem2 = new ListViewItem.ListViewSubItem(listViewItem, ((int)item["Unit Price"]).ToString("c0", cultureInfo));
+                ListViewItem.ListViewSubItem subItem3 = new ListViewItem.ListViewSubItem(listViewItem, ((int)item["Quantity"]).ToString());
+                ListViewItem.ListViewSubItem subItem4 = new ListViewItem.ListViewSubItem(listViewItem, ((int)item["Total Amount"]).ToString("c0", cultureInfo));
 
 
-                _totalPrice += (int)item["Thành tiền"];
+                _totalPrice += (int)item["Total Amount"];
 
                 listViewItem.SubItems.Add(subItem1);
                 listViewItem.SubItems.Add(subItem2);
@@ -85,28 +85,28 @@ namespace HotelManager
         {
             string query = "USP_ShowBillInfo @idBill";
             DataRow data = DataProvider.Instance.ExecuteQuery(query, new object[] { idBill }).Rows[0];
-            CultureInfo cultureInfo = new CultureInfo("vi-vn");
-            lblCustomerName.Text = data["HoTen"].ToString();
-            lblIDCard.Text = data["CMND"].ToString();
-            lblPhoneNumber.Text = ((int)data["SDT"]).ToString();
-            lblCustomerTypeName.Text = data["LoaiKH"].ToString();
-            lblAddress.Text = data["DiaChi"].ToString();
-            lblNationality.Text= data["QuocTich"].ToString();
-            lblRoomName.Text= data["TenPhong"].ToString();
-            lblRoomTypeName.Text= data["LoaiPhong"].ToString();
-            lblRoomPrice_.Text=((int)data["DonGia"]).ToString("c0",cultureInfo);
-            lblDateCheckIn.Text=((DateTime)data["NgayDen"]).ToString().Split(' ')[0];
-            DateTime dateCheckIn= (DateTime)data["NgayDen"];
-            DateTime dateCheckOut = (DateTime)data["NgayDi"];
+            CultureInfo cultureInfo = new CultureInfo("en-US");
+            lblCustomerName.Text = data["FullName"].ToString();
+            lblIDCard.Text = data["IDCard"].ToString();
+            lblPhoneNumber.Text = ((int)data["Phone"]).ToString();
+            lblCustomerTypeName.Text = data["CustomerType"].ToString();
+            lblAddress.Text = data["Address"].ToString();
+            lblNationality.Text= data["Nationality"].ToString();
+            lblRoomName.Text= data["RoomName"].ToString();
+            lblRoomTypeName.Text= data["RoomType"].ToString();
+            lblRoomPrice_.Text=((int)data["UnitPrice"]).ToString("c0",cultureInfo);
+            lblDateCheckIn.Text=((DateTime)data["CheckInDate"]).ToString().Split(' ')[0];
+            DateTime dateCheckIn= (DateTime)data["CheckInDate"];
+            DateTime dateCheckOut = (DateTime)data["CheckOutDate"];
             int days = dateCheckOut.Subtract(dateCheckIn).Days;
             lblDays.Text = days.ToString();
             lblPeoples.Text = RoomDAO.Instance.GetPeoples(idBill).ToString();
-            lblSurcharge.Text= ((int)data["PhuThu"]).ToString("c0", cultureInfo);
-            lblServicePrice.Text= ((int)data["TienDichVu"]).ToString("c0", cultureInfo);
-            lblRoomPrice.Text= ((int)data["TienPhong"]).ToString("c0", cultureInfo);
-            lblTotalPrice.Text= ((int)data["ThanhTien"]).ToString("c0", cultureInfo);
-            lblFinalPrice.Text= ((int)data["ThanhTien"]*((100-(int)data["GiamGia"])/100.0)).ToString("c0", cultureInfo);
-            lblDiscount.Text= ((int)data["GiamGia"]).ToString()+" %";
+            lblSurcharge.Text= ((int)data["Surcharge"]).ToString("c0", cultureInfo);
+            lblServicePrice.Text= ((int)data["ServicePrice"]).ToString("c0", cultureInfo);
+            lblRoomPrice.Text= ((int)data["RoomPrice"]).ToString("c0", cultureInfo);
+            lblTotalPrice.Text= ((int)data["TotalPrice"]).ToString("c0", cultureInfo);
+            lblFinalPrice.Text= ((int)data["TotalPrice"]*((100-(int)data["Discount"])/100.0)).ToString("c0", cultureInfo);
+            lblDiscount.Text= ((int)data["Discount"]).ToString()+" %";
         }
         private void btnClose_Click(object sender, EventArgs e)
         {

@@ -77,19 +77,19 @@ namespace HotelManager
         {
             if (txbFullName.Text != string.Empty && txbIDCard.Text != string.Empty && txbAddress.Text != string.Empty && cbNationality.Text != string.Empty && txbPhoneNumber.Text != string.Empty)
             {
-                //Kiểm tra IDCard có trùng không
+                //Check whether ID card is duplicate
                 if (!IsIdCardExists(txbIDCard.Text)||txbIDCard.Text==idCard)
                 {
                     UpdateCustomer();
-                    MessageBox.Show("Cập nhật thông tin khách hàng thành công.", "Thông báo.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Customer information updated successfully.", "Notification.", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     ClearData();
                     LoadCustomerInfo(idCard);
                 }
                 else
-                    MessageBox.Show("Thẻ căn cước/ CMND không hợp lệ.\nVui lòng nhập lại.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Invalid ID card.\nPlease try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
-                MessageBox.Show("Vui lòng nhập đầy đủ thông tin.", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please enter all required information.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
     }
 }

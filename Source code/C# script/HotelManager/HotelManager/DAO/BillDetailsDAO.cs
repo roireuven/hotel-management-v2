@@ -9,7 +9,7 @@ namespace HotelManager.DAO
     public class BillDetailsDAO
     {
         private static BillDetailsDAO instance;
-        public bool IsExistsBillDetails(int idRoom,int idService)// >0 Service đã có BillDetails, chỉ cần update lại thôi, <0 tạo BillDetails
+        public bool IsExistsBillDetails(int idRoom,int idService)// >0 Service already has BillDetails, just update; <0 create BillDetails
         {
             string query = "USP_IsExistBillDetailsOfRoom @idRoom , @idservice";
             return DataProvider.Instance.ExecuteQuery(query, new object[] { idRoom, idService }).Rows.Count > 0;

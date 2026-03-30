@@ -56,7 +56,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(138, 37);
             this.label2.TabIndex = 51;
-            this.label2.Text = "Giới Thiệu";
+            this.label2.Text = "About";
             // 
             // bunifuSeparator1
             // 
@@ -101,7 +101,7 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(313, 25);
             this.label5.TabIndex = 68;
-            this.label5.Text = "PHẦN MỀM QUẢN LÝ KHÁCH SẠN";
+            this.label5.Text = "HOTEL MANAGEMENT SOFTWARE";
             // 
             // label3
             // 
@@ -112,7 +112,7 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(188, 20);
             this.label3.TabIndex = 69;
-            this.label3.Text = "GVHD: Đỗ Thị Thanh Tuyền\r\n";
+            this.label3.Text = "Supervisor: Do Thi Thanh Tuyen\r\n";
             // 
             // bunifuSeparator2
             // 
@@ -135,7 +135,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(97, 20);
             this.label1.TabIndex = 71;
-            this.label1.Text = "Nhóm: 3-UIT\r\n";
+            this.label1.Text = "Team: 3-UIT\r\n";
             // 
             // label4
             // 
@@ -146,7 +146,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(216, 20);
             this.label4.TabIndex = 72;
-            this.label4.Text = "Nguyễn Duy Cương - 16520147\r\n";
+            this.label4.Text = "Nguyen Duy Cuong - 16520147\r\n";
             // 
             // label6
             // 
@@ -157,7 +157,7 @@
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(165, 20);
             this.label6.TabIndex = 73;
-            this.label6.Text = "Vi Chí Thiện - 16521169";
+            this.label6.Text = "Vi Chi Thien - 16521169";
             // 
             // label7
             // 
@@ -168,7 +168,7 @@
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(185, 20);
             this.label7.TabIndex = 74;
-            this.label7.Text = "Trần Minh Triết - 16521296";
+            this.label7.Text = "Tran Minh Triet - 16521296";
             // 
             // label8
             // 
@@ -179,7 +179,7 @@
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(179, 20);
             this.label8.TabIndex = 75;
-            this.label8.Text = "Lê Hữu Thắng - 16521098\r\n";
+            this.label8.Text = "Le Huu Thang - 16521098\r\n";
             // 
             // label9
             // 
@@ -190,7 +190,7 @@
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(97, 16);
             this.label9.TabIndex = 76;
-            this.label9.Text = "Phiên bản 1.1.0";
+            this.label9.Text = "Version 1.1.0";
             // 
             // bunifuThinButton25
             // 
@@ -202,7 +202,7 @@
             this.bunifuThinButton25.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bunifuThinButton25.BackColor = System.Drawing.Color.White;
             this.bunifuThinButton25.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("bunifuThinButton25.BackgroundImage")));
-            this.bunifuThinButton25.ButtonText = "Đóng";
+            this.bunifuThinButton25.ButtonText = "Close";
             this.bunifuThinButton25.Cursor = System.Windows.Forms.Cursors.Hand;
             this.bunifuThinButton25.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bunifuThinButton25.ForeColor = System.Drawing.Color.SeaGreen;

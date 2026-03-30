@@ -86,7 +86,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(262, 37);
             this.label2.TabIndex = 30;
-            this.label2.Text = "Chi Tiết Nhận Phòng";
+            this.label2.Text = "Check-In Details";
             // 
             // bunifuDragControl1
             // 
@@ -112,7 +112,7 @@
             this.groupBox6.Size = new System.Drawing.Size(238, 255);
             this.groupBox6.TabIndex = 34;
             this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Thông tin nhận phòng";
+            this.groupBox6.Text = "Check-In Information";
             // 
             // txbRoomName
             // 
@@ -141,7 +141,7 @@
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(82, 20);
             this.label15.TabIndex = 52;
-            this.label15.Text = "Tên phòng:";
+            this.label15.Text = "Room Name:";
             // 
             // txbIDReceiveRoom
             // 
@@ -170,7 +170,7 @@
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(116, 20);
             this.label16.TabIndex = 51;
-            this.label16.Text = "Mã nhận phòng:";
+            this.label16.Text = "Check-In ID:";
             // 
             // txbDateCheckOut
             // 
@@ -217,7 +217,7 @@
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(69, 20);
             this.label19.TabIndex = 34;
-            this.label19.Text = "Ngày trả:";
+            this.label19.Text = "Check-Out Date:";
             // 
             // label21
             // 
@@ -228,7 +228,7 @@
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(83, 20);
             this.label21.TabIndex = 32;
-            this.label21.Text = "Ngày nhận:";
+            this.label21.Text = "Check-In Date:";
             // 
             // groupBox5
             // 
@@ -241,7 +241,7 @@
             this.groupBox5.Size = new System.Drawing.Size(238, 138);
             this.groupBox5.TabIndex = 46;
             this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Chức năng";
+            this.groupBox5.Text = "Actions";
             // 
             // btnClose_
             // 
@@ -252,7 +252,7 @@
             this.btnClose_.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnClose_.BackColor = System.Drawing.Color.White;
             this.btnClose_.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnClose_.BackgroundImage")));
-            this.btnClose_.ButtonText = "Đóng";
+            this.btnClose_.ButtonText = "Close";
             this.btnClose_.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnClose_.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnClose_.ForeColor = System.Drawing.Color.SeaGreen;
@@ -278,7 +278,7 @@
             this.btnAddCustomer.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnAddCustomer.BackColor = System.Drawing.Color.White;
             this.btnAddCustomer.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnAddCustomer.BackgroundImage")));
-            this.btnAddCustomer.ButtonText = "Đổi Phòng";
+            this.btnAddCustomer.ButtonText = "Change Room";
             this.btnAddCustomer.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnAddCustomer.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAddCustomer.ForeColor = System.Drawing.Color.SeaGreen;
@@ -305,7 +305,7 @@
             this.groupBox1.Size = new System.Drawing.Size(512, 394);
             this.groupBox1.TabIndex = 47;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Danh sách khách hàng";
+            this.groupBox1.Text = "Customer List";
             // 
             // panel1
             // 
@@ -329,7 +329,7 @@
             this.bunifuThinButton23.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.bunifuThinButton23.BackColor = System.Drawing.Color.White;
             this.bunifuThinButton23.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("bunifuThinButton23.BackgroundImage")));
-            this.bunifuThinButton23.ButtonText = "Cập Nhật Khách Hàng";
+            this.bunifuThinButton23.ButtonText = "Update Customer";
             this.bunifuThinButton23.Cursor = System.Windows.Forms.Cursors.Hand;
             this.bunifuThinButton23.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bunifuThinButton23.ForeColor = System.Drawing.Color.SeaGreen;
@@ -355,7 +355,7 @@
             this.bunifuThinButton22.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.bunifuThinButton22.BackColor = System.Drawing.Color.White;
             this.bunifuThinButton22.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("bunifuThinButton22.BackgroundImage")));
-            this.bunifuThinButton22.ButtonText = "Xóa Khách Hàng";
+            this.bunifuThinButton22.ButtonText = "Delete Customer";
             this.bunifuThinButton22.Cursor = System.Windows.Forms.Cursors.Hand;
             this.bunifuThinButton22.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bunifuThinButton22.ForeColor = System.Drawing.Color.SeaGreen;
@@ -381,7 +381,7 @@
             this.bunifuThinButton21.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.bunifuThinButton21.BackColor = System.Drawing.Color.White;
             this.bunifuThinButton21.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("bunifuThinButton21.BackgroundImage")));
-            this.bunifuThinButton21.ButtonText = "Thêm Khách Hàng";
+            this.bunifuThinButton21.ButtonText = "Add Customer";
             this.bunifuThinButton21.Cursor = System.Windows.Forms.Cursors.Hand;
             this.bunifuThinButton21.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bunifuThinButton21.ForeColor = System.Drawing.Color.SeaGreen;

@@ -145,7 +145,7 @@ namespace HotelManager.DAO
                 {
                     path += vs[i];
                 }
-                path += " Mới ." +  vs[vs.Length - 1];
+                path += " New ." +  vs[vs.Length - 1];
                 bookExcel.SaveAs(path, fileFormat, misValue, misValue, false, false, Excel.XlSaveAsAccessMode.xlExclusive, Excel.XlSaveConflictResolution.xlLocalSessionChanges, misValue, misValue, misValue, misValue);
             }
             bookExcel.Close(true);

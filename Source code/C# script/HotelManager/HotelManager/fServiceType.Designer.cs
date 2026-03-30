@@ -112,7 +112,7 @@
             this.groupBox3.Size = new System.Drawing.Size(223, 140);
             this.groupBox3.TabIndex = 45;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Tìm kiếm";
+            this.groupBox3.Text = "Search";
             // 
             // btnSearch
             // 
@@ -123,7 +123,7 @@
             this.btnSearch.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnSearch.BackColor = System.Drawing.Color.White;
             this.btnSearch.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnSearch.BackgroundImage")));
-            this.btnSearch.ButtonText = "Tìm Kiếm";
+            this.btnSearch.ButtonText = "Search";
             this.btnSearch.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnSearch.Font = new System.Drawing.Font("Segoe UI", 11.25F);
             this.btnSearch.ForeColor = System.Drawing.Color.SeaGreen;
@@ -167,7 +167,7 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(142, 20);
             this.label5.TabIndex = 28;
-            this.label5.Text = "Mã/Tên loại dịch vụ:";
+            this.label5.Text = "Service Type ID / Name:";
             // 
             // btnCancel
             // 
@@ -178,7 +178,7 @@
             this.btnCancel.ActiveLineColor = System.Drawing.Color.Red;
             this.btnCancel.BackColor = System.Drawing.Color.White;
             this.btnCancel.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnCancel.BackgroundImage")));
-            this.btnCancel.ButtonText = "Huỷ Tìm";
+            this.btnCancel.ButtonText = "Clear Search";
             this.btnCancel.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnCancel.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCancel.ForeColor = System.Drawing.Color.SeaGreen;
@@ -211,7 +211,7 @@
             this.groupServiceType.Size = new System.Drawing.Size(223, 160);
             this.groupServiceType.TabIndex = 46;
             this.groupServiceType.TabStop = false;
-            this.groupServiceType.Text = "Thông tin loại dịch vụ";
+            this.groupServiceType.Text = "Service Type Information";
             // 
             // comboboxID
             // 
@@ -233,7 +233,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(115, 20);
             this.label1.TabIndex = 24;
-            this.label1.Text = "Tên loại dịch vụ:";
+            this.label1.Text = "Service Type Name:";
             // 
             // txbName
             // 
@@ -261,7 +261,7 @@
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(113, 20);
             this.label16.TabIndex = 22;
-            this.label16.Text = "Mã loại dịch vụ:";
+            this.label16.Text = "Service Type ID:";
             // 
             // btnUpdateServiceType
             // 
@@ -272,7 +272,7 @@
             this.btnUpdateServiceType.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnUpdateServiceType.BackColor = System.Drawing.Color.White;
             this.btnUpdateServiceType.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnUpdateServiceType.BackgroundImage")));
-            this.btnUpdateServiceType.ButtonText = "Cập Nhật";
+            this.btnUpdateServiceType.ButtonText = "Update";
             this.btnUpdateServiceType.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnUpdateServiceType.Font = new System.Drawing.Font("Segoe UI", 11.25F);
             this.btnUpdateServiceType.ForeColor = System.Drawing.Color.SeaGreen;
@@ -301,7 +301,7 @@
             this.groupBox1.Size = new System.Drawing.Size(549, 483);
             this.groupBox1.TabIndex = 47;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Danh Sách Loại Dịch Vụ";
+            this.groupBox1.Text = "Service Type List";
             // 
             // dataGridViewServiceType
             // 
@@ -356,7 +356,7 @@
             // 
             this.colID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.colID.DataPropertyName = "id";
-            this.colID.HeaderText = "Mã loại dịch vụ";
+            this.colID.HeaderText = "Service Type ID";
             this.colID.Name = "colID";
             this.colID.ReadOnly = true;
             this.colID.Width = 140;
@@ -366,7 +366,7 @@
             this.colName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.colName.DataPropertyName = "name";
             this.colName.FillWeight = 90F;
-            this.colName.HeaderText = "Tên loại dịch vụ";
+            this.colName.HeaderText = "Service Type Name";
             this.colName.Name = "colName";
             this.colName.ReadOnly = true;
             // 
@@ -472,7 +472,7 @@
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
             this.toolStripLabel1.Size = new System.Drawing.Size(31, 22);
-            this.toolStripLabel1.Text = "Xuất";
+            this.toolStripLabel1.Text = "Export";
             this.toolStripLabel1.Click += new System.EventHandler(this.ToolStripLabel1_Click);
             // 
             // labelName
@@ -485,7 +485,7 @@
             this.labelName.Name = "labelName";
             this.labelName.Size = new System.Drawing.Size(264, 37);
             this.labelName.TabIndex = 48;
-            this.labelName.Text = "Quản Lí Loại Dịch Vụ";
+            this.labelName.Text = "Service Type Management";
             this.labelName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // bunifuSeparator1
@@ -509,7 +509,7 @@
             this.btnCLose1.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnCLose1.BackColor = System.Drawing.Color.White;
             this.btnCLose1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnCLose1.BackgroundImage")));
-            this.btnCLose1.ButtonText = "Đóng";
+            this.btnCLose1.ButtonText = "Close";
             this.btnCLose1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnCLose1.Font = new System.Drawing.Font("Segoe UI", 11.25F);
             this.btnCLose1.ForeColor = System.Drawing.Color.SeaGreen;
@@ -540,7 +540,7 @@
             this.groupBox2.Size = new System.Drawing.Size(223, 181);
             this.groupBox2.TabIndex = 57;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Chức Năng";
+            this.groupBox2.Text = "Actions";
             // 
             // btnInsert
             // 
@@ -551,7 +551,7 @@
             this.btnInsert.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnInsert.BackColor = System.Drawing.Color.White;
             this.btnInsert.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnInsert.BackgroundImage")));
-            this.btnInsert.ButtonText = "Thêm";
+            this.btnInsert.ButtonText = "Add";
             this.btnInsert.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnInsert.Font = new System.Drawing.Font("Segoe UI", 11.25F);
             this.btnInsert.ForeColor = System.Drawing.Color.SeaGreen;
@@ -571,7 +571,7 @@
             // 
             // saveServiceType
             // 
-            this.saveServiceType.FileName = "Danh sách loại dịch vụ";
+            this.saveServiceType.FileName = "Service Type List";
             this.saveServiceType.Filter = "Excel File(*.xls)|*.xls|Excel File (*.xlsx) |.xlsx|PDF File(*.pdf)|*.pdf";
             // 
             // fServiceType

@@ -119,7 +119,7 @@
             this.bindingBill.AutoSize = false;
             this.bindingBill.BackColor = System.Drawing.Color.Transparent;
             this.bindingBill.CountItem = this.bindingNavigatorCountItem;
-            this.bindingBill.CountItemFormat = "của {0}";
+            this.bindingBill.CountItemFormat = "of {0}";
             this.bindingBill.DeleteItem = null;
             this.bindingBill.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bindingBill.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
@@ -147,7 +147,7 @@
             // 
             this.bindingNavigatorCountItem.Name = "bindingNavigatorCountItem";
             this.bindingNavigatorCountItem.Size = new System.Drawing.Size(47, 40);
-            this.bindingNavigatorCountItem.Text = "của {0}";
+            this.bindingNavigatorCountItem.Text = "of {0}";
             this.bindingNavigatorCountItem.ToolTipText = "Total number of items";
             // 
             // bindingNavigatorMoveFirstItem
@@ -221,7 +221,7 @@
             this.groupBox2.Size = new System.Drawing.Size(408, 83);
             this.groupBox2.TabIndex = 60;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Chức Năng";
+            this.groupBox2.Text = "Actions";
             // 
             // btnSeenBill
             // 
@@ -232,7 +232,7 @@
             this.btnSeenBill.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnSeenBill.BackColor = System.Drawing.Color.White;
             this.btnSeenBill.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnSeenBill.BackgroundImage")));
-            this.btnSeenBill.ButtonText = "Chi Tiết Hóa Đơn";
+            this.btnSeenBill.ButtonText = "Invoice Details";
             this.btnSeenBill.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnSeenBill.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSeenBill.ForeColor = System.Drawing.Color.SeaGreen;
@@ -259,7 +259,7 @@
             this.btnCLose1.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnCLose1.BackColor = System.Drawing.Color.White;
             this.btnCLose1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnCLose1.BackgroundImage")));
-            this.btnCLose1.ButtonText = "Đóng";
+            this.btnCLose1.ButtonText = "Close";
             this.btnCLose1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnCLose1.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCLose1.ForeColor = System.Drawing.Color.SeaGreen;
@@ -287,12 +287,12 @@
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(221, 37);
             this.label6.TabIndex = 61;
-            this.label6.Text = "Quản Lí Hoá Đơn";
+            this.label6.Text = "Invoice Management";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // saveBill
             // 
-            this.saveBill.FileName = "Danh sách dịch vụ";
+            this.saveBill.FileName = "Service List";
             this.saveBill.Filter = "Excel File(*.xls)|*.xls|Excel File (*.xlsx) |.xlsx|PDF File(*.pdf)|*.pdf";
             // 
             // groupService
@@ -321,7 +321,7 @@
             this.groupService.Size = new System.Drawing.Size(406, 271);
             this.groupService.TabIndex = 1;
             this.groupService.TabStop = false;
-            this.groupService.Text = "Thông tin hoá đơn";
+            this.groupService.Text = "Invoice Information";
             // 
             // txbFinalPrice
             // 
@@ -350,7 +350,7 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(81, 20);
             this.label3.TabIndex = 69;
-            this.label3.Text = "Thành tiền:";
+            this.label3.Text = "Total Amount:";
             // 
             // txbDiscount
             // 
@@ -379,7 +379,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(72, 20);
             this.label2.TabIndex = 67;
-            this.label2.Text = "Giảm giá:";
+            this.label2.Text = "Discount:";
             // 
             // txbStatusRoom
             // 
@@ -408,7 +408,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(81, 20);
             this.label1.TabIndex = 65;
-            this.label1.Text = "Trạng Thái:";
+            this.label1.Text = "Status:";
             // 
             // txbDateCreate
             // 
@@ -437,7 +437,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(73, 20);
             this.label4.TabIndex = 63;
-            this.label4.Text = "Ngày tạo:";
+            this.label4.Text = "Created Date:";
             // 
             // txbUser
             // 
@@ -513,7 +513,7 @@
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(92, 20);
             this.label16.TabIndex = 22;
-            this.label16.Text = "Mã hoá đơn:";
+            this.label16.Text = "Invoice ID:";
             // 
             // label15
             // 
@@ -524,7 +524,7 @@
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(82, 20);
             this.label15.TabIndex = 24;
-            this.label15.Text = "Tên phòng:";
+            this.label15.Text = "Room Name:";
             // 
             // label13
             // 
@@ -535,7 +535,7 @@
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(65, 20);
             this.label13.TabIndex = 57;
-            this.label13.Text = "Đơn giá:";
+            this.label13.Text = "Unit Price:";
             // 
             // label20
             // 
@@ -546,7 +546,7 @@
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(104, 20);
             this.label20.TabIndex = 58;
-            this.label20.Text = "Nhân viên tạo:";
+            this.label20.Text = "Created By:";
             // 
             // groupBox3
             // 
@@ -562,7 +562,7 @@
             this.groupBox3.Size = new System.Drawing.Size(406, 109);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Tìm kiếm";
+            this.groupBox3.Text = "Search";
             // 
             // cbBillSearch
             // 
@@ -571,10 +571,10 @@
             this.cbBillSearch.FormattingEnabled = true;
             this.cbBillSearch.ItemHeight = 23;
             this.cbBillSearch.Items.AddRange(new object[] {
-            "Mã hoá đơn",
-            "Tên khách hàng",
-            "Số CMND",
-            "Số điện thoại"});
+            "Invoice ID",
+            "Customer Name",
+            "ID card number",
+            "Phone number"});
             this.cbBillSearch.Location = new System.Drawing.Point(11, 57);
             this.cbBillSearch.Name = "cbBillSearch";
             this.cbBillSearch.Size = new System.Drawing.Size(175, 29);
@@ -612,7 +612,7 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(107, 20);
             this.label5.TabIndex = 28;
-            this.label5.Text = "Tìm kiếm theo:";
+            this.label5.Text = "Search by:";
             // 
             // btnSearch
             // 
@@ -623,7 +623,7 @@
             this.btnSearch.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnSearch.BackColor = System.Drawing.Color.White;
             this.btnSearch.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnSearch.BackgroundImage")));
-            this.btnSearch.ButtonText = "Tìm Kiếm";
+            this.btnSearch.ButtonText = "Search";
             this.btnSearch.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnSearch.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSearch.ForeColor = System.Drawing.Color.SeaGreen;
@@ -649,7 +649,7 @@
             this.btnCancel.ActiveLineColor = System.Drawing.Color.Red;
             this.btnCancel.BackColor = System.Drawing.Color.White;
             this.btnCancel.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnCancel.BackgroundImage")));
-            this.btnCancel.ButtonText = "Huỷ Tìm";
+            this.btnCancel.ButtonText = "Clear Search";
             this.btnCancel.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnCancel.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCancel.ForeColor = System.Drawing.Color.SeaGreen;
@@ -678,7 +678,7 @@
             this.groupBox1.Size = new System.Drawing.Size(775, 461);
             this.groupBox1.TabIndex = 59;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Danh Sách Hoá Đơn";
+            this.groupBox1.Text = "Invoice List";
             // 
             // dataGridViewBill
             // 
@@ -741,7 +741,7 @@
             this.colID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
             this.colID.DataPropertyName = "id";
             this.colID.FillWeight = 30F;
-            this.colID.HeaderText = "Mã hóa đơn";
+            this.colID.HeaderText = "Invoice ID";
             this.colID.Name = "colID";
             this.colID.ReadOnly = true;
             this.colID.Width = 119;
@@ -751,7 +751,7 @@
             this.colIdReciveRoom.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
             this.colIdReciveRoom.DataPropertyName = "roomName";
             this.colIdReciveRoom.FillWeight = 30F;
-            this.colIdReciveRoom.HeaderText = "Tên phòng";
+            this.colIdReciveRoom.HeaderText = "Room Name";
             this.colIdReciveRoom.Name = "colIdReciveRoom";
             this.colIdReciveRoom.ReadOnly = true;
             this.colIdReciveRoom.Width = 107;
@@ -760,7 +760,7 @@
             // 
             this.colCustomerName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
             this.colCustomerName.DataPropertyName = "customername";
-            this.colCustomerName.HeaderText = "Tên khách hàng";
+            this.colCustomerName.HeaderText = "Customer Name";
             this.colCustomerName.Name = "colCustomerName";
             this.colCustomerName.ReadOnly = true;
             this.colCustomerName.Width = 142;
@@ -770,7 +770,7 @@
             this.colStaffsetUp.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.colStaffsetUp.DataPropertyName = "StaffSetUp";
             this.colStaffsetUp.FillWeight = 30F;
-            this.colStaffsetUp.HeaderText = "Nhân viên tạo";
+            this.colStaffsetUp.HeaderText = "Created By";
             this.colStaffsetUp.Name = "colStaffsetUp";
             this.colStaffsetUp.ReadOnly = true;
             this.colStaffsetUp.Visible = false;
@@ -780,7 +780,7 @@
             // 
             this.coldDateOfCreate.DataPropertyName = "DateOfCreate";
             this.coldDateOfCreate.FillWeight = 30F;
-            this.coldDateOfCreate.HeaderText = "Ngày tạo";
+            this.coldDateOfCreate.HeaderText = "Created Date";
             this.coldDateOfCreate.Name = "coldDateOfCreate";
             this.coldDateOfCreate.ReadOnly = true;
             // 
@@ -788,7 +788,7 @@
             // 
             this.colStatus.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.colStatus.DataPropertyName = "name";
-            this.colStatus.HeaderText = "Trạng thái";
+            this.colStatus.HeaderText = "Status";
             this.colStatus.Name = "colStatus";
             this.colStatus.ReadOnly = true;
             this.colStatus.Width = 104;
@@ -798,7 +798,7 @@
             this.colPrice.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.colPrice.DataPropertyName = "TotalPrice";
             this.colPrice.FillWeight = 30F;
-            this.colPrice.HeaderText = "Đơn giá";
+            this.colPrice.HeaderText = "Unit Price";
             this.colPrice.Name = "colPrice";
             this.colPrice.ReadOnly = true;
             this.colPrice.Width = 90;
@@ -806,7 +806,7 @@
             // Column1
             // 
             this.Column1.DataPropertyName = "discount";
-            this.Column1.HeaderText = "Giảm giá";
+            this.Column1.HeaderText = "Discount";
             this.Column1.Name = "Column1";
             this.Column1.ReadOnly = true;
             this.Column1.Width = 50;
@@ -815,7 +815,7 @@
             // 
             this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.Column2.DataPropertyName = "finalPrice";
-            this.Column2.HeaderText = "Thành tiền";
+            this.Column2.HeaderText = "Total Amount";
             this.Column2.Name = "Column2";
             this.Column2.ReadOnly = true;
             // 

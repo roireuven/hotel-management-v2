@@ -41,7 +41,7 @@ namespace HotelManager
         }
         private void BtnUpdate_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show( "Bạn có muốn cập nhật nhân viên này không?", "Thông báo", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+            DialogResult result = MessageBox.Show( "Do you want to update this employee?", "Notification", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
             if (result == DialogResult.OK)
             {
                 if (CheckDate())
@@ -54,7 +54,7 @@ namespace HotelManager
         {
             if (fCustomer.CheckFillInText(new Control[] { txbUserName }))
             {
-                DialogResult result = MessageBox.Show( "Bạn có muốn đặt lại mật khẩu với tên đăng nhập " + txbUserName.Text + " không?", "Thông báo",
+                DialogResult result = MessageBox.Show( "Do you want to reset the password for username " + txbUserName.Text + "?", "Notification",
                     MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
                 if (result == DialogResult.OK)
                 {
@@ -63,7 +63,7 @@ namespace HotelManager
             }
             else
             {
-                MessageBox.Show( "Không được để trống tên đăng nhập", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show( "Username cannot be empty", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
         private void ToolStripLabel1_Click(object sender, EventArgs e)
@@ -88,13 +88,13 @@ namespace HotelManager
                             break;
                     }
                     if (check)
-                        MessageBox.Show( "Xuất thành công", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show( "Export successful", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     else
-                        MessageBox.Show( "Lỗi xuất thất bại", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show( "Export failed", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 catch
                 {
-                    MessageBox.Show( "Lỗi (Cần cài đặt Office)", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show( "Error (Microsoft Office required)", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -138,7 +138,7 @@ namespace HotelManager
                                                             txbIDcard , comboBoxSex , txbPhoneNumber, txbAddress});
             if (!isFill)
             {
-                MessageBox.Show( "Không được để trống", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show( "Fields cannot be empty", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             else
@@ -149,14 +149,14 @@ namespace HotelManager
                     Account accountnow = GetStaffNow();
                     if (accountnow.Equals(accountPre))
                     {
-                        MessageBox.Show( "Bạn chưa thay đổi dữ liệu", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show( "You have not changed any data", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                     else
                     {
                         bool check = AccountDAO.Instance.UpdateAccount(accountnow);
                         if (check)
                         {
-                            MessageBox.Show( "Cập nhật thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show( "Updated successfully", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             groupStaff.Tag = accountnow;
                             if (btnCancel.Visible == false)
                             {
@@ -171,15 +171,15 @@ namespace HotelManager
                         else
                         {
                             if(accountnow.UserName == accountPre.UserName)
-                                MessageBox.Show( "Không thể cập nhật(Trùng số chứng minh nhân dân)", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                                MessageBox.Show( "Cannot update (duplicate national ID number)", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                             else
-                                MessageBox.Show( "Không thể cập nhật(Tài khoản chưa tồn tại)", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                                MessageBox.Show( "Cannot update (account does not exist)", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                         }
                     }
                 }
                 catch
                 {
-                    MessageBox.Show( "Lỗi không xác định", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show( "Unknown error", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
 
@@ -191,14 +191,14 @@ namespace HotelManager
                 bool check = AccountDAO.Instance.ResetPassword(txbUserName.Text, HassPass );
                 if (check)
                 {
-                    MessageBox.Show( "Đặt lại mật khẩu thành công\nMật khẩu mặt định là: 123456", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show( "Password reset successful\nDefault password is: 123456", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
-                    MessageBox.Show( "Không thể đặt lại mật khẩu(Tên đăng nhập chưa tồn tại)", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBox.Show( "Password reset failed: username does not exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
             }
             catch
             {
-                MessageBox.Show( "Lỗi không xác định", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show( "Unknown error", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void Search()
@@ -325,13 +325,13 @@ namespace HotelManager
         {
             if (!CheckTrueDate(datepickerDateOfBirth.Value, DateTime.Now))
             {
-                MessageBox.Show( "Ngày sinh không hợp lệ (Tuổi phải lớn hơn 18)", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show( "Invalid date of birth (must be over 18)", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
             else
                 if (!CheckTrueDate(datepickerDateOfBirth.Value, datePickerStartDay.Value))
             {
-                MessageBox.Show( "Ngày vào làm không hợp lệ (Lớn hơn 18 tuổi)", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show( "Invalid start date (must be after 18th birthday)", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
             return true;

@@ -61,7 +61,7 @@ namespace HotelManager
         }
         private void BtnUpdate_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show( "Bạn có muốn cập nhật lại phòng?", "Thông báo", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+            DialogResult result = MessageBox.Show( "Do you want to update this room?", "Notification", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
             if (result == DialogResult.OK)
                 UpdateRoom();
             comboboxID.Focus();
@@ -88,13 +88,13 @@ namespace HotelManager
                             break;
                     }
                     if (check)
-                        MessageBox.Show( "Xuất thành công", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show( "Export successful", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     else
-                        MessageBox.Show( "Lỗi xuất thất bại", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show( "Export failed", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 catch
                 {
-                    MessageBox.Show( "Lỗi (Cần cài đặt Office)", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show( "Error (Microsoft Office required)", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -137,12 +137,12 @@ namespace HotelManager
         {
             if(comboboxID.Text == string.Empty)
             {
-                MessageBox.Show( "Phòng này chưa tồn tại\n", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show( "This room does not exist\n", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
             }
             else
             if (!fCustomer.CheckFillInText(new Control[] { txbNameRoom, comboBoxStatusRoom, comboBoxRoomType }))
             {
-                MessageBox.Show( "Không được để trống", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show( "Fields cannot be empty", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             else
@@ -153,14 +153,14 @@ namespace HotelManager
                     Room roomNow = GetRoomNow();
                     if (roomNow.Equals(roomPre))
                     {
-                        MessageBox.Show( "Bạn chưa thay đổi dữ liệu", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show( "You have not changed any data", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                     else
                     {
                         bool check = RoomDAO.Instance.UpdateCustomer(roomNow);
                         if (check)
                         {
-                            MessageBox.Show( "Cập Nhật Thành Công", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show( "Updated successfully", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             groupRoom.Tag = roomNow;
                             if (btnCancel.Visible == false)
                             {
@@ -171,12 +171,12 @@ namespace HotelManager
                             else BtnCancel_Click(null, null);
                         }
                         else
-                            MessageBox.Show( "Phòng này chưa tồn tại\n", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                            MessageBox.Show( "This room does not exist\n", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     }
                 }
                 catch
                 {
-                    MessageBox.Show( "Lỗi cập nhật phòng này", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show( "Error updating this room", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -274,7 +274,7 @@ namespace HotelManager
             table.Columns.Add("price_New", typeof(string));
             for (int i = 0; i < table.Rows.Count ; i++)
             {
-                table.Rows[i]["price_New"] = ((int)table.Rows[i]["price"]).ToString("C0", CultureInfo.CreateSpecificCulture("vi-VN"));
+                table.Rows[i]["price_New"] = ((int)table.Rows[i]["price"]).ToString("C0", CultureInfo.CreateSpecificCulture("en-US"));
             }
             table.Columns.Remove("price");
         }
@@ -284,7 +284,7 @@ namespace HotelManager
 
             if (((DataTable)comboBoxRoomType.DataSource).Rows[index]["Price"].ToString().Contains("."))
                 return;
-            txbPrice.Text = ((int)((DataTable)comboBoxRoomType.DataSource).Rows[index]["Price"]).ToString("C0", CultureInfo.CreateSpecificCulture("vi-VN"));
+            txbPrice.Text = ((int)((DataTable)comboBoxRoomType.DataSource).Rows[index]["Price"]).ToString("C0", CultureInfo.CreateSpecificCulture("en-US"));
         }
         #endregion
 

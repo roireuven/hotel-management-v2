@@ -89,7 +89,7 @@
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(204, 37);
             this.label6.TabIndex = 63;
-            this.label6.Text = "Quyền Truy Cập";
+            this.label6.Text = "Access Rights";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // groupService
@@ -103,7 +103,7 @@
             this.groupService.Size = new System.Drawing.Size(250, 337);
             this.groupService.TabIndex = 65;
             this.groupService.TabStop = false;
-            this.groupService.Text = "Quyền hiện tại";
+            this.groupService.Text = "Current Permissions";
             // 
             // dataGridViewAccessNow
             // 
@@ -182,7 +182,7 @@
             this.groupBox1.Size = new System.Drawing.Size(250, 337);
             this.groupBox1.TabIndex = 66;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Các quyền còn lại";
+            this.groupBox1.Text = "Remaining Permissions";
             // 
             // dataGridViewAccessRest
             // 
@@ -273,7 +273,7 @@
             this.groupBox3.Size = new System.Drawing.Size(587, 105);
             this.groupBox3.TabIndex = 67;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Loại Nhân Viên";
+            this.groupBox3.Text = "Staff Type";
             // 
             // bunifuThinButton25
             // 
@@ -284,7 +284,7 @@
             this.bunifuThinButton25.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.bunifuThinButton25.BackColor = System.Drawing.Color.White;
             this.bunifuThinButton25.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("bunifuThinButton25.BackgroundImage")));
-            this.bunifuThinButton25.ButtonText = "Đóng";
+            this.bunifuThinButton25.ButtonText = "Close";
             this.bunifuThinButton25.Cursor = System.Windows.Forms.Cursors.Hand;
             this.bunifuThinButton25.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bunifuThinButton25.ForeColor = System.Drawing.Color.SeaGreen;
@@ -310,7 +310,7 @@
             this.btnInsertStaffType.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnInsertStaffType.BackColor = System.Drawing.Color.White;
             this.btnInsertStaffType.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnInsertStaffType.BackgroundImage")));
-            this.btnInsertStaffType.ButtonText = "Thêm mới";
+            this.btnInsertStaffType.ButtonText = "Add New";
             this.btnInsertStaffType.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnInsertStaffType.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnInsertStaffType.ForeColor = System.Drawing.Color.SeaGreen;
@@ -336,7 +336,7 @@
             this.btnUpdate.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnUpdate.BackColor = System.Drawing.Color.White;
             this.btnUpdate.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnUpdate.BackgroundImage")));
-            this.btnUpdate.ButtonText = "Sửa tên";
+            this.btnUpdate.ButtonText = "Rename";
             this.btnUpdate.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnUpdate.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnUpdate.ForeColor = System.Drawing.Color.SeaGreen;
@@ -379,7 +379,7 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(131, 20);
             this.label5.TabIndex = 28;
-            this.label5.Text = "Tên loại nhân viên:";
+            this.label5.Text = "Staff type name:";
             // 
             // btnDelete
             // 
@@ -390,7 +390,7 @@
             this.btnDelete.ActiveLineColor = System.Drawing.Color.SeaGreen;
             this.btnDelete.BackColor = System.Drawing.Color.White;
             this.btnDelete.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnDelete.BackgroundImage")));
-            this.btnDelete.ButtonText = "Xoá";
+            this.btnDelete.ButtonText = "Delete";
             this.btnDelete.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnDelete.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDelete.ForeColor = System.Drawing.Color.SeaGreen;

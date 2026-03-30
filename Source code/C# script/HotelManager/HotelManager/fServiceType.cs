@@ -54,7 +54,7 @@ namespace HotelManager
         }
         private void BtnUpdateServiceType_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Bạn có muốn cập nhật loại dịch vụ này không?", "Thông báo", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+            DialogResult result = MessageBox.Show("Do you want to update this service type?", "Notification", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
             if (result == DialogResult.OK)
                 UpdateServiceType();
             comboboxID.Focus();
@@ -96,13 +96,13 @@ namespace HotelManager
                         break;
                 }
                 if (check)
-                    MessageBox.Show("Xuất thành công", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Export successful", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 else
-                    MessageBox.Show("Lỗi xuất thất bại", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Export failed", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch
             {
-                MessageBox.Show("Lỗi (Cần cài đặt Office)", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error (Microsoft Office required)", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void BtnSearch_Click(object sender, EventArgs e)
@@ -156,11 +156,11 @@ namespace HotelManager
         private void UpdateServiceType()
         {
             if(comboboxID.Text == string.Empty)
-                MessageBox.Show("Loại dịch vụ này chưa tồn tại", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("This service type does not exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             if (!fCustomer.CheckFillInText(new Control[] { txbName }))
             {
-                MessageBox.Show("Không được để trống", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Fields cannot be empty", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             else
@@ -170,13 +170,13 @@ namespace HotelManager
                 {
                     ServiceType serviceTypeNow = GetServiceTypeNow();
                     if (serviceTypeNow.Equals(serviceTypePre))
-                        MessageBox.Show("Bạn chưa thay đổi dữ liệu", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show("You have not changed any data", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     else
                     {
                         bool check = ServiceTypeDAO.Instance.UpdateServiceType(serviceTypeNow);
                         if (check)
                         {
-                            MessageBox.Show("Cập nhật thành công", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Updated successfully", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             if (btnCancel.Visible == false)
                             {
                                 int index = dataGridViewServiceType.SelectedRows[0].Index;
@@ -191,13 +191,13 @@ namespace HotelManager
                         }
                         else
                         {
-                            MessageBox.Show("Loại dịch vụ này chưa tồn tại", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("This service type does not exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
                 }
                 catch
                 {
-                    MessageBox.Show("Lỗi loại dịch vụ đã có", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Service type already exists", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
