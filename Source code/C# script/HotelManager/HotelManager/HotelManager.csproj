@@ -77,6 +77,7 @@
     <Compile Include="DAO\CustomerDAO.cs" />
     <Compile Include="DAO\CustomerTypeDAO.cs" />
     <Compile Include="DAO\DataProvider.cs" />
+    <Compile Include="DAO\PmsDAO.cs" />
     <Compile Include="DAO\ParameterDAO.cs" />
     <Compile Include="DAO\ReceiveRoomDAO.cs" />
     <Compile Include="DAO\ReceiveRoomDetailsDAO.cs" />
@@ -182,6 +183,12 @@
     </Compile>
     <Compile Include="fCustomer.Designer.cs">
       <DependentUpon>fCustomer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="fDashboard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="fDashboard.Designer.cs">
+      <DependentUpon>fDashboard.cs</DependentUpon>
     </Compile>
     <Compile Include="fManagement.cs">
       <SubType>Form</SubType>
