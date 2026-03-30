@@ -39,7 +39,7 @@ namespace HotelManager
         }
         public void LoadRoomTypeInfo(int idRoom)
         {
-            CultureInfo cultureInfo = new CultureInfo("vi-vn");
+            CultureInfo cultureInfo = new CultureInfo("en-US");
             RoomType roomType = RoomTypeDAO.Instance.GetRoomTypeByIdRoom(idRoom);
             txbLimitPerson.Text = roomType.LimitPerson.ToString();
             txbPrice.Text = roomType.Price.ToString("c",cultureInfo);
@@ -69,10 +69,10 @@ namespace HotelManager
 
         private void btnAddCustomer_Click(object sender, EventArgs e)
         {
-            //Phải cập nhật trạng thái của phòng cũ
+            // Must update the status of the old room
             RoomDAO.Instance.UpdateStatusRoom(idRoom);
             ReceiveRoomDAO.Instance.UpdateReceiveRoom(idReceiveRoom, (cbRoom.SelectedItem as Room).Id);
-            MessageBox.Show("Đổi phòng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Room changed successfully!", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

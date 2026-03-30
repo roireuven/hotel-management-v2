@@ -38,7 +38,7 @@ namespace HotelManager
        
         private void btnClose_Click_1(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Bạn có muốn thoát không?", "Thông báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show("Do you want to exit?", "Notification", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 Application.Exit();
         }
 
@@ -70,7 +70,7 @@ namespace HotelManager
                 f.ShowDialog();
                 Show();
             }
-            else MessageBox.Show("Bạn không quyền truy cập.", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            else MessageBox.Show("You do not have access permission.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
         }
 
@@ -91,7 +91,7 @@ namespace HotelManager
                 f.ShowDialog();
                 this.Show();
             }
-            else MessageBox.Show("Bạn không quyền truy cập.", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            else MessageBox.Show("You do not have access permission.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void titleSendRoom_Click(object sender, EventArgs e)
@@ -111,7 +111,7 @@ namespace HotelManager
                 f.ShowDialog();
                 this.Show();
             }
-            else MessageBox.Show("Bạn không quyền truy cập.", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            else MessageBox.Show("You do not have access permission.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
         }
 
@@ -125,7 +125,7 @@ namespace HotelManager
                 this.Show();
             }
             else
-                MessageBox.Show("Bạn không quyền truy cập.", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("You do not have access permission.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             
 
         }
@@ -147,7 +147,7 @@ namespace HotelManager
                 this.Show();
             }
             else
-              MessageBox.Show( "Bạn không quyền truy cập.", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+              MessageBox.Show( "You do not have access permission.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
            
         }
 
@@ -161,7 +161,7 @@ namespace HotelManager
                 this.Show();
             }
             else
-                MessageBox.Show( "Bạn không quyền truy cập.", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show( "You do not have access permission.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void metroTile8_Click(object sender, EventArgs e)
@@ -174,7 +174,7 @@ namespace HotelManager
                 this.Show();
             }
             else
-                MessageBox.Show( "Bạn không quyền truy cập.", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show( "You do not have access permission.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void metroTile2_Click(object sender, EventArgs e)
@@ -187,7 +187,7 @@ namespace HotelManager
                 this.Show();
             }
             else
-               MessageBox.Show( "Bạn không quyền truy cập.", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+               MessageBox.Show( "You do not have access permission.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void btnIntroduce_Click(object sender, EventArgs e)
@@ -208,7 +208,7 @@ namespace HotelManager
                 this.Show();
             }
             else
-              MessageBox.Show( "Bạn không quyền truy cập.", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+              MessageBox.Show( "You do not have access permission.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
           
         }
 
@@ -222,7 +222,7 @@ namespace HotelManager
                 this.Show();
             }
             else
-                MessageBox.Show( "Bạn không quyền truy cập.", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show( "You do not have access permission.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void panelRight_Paint(object sender, PaintEventArgs e)

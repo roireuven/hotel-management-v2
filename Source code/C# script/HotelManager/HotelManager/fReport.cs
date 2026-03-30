@@ -44,7 +44,7 @@ namespace HotelManager
         }
         private void ToolStripLabel1_Click(object sender, EventArgs e)
         {
-            saveReport.FileName = "Doanh thu tháng " + month + '-' + year;
+            saveReport.FileName = "Revenue for month " + month + '-' + year;
             if (saveReport.ShowDialog() == DialogResult.Cancel)
                 return;
             else
@@ -65,13 +65,13 @@ namespace HotelManager
                             break;
                     }
                     if (check)
-                        MessageBox.Show( "Xuất thành công", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show( "Export successful", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     else
-                        MessageBox.Show( "Lỗi xuất thất bại", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show( "Export failed", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 catch
                 {
-                    MessageBox.Show( "Lỗi (Cần cài đặt Office)", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show( "Error (Microsoft Office required)", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -110,14 +110,14 @@ namespace HotelManager
             for (int i = 0; i < table.Rows.Count; i++)
             {
                 int node = ((int)table.Rows[i]["value"]);
-                table.Rows[i]["value_New"] = node.ToString("C0", CultureInfo.CreateSpecificCulture("vi-VN"));
+                table.Rows[i]["value_New"] = node.ToString("C0", CultureInfo.CreateSpecificCulture("en-US"));
                 table.Rows[i]["rate_New"] = (((double)table.Rows[i]["rate"]) / 100).ToString("#0.##%");
                 sum += node;
             }
             table.Columns.Remove("value");
             DataRow row = table.NewRow();
             table.Columns["value_new"].ColumnName = "value";
-            row["value"] = sum.ToString("C0", CultureInfo.CreateSpecificCulture("vi-VN"));
+            row["value"] = sum.ToString("C0", CultureInfo.CreateSpecificCulture("en-US"));
             table.Rows.Add(row);
         }
 

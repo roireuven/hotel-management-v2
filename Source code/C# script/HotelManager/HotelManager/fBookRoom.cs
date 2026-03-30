@@ -38,7 +38,7 @@ namespace HotelManager
             RoomType roomType = RoomTypeDAO.Instance.LoadRoomTypeInfo(id);
             txbRoomTypeID.Text = roomType.Id.ToString();
             txbRoomTypeName.Text = roomType.Name;
-            CultureInfo cultureInfo = new CultureInfo("vi-vn");
+            CultureInfo cultureInfo = new CultureInfo("en-US");
             txbPrice.Text = roomType.Price.ToString("c0",cultureInfo);
             txbAmountPeople.Text = roomType.LimitPerson.ToString();
         }
@@ -144,7 +144,7 @@ namespace HotelManager
                 if (IsIdCardExists(txbIDCardSearch.Text))
                     GetInfoByIdCard(txbIDCardSearch.Text);
                 else
-                    MessageBox.Show("Thẻ căn cước/ CMND không tồn tại.\nVui lòng nhập lại.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("ID card does not exist.\nPlease try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }    
         }
         public void ClearData()
@@ -154,7 +154,7 @@ namespace HotelManager
         }
         private void btnBookRoom_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Bạn có muốn đặt phòng không?", "Thông báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show("Do you want to book a room?", "Notification", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 if (txbIDCard.Text != String.Empty && txbFullName.Text != String.Empty && txbAddress.Text != String.Empty && txbPhoneNumber.Text != String.Empty && cbNationality.Text != String.Empty)
                 {
@@ -164,7 +164,7 @@ namespace HotelManager
                         InsertCustomer(txbIDCard.Text, txbFullName.Text, idCustomerType, dpkDateOfBirth.Value, txbAddress.Text, int.Parse(txbPhoneNumber.Text), cbSex.Text, cbNationality.Text);
                     }
                     InsertBookRoom(CustomerDAO.Instance.GetInfoByIdCard(txbIDCard.Text).Id, (cbRoomType.SelectedItem as RoomType).Id, dpkDateCheckIn.Value, dpkDateCheckOut.Value, DateTime.Now);
-                    MessageBox.Show("Đặt phòng thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Booking successful.", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     ClearData();
                     LoadListBookRoom();
                     if (bunifuCheckbox1.Checked)
@@ -175,7 +175,7 @@ namespace HotelManager
                     }
                 }
                 else
-                    MessageBox.Show( "Vui lòng nhập đầy đủ thông tin.", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show( "Please fill in all required fields.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }   
         }
 

@@ -107,18 +107,18 @@ namespace HotelManager
         {
             if (txbFullName.Text != string.Empty && txbIDCard.Text != string.Empty && txbAddress.Text != string.Empty && cbNationality.Text != string.Empty && txbPhoneNumber.Text != string.Empty)
             {
-                //Kiểm tra IDCard có trùng không
+                // Check if ID card is duplicate
                 if (!IsIdCardExists(txbIDCard.Text) || txbIDCard.Text == idCard)
                 {
                     UpdateCustomer();
                     
                 }
                 else
-                    MessageBox.Show("Thẻ căn cước/ CMND không hợp lệ.\nVui lòng nhập lại.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("ID card is invalid.\nPlease try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
-                MessageBox.Show("Vui lòng nhập đầy đủ thông tin.", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            MessageBox.Show("Cập nhật thông tin khách hàng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Please fill in all required fields.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("Customer information updated successfully!", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
             LoadData();
             
         }
@@ -132,22 +132,22 @@ namespace HotelManager
         private void bunifuThinButton22_Click(object sender, EventArgs e)
         {
             BookRoomDAO.Instance.UpdateBookRoom(idBookRoom, (cbRoomType.SelectedItem as RoomType).Id, dpkDateCheckIn.Value, dpkDateCheckOut.Value);
-            MessageBox.Show("Cập nhật thông tin đặt phòng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Booking information updated successfully!", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
             LoadData();
         }
 
         private void bunifuThinButton23_Click(object sender, EventArgs e)
         {
-            if(MessageBox.Show("Xóa khách hàng dẫn đến phiếu đặt phòng cũng bị xóa!\nBạn có muốn tiếp tục?","Cảnh báo",MessageBoxButtons.OKCancel,MessageBoxIcon.Warning)==DialogResult.OK)
+            if(MessageBox.Show("Deleting customer will also delete the booking!\nDo you want to continue?","Warning",MessageBoxButtons.OKCancel,MessageBoxIcon.Warning)==DialogResult.OK)
             {
                 if (BookRoomDAO.Instance.IsIDBookRoomExists(idBookRoom))
                 {
                     BookRoomDAO.Instance.DeleteBookRoom(idBookRoom);
-                    MessageBox.Show("Xóa thông tin khách hàng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Customer information deleted successfully!", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Close();
                 }
                 else
-                    MessageBox.Show("Xóa thông tin khách hàng thất bại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Failed to delete customer information!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }

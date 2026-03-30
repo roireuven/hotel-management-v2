@@ -42,7 +42,7 @@ namespace HotelManager
             }
             else
             {
-                MessageBox.Show( "Tên Đăng Nhập không tồn tại hoặc Mật Khẩu không đúng.\nVui lòng nhập lại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show( "Username does not exist or password is incorrect.\nPlease try again!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
