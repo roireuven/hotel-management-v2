@@ -1,0 +1,22 @@
+[
+  {"ID":1,"Name":"Spa Treatment","ServiceType":"Entertainment","Price":50},
+  {"ID":2,"Name":"Fitness Center","ServiceType":"Entertainment","Price":15},
+  {"ID":3,"Name":"Swimming Pool","ServiceType":"Entertainment","Price":20},
+  {"ID":4,"Name":"Karaoke Room","ServiceType":"Entertainment","Price":40},
+  {"ID":5,"Name":"Tennis Court","ServiceType":"Entertainment","Price":25},
+  {"ID":6,"Name":"Laundry Service","ServiceType":"Utilities","Price":12},
+  {"ID":7,"Name":"Airport Shuttle","ServiceType":"Utilities","Price":35},
+  {"ID":8,"Name":"Car Rental","ServiceType":"Utilities","Price":80},
+  {"ID":9,"Name":"Babysitting","ServiceType":"Utilities","Price":30},
+  {"ID":10,"Name":"Continental Breakfast","ServiceType":"Food & Dining","Price":18},
+  {"ID":11,"Name":"Grilled Steak Dinner","ServiceType":"Food & Dining","Price":45},
+  {"ID":12,"Name":"Seafood Platter","ServiceType":"Food & Dining","Price":65},
+  {"ID":13,"Name":"Caesar Salad","ServiceType":"Food & Dining","Price":14},
+  {"ID":14,"Name":"Lobster Bisque","ServiceType":"Food & Dining","Price":22},
+  {"ID":15,"Name":"Tiramisu","ServiceType":"Food & Dining","Price":12},
+  {"ID":16,"Name":"Chivas Regal 12","ServiceType":"Beverages","Price":55},
+  {"ID":17,"Name":"Chivas Regal 18","ServiceType":"Beverages","Price":90},
+  {"ID":18,"Name":"Classic Mojito","ServiceType":"Beverages","Price":15},
+  {"ID":19,"Name":"Negroni Cocktail","ServiceType":"Beverages","Price":16},
+  {"ID":20,"Name":"Espresso Martini","ServiceType":"Beverages","Price":18}
+]

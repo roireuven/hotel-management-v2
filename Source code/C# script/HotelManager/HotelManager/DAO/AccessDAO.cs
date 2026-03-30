@@ -42,7 +42,7 @@ namespace HotelManager.DAO
 
         internal bool CheckAccess(string username, string formName)
         {
-            string query = "USP_ChekcAccess @username , @formname";
+            string query = "USP_CheckAccess @username , @formname";
             return !(DataProvider.Instance.ExecuteScalar(query, new object[] { username, formName }) is null);
         }
     }

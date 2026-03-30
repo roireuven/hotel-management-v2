@@ -1,4 +1,4 @@
-# Hotel Mangement
+# Hotel Management
 
 🏨 Hotel Management App.
 
@@ -64,7 +64,7 @@ For help getting started with C#, view our online [documentation](https://docs.m
 
 ## Bugs and Issues
 
-Have a bug or an issue with this project? [Open a new issue](https://github.com/ndc07/hotel-management/issues) here on GitHub.
+Have a bug or an issue with this project? [Open a new issue](https://github.com/roireuven/hotel-management-v2/issues) here on GitHub.
 
 ## Some screens
 
@@ -80,7 +80,7 @@ Have a bug or an issue with this project? [Open a new issue](https://github.com/
 
 ![33427304_2071955723072328_974694238862180352_n](https://user-images.githubusercontent.com/34389409/48674407-576d7d00-eb7e-11e8-929d-7df9d7582fa2.png)
 
-* `Order serices and checkout`
+* `Order services and checkout`
 
 ![32745681_2069079696693264_2972182965867511808_n](https://user-images.githubusercontent.com/34389409/48674408-59374080-eb7e-11e8-9bab-7a63544afe84.png)
 
@@ -96,4 +96,4 @@ Have a bug or an issue with this project? [Open a new issue](https://github.com/
 
 ## License
 
-[MIT](https://github.com/ndc07/ting-music/blob/master/LICENSE)
+[MIT](https://github.com/roireuven/hotel-management-v2/blob/master/LICENSE)

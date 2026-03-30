@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -11,9 +12,7 @@ namespace HotelManager.DAO
     public class DataProvider
     {
         private static DataProvider instance;
-        private string connectionStr = @"Data Source=ndc07;Initial Catalog=HotelManagement;Persist Security Info=True;User ID=sa;Pwd=123456";
-        //private string connectionStr = @"Data Source=THIEN-AI\THIENAI;Initial Catalog=HotelManagement;Integrated Security=True";
-        //private string connectionStr = @"Data Source=.\sqlexpress;Initial Catalog=HotelManagement;Integrated Security=True";
+        private string connectionStr = ConfigurationManager.ConnectionStrings["HotelManager.Properties.Settings.HotelManagementConnectionString"].ConnectionString;
         public DataTable ExecuteQuery(string query, object[] parameter = null)
         {
             DataTable data = new DataTable();
@@ -64,7 +63,8 @@ namespace HotelManager.DAO
                 {
                     if (item.Contains("@"))
                     {
-                        command.Parameters.AddWithValue(item, parameter[i]);
+                        string paramName = item.TrimEnd(',', ';', ')');
+                        command.Parameters.AddWithValue(paramName, parameter[i]);
                         ++i;
                     }
                 }
