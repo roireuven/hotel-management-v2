@@ -48,7 +48,7 @@ namespace HotelManager
             metroTile13.Text = LanguageManager.Get("tile_regulations");
             btnAccountProfile.ButtonText = "    " + LanguageManager.Get("btn_profile");
             btnLogOut.ButtonText = "    " + LanguageManager.Get("btn_logout");
-            btnHelp.ButtonText = "    " + LanguageManager.Get("btn_help");
+            btnHelp.ButtonText = "    Dashboard";
             btnIntroduce.ButtonText = "    " + LanguageManager.Get("btn_language");
             btnAccountProfile.Text = btnAccountProfile.ButtonText;
             btnLogOut.Text = btnLogOut.ButtonText;
@@ -221,6 +221,14 @@ namespace HotelManager
                 this.Show();
             }
             else MessageBox.Show(LanguageManager.Get("no_access"), LanguageManager.Get("warning"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+        private void btnHelp_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            fDashboard dashboard = new fDashboard();
+            dashboard.ShowDialog();
+            this.Show();
         }
 
         private void panelRight_Paint(object sender, PaintEventArgs e)

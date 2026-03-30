@@ -472,6 +472,7 @@
             this.btnHelp.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnHelp.Textcolor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(30)))), ((int)(((byte)(33)))));
             this.btnHelp.TextFont = new System.Drawing.Font("Segoe UI", 11F);
+            this.btnHelp.Click += new System.EventHandler(this.btnHelp_Click);
             // 
             // btnIntroduce
             // 
