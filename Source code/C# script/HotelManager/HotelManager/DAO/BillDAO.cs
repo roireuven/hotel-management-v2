@@ -23,7 +23,7 @@ namespace HotelManager.DAO
             Bill bill = new Bill(dataRow);
             return bill.Id;
         }
-        internal bool IsExistsBill(int idRoom)// > 0 Tồn tại Bill
+        internal bool IsExistsBill(int idRoom)// > 0 Bill exists
         {
             string query = "USP_IsExistBillOfRoom @idRoom";
             return DataProvider.Instance.ExecuteQuery(query, new object[] { idRoom }).Rows.Count > 0;

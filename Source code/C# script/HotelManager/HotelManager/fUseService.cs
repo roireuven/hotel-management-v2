@@ -216,28 +216,24 @@ namespace HotelManager
         {
             if(IsExistsBill(idRoom))
             {
-                //Đã tồn tại Bill
                 if(!IsExistsBillDetails(idRoom,idService))
                 {
-                    //Chưa tồn tại BillDetails
                     if (count > 0)
                     {
                         int idBill = BillDAO.Instance.GetIdBillFromIdRoom(idRoom);
                         InsertBillDetails(idBill, idService, count);
                     }
                     else
-                        MetroFramework.MetroMessageBox.Show(this, "Số lượng không hợp lệ.\nVui lòng nhập lại.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MetroFramework.MetroMessageBox.Show(this, "Invalid quantity.\nPlease enter again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else
                 {
-                    //ĐÃ tồn tại BillDetails
                     int idBill = BillDAO.Instance.GetIdBillFromIdRoom(idRoom);
                     UpdateBillDetails(idBill, idService, count);
                 }
             }
             else
             {
-                //Chưa tồn tại Bill
                 if (count > 0)
                 {
                     int idReceiveRoom = ReceiveRoomDAO.Instance.GetIdReceiveRoomFromIdRoom(idRoom);
@@ -246,7 +242,7 @@ namespace HotelManager
                     InsertBillDetails(idBill, idService, count);
                 }
                 else
-                    MetroFramework.MetroMessageBox.Show(this, "Số lượng không hợp lệ.\nVui lòng nhập lại.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MetroFramework.MetroMessageBox.Show(this, "Invalid quantity.\nPlease enter again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         int id = 1;
@@ -283,13 +279,13 @@ namespace HotelManager
                 ListViewItem listViewItem = new ListViewItem(id.ToString());
                 id++;
 
-                ListViewItem.ListViewSubItem subItem1 = new ListViewItem.ListViewSubItem(listViewItem, item["Tên dịch vụ"].ToString());
-                ListViewItem.ListViewSubItem subItem2 = new ListViewItem.ListViewSubItem(listViewItem, ((int)item["Đơn giá"]).ToString("c0", cultureInfo));
-                ListViewItem.ListViewSubItem subItem3 = new ListViewItem.ListViewSubItem(listViewItem, ((int)item["Số lượng"]).ToString());
-                ListViewItem.ListViewSubItem subItem4 = new ListViewItem.ListViewSubItem(listViewItem, ((int)item["Thành tiền"]).ToString("c0", cultureInfo));
+                ListViewItem.ListViewSubItem subItem1 = new ListViewItem.ListViewSubItem(listViewItem, item["Service Name"].ToString());
+                ListViewItem.ListViewSubItem subItem2 = new ListViewItem.ListViewSubItem(listViewItem, ((int)item["Unit Price"]).ToString("c0", cultureInfo));
+                ListViewItem.ListViewSubItem subItem3 = new ListViewItem.ListViewSubItem(listViewItem, ((int)item["Quantity"]).ToString());
+                ListViewItem.ListViewSubItem subItem4 = new ListViewItem.ListViewSubItem(listViewItem, ((int)item["Total Amount"]).ToString("c0", cultureInfo));
 
                 
-                _totalPrice+= (int)item["Thành tiền"];
+                _totalPrice+= (int)item["Total Amount"];
 
                 listViewItem.SubItems.Add(subItem1);
                 listViewItem.SubItems.Add(subItem2);
@@ -321,14 +317,14 @@ namespace HotelManager
             {
                 DataRow data = BillDAO.Instance.ShowBillRoom(idRoom);
 
-                ListViewItem listViewItem = new ListViewItem(data["Tên phòng"].ToString());
+                ListViewItem listViewItem = new ListViewItem(data["Room Name"].ToString());
 
-                ListViewItem.ListViewSubItem subItem1 = new ListViewItem.ListViewSubItem(listViewItem, ((int)data["Đơn giá"]).ToString("c0", cultureInfo));
-                ListViewItem.ListViewSubItem subItem2 = new ListViewItem.ListViewSubItem(listViewItem, ((DateTime)data["Ngày nhận"]).ToString().Split(' ')[0]);
-                ListViewItem.ListViewSubItem subItem3 = new ListViewItem.ListViewSubItem(listViewItem, ((DateTime)data["Ngày trả"]).ToString().Split(' ')[0]);
-                ListViewItem.ListViewSubItem subItem4 = new ListViewItem.ListViewSubItem(listViewItem, ((int)data["Tiền phòng"]).ToString("c0", cultureInfo));
-                ListViewItem.ListViewSubItem subItem5 = new ListViewItem.ListViewSubItem(listViewItem, ((int)data["Phụ thu"]).ToString("c0", cultureInfo));
-                int roomPrice = (int)data["Tiền phòng"] + (int)data["Phụ thu"];
+                ListViewItem.ListViewSubItem subItem1 = new ListViewItem.ListViewSubItem(listViewItem, ((int)data["Unit Price"]).ToString("c0", cultureInfo));
+                ListViewItem.ListViewSubItem subItem2 = new ListViewItem.ListViewSubItem(listViewItem, ((DateTime)data["Check-In Date"]).ToString().Split(' ')[0]);
+                ListViewItem.ListViewSubItem subItem3 = new ListViewItem.ListViewSubItem(listViewItem, ((DateTime)data["Check-Out Date"]).ToString().Split(' ')[0]);
+                ListViewItem.ListViewSubItem subItem4 = new ListViewItem.ListViewSubItem(listViewItem, ((int)data["Room Price"]).ToString("c0", cultureInfo));
+                ListViewItem.ListViewSubItem subItem5 = new ListViewItem.ListViewSubItem(listViewItem, ((int)data["Surcharge"]).ToString("c0", cultureInfo));
+                int roomPrice = (int)data["Room Price"] + (int)data["Surcharge"];
                 ListViewItem.ListViewSubItem subItem6 = new ListViewItem.ListViewSubItem(listViewItem, roomPrice.ToString("c0", cultureInfo));
 
                 totalPrice += roomPrice;
@@ -386,12 +382,12 @@ namespace HotelManager
         private void btnAddCustomer_Click(object sender, EventArgs e)
         {
             Room room = flowLayoutRooms.Tag as Room;
-            if (MessageBox.Show("Bạn có chắc chắn thanh toán cho "  +room.Name+ " không?", "Thông báo", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+            if (MessageBox.Show("Are you sure you want to checkout "  +room.Name+ "?", "Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
             {
                 int idBill = BillDAO.Instance.GetIdBillFromIdRoom(room.Id);
                 Pay(idBill,int.Parse(numericUpDown1.Value.ToString()));
                 ReportDAO.Instance.InsertReport(idBill);
-                MessageBox.Show( "Thanh toán thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show( "Payment successful!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Hide();
                 fPrintBill fPrintBill = new fPrintBill(room.Id,idBill);
                 fPrintBill.ShowDialog();

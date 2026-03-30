@@ -27,7 +27,7 @@ namespace HotelManager.DAO
         {
             string query = "USP_LoadBookRoomsByDate @date";
             DataRow dataRow= DataProvider.Instance.ExecuteQuery(query, new object[] { dateTime }).Rows[0];
-            return (int)dataRow["Mã đặt phòng"];
+            return (int)dataRow["Booking ID"];
         }
         public bool IsIDBookRoomExists(int idBookRoom)
         {
