@@ -41,7 +41,7 @@ namespace HotelManager
         {
             listViewUseService.Items.Clear();
             DataTable dataTable = BillDAO.Instance.ShowBillPreView(idBill);
-            CultureInfo cultureInfo = new CultureInfo("vi-vn");
+            CultureInfo cultureInfo = new CultureInfo("en-US");
             int _totalPrice = 0;
             foreach (DataRow item in dataTable.Rows)
             {
@@ -85,7 +85,7 @@ namespace HotelManager
         {
             string query = "USP_ShowBillInfo @idBill";
             DataRow data = DataProvider.Instance.ExecuteQuery(query, new object[] { idBill }).Rows[0];
-            CultureInfo cultureInfo = new CultureInfo("vi-vn");
+            CultureInfo cultureInfo = new CultureInfo("en-US");
             lblCustomerName.Text = data["FullName"].ToString();
             lblIDCard.Text = data["IDCard"].ToString();
             lblPhoneNumber.Text = ((int)data["Phone"]).ToString();

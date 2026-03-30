@@ -112,7 +112,7 @@ namespace HotelManager
                     ShowBookRoomInfo(int.Parse(txbIDBookRoom.Text));
                 }
                 else
-                   MessageBox.Show( "Mã đặt phòng không tồn tại.\nVui lòng nhập lại.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                   MessageBox.Show( "Booking code does not exist.\nPlease try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txbIDBookRoom.Text = string.Empty;
             }
         }
@@ -126,12 +126,12 @@ namespace HotelManager
                 this.Show();
             }
             else
-                MessageBox.Show("Vui lòng nhập lại đầy đủ thông tin.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please enter all required information.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void btnReceiveRoom_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Bạn có muốn nhận phòng không?", "Thông báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show("Do you want to check in?", "Notification", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 if (txbRoomName.Text != string.Empty && txbRoomTypeName.Text != string.Empty && txbFullName.Text != string.Empty && txbIDCard.Text != string.Empty && txbDateCheckIn.Text != string.Empty && txbDateCheckOut.Text != string.Empty && txbAmountPeople.Text != string.Empty && txbPrice.Text != string.Empty)
                 {
@@ -151,19 +151,19 @@ namespace HotelManager
                                         InsertReceiveRoomDetails(ReceiveRoomDAO.Instance.GetIDCurrent(), item);
                                 }
                             }
-                            MessageBox.Show("Nhận phòng thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Check-in successful.", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             LoadEmptyRoom((cbRoomType.SelectedItem as RoomType).Id);
                         }
                         else
-                            MessageBox.Show("Tạo phiếu nhận phòng thất bại.\nVui lòng nhập lại.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("Failed to create check-in record.\nPlease try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     else
-                        MessageBox.Show( "Ngày nhận phòng không hợp lệ.\nVui lòng nhập lại.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show( "Invalid check-in date.\nPlease try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     ClearData();
                     LoadReceiveRoomInfo();
                 }
                 else
-                    MessageBox.Show("Vui lòng nhập lại đầy đủ thông tin.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Please enter all required information.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         public void ClearData()

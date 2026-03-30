@@ -189,7 +189,7 @@ namespace HotelManager
             BillDAO.Instance.UpdateRoomPrice(BillDAO.Instance.GetIdBillFromIdRoom(room.Id));
             ShowBillRoom(room.Id);
 
-            txbTotalPrice.Text = totalPrice.ToString("c0",new CultureInfo("vi-vn"));
+            txbTotalPrice.Text = totalPrice.ToString("c0",new CultureInfo("en-US"));
         }
 
         public bool IsExistsBill(int idRoom)
@@ -272,7 +272,7 @@ namespace HotelManager
         {
             listViewUseService.Items.Clear();
             DataTable dataTable = BillDAO.Instance.ShowBill(idRoom);
-            CultureInfo cultureInfo = new CultureInfo("vi-vn");
+            CultureInfo cultureInfo = new CultureInfo("en-US");
             int _totalPrice = 0;
             foreach (DataRow item in dataTable.Rows)
             {
@@ -311,7 +311,7 @@ namespace HotelManager
         }
         public void ShowBillRoom(int idRoom)
         {
-            CultureInfo cultureInfo = new CultureInfo("vi-vn");
+            CultureInfo cultureInfo = new CultureInfo("en-US");
             listViewBillRoom.Items.Clear();
             if (IsExistsBill(idRoom))
             {
@@ -350,7 +350,7 @@ namespace HotelManager
         }
         private void cbService_SelectedIndexChanged(object sender, EventArgs e)
         {
-            CultureInfo cultureInfo = new CultureInfo("vi-vn");
+            CultureInfo cultureInfo = new CultureInfo("en-US");
             if (cbService.SelectedItem != null)
                 txbPrice.Text = (cbService.SelectedItem as Service).Price.ToString("c0", cultureInfo);
         }
@@ -364,7 +364,7 @@ namespace HotelManager
             numericUpDownCount.Value = 1;
 
             ShowBillRoom(room.Id);
-            txbTotalPrice.Text = totalPrice.ToString("c0", new CultureInfo("vi-vn"));
+            txbTotalPrice.Text = totalPrice.ToString("c0", new CultureInfo("en-US"));
         }
 
 
