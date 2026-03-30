@@ -8,11 +8,15 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 const dbConfig = {
-    server: 'localhost',
-    database: 'HotelManagement',
-    user: 'sa',
-    password: 'HotelMgmt123!',
-    options: { encrypt: false, trustServerCertificate: true }
+    server: process.env.DB_SERVER || 'localhost',
+    database: process.env.DB_NAME || 'HotelManagement',
+    user: process.env.DB_USER || 'sa',
+    password: process.env.DB_PASSWORD || 'HotelMgmt123!',
+    port: parseInt(process.env.DB_PORT || '1433'),
+    options: {
+        encrypt: process.env.DB_ENCRYPT === 'true',
+        trustServerCertificate: true
+    }
 };
 
 let pool;
@@ -193,4 +197,5 @@ app.post('/api/sentiment', (req, res) => {
     res.json({ sentiment: 'Normal', badge: 'secondary' });
 });
 
-app.listen(3000, '0.0.0.0', () => console.log('Hotel PMS Web running on http://localhost:3000'));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, '0.0.0.0', () => console.log('Hotel PMS Web running on port ' + PORT));
