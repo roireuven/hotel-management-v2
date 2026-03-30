@@ -197,8 +197,75 @@
 'use strict';
 
 const DB_KEY = 'hotel_mgr_';
-function load(key, def) { try { const d = localStorage.getItem(DB_KEY + key); return d ? JSON.parse(d) : def; } catch(e) { return def; } }
-function save(key, data) { localStorage.setItem(DB_KEY + key, JSON.stringify(data)); }
+const isAndroid = typeof HotelDB !== 'undefined';
+
+function load(key, def) {
+  if (isAndroid) {
+    try {
+      if (key === 'settings') {
+        const raw = HotelDB.getAllSettings();
+        const obj = JSON.parse(raw || '{}');
+        return Object.keys(obj).length > 0 ? obj : def;
+      }
+      const raw = HotelDB.getAll(key);
+      const arr = JSON.parse(raw || '[]');
+      return arr.length > 0 ? arr.map(r => {
+        if (r.services && typeof r.services === 'string') { try { r.services = JSON.parse(r.services); } catch(e) { r.services = []; } }
+        if (r.price) r.price = Number(r.price);
+        if (r.number) r.number = Number(r.number);
+        if (r.floor) r.floor = Number(r.floor);
+        if (r.maxGuests) r.maxGuests = Number(r.maxGuests);
+        if (r.visits) r.visits = Number(r.visits);
+        if (r.nights) r.nights = Number(r.nights);
+        if (r.roomCharge) r.roomCharge = Number(r.roomCharge);
+        if (r.serviceCharge) r.serviceCharge = Number(r.serviceCharge);
+        if (r.total) r.total = Number(r.total);
+        if (r.roomNumber) r.roomNumber = Number(r.roomNumber);
+        return r;
+      }) : def;
+    } catch(e) { return def; }
+  }
+  try { const d = localStorage.getItem(DB_KEY + key); return d ? JSON.parse(d) : def; } catch(e) { return def; }
+}
+
+function save(key, data) {
+  if (isAndroid) {
+    try {
+      if (key === 'settings') {
+        const obj = data;
+        for (const [k, v] of Object.entries(obj)) { HotelDB.saveSetting(k, String(v)); }
+        return;
+      }
+      HotelDB.deleteAll(key);
+      const toSave = data.map(r => {
+        const copy = {...r};
+        if (copy.services && Array.isArray(copy.services)) copy.services = JSON.stringify(copy.services);
+        return copy;
+      });
+      HotelDB.upsertAll(key, JSON.stringify(toSave));
+    } catch(e) { console.error('DB save error', e); }
+    return;
+  }
+  localStorage.setItem(DB_KEY + key, JSON.stringify(data));
+}
+
+function saveOne(key, row) {
+  if (isAndroid) {
+    try {
+      const copy = {...row};
+      if (copy.services && Array.isArray(copy.services)) copy.services = JSON.stringify(copy.services);
+      HotelDB.upsert(key, JSON.stringify(copy));
+    } catch(e) { console.error('DB saveOne error', e); }
+    return;
+  }
+}
+
+function deleteOne(key, id) {
+  if (isAndroid) {
+    try { HotelDB.deleteRow(key, id); } catch(e) { console.error('DB deleteOne error', e); }
+  }
+}
+
 function genId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 5); }
 function fmt$(n) { return '$' + Number(n).toFixed(2); }
 function fmtDate(d) { if (!d) return ''; const dt = new Date(d + 'T00:00:00'); return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }

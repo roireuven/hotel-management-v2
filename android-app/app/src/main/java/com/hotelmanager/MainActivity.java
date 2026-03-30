@@ -84,6 +84,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        JsBridge bridge = new JsBridge(dbHelper);
+        webView.addJavascriptInterface(bridge, "HotelDB");
+
         webView.loadUrl("file:///android_asset/index.html");
     }
 
