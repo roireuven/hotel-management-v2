@@ -120,6 +120,32 @@
     .search-bar:focus { outline: none; border-color: var(--primary); }
     .empty-state { text-align: center; padding: 3rem 1rem; color: var(--text-light); }
     .empty-state .empty-icon { font-size: 3rem; margin-bottom: 0.75rem; }
+    /* Excel-like grid */
+    .xgrid-wrap { overflow: auto; border: 1px solid var(--border); border-radius: 8px; }
+    .xgrid { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    .xgrid th, .xgrid td { border: 1px solid #e0e0e0; padding: 0; position: relative; }
+    .xgrid th { background: #f5f6f8; padding: 0; position: sticky; top: 0; z-index: 2; user-select: none; }
+    .xgrid th .th-inner { display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0.6rem; gap: 0.3rem; cursor: pointer; min-height: 36px; }
+    .xgrid th .th-inner:hover { background: #ebedf0; }
+    .xgrid th .sort-icon { font-size: 0.7rem; opacity: 0.4; } .xgrid th .sort-icon.active { opacity: 1; color: var(--primary); }
+    .xgrid th .col-filter { display: block; width: 100%; padding: 0.3rem 0.5rem; border: none; border-top: 1px solid #e0e0e0; font-size: 0.75rem; font-family: inherit; background: #fff; outline: none; }
+    .xgrid th .col-filter:focus { background: #e8f0fe; }
+    .xgrid td { padding: 0; }
+    .xgrid td .cell { padding: 0.45rem 0.6rem; min-height: 34px; display: flex; align-items: center; cursor: cell; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .xgrid td .cell:hover { background: #e8f0fe; }
+    .xgrid td .cell.editing { padding: 0; }
+    .xgrid td .cell.editing input, .xgrid td .cell.editing select { width: 100%; padding: 0.45rem 0.6rem; border: 2px solid var(--primary); font-size: 0.85rem; font-family: inherit; outline: none; background: #fff; }
+    .xgrid td .cell-actions { display: flex; gap: 0.3rem; padding: 0.3rem 0.5rem; justify-content: center; }
+    .xgrid tr.selected td { background: #e3f2fd; }
+    .xgrid tr:hover td .cell { background: #f5f8ff; }
+    .xgrid-toolbar { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 0; flex-wrap: wrap; }
+    .xgrid-toolbar .xg-info { font-size: 0.8rem; color: var(--text-light); margin-left: auto; }
+    .xgrid-footer { display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0; font-size: 0.8rem; color: var(--text-light); flex-wrap: wrap; gap: 0.5rem; }
+    .xgrid-footer select { padding: 0.2rem 0.4rem; border: 1px solid var(--border); border-radius: 4px; font-size: 0.8rem; }
+    .xg-page-btns { display: flex; gap: 0.25rem; }
+    .xg-page-btns button { padding: 0.2rem 0.6rem; border: 1px solid var(--border); background: #fff; border-radius: 4px; cursor: pointer; font-size: 0.78rem; }
+    .xg-page-btns button.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .xg-page-btns button:disabled { opacity: 0.4; cursor: default; }
     @media (max-width: 768px) {
       .sidebar { transform: translateX(-100%); } .sidebar.open { transform: translateX(0); } .sidebar-overlay.open { display: block; }
       .main { margin-left: 0; } .menu-toggle { display: block; } .form-row { grid-template-columns: 1fr; }
@@ -179,6 +205,138 @@ function fmtDate(d) { if (!d) return ''; const dt = new Date(d + 'T00:00:00'); r
 function today() { return new Date().toISOString().split('T')[0]; }
 function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
 function daysBetween(a, b) { return Math.max(1, Math.ceil((new Date(b) - new Date(a)) / 86400000)); }
+
+// ===== EXCEL-LIKE GRID ENGINE =====
+class XGrid {
+  constructor(containerId, opts) {
+    this.container = document.getElementById(containerId);
+    this.columns = opts.columns || [];
+    this.data = opts.data || [];
+    this.onEdit = opts.onEdit || null;
+    this.onDelete = opts.onDelete || null;
+    this.actions = opts.actions || [];
+    this.sortCol = null; this.sortDir = 'asc';
+    this.filters = {};
+    this.pageSize = 15; this.page = 0;
+    this.selectedRow = null;
+    this.editingCell = null;
+    this.render();
+  }
+  setData(data) { this.data = data; this.page = 0; this.render(); }
+  getFiltered() {
+    let d = [...this.data];
+    for (const [col, val] of Object.entries(this.filters)) {
+      if (val) { const v = val.toLowerCase(); d = d.filter(r => String(r[col] ?? '').toLowerCase().includes(v)); }
+    }
+    if (this.sortCol !== null) {
+      const key = this.columns[this.sortCol].field;
+      d.sort((a, b) => {
+        let va = a[key] ?? '', vb = b[key] ?? '';
+        if (typeof va === 'number' && typeof vb === 'number') return this.sortDir === 'asc' ? va - vb : vb - va;
+        va = String(va).toLowerCase(); vb = String(vb).toLowerCase();
+        return this.sortDir === 'asc' ? va.localeCompare(vb) : vb.localeCompare(va);
+      });
+    }
+    return d;
+  }
+  getPaged() { const f = this.getFiltered(); return f.slice(this.page * this.pageSize, (this.page + 1) * this.pageSize); }
+  getTotalPages() { return Math.max(1, Math.ceil(this.getFiltered().length / this.pageSize)); }
+  exportCSV() {
+    const rows = this.getFiltered();
+    const hdr = this.columns.filter(c => !c.hidden).map(c => '"' + c.label + '"').join(',');
+    const body = rows.map(r => this.columns.filter(c => !c.hidden).map(c => {
+      let v = c.format ? c.format(r[c.field], r) : (r[c.field] ?? '');
+      return '"' + String(v).replace(/"/g, '""') + '"';
+    }).join(',')).join('\n');
+    const blob = new Blob([hdr + '\n' + body], { type: 'text/csv' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'export.csv'; a.click();
+  }
+  render() {
+    const paged = this.getPaged(); const filtered = this.getFiltered();
+    const totalPages = this.getTotalPages();
+    let html = `<div class="xgrid-toolbar">
+      <button class="btn btn-sm btn-outline" onclick="window._xg_${this.container.id}.exportCSV()">📥 Export CSV</button>
+      <span class="xg-info">${filtered.length} row${filtered.length !== 1 ? 's' : ''}</span>
+    </div>`;
+    html += `<div class="xgrid-wrap"><table class="xgrid"><thead><tr>`;
+    this.columns.forEach((col, ci) => {
+      if (col.hidden) return;
+      const isSort = this.sortCol === ci;
+      const arrow = isSort ? (this.sortDir === 'asc' ? '▲' : '▼') : '⇅';
+      html += `<th style="${col.width ? 'width:' + col.width : ''}"><div class="th-inner" onclick="window._xg_${this.container.id}.toggleSort(${ci})"><span>${col.label}</span><span class="sort-icon ${isSort ? 'active' : ''}">${arrow}</span></div>`;
+      if (col.filterable !== false) html += `<input class="col-filter" placeholder="Filter..." value="${this.filters[col.field] || ''}" oninput="window._xg_${this.container.id}.setFilter('${col.field}',this.value)">`;
+      html += `</th>`;
+    });
+    if (this.actions.length) html += `<th style="width:120px"><div class="th-inner">Actions</div></th>`;
+    html += `</tr></thead><tbody>`;
+    if (paged.length === 0) {
+      const colSpan = this.columns.filter(c => !c.hidden).length + (this.actions.length ? 1 : 0);
+      html += `<tr><td colspan="${colSpan}"><div class="empty-state"><div class="empty-icon">📄</div><p>No data</p></div></td></tr>`;
+    } else {
+      paged.forEach((row, ri) => {
+        const globalIdx = this.page * this.pageSize + ri;
+        const sel = this.selectedRow === globalIdx ? ' selected' : '';
+        html += `<tr class="${sel}" onclick="window._xg_${this.container.id}.selectRow(${globalIdx})">`;
+        this.columns.forEach((col, ci) => {
+          if (col.hidden) return;
+          const val = row[col.field] ?? '';
+          const displayVal = col.format ? col.format(val, row) : val;
+          const isEditing = this.editingCell && this.editingCell.row === globalIdx && this.editingCell.col === ci;
+          if (isEditing && col.editable) {
+            if (col.editType === 'select' && col.editOptions) {
+              html += `<td><div class="cell editing"><select onchange="window._xg_${this.container.id}.commitEdit(${globalIdx},${ci},this.value)" onblur="window._xg_${this.container.id}.cancelEdit()">`;
+              col.editOptions.forEach(o => { html += `<option value="${o}" ${o === val ? 'selected' : ''}>${o}</option>`; });
+              html += `</select></div></td>`;
+            } else {
+              const inputType = col.editType || 'text';
+              html += `<td><div class="cell editing"><input type="${inputType}" value="${val}" onblur="window._xg_${this.container.id}.commitEdit(${globalIdx},${ci},this.value)" onkeydown="if(event.key==='Enter')this.blur();if(event.key==='Escape')window._xg_${this.container.id}.cancelEdit()" autofocus></div></td>`;
+            }
+          } else {
+            const dblclick = col.editable ? `ondblclick="window._xg_${this.container.id}.startEdit(${globalIdx},${ci})"` : '';
+            html += `<td><div class="cell" ${dblclick}>${displayVal}</div></td>`;
+          }
+        });
+        if (this.actions.length) {
+          html += `<td><div class="cell-actions">${this.actions.map(a => {
+            if (a.condition && !a.condition(row)) return '';
+            return `<button class="btn btn-sm ${a.cls || 'btn-outline'}" onclick="event.stopPropagation();window._xg_${this.container.id}.doAction('${a.name}','${row.id}')">${a.label}</button>`;
+          }).join('')}</div></td>`;
+        }
+        html += `</tr>`;
+      });
+    }
+    html += `</tbody></table></div>`;
+    html += `<div class="xgrid-footer"><div>Page ${this.page + 1} of ${totalPages} &nbsp; <select onchange="window._xg_${this.container.id}.setPageSize(+this.value)">${[10, 15, 25, 50, 100].map(n => `<option value="${n}" ${n === this.pageSize ? 'selected' : ''}>${n}/page</option>`).join('')}</select></div>`;
+    html += `<div class="xg-page-btns"><button ${this.page === 0 ? 'disabled' : ''} onclick="window._xg_${this.container.id}.goPage(0)">«</button><button ${this.page === 0 ? 'disabled' : ''} onclick="window._xg_${this.container.id}.goPage(${this.page - 1})">‹</button>`;
+    for (let p = Math.max(0, this.page - 2); p < Math.min(totalPages, this.page + 3); p++) {
+      html += `<button class="${p === this.page ? 'active' : ''}" onclick="window._xg_${this.container.id}.goPage(${p})">${p + 1}</button>`;
+    }
+    html += `<button ${this.page >= totalPages - 1 ? 'disabled' : ''} onclick="window._xg_${this.container.id}.goPage(${this.page + 1})">›</button><button ${this.page >= totalPages - 1 ? 'disabled' : ''} onclick="window._xg_${this.container.id}.goPage(${totalPages - 1})">»</button></div></div>`;
+    this.container.innerHTML = html;
+    window['_xg_' + this.container.id] = this;
+    if (this.editingCell) { const inp = this.container.querySelector('.cell.editing input, .cell.editing select'); if (inp) inp.focus(); }
+  }
+  toggleSort(ci) { if (this.sortCol === ci) { this.sortDir = this.sortDir === 'asc' ? 'desc' : 'asc'; } else { this.sortCol = ci; this.sortDir = 'asc'; } this.render(); }
+  setFilter(field, val) { this.filters[field] = val; this.page = 0; this.render(); }
+  goPage(p) { this.page = Math.max(0, Math.min(p, this.getTotalPages() - 1)); this.render(); }
+  setPageSize(n) { this.pageSize = n; this.page = 0; this.render(); }
+  selectRow(idx) { this.selectedRow = this.selectedRow === idx ? null : idx; this.render(); }
+  startEdit(row, col) { this.editingCell = { row, col }; this.render(); }
+  commitEdit(row, col, val) {
+    const filtered = this.getFiltered(); const dataRow = filtered[row];
+    if (!dataRow) { this.cancelEdit(); return; }
+    const field = this.columns[col].field; const oldVal = dataRow[field];
+    if (this.columns[col].editType === 'number') val = parseFloat(val) || 0;
+    dataRow[field] = val; this.editingCell = null;
+    if (this.onEdit) this.onEdit(dataRow, field, val, oldVal);
+    this.render();
+  }
+  cancelEdit() { this.editingCell = null; this.render(); }
+  doAction(name, id) {
+    const action = this.actions.find(a => a.name === name);
+    if (action && action.handler) action.handler(id);
+  }
+}
 
 const defaultRooms = [];
 [1,2,3,4,5].forEach(f => { for (let r = 1; r <= 10; r++) { const n = f*100+r; if(n>508)break;
@@ -339,16 +497,29 @@ window.deleteRoom = function(id) {
 };
 
 // ===== BOOKINGS =====
+let bookingGrid;
 function renderBookings() {
   const sorted = [...bookings].sort((a,b)=>a.checkin>b.checkin?-1:1);
   document.getElementById('page-bookings').innerHTML = `
-    <div class="card"><div class="card-header"><h2>Bookings</h2><button class="btn btn-primary" onclick="showAddBooking()">+ New Booking</button></div><div class="card-body"><div class="table-wrap"><table><thead><tr><th>Guest</th><th>Room</th><th>Check In</th><th>Check Out</th><th>Status</th><th>Actions</th></tr></thead><tbody>${sorted.length?sorted.map(b=>{
-      let actions = '';
-      if(b.status==='pending'||b.status==='reserved') actions=`<button class="btn btn-sm btn-primary" onclick="checkIn('${b.id}')">Check In</button>`;
-      else if(b.status==='checked-in') actions=`<button class="btn btn-sm btn-danger" onclick="checkOut('${b.id}')">Check Out</button> <button class="btn btn-sm btn-warning" onclick="showOrderService('${b.id}')">Services</button>`;
-      else if(b.status==='checked-out') actions=`<button class="btn btn-sm btn-outline" onclick="viewInvoice('${b.id}')">Invoice</button>`;
-      return `<tr><td>${b.guestName}</td><td>${b.roomNumber} - ${b.roomType}</td><td>${fmtDate(b.checkin)}</td><td>${fmtDate(b.checkout)}</td><td><span class="status status-${b.status}">${b.status.replace('-',' ')}</span></td><td>${actions} <button class="btn btn-sm btn-outline" onclick="deleteBooking('${b.id}')">✕</button></td></tr>`;
-    }).join(''):'<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">📋</div><p>No bookings yet</p></div></td></tr>'}</tbody></table></div></div></div>`;
+    <div class="card"><div class="card-header"><h2>Bookings</h2><button class="btn btn-primary" onclick="showAddBooking()">+ New Booking</button></div><div class="card-body"><div id="bookingGrid"></div></div></div>`;
+  bookingGrid = new XGrid('bookingGrid', {
+    columns: [
+      {field:'guestName',label:'Guest',editable:true,filterable:true},
+      {field:'roomNumber',label:'Room',format:(v,r)=>v+' - '+r.roomType,filterable:true},
+      {field:'checkin',label:'Check In',format:v=>fmtDate(v),editable:true,editType:'date',filterable:true},
+      {field:'checkout',label:'Check Out',format:v=>fmtDate(v),editable:true,editType:'date',filterable:true},
+      {field:'status',label:'Status',format:v=>`<span class="status status-${v}">${v.replace('-',' ')}</span>`,editable:true,editType:'select',editOptions:['pending','reserved','checked-in','checked-out'],filterable:true},
+    ],
+    data: sorted,
+    onEdit: (row, field, val) => { const b = bookings.find(x=>x.id===row.id); if(b){b[field]=val;save('bookings',bookings);toast('Booking updated');} },
+    actions: [
+      {name:'checkin',label:'Check In',cls:'btn-primary',condition:r=>r.status==='pending'||r.status==='reserved',handler:id=>checkIn(id)},
+      {name:'checkout',label:'Check Out',cls:'btn-danger',condition:r=>r.status==='checked-in',handler:id=>checkOut(id)},
+      {name:'services',label:'🛎️',cls:'btn-warning',condition:r=>r.status==='checked-in',handler:id=>showOrderService(id)},
+      {name:'invoice',label:'Invoice',cls:'btn-outline',condition:r=>r.status==='checked-out',handler:id=>viewInvoice(id)},
+      {name:'delete',label:'✕',cls:'btn-danger',handler:id=>deleteBooking(id)},
+    ]
+  });
 }
 window.showAddBooking = function() {
   const avail = rooms.filter(r=>r.status==='available');
@@ -413,14 +584,27 @@ window.viewInvoice = function(bId) {
 };
 
 // ===== GUESTS =====
+let guestGrid;
 function renderGuests() {
   document.getElementById('page-guests').innerHTML = `
-    <div class="card"><div class="card-header"><h2>Guest Directory</h2><div style="display:flex;gap:0.75rem;"><input type="text" class="search-bar" placeholder="Search guests..." oninput="filterGuests(this.value)"><button class="btn btn-primary" onclick="showAddGuest()">+ Add Guest</button></div></div><div class="card-body"><div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>ID/Passport</th><th>Visits</th><th>Actions</th></tr></thead><tbody id="guestTableBody">${renderGuestRows(guests)}</tbody></table></div></div></div>`;
+    <div class="card"><div class="card-header"><h2>Guest Directory</h2><button class="btn btn-primary" onclick="showAddGuest()">+ Add Guest</button></div><div class="card-body"><div id="guestGrid"></div></div></div>`;
+  guestGrid = new XGrid('guestGrid', {
+    columns: [
+      {field:'firstName',label:'First Name',editable:true,filterable:true},
+      {field:'lastName',label:'Last Name',editable:true,filterable:true},
+      {field:'email',label:'Email',editable:true,filterable:true},
+      {field:'phone',label:'Phone',editable:true,filterable:true},
+      {field:'idDoc',label:'ID/Passport',editable:true,filterable:true},
+      {field:'visits',label:'Visits',editable:true,editType:'number',width:'70px'},
+    ],
+    data: guests,
+    onEdit: (row, field, val) => { const g = guests.find(x=>x.id===row.id); if(g){g[field]=val;save('guests',guests);toast('Guest updated');} },
+    actions: [
+      {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditGuest(id)},
+      {name:'delete',label:'✕',cls:'btn-danger',handler:id=>deleteGuest(id)},
+    ]
+  });
 }
-function renderGuestRows(list) {
-  return list.length?list.map(g=>`<tr><td>${g.firstName} ${g.lastName}</td><td>${g.email}</td><td>${g.phone}</td><td>${g.idDoc}</td><td>${g.visits||0}</td><td><button class="btn btn-sm btn-outline" onclick="showEditGuest('${g.id}')">Edit</button> <button class="btn btn-sm btn-danger" onclick="deleteGuest('${g.id}')">✕</button></td></tr>`).join(''):'<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">👥</div><p>No guests yet</p></div></td></tr>';
-}
-window.filterGuests = function(q) { const f = guests.filter(g=>(g.firstName+' '+g.lastName+' '+g.email+' '+g.phone).toLowerCase().includes(q.toLowerCase())); document.getElementById('guestTableBody').innerHTML = renderGuestRows(f); };
 window.showAddGuest = function() {
   openModal(`<div class="modal-header"><h2>Add Guest</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body"><div class="form-row"><div class="form-group"><label>First Name</label><input type="text" class="form-control" id="mGFirst"></div><div class="form-group"><label>Last Name</label><input type="text" class="form-control" id="mGLast"></div></div>
@@ -451,9 +635,24 @@ window.updateGuest = function(id) {
 window.deleteGuest = function(id) { if(!confirm('Delete this guest?')) return; guests = guests.filter(g=>g.id!==id); save('guests',guests); renderGuests(); toast('Guest deleted'); };
 
 // ===== SERVICES =====
+let serviceGrid;
 function renderServices() {
   document.getElementById('page-services').innerHTML = `
-    <div class="card"><div class="card-header"><h2>Hotel Services</h2><button class="btn btn-primary" onclick="showAddService()">+ Add Service</button></div><div class="card-body"><ul class="service-list" id="serviceList">${services.map(s=>`<li class="service-item"><div class="service-left"><div class="service-icon">${s.icon}</div><div><div class="service-name">${s.name}</div><div class="service-cat">${s.category}</div></div></div><div class="service-actions"><span class="service-price">${fmt$(s.price)}</span><button class="btn btn-sm btn-outline" onclick="showEditService('${s.id}')">Edit</button><button class="btn btn-sm btn-danger" onclick="deleteService('${s.id}')">✕</button></div></li>`).join('')}</ul></div></div>`;
+    <div class="card"><div class="card-header"><h2>Hotel Services</h2><button class="btn btn-primary" onclick="showAddService()">+ Add Service</button></div><div class="card-body"><div id="serviceGrid"></div></div></div>`;
+  serviceGrid = new XGrid('serviceGrid', {
+    columns: [
+      {field:'icon',label:'Icon',editable:true,width:'60px',filterable:false},
+      {field:'name',label:'Service Name',editable:true,filterable:true},
+      {field:'category',label:'Category',editable:true,filterable:true},
+      {field:'price',label:'Price',format:v=>fmt$(v),editable:true,editType:'number',filterable:true},
+    ],
+    data: services,
+    onEdit: (row, field, val) => { const s = services.find(x=>x.id===row.id); if(s){s[field]=val;save('services',services);toast(s.name+' updated');} },
+    actions: [
+      {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditService(id)},
+      {name:'delete',label:'✕',cls:'btn-danger',handler:id=>deleteService(id)},
+    ]
+  });
 }
 window.showAddService = function() {
   openModal(`<div class="modal-header"><h2>Add Service</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
@@ -484,9 +683,30 @@ window.updateService = function(id) {
 window.deleteService = function(id) { if(!confirm('Delete?')) return; services = services.filter(s=>s.id!==id); save('services',services); renderServices(); toast('Service deleted'); };
 
 // ===== INVOICES =====
+let invoiceGrid;
 function renderInvoices() {
+  const invData = invoices.map((inv,i) => ({...inv, invNumber:'INV-'+String(2001+i).padStart(4,'0')}));
   document.getElementById('page-invoices').innerHTML = `
-    <div class="card"><div class="card-header"><h2>Invoices</h2></div><div class="card-body"><div class="table-wrap"><table><thead><tr><th>Invoice</th><th>Date</th><th>Guest</th><th>Room</th><th>Nights</th><th>Room $</th><th>Services $</th><th>Total</th><th>Status</th><th>Actions</th></tr></thead><tbody>${invoices.length?invoices.map((inv,i)=>`<tr><td>INV-${String(2001+i).padStart(4,'0')}</td><td>${fmtDate(inv.date)}</td><td>${inv.guestName}</td><td>${inv.roomNumber}</td><td>${inv.nights}</td><td>${fmt$(inv.roomCharge)}</td><td>${fmt$(inv.serviceCharge)}</td><td><strong>${fmt$(inv.total)}</strong></td><td><span class="status status-${inv.status}">${inv.status==='paid'?'Paid':'Pending'}</span></td><td>${inv.status!=='paid'?`<button class="btn btn-sm btn-success" onclick="payInvoice('${inv.id}')">Pay</button>`:''} <button class="btn btn-sm btn-outline" onclick="showInvoiceDetail('${inv.id}')">View</button></td></tr>`).join(''):'<tr><td colspan="10"><div class="empty-state"><div class="empty-icon">🧾</div><p>No invoices yet. Invoices are created when guests check out.</p></div></td></tr>'}</tbody></table></div></div></div>`;
+    <div class="card"><div class="card-header"><h2>Invoices</h2></div><div class="card-body"><div id="invoiceGrid"></div></div></div>`;
+  invoiceGrid = new XGrid('invoiceGrid', {
+    columns: [
+      {field:'invNumber',label:'Invoice #',filterable:true,width:'100px'},
+      {field:'date',label:'Date',format:v=>fmtDate(v),filterable:true},
+      {field:'guestName',label:'Guest',filterable:true},
+      {field:'roomNumber',label:'Room',filterable:true,width:'70px'},
+      {field:'nights',label:'Nights',width:'60px'},
+      {field:'roomCharge',label:'Room $',format:v=>fmt$(v)},
+      {field:'serviceCharge',label:'Services $',format:v=>fmt$(v)},
+      {field:'total',label:'Total',format:v=>'<strong>'+fmt$(v)+'</strong>'},
+      {field:'status',label:'Status',format:v=>`<span class="status status-${v}">${v==='paid'?'Paid':'Pending'}</span>`,editable:true,editType:'select',editOptions:['pending','paid'],filterable:true},
+    ],
+    data: invData,
+    onEdit: (row, field, val) => { const inv = invoices.find(x=>x.id===row.id); if(inv){inv[field]=val;save('invoices',invoices);toast('Invoice updated');renderInvoices();} },
+    actions: [
+      {name:'pay',label:'Pay',cls:'btn-success',condition:r=>r.status!=='paid',handler:id=>{ payInvoice(id); renderInvoices(); }},
+      {name:'view',label:'View',cls:'btn-outline',handler:id=>showInvoiceDetail(id)},
+    ]
+  });
 }
 window.payInvoice = function(id) { const inv = invoices.find(i=>i.id===id); if(inv) { inv.status='paid'; save('invoices',invoices); renderInvoices(); toast('Invoice marked as paid'); } };
 window.showInvoiceDetail = function(id) {
@@ -525,9 +745,24 @@ function renderReports() {
 }
 
 // ===== ACCOUNTS =====
+let accountGrid;
 function renderAccounts() {
   document.getElementById('page-accounts').innerHTML = `
-    <div class="card"><div class="card-header"><h2>User Accounts</h2><button class="btn btn-primary" onclick="showAddAccount()">+ Add User</button></div><div class="card-body"><div class="table-wrap"><table><thead><tr><th>User</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead><tbody>${accounts.map(a=>`<tr><td>${a.name}</td><td>${a.email}</td><td>${a.role}</td><td><span class="status status-${a.status}">${a.status==='active'?'Active':'Inactive'}</span></td><td><button class="btn btn-sm btn-outline" onclick="showEditAccount('${a.id}')">Edit</button> <button class="btn btn-sm ${a.status==='active'?'btn-warning':'btn-success'}" onclick="toggleAccount('${a.id}')">${a.status==='active'?'Deactivate':'Activate'}</button></td></tr>`).join('')}</tbody></table></div></div></div>`;
+    <div class="card"><div class="card-header"><h2>User Accounts</h2><button class="btn btn-primary" onclick="showAddAccount()">+ Add User</button></div><div class="card-body"><div id="accountGrid"></div></div></div>`;
+  accountGrid = new XGrid('accountGrid', {
+    columns: [
+      {field:'name',label:'User',editable:true,filterable:true},
+      {field:'email',label:'Email',editable:true,filterable:true},
+      {field:'role',label:'Role',editable:true,editType:'select',editOptions:['Administrator','Manager','Receptionist','Staff'],filterable:true},
+      {field:'status',label:'Status',format:v=>`<span class="status status-${v}">${v==='active'?'Active':'Inactive'}</span>`,editable:true,editType:'select',editOptions:['active','inactive'],filterable:true},
+    ],
+    data: accounts,
+    onEdit: (row, field, val) => { const a = accounts.find(x=>x.id===row.id); if(a){a[field]=val;save('accounts',accounts);toast('Account updated');} },
+    actions: [
+      {name:'toggle',label:'Toggle',cls:'btn-warning',handler:id=>{ toggleAccount(id); renderAccounts(); }},
+      {name:'delete',label:'✕',cls:'btn-danger',handler:id=>{ deleteAccount(id); }},
+    ]
+  });
 }
 window.showAddAccount = function() {
   openModal(`<div class="modal-header"><h2>Add User</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
