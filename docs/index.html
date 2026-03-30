@@ -584,7 +584,7 @@ let bookingGrid;
 function renderBookings() {
   const sorted = [...bookings].sort((a,b)=>a.checkin>b.checkin?-1:1);
   document.getElementById('page-bookings').innerHTML = `
-    <div class="card"><div class="card-header"><h2>Bookings</h2><button class="btn btn-primary" onclick="showAddBooking()">+ New Booking</button></div><div class="card-body"><div id="bookingGrid"></div></div></div>`;
+    <div class="card"><div class="card-header"><h2>Bookings</h2></div><div class="card-body"><div id="bookingGrid"></div></div></div>`;
   bookingGrid = new XGrid('bookingGrid', {
     columns: [
       {field:'guestName',label:'Guest',editable:true,filterable:true},
@@ -693,7 +693,7 @@ window.viewInvoice = function(bId) {
 let guestGrid;
 function renderGuests() {
   document.getElementById('page-guests').innerHTML = `
-    <div class="card"><div class="card-header"><h2>Guest Directory</h2><button class="btn btn-primary" onclick="showAddGuest()">+ Add Guest</button></div><div class="card-body"><div id="guestGrid"></div></div></div>`;
+    <div class="card"><div class="card-header"><h2>Guest Directory</h2></div><div class="card-body"><div id="guestGrid"></div></div></div>`;
   guestGrid = new XGrid('guestGrid', {
     columns: [
       {field:'firstName',label:'First Name',editable:true,filterable:true},
@@ -745,7 +745,7 @@ window.deleteGuest = function(id) { if(!confirm('Delete this guest?')) return; g
 let serviceGrid;
 function renderServices() {
   document.getElementById('page-services').innerHTML = `
-    <div class="card"><div class="card-header"><h2>Hotel Services</h2><button class="btn btn-primary" onclick="showAddService()">+ Add Service</button></div><div class="card-body"><div id="serviceGrid"></div></div></div>`;
+    <div class="card"><div class="card-header"><h2>Hotel Services</h2></div><div class="card-body"><div id="serviceGrid"></div></div></div>`;
   serviceGrid = new XGrid('serviceGrid', {
     columns: [
       {field:'icon',label:'Icon',editable:true,width:'60px',filterable:false},
@@ -795,7 +795,7 @@ let invoiceGrid;
 function renderInvoices() {
   const invData = invoices.map((inv,i) => ({...inv, invNumber:'INV-'+String(2001+i).padStart(4,'0')}));
   document.getElementById('page-invoices').innerHTML = `
-    <div class="card"><div class="card-header"><h2>Invoices</h2><button class="btn btn-primary" onclick="showAddInvoice()">+ Add Invoice</button></div><div class="card-body"><div id="invoiceGrid"></div></div></div>`;
+    <div class="card"><div class="card-header"><h2>Invoices</h2></div><div class="card-body"><div id="invoiceGrid"></div></div></div>`;
   invoiceGrid = new XGrid('invoiceGrid', {
     columns: [
       {field:'invNumber',label:'Invoice #',filterable:true,width:'100px'},
@@ -895,7 +895,7 @@ function renderReports() {
 let accountGrid;
 function renderAccounts() {
   document.getElementById('page-accounts').innerHTML = `
-    <div class="card"><div class="card-header"><h2>User Accounts</h2><button class="btn btn-primary" onclick="showAddAccount()">+ Add User</button></div><div class="card-body"><div id="accountGrid"></div></div></div>`;
+    <div class="card"><div class="card-header"><h2>User Accounts</h2></div><div class="card-body"><div id="accountGrid"></div></div></div>`;
   accountGrid = new XGrid('accountGrid', {
     columns: [
       {field:'name',label:'User',editable:true,filterable:true},
