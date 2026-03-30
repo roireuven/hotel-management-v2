@@ -42,7 +42,7 @@ namespace HotelManager
         }
         private void BtnUpdate_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show( "Bạn có muốn cập nhật không?", "Thông báo", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+            DialogResult result = MessageBox.Show( "Do you want to update?", "Notification", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
             if (result == DialogResult.OK)
             {
                 UpdateSurcharge();
@@ -71,13 +71,13 @@ namespace HotelManager
                             break;
                     }
                     if (check)
-                        MessageBox.Show( "Xuất thành công", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show( "Export successful", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     else
-                        MessageBox.Show( "Lỗi xuất thất bại", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show( "Export failed", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 catch
                 {
-                    MessageBox.Show( "Lỗi (Cần cài đặt Office)", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show( "Error (Microsoft Office required)", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -110,7 +110,7 @@ namespace HotelManager
         {
             if(comboboxName.Text == string.Empty)
             {
-                MessageBox.Show( "Không thể cập nhật (Không có phụ thu này)", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show( "Cannot update (this surcharge does not exist)", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
             bool isFill = fCustomer.CheckFillInText(new Control[] { txbValue });
@@ -122,14 +122,14 @@ namespace HotelManager
                     Parameter surchargeNow = GetSurchargeNow();
                     if (surchargeNow.Equals(surchargePre))
                     {
-                        MessageBox.Show( "bạn chưa thay đổi dữ liệu", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show( "You have not changed any data", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                     else
                     {
                         bool check = ParameterDAO.Instance.UpdateParameter(surchargeNow);
                         if (check)
                         {
-                            MessageBox.Show( "Cập nhật thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show( "Updated successfully", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             groupParameter.Tag = surchargeNow;
                             if (btnCancel.Visible == false)
                             {
@@ -140,17 +140,17 @@ namespace HotelManager
                             else BtnCancel_Click(null, null);
                         }
                         else
-                            MessageBox.Show( "Không thể cập nhật (Không có phụ thu này)", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                            MessageBox.Show( "Cannot update (this surcharge does not exist)", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     }
                 }
                 catch
                 {
-                    MessageBox.Show( "Lỗi không xác định", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show( "Unknown error", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
             {
-                MessageBox.Show( "Không được để trống giá trị", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show( "Value cannot be empty", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void ChangeText(DataGridViewRow row)

@@ -22,7 +22,7 @@ namespace HotelManager
 
         private void btnAddCustomer_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Bạn có muốn thêm nhân viên mới không?", "Thông báo", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+            DialogResult result = MessageBox.Show("Do you want to add a new employee?", "Notification", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
             if (result == DialogResult.OK)
             {
 
@@ -72,20 +72,20 @@ namespace HotelManager
                     accountNow.PassWord = fStaff.HassPass;
                     if (AccountDAO.Instance.InsertAccount(accountNow))
                     {
-                        MessageBox.Show("Thêm Thành Công\n Mật khẩu mặc đinh cho tài khảon " + txbName.Text +
-                            ": 123456", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Added successfully\nDefault password for account " + txbName.Text +
+                            ": 123456", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
-                        MessageBox.Show("Nhân Viên Đã Tồn Tại(Trùng tên đăng nhập hoặc Số CMND)", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                        MessageBox.Show("Employee already exists (duplicate username or ID number)", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 }
                 catch
                 {
-                    MessageBox.Show("Lỗi Không xác định", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Unknown error", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
             {
-                MessageBox.Show("Không được để trống", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Fields cannot be empty", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
@@ -114,13 +114,13 @@ namespace HotelManager
         {
             if (!CheckTrueDate(datepickerDateOfBirth.Value, DateTime.Now))
             {
-                MessageBox.Show("Ngày sinh không hợp lệ (Tuổi phải lớn hơn 18)", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Invalid date of birth (must be over 18)", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
             else
                 if (!CheckTrueDate(datepickerDateOfBirth.Value, datePickerStartDay.Value))
             {
-                MessageBox.Show("Ngày vào làm không hợp lệ (Lớn hơn 18 tuổi)", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Invalid start date (must be after 18th birthday)", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
             return true;

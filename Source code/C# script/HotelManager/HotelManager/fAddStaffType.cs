@@ -17,17 +17,17 @@ namespace HotelManager
         public fAddStaffType()
         {
             InitializeComponent();
-            btn.ButtonText = "Thêm mới";
-            title.Text = "Thêm Loại Nhân Viên";
+            btn.ButtonText = "Add new";
+            title.Text = "Add Staff Type";
         }
 
         public fAddStaffType(int idStaffType, string name)
         {
             InitializeComponent();
             this.idStaffType = idStaffType;
-            btn.ButtonText = "Cập nhật";
+            btn.ButtonText = "Update";
             txbName.Text = name;
-            title.Text = "Cập Nhật Loại Nhân Viên";
+            title.Text = "Update Staff Type";
         }
 
         private void bunifuThinButton25_Click(object sender, EventArgs e)
@@ -40,12 +40,12 @@ namespace HotelManager
             {
                 if(AccountTypeDAO.Instance.Insert(txbName.Text))
                 {
-                    MessageBox.Show("Thêm loại nhân viên thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Staff type added successfully", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Close();
                 }
                 else
                 {
-                    MessageBox.Show("Thêm thất bại", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Add failed", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 }
             }
@@ -53,12 +53,12 @@ namespace HotelManager
             {
                 if(AccountTypeDAO.Instance.Update(idStaffType, txbName.Text))
                 {
-                    MessageBox.Show("Cập nhật thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Updated successfully", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Close();
                 }
                 else
                 {
-                    MessageBox.Show("Cập nhật thất bại", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Update failed", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

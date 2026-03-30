@@ -49,7 +49,7 @@ namespace HotelManager
             table.Columns.Add("price_New", typeof(string));
             for (int i = 0; i < table.Rows.Count; i++)
             {
-                table.Rows[i]["price_New"] = ((int)table.Rows[i]["price"]).ToString("C0", CultureInfo.CreateSpecificCulture("vi-VN"));
+                table.Rows[i]["price_New"] = ((int)table.Rows[i]["price"]).ToString("C0", CultureInfo.CreateSpecificCulture("en-US"));
             }
         }
         private string StringToInt(string text)
@@ -69,11 +69,11 @@ namespace HotelManager
         private string IntToString(string text)
         {
             if (text == string.Empty)
-                return 0.ToString("C0", CultureInfo.CreateSpecificCulture("vi-VN"));
+                return 0.ToString("C0", CultureInfo.CreateSpecificCulture("en-US"));
             if (text.Contains(".") || text.Contains(" "))
                 return text;
             else
-                return (int.Parse(text).ToString("C0", CultureInfo.CreateSpecificCulture("vi-VN")));
+                return (int.Parse(text).ToString("C0", CultureInfo.CreateSpecificCulture("en-US")));
         }
 
         private void TxbPrice_KeyPress(object sender, KeyPressEventArgs e)
@@ -100,7 +100,7 @@ namespace HotelManager
         {
             if (!fCustomer.CheckFillInText(new Control[] { txbName, comboBoxServiceType, txbPrice }))
             {
-                DialogResult result = MessageBox.Show("Không được để trống", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DialogResult result = MessageBox.Show("Fields cannot be empty", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             try
@@ -108,21 +108,21 @@ namespace HotelManager
                 Service serviceNow = GetServiceNow();
                 if (ServiceDAO.Instance.InsertService(serviceNow))
                 {
-                    MessageBox.Show("Thành Công", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Success", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     txbName.Text = string.Empty;
                     txbPrice.Text = IntToString("100000");                
                 }
                 else
-                    MessageBox.Show("Dịch vụ đã tồn tại", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBox.Show("Service already exists", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
             }
             catch
             {
-                MessageBox.Show("Lỗi", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void btnAddCustomer_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Bạn có muốn thêm mới dịch vụ?", "Thông báo", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+            DialogResult result = MessageBox.Show("Do you want to add a new service?", "Notification", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
             if (result == DialogResult.OK)
                 InsertService();
             
