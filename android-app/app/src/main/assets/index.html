@@ -6,7 +6,6 @@
   <title>Hotel Management System</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
       --primary: #1a73e8;
       --primary-dark: #1557b0;
@@ -21,582 +20,122 @@
       --success: #42b72a;
       --warning: #f5a623;
       --danger: #e74c3c;
-      --info: #1a73e8;
     }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-    }
-
-    /* Sidebar */
-    .sidebar {
-      width: 260px;
-      background: var(--sidebar-bg);
-      color: #ecf0f1;
-      min-height: 100vh;
-      position: fixed;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      overflow-y: auto;
-      z-index: 100;
-      transition: transform 0.3s ease;
-    }
-
-    .sidebar-header {
-      padding: 1.5rem 1.25rem;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .sidebar-header .logo {
-      font-size: 1.8rem;
-    }
-
-    .sidebar-header h2 {
-      font-size: 1.1rem;
-      font-weight: 600;
-      line-height: 1.3;
-    }
-
-    .sidebar-header span {
-      font-size: 0.75rem;
-      opacity: 0.6;
-      display: block;
-    }
-
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; }
+    .sidebar { width: 260px; background: var(--sidebar-bg); color: #ecf0f1; min-height: 100vh; position: fixed; left: 0; top: 0; bottom: 0; overflow-y: auto; z-index: 100; transition: transform 0.3s ease; }
+    .sidebar-header { padding: 1.5rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 0.75rem; }
+    .sidebar-header .logo { font-size: 1.8rem; }
+    .sidebar-header h2 { font-size: 1.1rem; font-weight: 600; line-height: 1.3; }
+    .sidebar-header span { font-size: 0.75rem; opacity: 0.6; display: block; }
     .sidebar-nav { padding: 0.75rem 0; }
-
-    .sidebar-nav .nav-section {
-      padding: 0.5rem 1.25rem 0.25rem;
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      opacity: 0.4;
-      margin-top: 0.5rem;
-    }
-
-    .sidebar-nav a {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.65rem 1.25rem;
-      color: #bdc3c7;
-      text-decoration: none;
-      font-size: 0.9rem;
-      transition: all 0.15s ease;
-      cursor: pointer;
-    }
-
-    .sidebar-nav a:hover {
-      background: var(--sidebar-hover);
-      color: #fff;
-    }
-
-    .sidebar-nav a.active {
-      background: var(--sidebar-active);
-      color: #fff;
-    }
-
+    .sidebar-nav .nav-section { padding: 0.5rem 1.25rem 0.25rem; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.4; margin-top: 0.5rem; }
+    .sidebar-nav a { display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 1.25rem; color: #bdc3c7; text-decoration: none; font-size: 0.9rem; transition: all 0.15s ease; cursor: pointer; }
+    .sidebar-nav a:hover { background: var(--sidebar-hover); color: #fff; }
+    .sidebar-nav a.active { background: var(--sidebar-active); color: #fff; }
     .sidebar-nav a .icon { font-size: 1.15rem; width: 24px; text-align: center; }
-
-    .sidebar-nav a .badge {
-      margin-left: auto;
-      background: var(--danger);
-      color: #fff;
-      font-size: 0.7rem;
-      padding: 0.15rem 0.5rem;
-      border-radius: 10px;
-      font-weight: 600;
-    }
-
-    /* Main content */
-    .main {
-      margin-left: 260px;
-      flex: 1;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Top bar */
-    .topbar {
-      background: var(--card-bg);
-      border-bottom: 1px solid var(--border);
-      padding: 0 1.5rem;
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 50;
-    }
-
-    .topbar-left {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .menu-toggle {
-      display: none;
-      background: none;
-      border: none;
-      font-size: 1.4rem;
-      cursor: pointer;
-      padding: 0.25rem;
-    }
-
-    .topbar h1 {
-      font-size: 1.2rem;
-      font-weight: 600;
-    }
-
-    .topbar-right {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .topbar-right .user-info {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.9rem;
-    }
-
-    .avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: var(--primary);
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-      font-size: 0.85rem;
-    }
-
+    .sidebar-nav a .badge { margin-left: auto; background: var(--danger); color: #fff; font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: 10px; font-weight: 600; }
+    .main { margin-left: 260px; flex: 1; min-height: 100vh; display: flex; flex-direction: column; }
+    .topbar { background: var(--card-bg); border-bottom: 1px solid var(--border); padding: 0 1.5rem; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+    .topbar-left { display: flex; align-items: center; gap: 1rem; }
+    .menu-toggle { display: none; background: none; border: none; font-size: 1.4rem; cursor: pointer; padding: 0.25rem; }
+    .topbar h1 { font-size: 1.2rem; font-weight: 600; }
+    .topbar-right { display: flex; align-items: center; gap: 1rem; }
+    .topbar-right .user-info { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; }
+    .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.85rem; }
     .content { padding: 1.5rem; flex: 1; }
-
-    /* Stats cards */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .stat-card {
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 1.25rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .stat-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-    }
-
-    .stat-icon.blue { background: #e3f2fd; }
-    .stat-icon.green { background: #e8f5e9; }
-    .stat-icon.orange { background: #fff3e0; }
-    .stat-icon.red { background: #fce4ec; }
-
-    .stat-info h3 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      line-height: 1;
-    }
-
-    .stat-info p {
-      font-size: 0.8rem;
-      color: var(--text-light);
-      margin-top: 0.2rem;
-    }
-
-    /* Cards */
-    .card {
-      background: var(--card-bg);
-      border-radius: 12px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-      margin-bottom: 1.5rem;
-    }
-
-    .card-header {
-      padding: 1rem 1.25rem;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .stat-card { background: var(--card-bg); border-radius: 12px; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); display: flex; align-items: center; gap: 1rem; }
+    .stat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+    .stat-icon.blue { background: #e3f2fd; } .stat-icon.green { background: #e8f5e9; } .stat-icon.orange { background: #fff3e0; } .stat-icon.red { background: #fce4ec; }
+    .stat-info h3 { font-size: 1.5rem; font-weight: 700; line-height: 1; }
+    .stat-info p { font-size: 0.8rem; color: var(--text-light); margin-top: 0.2rem; }
+    .card { background: var(--card-bg); border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 1.5rem; }
+    .card-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
     .card-header h2 { font-size: 1rem; font-weight: 600; }
-
     .card-body { padding: 1.25rem; }
-
-    /* Tables */
     .table-wrap { overflow-x: auto; }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.88rem;
-    }
-
-    th, td {
-      text-align: left;
-      padding: 0.75rem 1rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    th {
-      font-weight: 600;
-      color: var(--text-light);
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      background: #fafbfc;
-    }
-
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    th, td { text-align: left; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); }
+    th { font-weight: 600; color: var(--text-light); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; background: #fafbfc; }
     tr:hover td { background: #f8f9fa; }
-
-    /* Status badges */
-    .status {
-      display: inline-block;
-      padding: 0.2rem 0.65rem;
-      border-radius: 12px;
-      font-size: 0.75rem;
-      font-weight: 600;
-    }
-
-    .status-available { background: #e8f5e9; color: #2e7d32; }
+    .status { display: inline-block; padding: 0.2rem 0.65rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+    .status-available, .status-active, .status-checked-in, .status-paid { background: #e8f5e9; color: #2e7d32; }
     .status-occupied { background: #e3f2fd; color: #1565c0; }
-    .status-reserved { background: #fff3e0; color: #e65100; }
+    .status-reserved, .status-pending { background: #fff3e0; color: #e65100; }
     .status-maintenance { background: #fce4ec; color: #c62828; }
-    .status-checked-in { background: #e8f5e9; color: #2e7d32; }
-    .status-pending { background: #fff3e0; color: #e65100; }
-    .status-checked-out { background: #eceff1; color: #546e7a; }
-
-    /* Buttons */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.45rem 1rem;
-      border-radius: 8px;
-      border: none;
-      font-size: 0.85rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-
-    .btn-primary { background: var(--primary); color: #fff; }
-    .btn-primary:hover { background: var(--primary-dark); }
+    .status-checked-out, .status-inactive { background: #eceff1; color: #546e7a; }
+    .btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 1rem; border-radius: 8px; border: none; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.15s ease; }
+    .btn-primary { background: var(--primary); color: #fff; } .btn-primary:hover { background: var(--primary-dark); }
     .btn-sm { padding: 0.3rem 0.7rem; font-size: 0.78rem; }
-    .btn-outline {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text);
-    }
-    .btn-outline:hover { background: #f0f2f5; }
-    .btn-success { background: var(--success); color: #fff; }
-    .btn-danger { background: var(--danger); color: #fff; }
-
-    /* Room grid */
-    .room-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap: 1rem;
-    }
-
-    .room-tile {
-      border-radius: 10px;
-      padding: 1rem;
-      text-align: center;
-      cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-      border: 2px solid transparent;
-    }
-
-    .room-tile:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-    }
-
-    .room-tile .room-number {
-      font-size: 1.3rem;
-      font-weight: 700;
-      margin-bottom: 0.25rem;
-    }
-
-    .room-tile .room-type {
-      font-size: 0.75rem;
-      opacity: 0.8;
-      margin-bottom: 0.4rem;
-    }
-
-    .room-tile .room-status {
-      font-size: 0.7rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); } .btn-outline:hover { background: #f0f2f5; }
+    .btn-success { background: var(--success); color: #fff; } .btn-danger { background: var(--danger); color: #fff; }
+    .btn-warning { background: var(--warning); color: #fff; }
+    .room-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; }
+    .room-tile { border-radius: 10px; padding: 1rem; text-align: center; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease; border: 2px solid transparent; }
+    .room-tile:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+    .room-tile .room-number { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .room-tile .room-type { font-size: 0.75rem; opacity: 0.8; margin-bottom: 0.4rem; }
+    .room-tile .room-price { font-size: 0.7rem; font-weight: 600; }
+    .room-tile .room-status { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.25rem; }
     .room-available { background: #e8f5e9; border-color: #a5d6a7; color: #2e7d32; }
     .room-occupied { background: #e3f2fd; border-color: #90caf9; color: #1565c0; }
     .room-reserved { background: #fff3e0; border-color: #ffcc80; color: #e65100; }
     .room-maintenance { background: #fce4ec; border-color: #ef9a9a; color: #c62828; }
-
-    /* Forms */
-    .form-group {
-      margin-bottom: 1rem;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 0.85rem;
-      font-weight: 500;
-      margin-bottom: 0.3rem;
-      color: var(--text-light);
-    }
-
-    .form-control {
-      width: 100%;
-      padding: 0.55rem 0.75rem;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 0.9rem;
-      font-family: inherit;
-      transition: border-color 0.15s ease;
-    }
-
-    .form-control:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(26,115,232,0.15);
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-    }
-
-    /* Modal */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 200;
-      align-items: center;
-      justify-content: center;
-    }
-
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 0.3rem; color: var(--text-light); }
+    .form-control { width: 100%; padding: 0.55rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; font-family: inherit; transition: border-color 0.15s ease; background: #fff; }
+    .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,115,232,0.15); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; }
     .modal-overlay.active { display: flex; }
-
-    .modal {
-      background: var(--card-bg);
-      border-radius: 12px;
-      width: 90%;
-      max-width: 500px;
-      max-height: 90vh;
-      overflow-y: auto;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-    }
-
-    .modal-header {
-      padding: 1rem 1.25rem;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
+    .modal { background: var(--card-bg); border-radius: 12px; width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+    .modal-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
     .modal-header h2 { font-size: 1.1rem; }
-
-    .modal-close {
-      background: none;
-      border: none;
-      font-size: 1.3rem;
-      cursor: pointer;
-      color: var(--text-light);
-    }
-
+    .modal-close { background: none; border: none; font-size: 1.3rem; cursor: pointer; color: var(--text-light); }
     .modal-body { padding: 1.25rem; }
-
-    .modal-footer {
-      padding: 1rem 1.25rem;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: flex-end;
-      gap: 0.5rem;
-    }
-
-    /* Chart placeholder */
-    .chart-container {
-      width: 100%;
-      height: 250px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .bar-chart {
-      display: flex;
-      align-items: flex-end;
-      gap: 0.75rem;
-      height: 200px;
-      padding: 0 0.5rem;
-      border-bottom: 2px solid var(--border);
-    }
-
-    .bar-group {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.3rem;
-    }
-
-    .bar {
-      width: 100%;
-      max-width: 50px;
-      border-radius: 6px 6px 0 0;
-      transition: height 0.6s ease;
-    }
-
-    .bar-label {
-      font-size: 0.7rem;
-      color: var(--text-light);
-      margin-top: 0.3rem;
-    }
-
-    .bar-value {
-      font-size: 0.7rem;
-      font-weight: 600;
-    }
-
-    /* Legend */
-    .legend {
-      display: flex;
-      gap: 1.5rem;
-      padding: 0.75rem 0.5rem 0;
-      flex-wrap: wrap;
-    }
-
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.78rem;
-      color: var(--text-light);
-    }
-
-    .legend-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 3px;
-    }
-
-    /* Services */
+    .modal-footer { padding: 1rem 1.25rem; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 0.5rem; }
+    .chart-container { width: 100%; height: 250px; display: flex; flex-direction: column; }
+    .bar-chart { display: flex; align-items: flex-end; gap: 0.75rem; height: 200px; padding: 0 0.5rem; border-bottom: 2px solid var(--border); }
+    .bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.3rem; }
+    .bar { width: 100%; max-width: 50px; border-radius: 6px 6px 0 0; transition: height 0.6s ease; }
+    .bar-label { font-size: 0.7rem; color: var(--text-light); margin-top: 0.3rem; }
+    .bar-value { font-size: 0.7rem; font-weight: 600; }
+    .legend { display: flex; gap: 1.5rem; padding: 0.75rem 0.5rem 0; flex-wrap: wrap; }
+    .legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.78rem; color: var(--text-light); }
+    .legend-dot { width: 10px; height: 10px; border-radius: 3px; }
     .service-list { list-style: none; }
-
-    .service-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.75rem 0;
-      border-bottom: 1px solid var(--border);
-    }
-
+    .service-item { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
     .service-item:last-child { border-bottom: none; }
-
-    .service-left {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .service-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      background: #f0f2f5;
-    }
-
+    .service-left { display: flex; align-items: center; gap: 0.75rem; }
+    .service-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; background: #f0f2f5; }
     .service-name { font-weight: 500; font-size: 0.9rem; }
     .service-cat { font-size: 0.78rem; color: var(--text-light); }
     .service-price { font-weight: 600; font-size: 0.9rem; }
-
-    /* Overlay for mobile sidebar */
-    .sidebar-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.4);
-      z-index: 90;
-    }
-
-    /* Pages */
-    .page { display: none; }
-    .page.active { display: block; }
-
-    /* Responsive */
+    .service-actions { display: flex; gap: 0.4rem; align-items: center; }
+    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 90; }
+    .page { display: none; } .page.active { display: block; }
+    .toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: #323232; color: #fff; padding: 0.75rem 1.25rem; border-radius: 8px; font-size: 0.9rem; z-index: 999; opacity: 0; transform: translateY(20px); transition: all 0.3s ease; pointer-events: none; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .search-bar { padding: 0.45rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.85rem; width: 220px; font-family: inherit; }
+    .search-bar:focus { outline: none; border-color: var(--primary); }
+    .empty-state { text-align: center; padding: 3rem 1rem; color: var(--text-light); }
+    .empty-state .empty-icon { font-size: 3rem; margin-bottom: 0.75rem; }
     @media (max-width: 768px) {
-      .sidebar { transform: translateX(-100%); }
-      .sidebar.open { transform: translateX(0); }
-      .sidebar-overlay.open { display: block; }
-      .main { margin-left: 0; }
-      .menu-toggle { display: block; }
-      .form-row { grid-template-columns: 1fr; }
-      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .sidebar { transform: translateX(-100%); } .sidebar.open { transform: translateX(0); } .sidebar-overlay.open { display: block; }
+      .main { margin-left: 0; } .menu-toggle { display: block; } .form-row { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); } .dash-grid { grid-template-columns: 1fr !important; }
     }
-
-    @media (max-width: 480px) {
-      .stats-grid { grid-template-columns: 1fr; }
-      .room-grid { grid-template-columns: repeat(2, 1fr); }
-    }
+    @media (max-width: 480px) { .stats-grid { grid-template-columns: 1fr; } .room-grid { grid-template-columns: repeat(2, 1fr); } .search-bar { width: 140px; } }
   </style>
 </head>
 <body>
-
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
   <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <div class="logo">🏨</div>
-      <div>
-        <h2>Hotel Manager</h2>
-        <span>Management System</span>
-      </div>
-    </div>
-    <nav class="sidebar-nav">
+    <div class="sidebar-header"><div class="logo">🏨</div><div><h2>Hotel Manager</h2><span>Management System</span></div></div>
+    <nav class="sidebar-nav" id="sidebarNav">
       <div class="nav-section">Main</div>
       <a class="active" data-page="dashboard"><span class="icon">📊</span> Dashboard</a>
-      <a data-page="rooms"><span class="icon">🚪</span> Rooms <span class="badge">3</span></a>
+      <a data-page="rooms"><span class="icon">🚪</span> Rooms <span class="badge" id="badgeMaint">0</span></a>
       <a data-page="bookings"><span class="icon">📋</span> Bookings</a>
       <a data-page="guests"><span class="icon">👥</span> Guests</a>
       <div class="nav-section">Services</div>
@@ -608,533 +147,442 @@
       <a data-page="settings"><span class="icon">⚙️</span> Settings</a>
     </nav>
   </aside>
-
   <div class="main">
     <div class="topbar">
-      <div class="topbar-left">
-        <button class="menu-toggle" id="menuToggle">☰</button>
-        <h1 id="pageTitle">Dashboard</h1>
-      </div>
-      <div class="topbar-right">
-        <div class="user-info">
-          <span>Admin</span>
-          <div class="avatar">A</div>
-        </div>
-      </div>
+      <div class="topbar-left"><button class="menu-toggle" id="menuToggle">☰</button><h1 id="pageTitle">Dashboard</h1></div>
+      <div class="topbar-right"><div class="user-info"><span>Admin</span><div class="avatar">A</div></div></div>
     </div>
-
     <div class="content">
-
-      <!-- Dashboard -->
-      <div class="page active" id="page-dashboard">
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-icon blue">🏨</div>
-            <div class="stat-info"><h3>48</h3><p>Total Rooms</p></div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon green">✅</div>
-            <div class="stat-info"><h3>21</h3><p>Available</p></div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon orange">📋</div>
-            <div class="stat-info"><h3>18</h3><p>Occupied</p></div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon red">🔧</div>
-            <div class="stat-info"><h3>3</h3><p>Maintenance</p></div>
-          </div>
-        </div>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
-          <div class="card">
-            <div class="card-header"><h2>Revenue (Last 7 Days)</h2></div>
-            <div class="card-body">
-              <div class="chart-container">
-                <div class="bar-chart" id="revenueChart"></div>
-                <div class="legend">
-                  <div class="legend-item"><div class="legend-dot" style="background:#1a73e8"></div> Rooms</div>
-                  <div class="legend-item"><div class="legend-dot" style="background:#42b72a"></div> Services</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-header"><h2>Recent Check-ins</h2></div>
-            <div class="card-body">
-              <div class="table-wrap">
-                <table>
-                  <thead><tr><th>Guest</th><th>Room</th><th>Status</th></tr></thead>
-                  <tbody>
-                    <tr><td>John Smith</td><td>201</td><td><span class="status status-checked-in">Checked In</span></td></tr>
-                    <tr><td>Maria Garcia</td><td>305</td><td><span class="status status-checked-in">Checked In</span></td></tr>
-                    <tr><td>David Lee</td><td>402</td><td><span class="status status-pending">Pending</span></td></tr>
-                    <tr><td>Sarah Johnson</td><td>108</td><td><span class="status status-checked-in">Checked In</span></td></tr>
-                    <tr><td>James Wilson</td><td>503</td><td><span class="status status-pending">Pending</span></td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Rooms -->
-      <div class="page" id="page-rooms">
-        <div class="card">
-          <div class="card-header">
-            <h2>Room Overview</h2>
-            <button class="btn btn-primary" onclick="openModal('addRoom')">+ Add Room</button>
-          </div>
-          <div class="card-body">
-            <div style="display:flex;gap:1rem;margin-bottom:1.25rem;flex-wrap:wrap;">
-              <button class="btn btn-outline room-filter active-filter" data-filter="all">All (48)</button>
-              <button class="btn btn-outline room-filter" data-filter="available">Available (21)</button>
-              <button class="btn btn-outline room-filter" data-filter="occupied">Occupied (18)</button>
-              <button class="btn btn-outline room-filter" data-filter="reserved">Reserved (6)</button>
-              <button class="btn btn-outline room-filter" data-filter="maintenance">Maintenance (3)</button>
-            </div>
-            <div class="room-grid" id="roomGrid"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Bookings -->
-      <div class="page" id="page-bookings">
-        <div class="card">
-          <div class="card-header">
-            <h2>Bookings</h2>
-            <button class="btn btn-primary" onclick="openModal('addBooking')">+ New Booking</button>
-          </div>
-          <div class="card-body">
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>ID</th><th>Guest</th><th>Room</th><th>Check In</th><th>Check Out</th><th>Status</th><th>Actions</th></tr></thead>
-                <tbody>
-                  <tr><td>#1001</td><td>John Smith</td><td>201 - Deluxe</td><td>Mar 28, 2026</td><td>Mar 31, 2026</td><td><span class="status status-checked-in">Checked In</span></td><td><button class="btn btn-sm btn-outline">View</button></td></tr>
-                  <tr><td>#1002</td><td>Maria Garcia</td><td>305 - Suite</td><td>Mar 29, 2026</td><td>Apr 2, 2026</td><td><span class="status status-checked-in">Checked In</span></td><td><button class="btn btn-sm btn-outline">View</button></td></tr>
-                  <tr><td>#1003</td><td>David Lee</td><td>402 - Standard</td><td>Mar 30, 2026</td><td>Apr 1, 2026</td><td><span class="status status-pending">Pending</span></td><td><button class="btn btn-sm btn-primary">Check In</button></td></tr>
-                  <tr><td>#1004</td><td>Sarah Johnson</td><td>108 - Deluxe</td><td>Mar 27, 2026</td><td>Mar 30, 2026</td><td><span class="status status-checked-in">Checked In</span></td><td><button class="btn btn-sm btn-danger">Check Out</button></td></tr>
-                  <tr><td>#1005</td><td>James Wilson</td><td>503 - Suite</td><td>Mar 30, 2026</td><td>Apr 3, 2026</td><td><span class="status status-pending">Pending</span></td><td><button class="btn btn-sm btn-primary">Check In</button></td></tr>
-                  <tr><td>#1006</td><td>Emily Chen</td><td>210 - Standard</td><td>Apr 1, 2026</td><td>Apr 4, 2026</td><td><span class="status status-reserved">Reserved</span></td><td><button class="btn btn-sm btn-outline">View</button></td></tr>
-                  <tr><td>#1007</td><td>Robert Brown</td><td>315 - Deluxe</td><td>Mar 25, 2026</td><td>Mar 28, 2026</td><td><span class="status status-checked-out">Checked Out</span></td><td><button class="btn btn-sm btn-outline">Invoice</button></td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Guests -->
-      <div class="page" id="page-guests">
-        <div class="card">
-          <div class="card-header">
-            <h2>Guest Directory</h2>
-            <button class="btn btn-primary" onclick="openModal('addGuest')">+ Add Guest</button>
-          </div>
-          <div class="card-body">
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>ID/Passport</th><th>Visits</th><th>Actions</th></tr></thead>
-                <tbody>
-                  <tr><td>John Smith</td><td>john.smith@email.com</td><td>+1 555-0123</td><td>US-98765432</td><td>3</td><td><button class="btn btn-sm btn-outline">Edit</button></td></tr>
-                  <tr><td>Maria Garcia</td><td>m.garcia@email.com</td><td>+34 612-3456</td><td>ES-12345678</td><td>1</td><td><button class="btn btn-sm btn-outline">Edit</button></td></tr>
-                  <tr><td>David Lee</td><td>david.lee@email.com</td><td>+82 10-9876</td><td>KR-87654321</td><td>5</td><td><button class="btn btn-sm btn-outline">Edit</button></td></tr>
-                  <tr><td>Sarah Johnson</td><td>s.johnson@email.com</td><td>+1 555-0456</td><td>US-11223344</td><td>2</td><td><button class="btn btn-sm btn-outline">Edit</button></td></tr>
-                  <tr><td>James Wilson</td><td>j.wilson@email.com</td><td>+44 20-7890</td><td>UK-55667788</td><td>1</td><td><button class="btn btn-sm btn-outline">Edit</button></td></tr>
-                  <tr><td>Emily Chen</td><td>e.chen@email.com</td><td>+86 138-0000</td><td>CN-99887766</td><td>4</td><td><button class="btn btn-sm btn-outline">Edit</button></td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Services -->
-      <div class="page" id="page-services">
-        <div class="card">
-          <div class="card-header">
-            <h2>Hotel Services</h2>
-            <button class="btn btn-primary">+ Add Service</button>
-          </div>
-          <div class="card-body">
-            <ul class="service-list">
-              <li class="service-item">
-                <div class="service-left"><div class="service-icon">🍳</div><div><div class="service-name">Breakfast Buffet</div><div class="service-cat">Food & Beverage</div></div></div>
-                <div class="service-price">$25.00</div>
-              </li>
-              <li class="service-item">
-                <div class="service-left"><div class="service-icon">🧺</div><div><div class="service-name">Laundry Service</div><div class="service-cat">Housekeeping</div></div></div>
-                <div class="service-price">$15.00</div>
-              </li>
-              <li class="service-item">
-                <div class="service-left"><div class="service-icon">💆</div><div><div class="service-name">Spa Treatment</div><div class="service-cat">Wellness</div></div></div>
-                <div class="service-price">$80.00</div>
-              </li>
-              <li class="service-item">
-                <div class="service-left"><div class="service-icon">🚗</div><div><div class="service-name">Airport Shuttle</div><div class="service-cat">Transport</div></div></div>
-                <div class="service-price">$45.00</div>
-              </li>
-              <li class="service-item">
-                <div class="service-left"><div class="service-icon">🍷</div><div><div class="service-name">Mini Bar</div><div class="service-cat">Food & Beverage</div></div></div>
-                <div class="service-price">$35.00</div>
-              </li>
-              <li class="service-item">
-                <div class="service-left"><div class="service-icon">🏊</div><div><div class="service-name">Pool Access</div><div class="service-cat">Recreation</div></div></div>
-                <div class="service-price">$10.00</div>
-              </li>
-              <li class="service-item">
-                <div class="service-left"><div class="service-icon">📶</div><div><div class="service-name">Premium WiFi</div><div class="service-cat">Technology</div></div></div>
-                <div class="service-price">$5.00</div>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <!-- Invoices -->
-      <div class="page" id="page-invoices">
-        <div class="card">
-          <div class="card-header"><h2>Invoices</h2></div>
-          <div class="card-body">
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>Invoice #</th><th>Guest</th><th>Room</th><th>Room Charges</th><th>Services</th><th>Total</th><th>Status</th></tr></thead>
-                <tbody>
-                  <tr><td>INV-2001</td><td>Robert Brown</td><td>315</td><td>$450.00</td><td>$65.00</td><td><strong>$515.00</strong></td><td><span class="status status-checked-in">Paid</span></td></tr>
-                  <tr><td>INV-2002</td><td>Sarah Johnson</td><td>108</td><td>$390.00</td><td>$105.00</td><td><strong>$495.00</strong></td><td><span class="status status-pending">Pending</span></td></tr>
-                  <tr><td>INV-2003</td><td>John Smith</td><td>201</td><td>$520.00</td><td>$80.00</td><td><strong>$600.00</strong></td><td><span class="status status-pending">Pending</span></td></tr>
-                  <tr><td>INV-2004</td><td>Maria Garcia</td><td>305</td><td>$780.00</td><td>$150.00</td><td><strong>$930.00</strong></td><td><span class="status status-pending">Pending</span></td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Reports -->
-      <div class="page" id="page-reports">
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-icon blue">💰</div>
-            <div class="stat-info"><h3>$12,450</h3><p>Revenue This Month</p></div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon green">📈</div>
-            <div class="stat-info"><h3>78%</h3><p>Occupancy Rate</p></div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon orange">⭐</div>
-            <div class="stat-info"><h3>4.6</h3><p>Avg Guest Rating</p></div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon red">📊</div>
-            <div class="stat-info"><h3>142</h3><p>Total Bookings</p></div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header"><h2>Monthly Revenue Breakdown</h2></div>
-          <div class="card-body">
-            <div class="chart-container">
-              <div class="bar-chart" id="monthlyChart"></div>
-              <div class="legend">
-                <div class="legend-item"><div class="legend-dot" style="background:#1a73e8"></div> Room Revenue</div>
-                <div class="legend-item"><div class="legend-dot" style="background:#42b72a"></div> Service Revenue</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Accounts -->
-      <div class="page" id="page-accounts">
-        <div class="card">
-          <div class="card-header">
-            <h2>User Accounts</h2>
-            <button class="btn btn-primary">+ Add User</button>
-          </div>
-          <div class="card-body">
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>User</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead>
-                <tbody>
-                  <tr><td>Admin User</td><td>admin@hotel.com</td><td>Administrator</td><td><span class="status status-checked-in">Active</span></td><td><button class="btn btn-sm btn-outline">Edit</button></td></tr>
-                  <tr><td>Jane Receptionist</td><td>jane@hotel.com</td><td>Receptionist</td><td><span class="status status-checked-in">Active</span></td><td><button class="btn btn-sm btn-outline">Edit</button></td></tr>
-                  <tr><td>Mike Manager</td><td>mike@hotel.com</td><td>Manager</td><td><span class="status status-checked-in">Active</span></td><td><button class="btn btn-sm btn-outline">Edit</button></td></tr>
-                  <tr><td>Tom Housekeeping</td><td>tom@hotel.com</td><td>Staff</td><td><span class="status status-checked-out">Inactive</span></td><td><button class="btn btn-sm btn-outline">Edit</button></td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Settings -->
-      <div class="page" id="page-settings">
-        <div class="card">
-          <div class="card-header"><h2>Hotel Settings</h2></div>
-          <div class="card-body">
-            <div class="form-row">
-              <div class="form-group">
-                <label>Hotel Name</label>
-                <input type="text" class="form-control" value="Grand Hotel Management">
-              </div>
-              <div class="form-group">
-                <label>Contact Email</label>
-                <input type="email" class="form-control" value="info@grandhotel.com">
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Phone Number</label>
-                <input type="tel" class="form-control" value="+1 555-0100">
-              </div>
-              <div class="form-group">
-                <label>Currency</label>
-                <select class="form-control">
-                  <option>USD ($)</option>
-                  <option>EUR (€)</option>
-                  <option>GBP (£)</option>
-                  <option>VND (₫)</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Address</label>
-              <input type="text" class="form-control" value="123 Hotel Street, City, Country">
-            </div>
-            <h3 style="margin:1.5rem 0 1rem;font-size:1rem;">Regulations</h3>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Max Guests Per Room</label>
-                <input type="number" class="form-control" value="3">
-              </div>
-              <div class="form-group">
-                <label>Surcharge Rate (%)</label>
-                <input type="number" class="form-control" value="25">
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Check-in Time</label>
-                <input type="time" class="form-control" value="14:00">
-              </div>
-              <div class="form-group">
-                <label>Check-out Time</label>
-                <input type="time" class="form-control" value="12:00">
-              </div>
-            </div>
-            <div style="margin-top:1rem;">
-              <button class="btn btn-primary">Save Settings</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <div class="page active" id="page-dashboard"></div>
+      <div class="page" id="page-rooms"></div>
+      <div class="page" id="page-bookings"></div>
+      <div class="page" id="page-guests"></div>
+      <div class="page" id="page-services"></div>
+      <div class="page" id="page-invoices"></div>
+      <div class="page" id="page-reports"></div>
+      <div class="page" id="page-accounts"></div>
+      <div class="page" id="page-settings"></div>
     </div>
   </div>
+  <div class="modal-overlay" id="modalOverlay"><div class="modal" id="modalContent"></div></div>
+  <div class="toast" id="toast"></div>
 
-  <!-- Add Room Modal -->
-  <div class="modal-overlay" id="modal-addRoom">
-    <div class="modal">
-      <div class="modal-header"><h2>Add New Room</h2><button class="modal-close" onclick="closeModal('addRoom')">&times;</button></div>
-      <div class="modal-body">
-        <div class="form-row">
-          <div class="form-group"><label>Room Number</label><input type="text" class="form-control" placeholder="e.g. 101"></div>
-          <div class="form-group"><label>Floor</label><input type="number" class="form-control" placeholder="e.g. 1"></div>
-        </div>
-        <div class="form-group">
-          <label>Room Type</label>
-          <select class="form-control"><option>Standard</option><option>Deluxe</option><option>Suite</option><option>VIP Suite</option></select>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label>Price Per Night ($)</label><input type="number" class="form-control" placeholder="e.g. 120"></div>
-          <div class="form-group"><label>Max Guests</label><input type="number" class="form-control" placeholder="e.g. 2"></div>
-        </div>
-      </div>
-      <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('addRoom')">Cancel</button><button class="btn btn-primary" onclick="closeModal('addRoom')">Add Room</button></div>
+<script>
+'use strict';
+
+const DB_KEY = 'hotel_mgr_';
+function load(key, def) { try { const d = localStorage.getItem(DB_KEY + key); return d ? JSON.parse(d) : def; } catch(e) { return def; } }
+function save(key, data) { localStorage.setItem(DB_KEY + key, JSON.stringify(data)); }
+function genId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 5); }
+function fmt$(n) { return '$' + Number(n).toFixed(2); }
+function fmtDate(d) { if (!d) return ''; const dt = new Date(d + 'T00:00:00'); return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
+function today() { return new Date().toISOString().split('T')[0]; }
+function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
+function daysBetween(a, b) { return Math.max(1, Math.ceil((new Date(b) - new Date(a)) / 86400000)); }
+
+const defaultRooms = [];
+[1,2,3,4,5].forEach(f => { for (let r = 1; r <= 10; r++) { const n = f*100+r; if(n>508)break;
+  const types = ['Standard','Deluxe','Suite','VIP Suite']; const prices = [100,150,250,400];
+  const ti = r<=4?0:r<=7?1:r<=9?2:3; let st='available';
+  if(r===3&&f===2) st='maintenance'; else if(r===7&&f===4) st='maintenance'; else if(r===1&&f===5) st='maintenance';
+  else if([1,2,5,6,8].includes(r)&&f<=3) st='occupied'; else if((r===4&&f<=2)||(r===9&&f<=2)||(r===10&&f===1)||(r===3&&f===3)||(r===10&&f===3)) st='reserved';
+  defaultRooms.push({id:genId(),number:n,floor:f,type:types[ti],price:prices[ti],maxGuests:ti<2?2:ti<3?3:4,status:st});
+}});
+const defaultGuests = [
+  {id:genId(),firstName:'John',lastName:'Smith',email:'john.smith@email.com',phone:'+1 555-0123',idDoc:'US-98765432',visits:3},
+  {id:genId(),firstName:'Maria',lastName:'Garcia',email:'m.garcia@email.com',phone:'+34 612-3456',idDoc:'ES-12345678',visits:1},
+  {id:genId(),firstName:'David',lastName:'Lee',email:'david.lee@email.com',phone:'+82 10-9876',idDoc:'KR-87654321',visits:5},
+  {id:genId(),firstName:'Sarah',lastName:'Johnson',email:'s.johnson@email.com',phone:'+1 555-0456',idDoc:'US-11223344',visits:2},
+  {id:genId(),firstName:'James',lastName:'Wilson',email:'j.wilson@email.com',phone:'+44 20-7890',idDoc:'UK-55667788',visits:1},
+  {id:genId(),firstName:'Emily',lastName:'Chen',email:'e.chen@email.com',phone:'+86 138-0000',idDoc:'CN-99887766',visits:4},
+];
+const defaultServices = [
+  {id:genId(),name:'Breakfast Buffet',category:'Food & Beverage',price:25,icon:'🍳'},
+  {id:genId(),name:'Laundry Service',category:'Housekeeping',price:15,icon:'🧺'},
+  {id:genId(),name:'Spa Treatment',category:'Wellness',price:80,icon:'💆'},
+  {id:genId(),name:'Airport Shuttle',category:'Transport',price:45,icon:'🚗'},
+  {id:genId(),name:'Mini Bar',category:'Food & Beverage',price:35,icon:'🍷'},
+  {id:genId(),name:'Pool Access',category:'Recreation',price:10,icon:'🏊'},
+  {id:genId(),name:'Premium WiFi',category:'Technology',price:5,icon:'📶'},
+];
+const defaultAccounts = [
+  {id:genId(),name:'Admin User',email:'admin@hotel.com',role:'Administrator',status:'active'},
+  {id:genId(),name:'Jane Receptionist',email:'jane@hotel.com',role:'Receptionist',status:'active'},
+  {id:genId(),name:'Mike Manager',email:'mike@hotel.com',role:'Manager',status:'active'},
+  {id:genId(),name:'Tom Housekeeping',email:'tom@hotel.com',role:'Staff',status:'inactive'},
+];
+const defaultSettings = {hotelName:'Grand Hotel Management',email:'info@grandhotel.com',phone:'+1 555-0100',currency:'USD ($)',address:'123 Hotel Street, City, Country',maxGuests:3,surcharge:25,checkinTime:'14:00',checkoutTime:'12:00'};
+
+let rooms = load('rooms', null); if(!rooms) { rooms = defaultRooms; save('rooms', rooms); }
+let guests = load('guests', null); if(!guests) { guests = defaultGuests; save('guests', guests); }
+let bookings = load('bookings', []); 
+let services = load('services', null); if(!services) { services = defaultServices; save('services', services); }
+let invoices = load('invoices', []);
+let accounts = load('accounts', null); if(!accounts) { accounts = defaultAccounts; save('accounts', accounts); }
+let settings = load('settings', defaultSettings);
+
+if(bookings.length === 0) {
+  const g = guests; const r = rooms.filter(x=>x.status==='occupied'||x.status==='reserved');
+  const seed = [
+    {guest:g[0],room:r[0],checkin:'2026-03-28',checkout:'2026-03-31',status:'checked-in'},
+    {guest:g[1],room:r[1],checkin:'2026-03-29',checkout:'2026-04-02',status:'checked-in'},
+    {guest:g[2],room:r[2]||r[0],checkin:'2026-03-30',checkout:'2026-04-01',status:'pending'},
+    {guest:g[3],room:r[3]||r[0],checkin:'2026-03-27',checkout:'2026-03-30',status:'checked-in'},
+    {guest:g[4],room:r[4]||r[0],checkin:'2026-03-30',checkout:'2026-04-03',status:'pending'},
+    {guest:g[5],room:r[5]||r[0],checkin:'2026-04-01',checkout:'2026-04-04',status:'reserved'},
+  ];
+  seed.forEach(s => { if(s.room) bookings.push({id:genId(),guestId:s.guest.id,guestName:s.guest.firstName+' '+s.guest.lastName,roomId:s.room.id,roomNumber:s.room.number,roomType:s.room.type,checkin:s.checkin,checkout:s.checkout,status:s.status,services:[],notes:''}); });
+  save('bookings', bookings);
+}
+
+const pageTitles = {dashboard:'Dashboard',rooms:'Room Management',bookings:'Bookings',guests:'Guest Directory',services:'Services',invoices:'Invoices',reports:'Sales Reports',accounts:'User Accounts',settings:'Settings & Regulations'};
+
+document.querySelectorAll('#sidebarNav a[data-page]').forEach(link => {
+  link.addEventListener('click', () => {
+    const page = link.dataset.page;
+    document.querySelectorAll('#sidebarNav a').forEach(a => a.classList.remove('active'));
+    link.classList.add('active');
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    document.getElementById('pageTitle').textContent = pageTitles[page] || page;
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('open');
+    renderPage(page);
+  });
+});
+document.getElementById('menuToggle').addEventListener('click', () => { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('open'); });
+document.getElementById('sidebarOverlay').addEventListener('click', () => { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('open'); });
+
+function openModal(html) { document.getElementById('modalContent').innerHTML = html; document.getElementById('modalOverlay').classList.add('active'); }
+function closeModal() { document.getElementById('modalOverlay').classList.remove('active'); }
+document.getElementById('modalOverlay').addEventListener('click', e => { if(e.target === document.getElementById('modalOverlay')) closeModal(); });
+
+function renderPage(page) {
+  const fn = {dashboard:renderDashboard,rooms:renderRooms,bookings:renderBookings,guests:renderGuests,services:renderServices,invoices:renderInvoices,reports:renderReports,accounts:renderAccounts,settings:renderSettings};
+  if(fn[page]) fn[page]();
+  updateBadges();
+}
+
+function updateBadges() {
+  document.getElementById('badgeMaint').textContent = rooms.filter(r=>r.status==='maintenance').length;
+}
+
+function renderBarChart(data) {
+  const maxVal = Math.max(...data.map(d => d.v1 + d.v2), 1);
+  return `<div class="chart-container"><div class="bar-chart">${data.map(d => `<div class="bar-group"><div class="bar-value">${fmt$(d.v1+d.v2)}</div><div style="display:flex;flex-direction:column;width:100%;max-width:50px;"><div class="bar" style="height:${(d.v2/maxVal)*160}px;background:#42b72a;border-radius:6px 6px 0 0;"></div><div class="bar" style="height:${(d.v1/maxVal)*160}px;background:#1a73e8;"></div></div><div class="bar-label">${d.label}</div></div>`).join('')}</div><div class="legend"><div class="legend-item"><div class="legend-dot" style="background:#1a73e8"></div> Rooms</div><div class="legend-item"><div class="legend-dot" style="background:#42b72a"></div> Services</div></div></div>`;
+}
+
+// ===== DASHBOARD =====
+function renderDashboard() {
+  const total = rooms.length, avail = rooms.filter(r=>r.status==='available').length, occ = rooms.filter(r=>r.status==='occupied').length, maint = rooms.filter(r=>r.status==='maintenance').length;
+  const recent = bookings.filter(b=>b.status==='checked-in'||b.status==='pending').slice(-5).reverse();
+  const totalRev = invoices.reduce((s,i)=>s+i.total,0);
+  document.getElementById('page-dashboard').innerHTML = `
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-icon blue">🏨</div><div class="stat-info"><h3>${total}</h3><p>Total Rooms</p></div></div>
+      <div class="stat-card"><div class="stat-icon green">✅</div><div class="stat-info"><h3>${avail}</h3><p>Available</p></div></div>
+      <div class="stat-card"><div class="stat-icon orange">📋</div><div class="stat-info"><h3>${occ}</h3><p>Occupied</p></div></div>
+      <div class="stat-card"><div class="stat-icon red">🔧</div><div class="stat-info"><h3>${maint}</h3><p>Maintenance</p></div></div>
     </div>
-  </div>
+    <div class="dash-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+      <div class="card"><div class="card-header"><h2>Revenue (Last 7 Days)</h2></div><div class="card-body">${renderBarChart([
+        {label:'Mon',v1:1200,v2:300},{label:'Tue',v1:1500,v2:450},{label:'Wed',v1:1800,v2:400},{label:'Thu',v1:1400,v2:500},{label:'Fri',v1:2100,v2:600},{label:'Sat',v1:2400,v2:700},{label:'Sun',v1:2000,v2:550}
+      ])}</div></div>
+      <div class="card"><div class="card-header"><h2>Recent Activity</h2></div><div class="card-body"><div class="table-wrap"><table><thead><tr><th>Guest</th><th>Room</th><th>Status</th></tr></thead><tbody>${recent.length?recent.map(b=>`<tr><td>${b.guestName}</td><td>${b.roomNumber}</td><td><span class="status status-${b.status}">${b.status.replace('-',' ')}</span></td></tr>`).join(''):'<tr><td colspan="3" style="text-align:center;color:var(--text-light);">No recent activity</td></tr>'}</tbody></table></div></div></div>
+    </div>`;
+}
 
-  <!-- Add Booking Modal -->
-  <div class="modal-overlay" id="modal-addBooking">
-    <div class="modal">
-      <div class="modal-header"><h2>New Booking</h2><button class="modal-close" onclick="closeModal('addBooking')">&times;</button></div>
-      <div class="modal-body">
-        <div class="form-group"><label>Guest Name</label><input type="text" class="form-control" placeholder="Search guest..."></div>
-        <div class="form-group">
-          <label>Room</label>
-          <select class="form-control"><option>101 - Standard ($100/night)</option><option>201 - Deluxe ($150/night)</option><option>305 - Suite ($250/night)</option><option>501 - VIP Suite ($400/night)</option></select>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label>Check-in Date</label><input type="date" class="form-control"></div>
-          <div class="form-group"><label>Check-out Date</label><input type="date" class="form-control"></div>
-        </div>
-        <div class="form-group"><label>Special Requests</label><textarea class="form-control" rows="3" placeholder="Any special requests..."></textarea></div>
-      </div>
-      <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('addBooking')">Cancel</button><button class="btn btn-primary" onclick="closeModal('addBooking')">Create Booking</button></div>
+// ===== ROOMS =====
+let roomFilter = 'all';
+function renderRooms() {
+  const counts = {all:rooms.length, available:rooms.filter(r=>r.status==='available').length, occupied:rooms.filter(r=>r.status==='occupied').length, reserved:rooms.filter(r=>r.status==='reserved').length, maintenance:rooms.filter(r=>r.status==='maintenance').length};
+  const filtered = roomFilter==='all'?rooms:rooms.filter(r=>r.status===roomFilter);
+  document.getElementById('page-rooms').innerHTML = `
+    <div class="card"><div class="card-header"><h2>Room Overview</h2><button class="btn btn-primary" onclick="showAddRoom()">+ Add Room</button></div><div class="card-body">
+      <div style="display:flex;gap:0.75rem;margin-bottom:1.25rem;flex-wrap:wrap;">${['all','available','occupied','reserved','maintenance'].map(f=>`<button class="btn ${roomFilter===f?'btn-primary':'btn-outline'}" onclick="roomFilter='${f}';renderRooms()">${f.charAt(0).toUpperCase()+f.slice(1)} (${counts[f]})</button>`).join('')}</div>
+      <div class="room-grid">${filtered.map(r=>`<div class="room-tile room-${r.status}" onclick="showRoomDetail('${r.id}')"><div class="room-number">${r.number}</div><div class="room-type">${r.type}</div><div class="room-price">${fmt$(r.price)}/night</div><div class="room-status">${r.status}</div></div>`).join('')}</div>
+    </div></div>`;
+}
+window.showAddRoom = function() {
+  openModal(`<div class="modal-header"><h2>Add New Room</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body"><div class="form-row"><div class="form-group"><label>Room Number</label><input type="number" class="form-control" id="mRoomNum" placeholder="e.g. 601"></div><div class="form-group"><label>Floor</label><input type="number" class="form-control" id="mRoomFloor" placeholder="e.g. 6"></div></div>
+    <div class="form-group"><label>Room Type</label><select class="form-control" id="mRoomType"><option value="Standard">Standard</option><option value="Deluxe">Deluxe</option><option value="Suite">Suite</option><option value="VIP Suite">VIP Suite</option></select></div>
+    <div class="form-row"><div class="form-group"><label>Price Per Night ($)</label><input type="number" class="form-control" id="mRoomPrice" placeholder="e.g. 120"></div><div class="form-group"><label>Max Guests</label><input type="number" class="form-control" id="mRoomMax" placeholder="e.g. 2" value="2"></div></div></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addRoom()">Add Room</button></div>`);
+};
+window.addRoom = function() {
+  const num = parseInt(document.getElementById('mRoomNum').value); if(!num) { toast('Enter a room number'); return; }
+  if(rooms.find(r=>r.number===num)) { toast('Room number already exists'); return; }
+  rooms.push({id:genId(),number:num,floor:parseInt(document.getElementById('mRoomFloor').value)||1,type:document.getElementById('mRoomType').value,price:parseFloat(document.getElementById('mRoomPrice').value)||100,maxGuests:parseInt(document.getElementById('mRoomMax').value)||2,status:'available'});
+  save('rooms',rooms); closeModal(); renderRooms(); renderDashboard(); toast('Room '+num+' added');
+};
+window.showRoomDetail = function(id) {
+  const r = rooms.find(x=>x.id===id); if(!r) return;
+  const statuses = ['available','occupied','reserved','maintenance'];
+  openModal(`<div class="modal-header"><h2>Room ${r.number}</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body"><div class="form-row"><div class="form-group"><label>Room Number</label><input type="number" class="form-control" id="eRoomNum" value="${r.number}"></div><div class="form-group"><label>Floor</label><input type="number" class="form-control" id="eRoomFloor" value="${r.floor}"></div></div>
+    <div class="form-group"><label>Room Type</label><select class="form-control" id="eRoomType">${['Standard','Deluxe','Suite','VIP Suite'].map(t=>`<option ${t===r.type?'selected':''}>${t}</option>`).join('')}</select></div>
+    <div class="form-row"><div class="form-group"><label>Price Per Night ($)</label><input type="number" class="form-control" id="eRoomPrice" value="${r.price}"></div><div class="form-group"><label>Max Guests</label><input type="number" class="form-control" id="eRoomMax" value="${r.maxGuests}"></div></div>
+    <div class="form-group"><label>Status</label><select class="form-control" id="eRoomStatus">${statuses.map(s=>`<option value="${s}" ${s===r.status?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`).join('')}</select></div></div>
+    <div class="modal-footer"><button class="btn btn-danger" onclick="deleteRoom('${r.id}')">Delete</button><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateRoom('${r.id}')">Save</button></div>`);
+};
+window.updateRoom = function(id) {
+  const r = rooms.find(x=>x.id===id); if(!r) return;
+  r.number = parseInt(document.getElementById('eRoomNum').value)||r.number; r.floor = parseInt(document.getElementById('eRoomFloor').value)||r.floor;
+  r.type = document.getElementById('eRoomType').value; r.price = parseFloat(document.getElementById('eRoomPrice').value)||r.price;
+  r.maxGuests = parseInt(document.getElementById('eRoomMax').value)||r.maxGuests; r.status = document.getElementById('eRoomStatus').value;
+  save('rooms',rooms); closeModal(); renderRooms(); toast('Room '+r.number+' updated');
+};
+window.deleteRoom = function(id) {
+  if(!confirm('Delete this room?')) return;
+  rooms = rooms.filter(r=>r.id!==id); save('rooms',rooms); closeModal(); renderRooms(); renderDashboard(); toast('Room deleted');
+};
+
+// ===== BOOKINGS =====
+function renderBookings() {
+  const sorted = [...bookings].sort((a,b)=>a.checkin>b.checkin?-1:1);
+  document.getElementById('page-bookings').innerHTML = `
+    <div class="card"><div class="card-header"><h2>Bookings</h2><button class="btn btn-primary" onclick="showAddBooking()">+ New Booking</button></div><div class="card-body"><div class="table-wrap"><table><thead><tr><th>Guest</th><th>Room</th><th>Check In</th><th>Check Out</th><th>Status</th><th>Actions</th></tr></thead><tbody>${sorted.length?sorted.map(b=>{
+      let actions = '';
+      if(b.status==='pending'||b.status==='reserved') actions=`<button class="btn btn-sm btn-primary" onclick="checkIn('${b.id}')">Check In</button>`;
+      else if(b.status==='checked-in') actions=`<button class="btn btn-sm btn-danger" onclick="checkOut('${b.id}')">Check Out</button> <button class="btn btn-sm btn-warning" onclick="showOrderService('${b.id}')">Services</button>`;
+      else if(b.status==='checked-out') actions=`<button class="btn btn-sm btn-outline" onclick="viewInvoice('${b.id}')">Invoice</button>`;
+      return `<tr><td>${b.guestName}</td><td>${b.roomNumber} - ${b.roomType}</td><td>${fmtDate(b.checkin)}</td><td>${fmtDate(b.checkout)}</td><td><span class="status status-${b.status}">${b.status.replace('-',' ')}</span></td><td>${actions} <button class="btn btn-sm btn-outline" onclick="deleteBooking('${b.id}')">✕</button></td></tr>`;
+    }).join(''):'<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">📋</div><p>No bookings yet</p></div></td></tr>'}</tbody></table></div></div></div>`;
+}
+window.showAddBooking = function() {
+  const avail = rooms.filter(r=>r.status==='available');
+  openModal(`<div class="modal-header"><h2>New Booking</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body"><div class="form-group"><label>Guest</label><select class="form-control" id="mBkGuest">${guests.map(g=>`<option value="${g.id}">${g.firstName} ${g.lastName}</option>`).join('')}</select></div>
+    <div class="form-group"><label>Room</label><select class="form-control" id="mBkRoom">${avail.length?avail.map(r=>`<option value="${r.id}">${r.number} - ${r.type} (${fmt$(r.price)}/night)</option>`).join(''):'<option disabled>No rooms available</option>'}</select></div>
+    <div class="form-row"><div class="form-group"><label>Check-in Date</label><input type="date" class="form-control" id="mBkIn" value="${today()}"></div><div class="form-group"><label>Check-out Date</label><input type="date" class="form-control" id="mBkOut"></div></div>
+    <div class="form-group"><label>Notes</label><textarea class="form-control" id="mBkNotes" rows="2" placeholder="Special requests..."></textarea></div></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addBooking()">Create Booking</button></div>`);
+};
+window.addBooking = function() {
+  const gId = document.getElementById('mBkGuest').value; const rId = document.getElementById('mBkRoom').value;
+  const checkin = document.getElementById('mBkIn').value; const checkout = document.getElementById('mBkOut').value;
+  if(!gId||!rId||!checkin||!checkout) { toast('Fill all fields'); return; }
+  if(checkout<=checkin) { toast('Check-out must be after check-in'); return; }
+  const g = guests.find(x=>x.id===gId); const r = rooms.find(x=>x.id===rId); if(!g||!r) return;
+  r.status = 'reserved'; save('rooms',rooms);
+  bookings.push({id:genId(),guestId:g.id,guestName:g.firstName+' '+g.lastName,roomId:r.id,roomNumber:r.number,roomType:r.type,checkin,checkout,status:'reserved',services:[],notes:document.getElementById('mBkNotes').value});
+  save('bookings',bookings); closeModal(); renderBookings(); toast('Booking created');
+};
+window.checkIn = function(id) {
+  const b = bookings.find(x=>x.id===id); if(!b) return;
+  b.status = 'checked-in'; const r = rooms.find(x=>x.id===b.roomId); if(r) { r.status = 'occupied'; save('rooms',rooms); }
+  const g = guests.find(x=>x.id===b.guestId); if(g) { g.visits = (g.visits||0)+1; save('guests',guests); }
+  save('bookings',bookings); renderBookings(); toast(b.guestName+' checked in to Room '+b.roomNumber);
+};
+window.checkOut = function(id) {
+  const b = bookings.find(x=>x.id===id); if(!b) return;
+  b.status = 'checked-out'; const r = rooms.find(x=>x.id===b.roomId); if(r) { r.status = 'available'; save('rooms',rooms); }
+  const nights = daysBetween(b.checkin, b.checkout); const roomCharge = (r?r.price:100)*nights;
+  const svcCharge = (b.services||[]).reduce((s,sv)=>s+sv.price,0);
+  invoices.push({id:genId(),bookingId:b.id,guestName:b.guestName,roomNumber:b.roomNumber,nights,roomCharge,serviceCharge:svcCharge,total:roomCharge+svcCharge,services:b.services||[],status:'pending',date:today()});
+  save('invoices',invoices); save('bookings',bookings); renderBookings(); toast(b.guestName+' checked out. Invoice generated.');
+};
+window.showOrderService = function(id) {
+  const b = bookings.find(x=>x.id===id); if(!b) return;
+  openModal(`<div class="modal-header"><h2>Order Service - ${b.guestName}</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body"><div class="form-group"><label>Select Service</label><select class="form-control" id="mSvcSelect">${services.map(s=>`<option value="${s.id}">${s.icon} ${s.name} - ${fmt$(s.price)}</option>`).join('')}</select></div>
+    <div class="form-group"><label>Quantity</label><input type="number" class="form-control" id="mSvcQty" value="1" min="1"></div>
+    <h3 style="margin:1rem 0 0.5rem;font-size:0.95rem;">Ordered Services</h3>
+    <ul class="service-list" style="max-height:200px;overflow-y:auto;">${(b.services||[]).length?(b.services||[]).map((s,i)=>`<li class="service-item"><div class="service-left"><div class="service-icon">${s.icon||'🛎️'}</div><div><div class="service-name">${s.name} x${s.qty||1}</div></div></div><div class="service-price">${fmt$(s.price*(s.qty||1))}</div></li>`).join(''):'<li style="padding:1rem;text-align:center;color:var(--text-light);">No services ordered yet</li>'}</ul></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Close</button><button class="btn btn-primary" onclick="orderService('${b.id}')">Add Service</button></div>`);
+};
+window.orderService = function(bId) {
+  const b = bookings.find(x=>x.id===bId); if(!b) return;
+  const sId = document.getElementById('mSvcSelect').value; const qty = parseInt(document.getElementById('mSvcQty').value)||1;
+  const svc = services.find(s=>s.id===sId); if(!svc) return;
+  if(!b.services) b.services = [];
+  b.services.push({name:svc.name,price:svc.price,icon:svc.icon,qty});
+  save('bookings',bookings); toast(svc.name+' added'); showOrderService(bId);
+};
+window.deleteBooking = function(id) {
+  if(!confirm('Delete this booking?')) return;
+  const b = bookings.find(x=>x.id===id);
+  if(b && (b.status==='reserved'||b.status==='pending')) { const r = rooms.find(x=>x.id===b.roomId); if(r && r.status==='reserved') { r.status='available'; save('rooms',rooms); } }
+  bookings = bookings.filter(x=>x.id!==id); save('bookings',bookings); renderBookings(); toast('Booking deleted');
+};
+window.viewInvoice = function(bId) {
+  const inv = invoices.find(i=>i.bookingId===bId);
+  if(inv) { document.querySelector('[data-page="invoices"]').click(); }
+  else toast('No invoice found');
+};
+
+// ===== GUESTS =====
+function renderGuests() {
+  document.getElementById('page-guests').innerHTML = `
+    <div class="card"><div class="card-header"><h2>Guest Directory</h2><div style="display:flex;gap:0.75rem;"><input type="text" class="search-bar" placeholder="Search guests..." oninput="filterGuests(this.value)"><button class="btn btn-primary" onclick="showAddGuest()">+ Add Guest</button></div></div><div class="card-body"><div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>ID/Passport</th><th>Visits</th><th>Actions</th></tr></thead><tbody id="guestTableBody">${renderGuestRows(guests)}</tbody></table></div></div></div>`;
+}
+function renderGuestRows(list) {
+  return list.length?list.map(g=>`<tr><td>${g.firstName} ${g.lastName}</td><td>${g.email}</td><td>${g.phone}</td><td>${g.idDoc}</td><td>${g.visits||0}</td><td><button class="btn btn-sm btn-outline" onclick="showEditGuest('${g.id}')">Edit</button> <button class="btn btn-sm btn-danger" onclick="deleteGuest('${g.id}')">✕</button></td></tr>`).join(''):'<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">👥</div><p>No guests yet</p></div></td></tr>';
+}
+window.filterGuests = function(q) { const f = guests.filter(g=>(g.firstName+' '+g.lastName+' '+g.email+' '+g.phone).toLowerCase().includes(q.toLowerCase())); document.getElementById('guestTableBody').innerHTML = renderGuestRows(f); };
+window.showAddGuest = function() {
+  openModal(`<div class="modal-header"><h2>Add Guest</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body"><div class="form-row"><div class="form-group"><label>First Name</label><input type="text" class="form-control" id="mGFirst"></div><div class="form-group"><label>Last Name</label><input type="text" class="form-control" id="mGLast"></div></div>
+    <div class="form-group"><label>Email</label><input type="email" class="form-control" id="mGEmail"></div>
+    <div class="form-row"><div class="form-group"><label>Phone</label><input type="tel" class="form-control" id="mGPhone"></div><div class="form-group"><label>ID / Passport</label><input type="text" class="form-control" id="mGId"></div></div></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addGuest()">Add Guest</button></div>`);
+};
+window.addGuest = function() {
+  const fn = document.getElementById('mGFirst').value.trim(), ln = document.getElementById('mGLast').value.trim();
+  if(!fn||!ln) { toast('Enter first and last name'); return; }
+  guests.push({id:genId(),firstName:fn,lastName:ln,email:document.getElementById('mGEmail').value,phone:document.getElementById('mGPhone').value,idDoc:document.getElementById('mGId').value,visits:0});
+  save('guests',guests); closeModal(); renderGuests(); toast(fn+' '+ln+' added');
+};
+window.showEditGuest = function(id) {
+  const g = guests.find(x=>x.id===id); if(!g) return;
+  openModal(`<div class="modal-header"><h2>Edit Guest</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body"><div class="form-row"><div class="form-group"><label>First Name</label><input type="text" class="form-control" id="eGFirst" value="${g.firstName}"></div><div class="form-group"><label>Last Name</label><input type="text" class="form-control" id="eGLast" value="${g.lastName}"></div></div>
+    <div class="form-group"><label>Email</label><input type="email" class="form-control" id="eGEmail" value="${g.email}"></div>
+    <div class="form-row"><div class="form-group"><label>Phone</label><input type="tel" class="form-control" id="eGPhone" value="${g.phone}"></div><div class="form-group"><label>ID / Passport</label><input type="text" class="form-control" id="eGId" value="${g.idDoc}"></div></div></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateGuest('${g.id}')">Save</button></div>`);
+};
+window.updateGuest = function(id) {
+  const g = guests.find(x=>x.id===id); if(!g) return;
+  g.firstName = document.getElementById('eGFirst').value||g.firstName; g.lastName = document.getElementById('eGLast').value||g.lastName;
+  g.email = document.getElementById('eGEmail').value; g.phone = document.getElementById('eGPhone').value; g.idDoc = document.getElementById('eGId').value;
+  save('guests',guests); closeModal(); renderGuests(); toast('Guest updated');
+};
+window.deleteGuest = function(id) { if(!confirm('Delete this guest?')) return; guests = guests.filter(g=>g.id!==id); save('guests',guests); renderGuests(); toast('Guest deleted'); };
+
+// ===== SERVICES =====
+function renderServices() {
+  document.getElementById('page-services').innerHTML = `
+    <div class="card"><div class="card-header"><h2>Hotel Services</h2><button class="btn btn-primary" onclick="showAddService()">+ Add Service</button></div><div class="card-body"><ul class="service-list" id="serviceList">${services.map(s=>`<li class="service-item"><div class="service-left"><div class="service-icon">${s.icon}</div><div><div class="service-name">${s.name}</div><div class="service-cat">${s.category}</div></div></div><div class="service-actions"><span class="service-price">${fmt$(s.price)}</span><button class="btn btn-sm btn-outline" onclick="showEditService('${s.id}')">Edit</button><button class="btn btn-sm btn-danger" onclick="deleteService('${s.id}')">✕</button></div></li>`).join('')}</ul></div></div>`;
+}
+window.showAddService = function() {
+  openModal(`<div class="modal-header"><h2>Add Service</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body"><div class="form-group"><label>Icon (emoji)</label><input type="text" class="form-control" id="mSIcon" value="🛎️" maxlength="4"></div>
+    <div class="form-group"><label>Name</label><input type="text" class="form-control" id="mSName"></div>
+    <div class="form-row"><div class="form-group"><label>Category</label><input type="text" class="form-control" id="mSCat" placeholder="e.g. Food & Beverage"></div><div class="form-group"><label>Price ($)</label><input type="number" class="form-control" id="mSPrice" step="0.01"></div></div></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addService()">Add Service</button></div>`);
+};
+window.addService = function() {
+  const name = document.getElementById('mSName').value.trim(); if(!name) { toast('Enter service name'); return; }
+  services.push({id:genId(),name,category:document.getElementById('mSCat').value||'General',price:parseFloat(document.getElementById('mSPrice').value)||0,icon:document.getElementById('mSIcon').value||'🛎️'});
+  save('services',services); closeModal(); renderServices(); toast(name+' added');
+};
+window.showEditService = function(id) {
+  const s = services.find(x=>x.id===id); if(!s) return;
+  openModal(`<div class="modal-header"><h2>Edit Service</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body"><div class="form-group"><label>Icon</label><input type="text" class="form-control" id="eSIcon" value="${s.icon}" maxlength="4"></div>
+    <div class="form-group"><label>Name</label><input type="text" class="form-control" id="eSName" value="${s.name}"></div>
+    <div class="form-row"><div class="form-group"><label>Category</label><input type="text" class="form-control" id="eSCat" value="${s.category}"></div><div class="form-group"><label>Price ($)</label><input type="number" class="form-control" id="eSPrice" value="${s.price}" step="0.01"></div></div></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateService('${s.id}')">Save</button></div>`);
+};
+window.updateService = function(id) {
+  const s = services.find(x=>x.id===id); if(!s) return;
+  s.name = document.getElementById('eSName').value||s.name; s.category = document.getElementById('eSCat').value||s.category;
+  s.price = parseFloat(document.getElementById('eSPrice').value)||s.price; s.icon = document.getElementById('eSIcon').value||s.icon;
+  save('services',services); closeModal(); renderServices(); toast(s.name+' updated');
+};
+window.deleteService = function(id) { if(!confirm('Delete?')) return; services = services.filter(s=>s.id!==id); save('services',services); renderServices(); toast('Service deleted'); };
+
+// ===== INVOICES =====
+function renderInvoices() {
+  document.getElementById('page-invoices').innerHTML = `
+    <div class="card"><div class="card-header"><h2>Invoices</h2></div><div class="card-body"><div class="table-wrap"><table><thead><tr><th>Invoice</th><th>Date</th><th>Guest</th><th>Room</th><th>Nights</th><th>Room $</th><th>Services $</th><th>Total</th><th>Status</th><th>Actions</th></tr></thead><tbody>${invoices.length?invoices.map((inv,i)=>`<tr><td>INV-${String(2001+i).padStart(4,'0')}</td><td>${fmtDate(inv.date)}</td><td>${inv.guestName}</td><td>${inv.roomNumber}</td><td>${inv.nights}</td><td>${fmt$(inv.roomCharge)}</td><td>${fmt$(inv.serviceCharge)}</td><td><strong>${fmt$(inv.total)}</strong></td><td><span class="status status-${inv.status}">${inv.status==='paid'?'Paid':'Pending'}</span></td><td>${inv.status!=='paid'?`<button class="btn btn-sm btn-success" onclick="payInvoice('${inv.id}')">Pay</button>`:''} <button class="btn btn-sm btn-outline" onclick="showInvoiceDetail('${inv.id}')">View</button></td></tr>`).join(''):'<tr><td colspan="10"><div class="empty-state"><div class="empty-icon">🧾</div><p>No invoices yet. Invoices are created when guests check out.</p></div></td></tr>'}</tbody></table></div></div></div>`;
+}
+window.payInvoice = function(id) { const inv = invoices.find(i=>i.id===id); if(inv) { inv.status='paid'; save('invoices',invoices); renderInvoices(); toast('Invoice marked as paid'); } };
+window.showInvoiceDetail = function(id) {
+  const inv = invoices.find(i=>i.id===id); if(!inv) return;
+  const idx = invoices.indexOf(inv);
+  openModal(`<div class="modal-header"><h2>Invoice INV-${String(2001+idx).padStart(4,'0')}</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body" style="font-size:0.9rem;">
+    <p><strong>Guest:</strong> ${inv.guestName}</p><p><strong>Room:</strong> ${inv.roomNumber}</p><p><strong>Date:</strong> ${fmtDate(inv.date)}</p><p><strong>Nights:</strong> ${inv.nights}</p>
+    <hr style="margin:1rem 0;border:none;border-top:1px solid var(--border);">
+    <p>Room Charges: <strong>${fmt$(inv.roomCharge)}</strong></p>
+    ${(inv.services||[]).length?'<p style="margin-top:0.5rem;font-weight:600;">Services:</p><ul style="list-style:none;margin:0.25rem 0;">'+inv.services.map(s=>`<li style="padding:0.2rem 0;">${s.icon||'🛎️'} ${s.name} x${s.qty||1} — ${fmt$(s.price*(s.qty||1))}</li>`).join('')+'</ul>':''}
+    <p>Service Charges: <strong>${fmt$(inv.serviceCharge)}</strong></p>
+    <hr style="margin:1rem 0;border:none;border-top:2px solid var(--text);">
+    <p style="font-size:1.1rem;"><strong>Total: ${fmt$(inv.total)}</strong></p>
+    <p>Status: <span class="status status-${inv.status}">${inv.status==='paid'?'Paid':'Pending'}</span></p></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Close</button>${inv.status!=='paid'?`<button class="btn btn-success" onclick="payInvoice('${inv.id}');closeModal();renderInvoices();">Mark as Paid</button>`:''}</div>`);
+};
+
+// ===== REPORTS =====
+function renderReports() {
+  const totalRev = invoices.reduce((s,i)=>s+i.total,0); const paidRev = invoices.filter(i=>i.status==='paid').reduce((s,i)=>s+i.total,0);
+  const occ = rooms.length ? Math.round(rooms.filter(r=>r.status==='occupied').length/rooms.length*100) : 0;
+  document.getElementById('page-reports').innerHTML = `
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-icon blue">💰</div><div class="stat-info"><h3>${fmt$(totalRev)}</h3><p>Total Revenue</p></div></div>
+      <div class="stat-card"><div class="stat-icon green">📈</div><div class="stat-info"><h3>${occ}%</h3><p>Occupancy Rate</p></div></div>
+      <div class="stat-card"><div class="stat-icon orange">✅</div><div class="stat-info"><h3>${fmt$(paidRev)}</h3><p>Collected</p></div></div>
+      <div class="stat-card"><div class="stat-icon red">📊</div><div class="stat-info"><h3>${bookings.length}</h3><p>Total Bookings</p></div></div>
     </div>
-  </div>
+    <div class="card"><div class="card-header"><h2>Monthly Revenue</h2></div><div class="card-body">${renderBarChart([
+      {label:'Oct',v1:8500,v2:2200},{label:'Nov',v1:9200,v2:2800},{label:'Dec',v1:11000,v2:3500},{label:'Jan',v1:9800,v2:2600},{label:'Feb',v1:10500,v2:3000},{label:'Mar',v1:totalRev*0.7||12450,v2:totalRev*0.3||3800}
+    ])}</div></div>
+    <div class="card"><div class="card-header"><h2>Booking Summary</h2></div><div class="card-body"><div class="table-wrap"><table><thead><tr><th>Status</th><th>Count</th><th>Percentage</th></tr></thead><tbody>
+      ${['checked-in','pending','reserved','checked-out'].map(st=>{const c=bookings.filter(b=>b.status===st).length;return `<tr><td><span class="status status-${st}">${st.replace('-',' ')}</span></td><td>${c}</td><td>${bookings.length?Math.round(c/bookings.length*100):0}%</td></tr>`;}).join('')}
+    </tbody></table></div></div></div>`;
+}
 
-  <!-- Add Guest Modal -->
-  <div class="modal-overlay" id="modal-addGuest">
-    <div class="modal">
-      <div class="modal-header"><h2>Add Guest</h2><button class="modal-close" onclick="closeModal('addGuest')">&times;</button></div>
-      <div class="modal-body">
-        <div class="form-row">
-          <div class="form-group"><label>First Name</label><input type="text" class="form-control" placeholder="First name"></div>
-          <div class="form-group"><label>Last Name</label><input type="text" class="form-control" placeholder="Last name"></div>
-        </div>
-        <div class="form-group"><label>Email</label><input type="email" class="form-control" placeholder="email@example.com"></div>
-        <div class="form-row">
-          <div class="form-group"><label>Phone</label><input type="tel" class="form-control" placeholder="+1 555-0000"></div>
-          <div class="form-group"><label>ID / Passport</label><input type="text" class="form-control" placeholder="ID number"></div>
-        </div>
-      </div>
-      <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('addGuest')">Cancel</button><button class="btn btn-primary" onclick="closeModal('addGuest')">Add Guest</button></div>
-    </div>
-  </div>
+// ===== ACCOUNTS =====
+function renderAccounts() {
+  document.getElementById('page-accounts').innerHTML = `
+    <div class="card"><div class="card-header"><h2>User Accounts</h2><button class="btn btn-primary" onclick="showAddAccount()">+ Add User</button></div><div class="card-body"><div class="table-wrap"><table><thead><tr><th>User</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead><tbody>${accounts.map(a=>`<tr><td>${a.name}</td><td>${a.email}</td><td>${a.role}</td><td><span class="status status-${a.status}">${a.status==='active'?'Active':'Inactive'}</span></td><td><button class="btn btn-sm btn-outline" onclick="showEditAccount('${a.id}')">Edit</button> <button class="btn btn-sm ${a.status==='active'?'btn-warning':'btn-success'}" onclick="toggleAccount('${a.id}')">${a.status==='active'?'Deactivate':'Activate'}</button></td></tr>`).join('')}</tbody></table></div></div></div>`;
+}
+window.showAddAccount = function() {
+  openModal(`<div class="modal-header"><h2>Add User</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body"><div class="form-group"><label>Full Name</label><input type="text" class="form-control" id="mAName"></div>
+    <div class="form-group"><label>Email</label><input type="email" class="form-control" id="mAEmail"></div>
+    <div class="form-group"><label>Role</label><select class="form-control" id="mARole"><option>Administrator</option><option>Manager</option><option>Receptionist</option><option>Staff</option></select></div></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addAccount()">Add User</button></div>`);
+};
+window.addAccount = function() {
+  const name = document.getElementById('mAName').value.trim(); if(!name) { toast('Enter name'); return; }
+  accounts.push({id:genId(),name,email:document.getElementById('mAEmail').value,role:document.getElementById('mARole').value,status:'active'});
+  save('accounts',accounts); closeModal(); renderAccounts(); toast(name+' added');
+};
+window.showEditAccount = function(id) {
+  const a = accounts.find(x=>x.id===id); if(!a) return;
+  openModal(`<div class="modal-header"><h2>Edit User</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body"><div class="form-group"><label>Full Name</label><input type="text" class="form-control" id="eAName" value="${a.name}"></div>
+    <div class="form-group"><label>Email</label><input type="email" class="form-control" id="eAEmail" value="${a.email}"></div>
+    <div class="form-group"><label>Role</label><select class="form-control" id="eARole">${['Administrator','Manager','Receptionist','Staff'].map(r=>`<option ${r===a.role?'selected':''}>${r}</option>`).join('')}</select></div></div>
+    <div class="modal-footer"><button class="btn btn-danger" onclick="deleteAccount('${a.id}')">Delete</button><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateAccount('${a.id}')">Save</button></div>`);
+};
+window.updateAccount = function(id) {
+  const a = accounts.find(x=>x.id===id); if(!a) return;
+  a.name = document.getElementById('eAName').value||a.name; a.email = document.getElementById('eAEmail').value; a.role = document.getElementById('eARole').value;
+  save('accounts',accounts); closeModal(); renderAccounts(); toast('Account updated');
+};
+window.toggleAccount = function(id) { const a = accounts.find(x=>x.id===id); if(a) { a.status = a.status==='active'?'inactive':'active'; save('accounts',accounts); renderAccounts(); toast(a.name+' '+(a.status==='active'?'activated':'deactivated')); } };
+window.deleteAccount = function(id) { if(!confirm('Delete this account?')) return; accounts = accounts.filter(a=>a.id!==id); save('accounts',accounts); closeModal(); renderAccounts(); toast('Account deleted'); };
 
-  <script>
-    const pageTitles = {
-      dashboard: 'Dashboard',
-      rooms: 'Room Management',
-      bookings: 'Bookings',
-      guests: 'Guest Directory',
-      services: 'Services',
-      invoices: 'Invoices',
-      reports: 'Sales Reports',
-      accounts: 'User Accounts',
-      settings: 'Settings & Regulations'
-    };
+// ===== SETTINGS =====
+function renderSettings() {
+  const s = settings;
+  document.getElementById('page-settings').innerHTML = `
+    <div class="card"><div class="card-header"><h2>Hotel Settings</h2></div><div class="card-body">
+      <div class="form-row"><div class="form-group"><label>Hotel Name</label><input type="text" class="form-control" id="sName" value="${s.hotelName}"></div><div class="form-group"><label>Contact Email</label><input type="email" class="form-control" id="sEmail" value="${s.email}"></div></div>
+      <div class="form-row"><div class="form-group"><label>Phone Number</label><input type="tel" class="form-control" id="sPhone" value="${s.phone}"></div><div class="form-group"><label>Currency</label><select class="form-control" id="sCurrency">${['USD ($)','EUR (€)','GBP (£)','VND (₫)'].map(c=>`<option ${c===s.currency?'selected':''}>${c}</option>`).join('')}</select></div></div>
+      <div class="form-group"><label>Address</label><input type="text" class="form-control" id="sAddr" value="${s.address}"></div>
+      <h3 style="margin:1.5rem 0 1rem;font-size:1rem;">Regulations</h3>
+      <div class="form-row"><div class="form-group"><label>Max Guests Per Room</label><input type="number" class="form-control" id="sMaxG" value="${s.maxGuests}"></div><div class="form-group"><label>Surcharge Rate (%)</label><input type="number" class="form-control" id="sSur" value="${s.surcharge}"></div></div>
+      <div class="form-row"><div class="form-group"><label>Check-in Time</label><input type="time" class="form-control" id="sIn" value="${s.checkinTime}"></div><div class="form-group"><label>Check-out Time</label><input type="time" class="form-control" id="sOut" value="${s.checkoutTime}"></div></div>
+      <div style="margin-top:1rem;display:flex;gap:0.75rem;"><button class="btn btn-primary" onclick="saveSettings()">Save Settings</button><button class="btn btn-danger" onclick="resetAll()">Reset All Data</button></div>
+    </div></div>`;
+}
+window.saveSettings = function() {
+  settings = {hotelName:document.getElementById('sName').value,email:document.getElementById('sEmail').value,phone:document.getElementById('sPhone').value,currency:document.getElementById('sCurrency').value,address:document.getElementById('sAddr').value,maxGuests:parseInt(document.getElementById('sMaxG').value)||3,surcharge:parseInt(document.getElementById('sSur').value)||25,checkinTime:document.getElementById('sIn').value,checkoutTime:document.getElementById('sOut').value};
+  save('settings',settings); toast('Settings saved');
+};
+window.resetAll = function() {
+  if(!confirm('Reset ALL data to defaults? This cannot be undone.')) return;
+  Object.keys(localStorage).forEach(k => { if(k.startsWith(DB_KEY)) localStorage.removeItem(k); });
+  location.reload();
+};
 
-    document.querySelectorAll('.sidebar-nav a[data-page]').forEach(link => {
-      link.addEventListener('click', () => {
-        const page = link.dataset.page;
-        document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
-        link.classList.add('active');
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById('page-' + page).classList.add('active');
-        document.getElementById('pageTitle').textContent = pageTitles[page] || page;
-        document.getElementById('sidebar').classList.remove('open');
-        document.getElementById('sidebarOverlay').classList.remove('open');
-      });
-    });
-
-    document.getElementById('menuToggle').addEventListener('click', () => {
-      document.getElementById('sidebar').classList.toggle('open');
-      document.getElementById('sidebarOverlay').classList.toggle('open');
-    });
-
-    document.getElementById('sidebarOverlay').addEventListener('click', () => {
-      document.getElementById('sidebar').classList.remove('open');
-      document.getElementById('sidebarOverlay').classList.remove('open');
-    });
-
-    function openModal(name) {
-      document.getElementById('modal-' + name).classList.add('active');
-    }
-
-    function closeModal(name) {
-      document.getElementById('modal-' + name).classList.remove('active');
-    }
-
-    document.querySelectorAll('.modal-overlay').forEach(overlay => {
-      overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) overlay.classList.remove('active');
-      });
-    });
-
-    const rooms = [];
-    const types = ['Standard', 'Deluxe', 'Suite', 'VIP Suite'];
-    const statuses = ['available', 'occupied', 'reserved', 'maintenance'];
-    const floors = [1, 2, 3, 4, 5];
-
-    floors.forEach(floor => {
-      for (let r = 1; r <= 10; r++) {
-        const num = floor * 100 + r;
-        if (num > 508) break;
-        const typeIdx = r <= 4 ? 0 : r <= 7 ? 1 : r <= 9 ? 2 : 3;
-        let st;
-        if (r === 3 && floor === 2) st = 'maintenance';
-        else if (r === 7 && floor === 4) st = 'maintenance';
-        else if (r === 1 && floor === 5) st = 'maintenance';
-        else if ([1,2,5,6,8].includes(r) && floor <= 3) st = 'occupied';
-        else if (r === 4 && floor <= 2) st = 'reserved';
-        else if (r === 9 && floor <= 2) st = 'reserved';
-        else if (r === 10 && floor === 1) st = 'reserved';
-        else if (r === 3 && floor === 3) st = 'reserved';
-        else if (r === 10 && floor === 3) st = 'reserved';
-        else st = 'available';
-        rooms.push({ number: num, type: types[typeIdx], status: st });
-      }
-    });
-
-    function renderRooms(filter) {
-      const grid = document.getElementById('roomGrid');
-      const filtered = filter === 'all' ? rooms : rooms.filter(r => r.status === filter);
-      grid.innerHTML = filtered.map(r => `
-        <div class="room-tile room-${r.status}">
-          <div class="room-number">${r.number}</div>
-          <div class="room-type">${r.type}</div>
-          <div class="room-status">${r.status}</div>
-        </div>
-      `).join('');
-    }
-
-    renderRooms('all');
-
-    document.querySelectorAll('.room-filter').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.room-filter').forEach(b => b.classList.remove('active-filter'));
-        btn.classList.add('active-filter');
-        btn.style.background = '#1a73e8';
-        btn.style.color = '#fff';
-        document.querySelectorAll('.room-filter:not(.active-filter)').forEach(b => {
-          b.style.background = '';
-          b.style.color = '';
-        });
-        renderRooms(btn.dataset.filter);
-      });
-    });
-
-    const initFilter = document.querySelector('.room-filter.active-filter');
-    if (initFilter) { initFilter.style.background = '#1a73e8'; initFilter.style.color = '#fff'; }
-
-    function renderBarChart(containerId, data) {
-      const container = document.getElementById(containerId);
-      const maxVal = Math.max(...data.map(d => d.v1 + d.v2));
-      container.innerHTML = data.map(d => `
-        <div class="bar-group">
-          <div class="bar-value">$${d.v1 + d.v2}</div>
-          <div style="display:flex;flex-direction:column;width:100%;max-width:50px;">
-            <div class="bar" style="height:${(d.v2/maxVal)*160}px;background:#42b72a;border-radius:6px 6px 0 0;"></div>
-            <div class="bar" style="height:${(d.v1/maxVal)*160}px;background:#1a73e8;border-radius:0;"></div>
-          </div>
-          <div class="bar-label">${d.label}</div>
-        </div>
-      `).join('');
-    }
-
-    renderBarChart('revenueChart', [
-      { label: 'Mon', v1: 1200, v2: 300 },
-      { label: 'Tue', v1: 1500, v2: 450 },
-      { label: 'Wed', v1: 1800, v2: 400 },
-      { label: 'Thu', v1: 1400, v2: 500 },
-      { label: 'Fri', v1: 2100, v2: 600 },
-      { label: 'Sat', v1: 2400, v2: 700 },
-      { label: 'Sun', v1: 2000, v2: 550 },
-    ]);
-
-    renderBarChart('monthlyChart', [
-      { label: 'Oct', v1: 8500, v2: 2200 },
-      { label: 'Nov', v1: 9200, v2: 2800 },
-      { label: 'Dec', v1: 11000, v2: 3500 },
-      { label: 'Jan', v1: 9800, v2: 2600 },
-      { label: 'Feb', v1: 10500, v2: 3000 },
-      { label: 'Mar', v1: 12450, v2: 3800 },
-    ]);
-  </script>
-
+renderDashboard();
+updateBadges();
+</script>
 </body>
 </html>
