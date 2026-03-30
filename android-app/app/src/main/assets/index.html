@@ -929,8 +929,22 @@ window.toggleAccount = function(id) { const a = accounts.find(x=>x.id===id); if(
 window.deleteAccount = function(id) { if(!confirm('Delete this account?')) return; accounts = accounts.filter(a=>a.id!==id); save('accounts',accounts); closeModal(); renderAccounts(); toast('Account deleted'); };
 
 // ===== SETTINGS =====
+function getDbCounts() {
+  const tables = ['rooms','guests','bookings','services','invoices','accounts'];
+  const counts = {};
+  if (isAndroid) {
+    tables.forEach(t => { try { counts[t] = HotelDB.count(t); } catch(e) { counts[t] = '?'; } });
+  } else {
+    counts.rooms = rooms.length; counts.guests = guests.length; counts.bookings = bookings.length;
+    counts.services = services.length; counts.invoices = invoices.length; counts.accounts = accounts.length;
+  }
+  return counts;
+}
+
 function renderSettings() {
   const s = settings;
+  const counts = getDbCounts();
+  const dbType = isAndroid ? '🟢 SQLite Database (hotel_manager.db)' : '🔵 Browser localStorage';
   document.getElementById('page-settings').innerHTML = `
     <div class="card"><div class="card-header"><h2>Hotel Settings</h2></div><div class="card-body">
       <div class="form-row"><div class="form-group"><label>Hotel Name</label><input type="text" class="form-control" id="sName" value="${s.hotelName}"></div><div class="form-group"><label>Contact Email</label><input type="email" class="form-control" id="sEmail" value="${s.email}"></div></div>
@@ -940,6 +954,22 @@ function renderSettings() {
       <div class="form-row"><div class="form-group"><label>Max Guests Per Room</label><input type="number" class="form-control" id="sMaxG" value="${s.maxGuests}"></div><div class="form-group"><label>Surcharge Rate (%)</label><input type="number" class="form-control" id="sSur" value="${s.surcharge}"></div></div>
       <div class="form-row"><div class="form-group"><label>Check-in Time</label><input type="time" class="form-control" id="sIn" value="${s.checkinTime}"></div><div class="form-group"><label>Check-out Time</label><input type="time" class="form-control" id="sOut" value="${s.checkoutTime}"></div></div>
       <div style="margin-top:1rem;display:flex;gap:0.75rem;"><button class="btn btn-primary" onclick="saveSettings()">Save Settings</button><button class="btn btn-danger" onclick="resetAll()">Reset All Data</button></div>
+    </div></div>
+    <div class="card"><div class="card-header"><h2>📀 Database Info</h2></div><div class="card-body">
+      <p style="margin-bottom:1rem;font-size:0.9rem;"><strong>Storage Backend:</strong> ${dbType}</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Table</th><th>Rows</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><strong>rooms</strong></td><td>${counts.rooms}</td><td>Room inventory (number, floor, type, price, status)</td></tr>
+          <tr><td><strong>guests</strong></td><td>${counts.guests}</td><td>Guest directory (name, email, phone, ID, visits)</td></tr>
+          <tr><td><strong>bookings</strong></td><td>${counts.bookings}</td><td>Reservations (guest, room, dates, status, services)</td></tr>
+          <tr><td><strong>services</strong></td><td>${counts.services}</td><td>Hotel services catalog (name, category, price)</td></tr>
+          <tr><td><strong>invoices</strong></td><td>${counts.invoices}</td><td>Billing records (charges, payments, totals)</td></tr>
+          <tr><td><strong>accounts</strong></td><td>${counts.accounts}</td><td>User accounts (name, email, role, status)</td></tr>
+          <tr><td><strong>settings</strong></td><td>—</td><td>Hotel configuration (key/value pairs)</td></tr>
+        </tbody>
+      </table></div>
+      <p style="margin-top:1rem;font-size:0.8rem;color:var(--text-light);">${isAndroid ? 'Data is stored in SQLite database on device. Persists across app restarts.' : 'Data is stored in browser localStorage. Persists in this browser only.'}</p>
     </div></div>`;
 }
 window.saveSettings = function() {
@@ -948,6 +978,9 @@ window.saveSettings = function() {
 };
 window.resetAll = function() {
   if(!confirm('Reset ALL data to defaults? This cannot be undone.')) return;
+  if (isAndroid) {
+    ['rooms','guests','bookings','services','invoices','accounts','settings'].forEach(t => { try { HotelDB.deleteAll(t); } catch(e){} });
+  }
   Object.keys(localStorage).forEach(k => { if(k.startsWith(DB_KEY)) localStorage.removeItem(k); });
   location.reload();
 };
