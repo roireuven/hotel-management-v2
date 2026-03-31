@@ -1031,12 +1031,13 @@ window.openGuestPicker = function() {
     openModal(`<div class="modal-header"><h2>Select Guest</h2><button class="modal-close" onclick="cancelGuestPicker()">&times;</button></div>
       <div class="modal-body" style="padding:0.75rem;">
       <div style="padding:0.5rem 0;"><input type="text" class="form-control" id="guestPickerSearch" placeholder="Search by name, passport, email, phone..." value="${filterVal}" oninput="window._gpFilter(this.value)" style="font-size:1rem;"></div>
-      <div class="table-wrap" style="max-height:calc(100vh - 200px);overflow-y:auto;">
-      <table style="font-size:0.82rem;"><thead><tr style="position:sticky;top:0;z-index:2;"><th>Guest ID</th><th>Name</th><th>Passport/ID</th><th>Nationality</th><th>Phone</th><th>Action</th></tr></thead>
-      <tbody>${filtered.length?filtered.map((g,i)=>{
+      <p style="font-size:0.78rem;color:#999;margin-bottom:0.5rem;text-align:center;">Tap a row to select the guest</p>
+      <div style="max-height:calc(100vh - 240px);overflow-y:auto;">
+      ${filtered.length?filtered.map(g=>{
         const gid = guestDisplayId(g);
-        return '<tr><td style="font-weight:600;color:#1a73e8;">'+gid+'</td><td>'+g.firstName+' '+g.lastName+'</td><td>'+g.passportId+'</td><td>'+g.nationality+'</td><td>'+g.phone+'</td><td><button class="btn btn-sm btn-primary" onclick="pickGuest(\''+g.id+'\')">Select</button></td></tr>';
-      }).join(''):'<tr><td colspan="6" style="text-align:center;padding:2rem;color:#999;">No guests found</td></tr>'}</tbody></table></div>
+        const name = g.firstName+' '+g.lastName;
+        return '<div onclick="pickGuest(\''+g.id+'\')" style="padding:0.85rem;margin-bottom:0.5rem;background:var(--card-bg);border:1.5px solid var(--border);border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:0.75rem;transition:all 0.15s;" ontouchstart="this.style.background=\'#e3f2fd\'" ontouchend="this.style.background=\'\'" onmouseover="this.style.background=\'#e3f2fd\'" onmouseout="this.style.background=\'\'"><div style="min-width:0;flex:1;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.25rem;"><span style="font-weight:700;font-size:1rem;">'+name+'</span><span style="font-size:0.75rem;color:#1a73e8;font-weight:600;">'+gid+'</span></div><div style="display:flex;gap:1rem;font-size:0.82rem;color:var(--text-light);flex-wrap:wrap;">'+(g.passportId?'<span>◆ '+g.passportId+'</span>':'')+(g.nationality?'<span>'+g.nationality+'</span>':'')+(g.phone?'<span>'+g.phone+'</span>':'')+(g.email?'<span>'+g.email+'</span>':'')+'</div></div><div style="font-size:1.2rem;color:#1a73e8;">▸</div></div>';
+      }).join(''):'<div style="text-align:center;padding:2rem;color:#999;">No guests found</div>'}</div>
       <div style="padding:0.75rem 0;text-align:center;"><button class="btn btn-outline" style="width:100%;justify-content:center;" onclick="cancelGuestPicker()">Cancel — Back to Booking</button></div></div>`);
     window._gpFilter = function(v) { filterVal = v; renderPicker(); setTimeout(()=>{ const el = document.getElementById('guestPickerSearch'); if(el){el.focus();el.setSelectionRange(v.length,v.length);} },50); };
   }
