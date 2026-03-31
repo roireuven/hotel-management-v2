@@ -505,7 +505,8 @@ function selectOpts(arr, sel) { return arr.map(v=>`<option ${v===sel?'selected':
 function adminEditBtn(listName) { return currentRole==='Admin' ? ` <button class="btn btn-sm btn-outline" onclick="manageList('${listName}')" style="padding:0.2rem 0.5rem;font-size:0.7rem;min-height:auto;min-width:auto;">⊕</button>` : ''; }
 window.manageList = function(listName) {
   const label = listName === 'roomTypes' ? 'Room Types' : 'Bed Configurations';
-  const items = (settings[listName] || '').split(',').map(s=>s.trim()).filter(Boolean);
+  const defaults = listName === 'roomTypes' ? 'Single,Double,Deluxe,Suite,Penthouse' : 'King,Twin,Queen+Single,Double,King+Sofa';
+  const items = (settings[listName] || defaults).split(',').map(s=>s.trim()).filter(Boolean);
   let html = `<div class="modal-header"><h2>Manage ${label}</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:1rem;">Add, edit or delete values. These appear in all dropdown menus across the app.</p>
@@ -788,6 +789,8 @@ let invoices = load('invoices', null); if(!invoices) { invoices = defaultInvoice
 let accounts = load('accounts', null); if(!accounts) { accounts = defaultAccounts; save('accounts', accounts); }
 let auditLog = load('auditLog', []);
 let settings = load('settings', defaultSettings);
+if (!settings.roomTypes) { settings.roomTypes = defaultSettings.roomTypes; save('settings', settings); }
+if (!settings.bedConfigs) { settings.bedConfigs = defaultSettings.bedConfigs; save('settings', settings); }
 let tickets = load('tickets', null); if(!tickets) { tickets = defaultTickets; save('tickets', tickets); }
 let messages = load('messages', null); if(!messages) { messages = defaultMessages; save('messages', messages); }
 let inventory = load('inventory', null); if(!inventory) { inventory = defaultInventory; save('inventory', inventory); }
