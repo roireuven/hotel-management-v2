@@ -175,6 +175,7 @@
       <div class="nav-section">Admin</div>
       <a data-page="reports"><span class="icon">📈</span> Reports</a>
       <a data-page="accounts"><span class="icon">👤</span> Accounts</a>
+      <a data-page="auditlog"><span class="icon">📜</span> Audit Log</a>
       <a data-page="settings"><span class="icon">⚙️</span> Settings</a>
     </nav>
   </aside>
@@ -192,6 +193,7 @@
       <div class="page" id="page-invoices"></div>
       <div class="page" id="page-reports"></div>
       <div class="page" id="page-accounts"></div>
+      <div class="page" id="page-auditlog"></div>
       <div class="page" id="page-settings"></div>
     </div>
   </div>
@@ -421,62 +423,106 @@ class XGrid {
   }
 }
 
-const defaultRooms = [];
-[1,2,3,4,5].forEach(f => { for (let r = 1; r <= 10; r++) { const n = f*100+r; if(n>508)break;
-  const types = ['Standard','Deluxe','Suite','VIP Suite']; const prices = [100,150,250,400];
-  const ti = r<=4?0:r<=7?1:r<=9?2:3; let st='available';
-  if(r===3&&f===2) st='maintenance'; else if(r===7&&f===4) st='maintenance'; else if(r===1&&f===5) st='maintenance';
-  else if([1,2,5,6,8].includes(r)&&f<=3) st='occupied'; else if((r===4&&f<=2)||(r===9&&f<=2)||(r===10&&f===1)||(r===3&&f===3)||(r===10&&f===3)) st='reserved';
-  defaultRooms.push({id:genId(),number:n,floor:f,type:types[ti],price:prices[ti],maxGuests:ti<2?2:ti<3?3:4,status:st});
-}});
+// ===== AUTO-ID GENERATORS =====
+function nextBookingId() {
+  const nums = bookings.map(b => parseInt((b.bookingId||'').replace('BK-',''))).filter(n=>!isNaN(n));
+  return 'BK-' + (Math.max(1000, ...nums) + 1);
+}
+function nextInvoiceNumber() {
+  const nums = invoices.map(i => parseInt((i.invoiceNumber||'').replace('INV-',''))).filter(n=>!isNaN(n));
+  return 'INV-' + (Math.max(2000, ...nums) + 1);
+}
+
+// ===== AUDIT LOG =====
+function logAudit(action, entity, detail) {
+  auditLog.push({id:genId(), timestamp:new Date().toISOString(), action:action, entity:entity, detail:detail, user:'Admin'});
+  if (auditLog.length > 500) auditLog = auditLog.slice(-500);
+  save('auditLog', auditLog);
+}
+
+// ===== DEFAULT DATA =====
+const defaultRooms = [
+  {id:genId(),roomNumber:'101',roomType:'Single',floorNumber:1,bedConfig:'Twin',housekeepingStatus:'Inspected',occupancyStatus:'Occupied',maxAdults:1,maxChildren:1,amenities:'TV, WiFi',maintenanceLogs:'',price:80},
+  {id:genId(),roomNumber:'102',roomType:'Double',floorNumber:1,bedConfig:'Queen+Single',housekeepingStatus:'Clean',occupancyStatus:'Vacant',maxAdults:2,maxChildren:1,amenities:'TV, WiFi, Mini-bar',maintenanceLogs:'',price:120},
+  {id:genId(),roomNumber:'103',roomType:'Deluxe',floorNumber:1,bedConfig:'King',housekeepingStatus:'Clean',occupancyStatus:'Occupied',maxAdults:2,maxChildren:2,amenities:'Balcony, Sea View, Mini-bar',maintenanceLogs:'',price:200},
+  {id:genId(),roomNumber:'104',roomType:'Suite',floorNumber:1,bedConfig:'King',housekeepingStatus:'Clean',occupancyStatus:'Vacant',maxAdults:3,maxChildren:2,amenities:'Balcony, Sea View, Mini-bar, Jacuzzi',maintenanceLogs:'',price:350},
+  {id:genId(),roomNumber:'105',roomType:'Single',floorNumber:1,bedConfig:'Twin',housekeepingStatus:'Clean',occupancyStatus:'Reserved',maxAdults:1,maxChildren:1,amenities:'TV, WiFi',maintenanceLogs:'',price:80},
+  {id:genId(),roomNumber:'201',roomType:'Double',floorNumber:2,bedConfig:'Queen+Single',housekeepingStatus:'Dirty',occupancyStatus:'Occupied',maxAdults:2,maxChildren:1,amenities:'TV, WiFi, Mini-bar',maintenanceLogs:'',price:120},
+  {id:genId(),roomNumber:'202',roomType:'Deluxe',floorNumber:2,bedConfig:'King',housekeepingStatus:'Clean',occupancyStatus:'Vacant',maxAdults:2,maxChildren:2,amenities:'Balcony, Mini-bar',maintenanceLogs:'',price:200},
+  {id:genId(),roomNumber:'203',roomType:'Suite',floorNumber:2,bedConfig:'King',housekeepingStatus:'Clean',occupancyStatus:'Occupied',maxAdults:3,maxChildren:2,amenities:'Balcony, Sea View, Mini-bar, Jacuzzi',maintenanceLogs:'',price:350},
+  {id:genId(),roomNumber:'204',roomType:'Penthouse',floorNumber:2,bedConfig:'King',housekeepingStatus:'Clean',occupancyStatus:'Vacant',maxAdults:4,maxChildren:2,amenities:'Balcony, Sea View, Mini-bar, Jacuzzi, Private Pool',maintenanceLogs:'',price:600},
+  {id:genId(),roomNumber:'205',roomType:'Single',floorNumber:2,bedConfig:'Twin',housekeepingStatus:'Clean',occupancyStatus:'Occupied',maxAdults:1,maxChildren:0,amenities:'TV, WiFi',maintenanceLogs:'',price:85},
+  {id:genId(),roomNumber:'301',roomType:'Double',floorNumber:3,bedConfig:'Queen+Single',housekeepingStatus:'Clean',occupancyStatus:'Vacant',maxAdults:2,maxChildren:1,amenities:'TV, WiFi, Mini-bar',maintenanceLogs:'',price:130},
+  {id:genId(),roomNumber:'302',roomType:'Deluxe',floorNumber:3,bedConfig:'King',housekeepingStatus:'Clean',occupancyStatus:'Occupied',maxAdults:2,maxChildren:2,amenities:'Balcony, Sea View',maintenanceLogs:'',price:210},
+  {id:genId(),roomNumber:'303',roomType:'Single',floorNumber:3,bedConfig:'Twin',housekeepingStatus:'Out of Service',occupancyStatus:'Vacant',maxAdults:1,maxChildren:0,amenities:'TV, WiFi',maintenanceLogs:'Bathroom renovation in progress',price:85},
+  {id:genId(),roomNumber:'304',roomType:'Double',floorNumber:3,bedConfig:'Queen+Single',housekeepingStatus:'Clean',occupancyStatus:'Reserved',maxAdults:2,maxChildren:1,amenities:'TV, WiFi, Mini-bar',maintenanceLogs:'',price:130},
+  {id:genId(),roomNumber:'305',roomType:'Suite',floorNumber:3,bedConfig:'King',housekeepingStatus:'Clean',occupancyStatus:'Occupied',maxAdults:3,maxChildren:2,amenities:'Balcony, Sea View, Mini-bar',maintenanceLogs:'',price:360},
+  {id:genId(),roomNumber:'401',roomType:'Deluxe',floorNumber:4,bedConfig:'King',housekeepingStatus:'Clean',occupancyStatus:'Vacant',maxAdults:2,maxChildren:2,amenities:'Balcony, Sea View, Mini-bar',maintenanceLogs:'',price:220},
+  {id:genId(),roomNumber:'402',roomType:'Penthouse',floorNumber:4,bedConfig:'King',housekeepingStatus:'Clean',occupancyStatus:'Reserved',maxAdults:4,maxChildren:2,amenities:'Balcony, Sea View, Mini-bar, Jacuzzi, Private Pool',maintenanceLogs:'',price:650},
+  {id:genId(),roomNumber:'403',roomType:'Double',floorNumber:4,bedConfig:'Queen+Single',housekeepingStatus:'Clean',occupancyStatus:'Occupied',maxAdults:2,maxChildren:1,amenities:'TV, WiFi, Mini-bar',maintenanceLogs:'',price:130},
+  {id:genId(),roomNumber:'404',roomType:'Suite',floorNumber:4,bedConfig:'King',housekeepingStatus:'Dirty',occupancyStatus:'Vacant',maxAdults:3,maxChildren:2,amenities:'Balcony, Sea View, Mini-bar, Jacuzzi',maintenanceLogs:'',price:370},
+  {id:genId(),roomNumber:'405',roomType:'Single',floorNumber:4,bedConfig:'Twin',housekeepingStatus:'Clean',occupancyStatus:'Vacant',maxAdults:1,maxChildren:0,amenities:'TV, WiFi',maintenanceLogs:'',price:85},
+];
 const defaultGuests = [
-  {id:genId(),firstName:'John',lastName:'Smith',email:'john.smith@email.com',phone:'+1 555-0123',idDoc:'US-98765432',visits:3},
-  {id:genId(),firstName:'Maria',lastName:'Garcia',email:'m.garcia@email.com',phone:'+34 612-3456',idDoc:'ES-12345678',visits:1},
-  {id:genId(),firstName:'David',lastName:'Lee',email:'david.lee@email.com',phone:'+82 10-9876',idDoc:'KR-87654321',visits:5},
-  {id:genId(),firstName:'Sarah',lastName:'Johnson',email:'s.johnson@email.com',phone:'+1 555-0456',idDoc:'US-11223344',visits:2},
-  {id:genId(),firstName:'James',lastName:'Wilson',email:'j.wilson@email.com',phone:'+44 20-7890',idDoc:'UK-55667788',visits:1},
-  {id:genId(),firstName:'Emily',lastName:'Chen',email:'e.chen@email.com',phone:'+86 138-0000',idDoc:'CN-99887766',visits:4},
+  {id:genId(),firstName:'John',lastName:'Smith',passportId:'US-98765432',nationality:'American',dob:'1985-06-15',email:'john.smith@email.com',phone:'+1 555-0123',paymentMethod:'Credit Card',guestNotes:'Prefers high floor',blacklist:0,visits:3},
+  {id:genId(),firstName:'Maria',lastName:'Garcia',passportId:'ES-12345678',nationality:'Spanish',dob:'1990-03-22',email:'m.garcia@email.com',phone:'+34 612-3456',paymentMethod:'Cash',guestNotes:'',blacklist:0,visits:1},
+  {id:genId(),firstName:'Akira',lastName:'Tanaka',passportId:'JP-55667788',nationality:'Japanese',dob:'1978-11-03',email:'a.tanaka@email.com',phone:'+81 90-1234',paymentMethod:'Credit Card',guestNotes:'Allergic to shellfish',blacklist:0,visits:5},
+  {id:genId(),firstName:'Sophie',lastName:'Laurent',passportId:'FR-33445566',nationality:'French',dob:'1992-08-10',email:'s.laurent@email.com',phone:'+33 6-7890',paymentMethod:'Bank Transfer',guestNotes:'',blacklist:0,visits:2},
+  {id:genId(),firstName:'James',lastName:'Wilson',passportId:'UK-11223344',nationality:'British',dob:'1988-01-28',email:'j.wilson@email.com',phone:'+44 20-7890',paymentMethod:'Credit Card',guestNotes:'VIP guest',blacklist:0,visits:1},
+  {id:genId(),firstName:'Lin',lastName:'Wei',passportId:'CN-99887766',nationality:'Chinese',dob:'1995-12-05',email:'l.wei@email.com',phone:'+86 138-0000',paymentMethod:'Cash',guestNotes:'',blacklist:0,visits:4},
 ];
 const defaultServices = [
-  {id:genId(),name:'Breakfast Buffet',category:'Food & Beverage',price:25,icon:'🍳'},
-  {id:genId(),name:'Laundry Service',category:'Housekeeping',price:15,icon:'🧺'},
-  {id:genId(),name:'Spa Treatment',category:'Wellness',price:80,icon:'💆'},
-  {id:genId(),name:'Airport Shuttle',category:'Transport',price:45,icon:'🚗'},
-  {id:genId(),name:'Mini Bar',category:'Food & Beverage',price:35,icon:'🍷'},
-  {id:genId(),name:'Pool Access',category:'Recreation',price:10,icon:'🏊'},
-  {id:genId(),name:'Premium WiFi',category:'Technology',price:5,icon:'📶'},
+  {id:genId(),serviceCategory:'Room Service',name:'Breakfast Buffet',unitPrice:25,quantity:1,taxRate:7,serviceDateTime:'',staffId:'',icon:'🍳'},
+  {id:genId(),serviceCategory:'Laundry',name:'Standard Wash & Iron',unitPrice:15,quantity:1,taxRate:7,serviceDateTime:'',staffId:'',icon:'🧺'},
+  {id:genId(),serviceCategory:'Airport Transfer',name:'Airport Pickup',unitPrice:45,quantity:1,taxRate:7,serviceDateTime:'',staffId:'',icon:'🚗'},
+  {id:genId(),serviceCategory:'Mini-bar',name:'Mini-bar Replenishment',unitPrice:35,quantity:1,taxRate:7,serviceDateTime:'',staffId:'',icon:'🍷'},
+  {id:genId(),serviceCategory:'Spa',name:'Thai Massage (60 min)',unitPrice:80,quantity:1,taxRate:7,serviceDateTime:'',staffId:'',icon:'💆'},
+  {id:genId(),serviceCategory:'Pool',name:'Pool Day Pass',unitPrice:10,quantity:1,taxRate:7,serviceDateTime:'',staffId:'',icon:'🏊'},
+  {id:genId(),serviceCategory:'Room Service',name:'Dinner Set Menu',unitPrice:40,quantity:1,taxRate:7,serviceDateTime:'',staffId:'',icon:'🍽️'},
 ];
 const defaultAccounts = [
-  {id:genId(),name:'Admin User',email:'admin@hotel.com',role:'Administrator',status:'active'},
-  {id:genId(),name:'Jane Receptionist',email:'jane@hotel.com',role:'Receptionist',status:'active'},
-  {id:genId(),name:'Mike Manager',email:'mike@hotel.com',role:'Manager',status:'active'},
-  {id:genId(),name:'Tom Housekeeping',email:'tom@hotel.com',role:'Staff',status:'inactive'},
+  {id:genId(),name:'Admin User',email:'admin@hotel.com',role:'Admin',status:'active'},
+  {id:genId(),name:'Jane Smith',email:'jane@hotel.com',role:'Receptionist',status:'active'},
+  {id:genId(),name:'Mike Johnson',email:'mike@hotel.com',role:'Manager',status:'active'},
+  {id:genId(),name:'Tom Williams',email:'tom@hotel.com',role:'Housekeeper',status:'inactive'},
+];
+const defaultInvoices = [
+  {id:genId(),invoiceNumber:'INV-2001',bookingId:'',guestName:'John Smith',roomNumber:'201',subtotal:240,discountAmount:0,taxTotal:16.80,grandTotal:256.80,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10001',currency:'USD',billingAddress:'123 Main St, New York, USA',services:[],date:'2026-03-15'},
+  {id:genId(),invoiceNumber:'INV-2002',bookingId:'',guestName:'Akira Tanaka',roomNumber:'305',subtotal:720,discountAmount:50,taxTotal:46.90,grandTotal:716.90,paymentStatus:'Partially Paid',paymentTransactionId:'TXN-10002',currency:'USD',billingAddress:'456 Sakura Ave, Tokyo, Japan',services:[{name:'Thai Massage',unitPrice:80,quantity:1,icon:'💆'}],date:'2026-03-20'},
+  {id:genId(),invoiceNumber:'INV-2003',bookingId:'',guestName:'Sophie Laurent',roomNumber:'103',subtotal:400,discountAmount:0,taxTotal:28,grandTotal:428,paymentStatus:'Unpaid',paymentTransactionId:'',currency:'EUR',billingAddress:'789 Rue de Paris, Paris, France',services:[],date:'2026-03-25'},
 ];
 const defaultSettings = {hotelName:'Grand Hotel Management',email:'info@grandhotel.com',phone:'+1 555-0100',currency:'USD ($)',address:'123 Hotel Street, City, Country',maxGuests:3,surcharge:25,checkinTime:'14:00',checkoutTime:'12:00'};
 
+// ===== LOAD DATA =====
 let rooms = load('rooms', null); if(!rooms) { rooms = defaultRooms; save('rooms', rooms); }
 let guests = load('guests', null); if(!guests) { guests = defaultGuests; save('guests', guests); }
-let bookings = load('bookings', []); 
+let bookings = load('bookings', []);
 let services = load('services', null); if(!services) { services = defaultServices; save('services', services); }
-let invoices = load('invoices', []);
+let invoices = load('invoices', null); if(!invoices) { invoices = defaultInvoices; save('invoices', invoices); }
 let accounts = load('accounts', null); if(!accounts) { accounts = defaultAccounts; save('accounts', accounts); }
+let auditLog = load('auditLog', []);
 let settings = load('settings', defaultSettings);
 
 if(bookings.length === 0) {
-  const g = guests; const r = rooms.filter(x=>x.status==='occupied'||x.status==='reserved');
   const seed = [
-    {guest:g[0],room:r[0],checkin:'2026-03-28',checkout:'2026-03-31',status:'checked-in'},
-    {guest:g[1],room:r[1],checkin:'2026-03-29',checkout:'2026-04-02',status:'checked-in'},
-    {guest:g[2],room:r[2]||r[0],checkin:'2026-03-30',checkout:'2026-04-01',status:'pending'},
-    {guest:g[3],room:r[3]||r[0],checkin:'2026-03-27',checkout:'2026-03-30',status:'checked-in'},
-    {guest:g[4],room:r[4]||r[0],checkin:'2026-03-30',checkout:'2026-04-03',status:'pending'},
-    {guest:g[5],room:r[5]||r[0],checkin:'2026-04-01',checkout:'2026-04-04',status:'reserved'},
+    {guest:'John Smith',roomNum:'101',inD:'2026-03-28',outD:'2026-03-31',status:'Checked-in',src:'Direct'},
+    {guest:'Maria Garcia',roomNum:'103',inD:'2026-03-29',outD:'2026-04-02',status:'Checked-in',src:'Booking.com'},
+    {guest:'Akira Tanaka',roomNum:'201',inD:'2026-03-30',outD:'2026-04-01',status:'Checked-in',src:'Expedia'},
+    {guest:'Sophie Laurent',roomNum:'105',inD:'2026-04-01',outD:'2026-04-04',status:'Expected',src:'Direct'},
+    {guest:'James Wilson',roomNum:'304',inD:'2026-04-02',outD:'2026-04-05',status:'Expected',src:'Walk-in'},
+    {guest:'Lin Wei',roomNum:'305',inD:'2026-03-27',outD:'2026-03-31',status:'Checked-in',src:'Booking.com'},
   ];
-  seed.forEach(s => { if(s.room) bookings.push({id:genId(),guestId:s.guest.id,guestName:s.guest.firstName+' '+s.guest.lastName,roomId:s.room.id,roomNumber:s.room.number,roomType:s.room.type,checkin:s.checkin,checkout:s.checkout,status:s.status,services:[],notes:''}); });
+  seed.forEach((s,i) => {
+    const room = rooms.find(x => String(x.roomNumber) === s.roomNum);
+    if(room) {
+      bookings.push({id:genId(),bookingId:'BK-'+(1001+i),guestName:s.guest,roomId:room.id,roomNumber:room.roomNumber,roomType:room.roomType,checkinDate:s.inD,checkinTime:'14:00',checkoutDate:s.outD,checkoutTime:'12:00',numAdults:1,numChildren:0,bookingSource:s.src,cancellationPolicy:'Free cancellation',arrivalStatus:s.status,specialRequests:'',services:[],notes:''});
+    }
+  });
   save('bookings', bookings);
 }
 
-const pageTitles = {dashboard:'Dashboard',rooms:'Room Management',bookings:'Bookings',guests:'Guest Directory',services:'Services',invoices:'Invoices',reports:'Sales Reports',accounts:'User Accounts',settings:'Settings & Regulations'};
+// ===== NAVIGATION =====
+const pageTitles = {dashboard:'Dashboard',rooms:'Room Management',bookings:'Bookings',guests:'Guest Directory',services:'Services',invoices:'Invoices',reports:'Reports & Analytics',accounts:'User Accounts',auditlog:'Audit Log',settings:'Settings & Regulations'};
 
 document.querySelectorAll('#sidebarNav a[data-page]').forEach(link => {
   link.addEventListener('click', () => {
@@ -499,13 +545,13 @@ function closeModal() { document.getElementById('modalOverlay').classList.remove
 document.getElementById('modalOverlay').addEventListener('click', e => { if(e.target === document.getElementById('modalOverlay')) closeModal(); });
 
 function renderPage(page) {
-  const fn = {dashboard:renderDashboard,rooms:renderRooms,bookings:renderBookings,guests:renderGuests,services:renderServices,invoices:renderInvoices,reports:renderReports,accounts:renderAccounts,settings:renderSettings};
+  const fn = {dashboard:renderDashboard,rooms:renderRooms,bookings:renderBookings,guests:renderGuests,services:renderServices,invoices:renderInvoices,reports:renderReports,accounts:renderAccounts,auditlog:renderAuditLog,settings:renderSettings};
   if(fn[page]) fn[page]();
   updateBadges();
 }
 
 function updateBadges() {
-  document.getElementById('badgeMaint').textContent = rooms.filter(r=>r.status==='maintenance').length;
+  document.getElementById('badgeMaint').textContent = rooms.filter(r=>r.housekeepingStatus==='Out of Service').length;
 }
 
 function renderBarChart(data) {
@@ -513,140 +559,193 @@ function renderBarChart(data) {
   return `<div class="chart-container"><div class="bar-chart">${data.map(d => `<div class="bar-group"><div class="bar-value">${fmt$(d.v1+d.v2)}</div><div style="display:flex;flex-direction:column;width:100%;max-width:50px;"><div class="bar" style="height:${(d.v2/maxVal)*160}px;background:#42b72a;border-radius:6px 6px 0 0;"></div><div class="bar" style="height:${(d.v1/maxVal)*160}px;background:#1a73e8;"></div></div><div class="bar-label">${d.label}</div></div>`).join('')}</div><div class="legend"><div class="legend-item"><div class="legend-dot" style="background:#1a73e8"></div> Rooms</div><div class="legend-item"><div class="legend-dot" style="background:#42b72a"></div> Services</div></div></div>`;
 }
 
+function roomTileClass(r) {
+  if (r.housekeepingStatus === 'Out of Service') return 'maintenance';
+  if (r.occupancyStatus === 'Occupied') return 'occupied';
+  if (r.occupancyStatus === 'Reserved') return 'reserved';
+  return 'available';
+}
+function roomTileLabel(r) {
+  if (r.housekeepingStatus === 'Out of Service') return 'Out of Service';
+  return r.occupancyStatus;
+}
+
 // ===== DASHBOARD =====
 function renderDashboard() {
-  const total = rooms.length, avail = rooms.filter(r=>r.status==='available').length, occ = rooms.filter(r=>r.status==='occupied').length, maint = rooms.filter(r=>r.status==='maintenance').length;
-  const recent = bookings.filter(b=>b.status==='checked-in'||b.status==='pending').slice(-5).reverse();
-  const totalRev = invoices.reduce((s,i)=>s+i.total,0);
+  const total = rooms.length;
+  const vacant = rooms.filter(r=>r.occupancyStatus==='Vacant' && r.housekeepingStatus!=='Out of Service').length;
+  const occ = rooms.filter(r=>r.occupancyStatus==='Occupied').length;
+  const oos = rooms.filter(r=>r.housekeepingStatus==='Out of Service').length;
+  const recent = bookings.filter(b=>b.arrivalStatus==='Checked-in'||b.arrivalStatus==='Expected').slice(-5).reverse();
+  const totalRev = invoices.reduce((s,i)=>s+(parseFloat(i.grandTotal)||0),0);
   document.getElementById('page-dashboard').innerHTML = `
     <div class="stats-grid">
       <div class="stat-card"><div class="stat-icon blue">🏨</div><div class="stat-info"><h3>${total}</h3><p>Total Rooms</p></div></div>
-      <div class="stat-card"><div class="stat-icon green">✅</div><div class="stat-info"><h3>${avail}</h3><p>Available</p></div></div>
+      <div class="stat-card"><div class="stat-icon green">✅</div><div class="stat-info"><h3>${vacant}</h3><p>Vacant</p></div></div>
       <div class="stat-card"><div class="stat-icon orange">📋</div><div class="stat-info"><h3>${occ}</h3><p>Occupied</p></div></div>
-      <div class="stat-card"><div class="stat-icon red">🔧</div><div class="stat-info"><h3>${maint}</h3><p>Maintenance</p></div></div>
+      <div class="stat-card"><div class="stat-icon red">🔧</div><div class="stat-info"><h3>${oos}</h3><p>Out of Service</p></div></div>
     </div>
     <div class="dash-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
       <div class="card"><div class="card-header"><h2>Revenue (Last 7 Days)</h2></div><div class="card-body">${renderBarChart([
         {label:'Mon',v1:1200,v2:300},{label:'Tue',v1:1500,v2:450},{label:'Wed',v1:1800,v2:400},{label:'Thu',v1:1400,v2:500},{label:'Fri',v1:2100,v2:600},{label:'Sat',v1:2400,v2:700},{label:'Sun',v1:2000,v2:550}
       ])}</div></div>
-      <div class="card"><div class="card-header"><h2>Recent Activity</h2></div><div class="card-body"><div class="table-wrap"><table><thead><tr><th>Guest</th><th>Room</th><th>Status</th></tr></thead><tbody>${recent.length?recent.map(b=>`<tr><td>${b.guestName}</td><td>${b.roomNumber}</td><td><span class="status status-${b.status}">${b.status.replace('-',' ')}</span></td></tr>`).join(''):'<tr><td colspan="3" style="text-align:center;color:var(--text-light);">No recent activity</td></tr>'}</tbody></table></div></div></div>
+      <div class="card"><div class="card-header"><h2>Recent Activity</h2></div><div class="card-body"><div class="table-wrap"><table><thead><tr><th>Guest</th><th>Room</th><th>Status</th></tr></thead><tbody>${recent.length?recent.map(b=>`<tr><td>${b.guestName}</td><td>${b.roomNumber}</td><td><span class="status status-${b.arrivalStatus==='Checked-in'?'checked-in':b.arrivalStatus==='Expected'?'pending':'checked-out'}">${b.arrivalStatus}</span></td></tr>`).join(''):'<tr><td colspan="3" style="text-align:center;color:var(--text-light);">No recent activity</td></tr>'}</tbody></table></div></div></div>
     </div>`;
 }
 
 // ===== ROOMS =====
 let roomFilter = 'all';
 function renderRooms() {
-  const counts = {all:rooms.length, available:rooms.filter(r=>r.status==='available').length, occupied:rooms.filter(r=>r.status==='occupied').length, reserved:rooms.filter(r=>r.status==='reserved').length, maintenance:rooms.filter(r=>r.status==='maintenance').length};
-  const filtered = roomFilter==='all'?rooms:rooms.filter(r=>r.status===roomFilter);
+  const counts = {
+    all: rooms.length,
+    Vacant: rooms.filter(r=>r.occupancyStatus==='Vacant' && r.housekeepingStatus!=='Out of Service').length,
+    Occupied: rooms.filter(r=>r.occupancyStatus==='Occupied').length,
+    Reserved: rooms.filter(r=>r.occupancyStatus==='Reserved').length,
+    'Out of Service': rooms.filter(r=>r.housekeepingStatus==='Out of Service').length
+  };
+  let filtered = rooms;
+  if (roomFilter === 'Out of Service') filtered = rooms.filter(r=>r.housekeepingStatus==='Out of Service');
+  else if (roomFilter !== 'all') filtered = rooms.filter(r=>r.occupancyStatus===roomFilter && r.housekeepingStatus!=='Out of Service');
   document.getElementById('page-rooms').innerHTML = `
     <div class="card"><div class="card-header"><h2>Room Overview</h2><button class="btn btn-primary" onclick="showAddRoom()">+ Add Room</button></div><div class="card-body">
-      <div style="display:flex;gap:0.75rem;margin-bottom:1.25rem;flex-wrap:wrap;">${['all','available','occupied','reserved','maintenance'].map(f=>`<button class="btn ${roomFilter===f?'btn-primary':'btn-outline'}" onclick="roomFilter='${f}';renderRooms()">${f.charAt(0).toUpperCase()+f.slice(1)} (${counts[f]})</button>`).join('')}</div>
-      <div class="room-grid">${filtered.map(r=>`<div class="room-tile room-${r.status}" onclick="showRoomDetail('${r.id}')"><div class="room-number">${r.number}</div><div class="room-type">${r.type}</div><div class="room-price">${fmt$(r.price)}/night</div><div class="room-status">${r.status}</div></div>`).join('')}</div>
+      <div style="display:flex;gap:0.75rem;margin-bottom:1.25rem;flex-wrap:wrap;">${['all','Vacant','Occupied','Reserved','Out of Service'].map(f=>`<button class="btn ${roomFilter===f?'btn-primary':'btn-outline'}" onclick="roomFilter='${f}';renderRooms()">${f==='all'?'All':f} (${counts[f]})</button>`).join('')}</div>
+      <div class="room-grid">${filtered.map(r=>`<div class="room-tile room-${roomTileClass(r)}" onclick="showRoomDetail('${r.id}')"><div class="room-number">${r.roomNumber}</div><div class="room-type">${r.roomType} · ${r.bedConfig}</div><div class="room-price">${fmt$(r.price)}/night</div><div class="room-status">${roomTileLabel(r)}</div></div>`).join('')}</div>
     </div></div>`;
 }
 window.showAddRoom = function() {
   openModal(`<div class="modal-header"><h2>Add New Room</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
-    <div class="modal-body"><div class="form-row"><div class="form-group"><label>Room Number</label><input type="number" class="form-control" id="mRoomNum" placeholder="e.g. 601"></div><div class="form-group"><label>Floor</label><input type="number" class="form-control" id="mRoomFloor" placeholder="e.g. 6"></div></div>
-    <div class="form-group"><label>Room Type</label><select class="form-control" id="mRoomType"><option value="Standard">Standard</option><option value="Deluxe">Deluxe</option><option value="Suite">Suite</option><option value="VIP Suite">VIP Suite</option></select></div>
-    <div class="form-row"><div class="form-group"><label>Price Per Night ($)</label><input type="number" class="form-control" id="mRoomPrice" placeholder="e.g. 120"></div><div class="form-group"><label>Max Guests</label><input type="number" class="form-control" id="mRoomMax" placeholder="e.g. 2" value="2"></div></div></div>
+    <div class="modal-body">
+    <div class="form-row"><div class="form-group"><label>Room Number</label><input type="text" class="form-control" id="mRoomNum" placeholder="e.g. 501"></div><div class="form-group"><label>Floor Number</label><input type="number" class="form-control" id="mRoomFloor" placeholder="e.g. 5"></div></div>
+    <div class="form-row"><div class="form-group"><label>Room Type</label><select class="form-control" id="mRoomType"><option>Single</option><option>Double</option><option>Deluxe</option><option>Suite</option><option>Penthouse</option></select></div><div class="form-group"><label>Bed Config</label><select class="form-control" id="mRoomBed"><option>King</option><option>Twin</option><option>Queen+Single</option></select></div></div>
+    <div class="form-row"><div class="form-group"><label>Max Adults</label><input type="number" class="form-control" id="mRoomMaxA" value="2"></div><div class="form-group"><label>Max Children</label><input type="number" class="form-control" id="mRoomMaxC" value="1"></div></div>
+    <div class="form-group"><label>Price Per Night ($)</label><input type="number" class="form-control" id="mRoomPrice" placeholder="e.g. 120" step="0.01"></div>
+    <div class="form-group"><label>Amenities (comma separated)</label><input type="text" class="form-control" id="mRoomAmen" placeholder="TV, WiFi, Mini-bar"></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addRoom()">Add Room</button></div>`);
 };
 window.addRoom = function() {
-  const num = parseInt(document.getElementById('mRoomNum').value); if(!num) { toast('Enter a room number'); return; }
-  if(rooms.find(r=>r.number===num)) { toast('Room number already exists'); return; }
-  rooms.push({id:genId(),number:num,floor:parseInt(document.getElementById('mRoomFloor').value)||1,type:document.getElementById('mRoomType').value,price:parseFloat(document.getElementById('mRoomPrice').value)||100,maxGuests:parseInt(document.getElementById('mRoomMax').value)||2,status:'available'});
-  save('rooms',rooms); closeModal(); renderRooms(); renderDashboard(); toast('Room '+num+' added');
+  const num = document.getElementById('mRoomNum').value.trim(); if(!num) { toast('Enter a room number'); return; }
+  if(rooms.find(r=>String(r.roomNumber)===num)) { toast('Room number already exists'); return; }
+  const r = {id:genId(),roomNumber:num,roomType:document.getElementById('mRoomType').value,floorNumber:parseInt(document.getElementById('mRoomFloor').value)||1,bedConfig:document.getElementById('mRoomBed').value,housekeepingStatus:'Clean',occupancyStatus:'Vacant',maxAdults:parseInt(document.getElementById('mRoomMaxA').value)||2,maxChildren:parseInt(document.getElementById('mRoomMaxC').value)||0,amenities:document.getElementById('mRoomAmen').value,maintenanceLogs:'',price:parseFloat(document.getElementById('mRoomPrice').value)||100};
+  rooms.push(r); save('rooms',rooms); logAudit('Add','Room','Added room '+num); closeModal(); renderRooms(); renderDashboard(); toast('Room '+num+' added');
 };
 window.showRoomDetail = function(id) {
   const r = rooms.find(x=>x.id===id); if(!r) return;
-  const statuses = ['available','occupied','reserved','maintenance'];
-  openModal(`<div class="modal-header"><h2>Room ${r.number}</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
-    <div class="modal-body"><div class="form-row"><div class="form-group"><label>Room Number</label><input type="number" class="form-control" id="eRoomNum" value="${r.number}"></div><div class="form-group"><label>Floor</label><input type="number" class="form-control" id="eRoomFloor" value="${r.floor}"></div></div>
-    <div class="form-group"><label>Room Type</label><select class="form-control" id="eRoomType">${['Standard','Deluxe','Suite','VIP Suite'].map(t=>`<option ${t===r.type?'selected':''}>${t}</option>`).join('')}</select></div>
-    <div class="form-row"><div class="form-group"><label>Price Per Night ($)</label><input type="number" class="form-control" id="eRoomPrice" value="${r.price}"></div><div class="form-group"><label>Max Guests</label><input type="number" class="form-control" id="eRoomMax" value="${r.maxGuests}"></div></div>
-    <div class="form-group"><label>Status</label><select class="form-control" id="eRoomStatus">${statuses.map(s=>`<option value="${s}" ${s===r.status?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`).join('')}</select></div></div>
+  const types = ['Single','Double','Deluxe','Suite','Penthouse'];
+  const beds = ['King','Twin','Queen+Single'];
+  const hkStatuses = ['Clean','Dirty','Inspected','Out of Service'];
+  const occStatuses = ['Occupied','Vacant','Reserved'];
+  openModal(`<div class="modal-header"><h2>Room ${r.roomNumber}</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body">
+    <div class="form-row"><div class="form-group"><label>Room Number</label><input type="text" class="form-control" id="eRoomNum" value="${r.roomNumber}"></div><div class="form-group"><label>Floor Number</label><input type="number" class="form-control" id="eRoomFloor" value="${r.floorNumber}"></div></div>
+    <div class="form-row"><div class="form-group"><label>Room Type</label><select class="form-control" id="eRoomType">${types.map(t=>`<option ${t===r.roomType?'selected':''}>${t}</option>`).join('')}</select></div><div class="form-group"><label>Bed Config</label><select class="form-control" id="eRoomBed">${beds.map(b=>`<option ${b===r.bedConfig?'selected':''}>${b}</option>`).join('')}</select></div></div>
+    <div class="form-row"><div class="form-group"><label>Max Adults</label><input type="number" class="form-control" id="eRoomMaxA" value="${r.maxAdults}"></div><div class="form-group"><label>Max Children</label><input type="number" class="form-control" id="eRoomMaxC" value="${r.maxChildren}"></div></div>
+    <div class="form-group"><label>Price Per Night ($)</label><input type="number" class="form-control" id="eRoomPrice" value="${r.price}" step="0.01"></div>
+    <div class="form-row"><div class="form-group"><label>Housekeeping Status</label><select class="form-control" id="eRoomHK">${hkStatuses.map(s=>`<option ${s===r.housekeepingStatus?'selected':''}>${s}</option>`).join('')}</select></div><div class="form-group"><label>Occupancy Status</label><select class="form-control" id="eRoomOcc">${occStatuses.map(s=>`<option ${s===r.occupancyStatus?'selected':''}>${s}</option>`).join('')}</select></div></div>
+    <div class="form-group"><label>Amenities</label><input type="text" class="form-control" id="eRoomAmen" value="${r.amenities||''}"></div>
+    <div class="form-group"><label>Maintenance Logs</label><textarea class="form-control" id="eRoomMaint" rows="2">${r.maintenanceLogs||''}</textarea></div></div>
     <div class="modal-footer"><button class="btn btn-danger" onclick="deleteRoom('${r.id}')">Delete</button><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateRoom('${r.id}')">Save</button></div>`);
 };
 window.updateRoom = function(id) {
   const r = rooms.find(x=>x.id===id); if(!r) return;
-  r.number = parseInt(document.getElementById('eRoomNum').value)||r.number; r.floor = parseInt(document.getElementById('eRoomFloor').value)||r.floor;
-  r.type = document.getElementById('eRoomType').value; r.price = parseFloat(document.getElementById('eRoomPrice').value)||r.price;
-  r.maxGuests = parseInt(document.getElementById('eRoomMax').value)||r.maxGuests; r.status = document.getElementById('eRoomStatus').value;
-  save('rooms',rooms); closeModal(); renderRooms(); toast('Room '+r.number+' updated');
+  r.roomNumber = document.getElementById('eRoomNum').value||r.roomNumber;
+  r.floorNumber = parseInt(document.getElementById('eRoomFloor').value)||r.floorNumber;
+  r.roomType = document.getElementById('eRoomType').value;
+  r.bedConfig = document.getElementById('eRoomBed').value;
+  r.maxAdults = parseInt(document.getElementById('eRoomMaxA').value)||r.maxAdults;
+  r.maxChildren = parseInt(document.getElementById('eRoomMaxC').value)||0;
+  r.price = parseFloat(document.getElementById('eRoomPrice').value)||r.price;
+  r.housekeepingStatus = document.getElementById('eRoomHK').value;
+  r.occupancyStatus = document.getElementById('eRoomOcc').value;
+  r.amenities = document.getElementById('eRoomAmen').value;
+  r.maintenanceLogs = document.getElementById('eRoomMaint').value;
+  save('rooms',rooms); logAudit('Update','Room','Updated room '+r.roomNumber); closeModal(); renderRooms(); toast('Room '+r.roomNumber+' updated');
 };
 window.deleteRoom = function(id) {
   if(!confirm('Delete this room?')) return;
-  rooms = rooms.filter(r=>r.id!==id); save('rooms',rooms); closeModal(); renderRooms(); renderDashboard(); toast('Room deleted');
+  const r = rooms.find(x=>x.id===id);
+  rooms = rooms.filter(x=>x.id!==id); save('rooms',rooms); logAudit('Delete','Room','Deleted room '+(r?r.roomNumber:id)); closeModal(); renderRooms(); renderDashboard(); toast('Room deleted');
 };
 
 // ===== BOOKINGS =====
 let bookingGrid;
 function renderBookings() {
-  const sorted = [...bookings].sort((a,b)=>a.checkin>b.checkin?-1:1);
+  const sorted = [...bookings].sort((a,b)=>a.checkinDate>b.checkinDate?-1:1);
   document.getElementById('page-bookings').innerHTML = `
     <div class="card"><div class="card-header"><h2>Bookings</h2></div><div class="card-body"><div id="bookingGrid"></div></div></div>`;
   bookingGrid = new XGrid('bookingGrid', {
     columns: [
+      {field:'bookingId',label:'Booking #',filterable:true,width:'95px'},
       {field:'guestName',label:'Guest',editable:true,filterable:true},
-      {field:'roomNumber',label:'Room',format:(v,r)=>v+' - '+r.roomType,filterable:true},
-      {field:'checkin',label:'Check In',format:v=>fmtDate(v),editable:true,editType:'date',filterable:true},
-      {field:'checkout',label:'Check Out',format:v=>fmtDate(v),editable:true,editType:'date',filterable:true},
-      {field:'status',label:'Status',format:v=>`<span class="status status-${v}">${v.replace('-',' ')}</span>`,editable:true,editType:'select',editOptions:['pending','reserved','checked-in','checked-out'],filterable:true},
+      {field:'roomNumber',label:'Room',format:(v,r)=>v+' ('+r.roomType+')',filterable:true},
+      {field:'checkinDate',label:'Check In',format:v=>fmtDate(v),editable:true,editType:'date',filterable:true},
+      {field:'checkoutDate',label:'Check Out',format:v=>fmtDate(v),editable:true,editType:'date',filterable:true},
+      {field:'numAdults',label:'Adults',editable:true,editType:'number',width:'60px'},
+      {field:'bookingSource',label:'Source',editable:true,editType:'select',editOptions:['Direct','Booking.com','Expedia','Walk-in'],filterable:true},
+      {field:'arrivalStatus',label:'Status',format:v=>{const cls=v==='Checked-in'?'checked-in':v==='Expected'?'pending':v==='Checked-out'?'checked-out':'maintenance';return `<span class="status status-${cls}">${v}</span>`;},editable:true,editType:'select',editOptions:['Expected','Checked-in','Checked-out','No-show'],filterable:true},
     ],
     data: sorted,
     onAdd: () => showAddBooking(),
-    onEdit: (row, field, val) => { const b = bookings.find(x=>x.id===row.id); if(b){b[field]=val;save('bookings',bookings);toast('Booking updated');} },
+    onEdit: (row, field, val) => { const b = bookings.find(x=>x.id===row.id); if(b){b[field]=val;save('bookings',bookings);logAudit('Update','Booking','Updated '+field+' on '+b.bookingId);toast('Booking updated');} },
     actions: [
       {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditBooking(id)},
-      {name:'checkin',label:'Check In',cls:'btn-primary',condition:r=>r.status==='pending'||r.status==='reserved',handler:id=>checkIn(id)},
-      {name:'checkout',label:'Check Out',cls:'btn-danger',condition:r=>r.status==='checked-in',handler:id=>checkOut(id)},
-      {name:'services',label:'🛎️',cls:'btn-warning',condition:r=>r.status==='checked-in',handler:id=>showOrderService(id)},
-      {name:'invoice',label:'Invoice',cls:'btn-outline',condition:r=>r.status==='checked-out',handler:id=>viewInvoice(id)},
+      {name:'checkin',label:'Check In',cls:'btn-primary',condition:r=>r.arrivalStatus==='Expected',handler:id=>checkIn(id)},
+      {name:'checkout',label:'Check Out',cls:'btn-danger',condition:r=>r.arrivalStatus==='Checked-in',handler:id=>checkOut(id)},
+      {name:'services',label:'🛎️',cls:'btn-warning',condition:r=>r.arrivalStatus==='Checked-in',handler:id=>showOrderService(id)},
+      {name:'invoice',label:'Invoice',cls:'btn-outline',condition:r=>r.arrivalStatus==='Checked-out',handler:id=>viewInvoice(id)},
       {name:'delete',label:'✕',cls:'btn-danger',handler:id=>deleteBooking(id)},
     ]
   });
 }
 window.showAddBooking = function() {
-  const avail = rooms.filter(r=>r.status==='available');
+  const avail = rooms.filter(r=>r.occupancyStatus==='Vacant' && r.housekeepingStatus!=='Out of Service');
   openModal(`<div class="modal-header"><h2>New Booking</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
-    <div class="modal-body"><div class="form-group"><label>Guest</label><input type="text" class="form-control" id="mBkGuest" placeholder="Enter guest name"></div>
-    <div class="form-group"><label>Room</label><select class="form-control" id="mBkRoom">${avail.length?avail.map(r=>`<option value="${r.id}">${r.number} - ${r.type} (${fmt$(r.price)}/night)</option>`).join(''):'<option disabled>No rooms available</option>'}</select></div>
-    <div class="form-row"><div class="form-group"><label>Check-in Date</label><input type="date" class="form-control" id="mBkIn" value="${today()}"></div><div class="form-group"><label>Check-out Date</label><input type="date" class="form-control" id="mBkOut"></div></div>
-    <div class="form-group"><label>Notes</label><textarea class="form-control" id="mBkNotes" rows="2" placeholder="Special requests..."></textarea></div></div>
+    <div class="modal-body">
+    <div class="form-group"><label>Guest Name</label><input type="text" class="form-control" id="mBkGuest" placeholder="Enter guest name"></div>
+    <div class="form-group"><label>Room</label><select class="form-control" id="mBkRoom">${avail.length?avail.map(r=>`<option value="${r.id}">${r.roomNumber} - ${r.roomType} (${fmt$(r.price)}/night)</option>`).join(''):'<option disabled>No rooms available</option>'}</select></div>
+    <div class="form-row"><div class="form-group"><label>Check-in Date</label><input type="date" class="form-control" id="mBkInD" value="${today()}"></div><div class="form-group"><label>Check-in Time</label><input type="time" class="form-control" id="mBkInT" value="14:00"></div></div>
+    <div class="form-row"><div class="form-group"><label>Check-out Date</label><input type="date" class="form-control" id="mBkOutD"></div><div class="form-group"><label>Check-out Time</label><input type="time" class="form-control" id="mBkOutT" value="12:00"></div></div>
+    <div class="form-row"><div class="form-group"><label>Adults</label><input type="number" class="form-control" id="mBkAdults" value="1" min="1"></div><div class="form-group"><label>Children</label><input type="number" class="form-control" id="mBkChildren" value="0" min="0"></div></div>
+    <div class="form-row"><div class="form-group"><label>Booking Source</label><select class="form-control" id="mBkSrc"><option>Direct</option><option>Booking.com</option><option>Expedia</option><option>Walk-in</option></select></div><div class="form-group"><label>Cancellation Policy</label><select class="form-control" id="mBkCancel"><option>Free cancellation</option><option>Non-refundable</option></select></div></div>
+    <div class="form-group"><label>Special Requests</label><textarea class="form-control" id="mBkReq" rows="2" placeholder="Special requests..."></textarea></div>
+    <div class="form-group"><label>Notes</label><textarea class="form-control" id="mBkNotes" rows="2" placeholder="Internal notes..."></textarea></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addBooking()">Create Booking</button></div>`);
 };
 window.addBooking = function() {
   const guestName = document.getElementById('mBkGuest').value.trim(); const rId = document.getElementById('mBkRoom').value;
-  const checkin = document.getElementById('mBkIn').value; const checkout = document.getElementById('mBkOut').value;
-  if(!guestName||!rId||!checkin||!checkout) { toast('Fill all fields'); return; }
-  if(checkout<=checkin) { toast('Check-out must be after check-in'); return; }
+  const checkinDate = document.getElementById('mBkInD').value; const checkoutDate = document.getElementById('mBkOutD').value;
+  if(!guestName||!rId||!checkinDate||!checkoutDate) { toast('Fill all required fields'); return; }
+  if(checkoutDate<=checkinDate) { toast('Check-out must be after check-in'); return; }
   const r = rooms.find(x=>x.id===rId); if(!r) return;
-  r.status = 'reserved'; save('rooms',rooms);
-  const g = guests.find(x=>(x.firstName+' '+x.lastName).toLowerCase()===guestName.toLowerCase());
-  bookings.push({id:genId(),guestId:g?g.id:'',guestName:guestName,roomId:r.id,roomNumber:r.number,roomType:r.type,checkin,checkout,status:'reserved',services:[],notes:document.getElementById('mBkNotes').value});
-  save('bookings',bookings); closeModal(); renderBookings(); toast('Booking created');
+  r.occupancyStatus = 'Reserved'; save('rooms',rooms);
+  const bkId = nextBookingId();
+  bookings.push({id:genId(),bookingId:bkId,guestName:guestName,roomId:r.id,roomNumber:r.roomNumber,roomType:r.roomType,checkinDate:checkinDate,checkinTime:document.getElementById('mBkInT').value||'14:00',checkoutDate:checkoutDate,checkoutTime:document.getElementById('mBkOutT').value||'12:00',numAdults:parseInt(document.getElementById('mBkAdults').value)||1,numChildren:parseInt(document.getElementById('mBkChildren').value)||0,bookingSource:document.getElementById('mBkSrc').value,cancellationPolicy:document.getElementById('mBkCancel').value,arrivalStatus:'Expected',specialRequests:document.getElementById('mBkReq').value,services:[],notes:document.getElementById('mBkNotes').value});
+  save('bookings',bookings); logAudit('Add','Booking','Created booking '+bkId+' for '+guestName); closeModal(); renderBookings(); toast('Booking '+bkId+' created');
 };
 window.checkIn = function(id) {
   const b = bookings.find(x=>x.id===id); if(!b) return;
-  b.status = 'checked-in'; const r = rooms.find(x=>x.id===b.roomId); if(r) { r.status = 'occupied'; save('rooms',rooms); }
-  const g = guests.find(x=>x.id===b.guestId); if(g) { g.visits = (g.visits||0)+1; save('guests',guests); }
-  save('bookings',bookings); renderBookings(); toast(b.guestName+' checked in to Room '+b.roomNumber);
+  b.arrivalStatus = 'Checked-in'; const r = rooms.find(x=>x.id===b.roomId); if(r) { r.occupancyStatus = 'Occupied'; save('rooms',rooms); }
+  save('bookings',bookings); logAudit('Check-in','Booking',b.guestName+' checked in to Room '+b.roomNumber); renderBookings(); toast(b.guestName+' checked in to Room '+b.roomNumber);
 };
 window.checkOut = function(id) {
   const b = bookings.find(x=>x.id===id); if(!b) return;
-  b.status = 'checked-out'; const r = rooms.find(x=>x.id===b.roomId); if(r) { r.status = 'available'; save('rooms',rooms); }
-  const nights = daysBetween(b.checkin, b.checkout); const roomCharge = (r?r.price:100)*nights;
-  const svcCharge = (b.services||[]).reduce((s,sv)=>s+sv.price,0);
-  invoices.push({id:genId(),bookingId:b.id,guestName:b.guestName,roomNumber:b.roomNumber,nights,roomCharge,serviceCharge:svcCharge,total:roomCharge+svcCharge,services:b.services||[],status:'pending',date:today()});
-  save('invoices',invoices); save('bookings',bookings); renderBookings(); toast(b.guestName+' checked out. Invoice generated.');
+  b.arrivalStatus = 'Checked-out'; const r = rooms.find(x=>x.id===b.roomId); if(r) { r.occupancyStatus = 'Vacant'; r.housekeepingStatus = 'Dirty'; save('rooms',rooms); }
+  const nights = daysBetween(b.checkinDate, b.checkoutDate); const roomPrice = r ? r.price : 100;
+  const subtotal = roomPrice * nights;
+  const svcCharges = (b.services||[]).reduce((s,sv)=>s+(parseFloat(sv.unitPrice)||0)*(parseInt(sv.quantity)||1),0);
+  const taxRate = 7;
+  const taxTotal = (subtotal + svcCharges) * taxRate / 100;
+  const grandTotal = subtotal + svcCharges + taxTotal;
+  const invNum = nextInvoiceNumber();
+  invoices.push({id:genId(),invoiceNumber:invNum,bookingId:b.bookingId,guestName:b.guestName,roomNumber:b.roomNumber,subtotal:subtotal,discountAmount:0,taxTotal:Math.round(taxTotal*100)/100,grandTotal:Math.round(grandTotal*100)/100,paymentStatus:'Unpaid',paymentTransactionId:'',currency:'USD',billingAddress:'',services:b.services||[],date:today()});
+  save('invoices',invoices); save('bookings',bookings); logAudit('Check-out','Booking',b.guestName+' checked out from Room '+b.roomNumber+'. Invoice '+invNum+' generated.'); renderBookings(); toast(b.guestName+' checked out. Invoice '+invNum+' generated.');
 };
 window.showOrderService = function(id) {
   const b = bookings.find(x=>x.id===id); if(!b) return;
   openModal(`<div class="modal-header"><h2>Order Service - ${b.guestName}</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
-    <div class="modal-body"><div class="form-group"><label>Select Service</label><select class="form-control" id="mSvcSelect">${services.map(s=>`<option value="${s.id}">${s.icon} ${s.name} - ${fmt$(s.price)}</option>`).join('')}</select></div>
+    <div class="modal-body"><div class="form-group"><label>Select Service</label><select class="form-control" id="mSvcSelect">${services.map(s=>`<option value="${s.id}">${s.icon} ${s.name} - ${fmt$(s.unitPrice)}</option>`).join('')}</select></div>
     <div class="form-group"><label>Quantity</label><input type="number" class="form-control" id="mSvcQty" value="1" min="1"></div>
     <h3 style="margin:1rem 0 0.5rem;font-size:0.95rem;">Ordered Services</h3>
-    <ul class="service-list" style="max-height:200px;overflow-y:auto;">${(b.services||[]).length?(b.services||[]).map((s,i)=>`<li class="service-item"><div class="service-left"><div class="service-icon">${s.icon||'🛎️'}</div><div><div class="service-name">${s.name} x${s.qty||1}</div></div></div><div class="service-price">${fmt$(s.price*(s.qty||1))}</div></li>`).join(''):'<li style="padding:1rem;text-align:center;color:var(--text-light);">No services ordered yet</li>'}</ul></div>
+    <ul class="service-list" style="max-height:200px;overflow-y:auto;">${(b.services||[]).length?(b.services||[]).map(s=>`<li class="service-item"><div class="service-left"><div class="service-icon">${s.icon||'🛎️'}</div><div><div class="service-name">${s.name} x${s.quantity||1}</div></div></div><div class="service-price">${fmt$((parseFloat(s.unitPrice)||0)*(parseInt(s.quantity)||1))}</div></li>`).join(''):'<li style="padding:1rem;text-align:center;color:var(--text-light);">No services ordered yet</li>'}</ul></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Close</button><button class="btn btn-primary" onclick="orderService('${b.id}')">Add Service</button></div>`);
 };
 window.orderService = function(bId) {
@@ -654,38 +753,52 @@ window.orderService = function(bId) {
   const sId = document.getElementById('mSvcSelect').value; const qty = parseInt(document.getElementById('mSvcQty').value)||1;
   const svc = services.find(s=>s.id===sId); if(!svc) return;
   if(!b.services) b.services = [];
-  b.services.push({name:svc.name,price:svc.price,icon:svc.icon,qty});
-  save('bookings',bookings); toast(svc.name+' added'); showOrderService(bId);
+  b.services.push({name:svc.name,unitPrice:svc.unitPrice,quantity:qty,icon:svc.icon,serviceCategory:svc.serviceCategory});
+  save('bookings',bookings); logAudit('Service','Booking','Added '+svc.name+' x'+qty+' to '+b.bookingId); toast(svc.name+' added'); showOrderService(bId);
 };
 window.showEditBooking = function(id) {
   const b = bookings.find(x=>x.id===id); if(!b) return;
-  const avail = rooms.filter(r=>r.status==='available'||r.id===b.roomId);
-  openModal(`<div class="modal-header"><h2>Edit Booking</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
-    <div class="modal-body"><div class="form-group"><label>Guest</label><select class="form-control" id="eBkGuest">${guests.map(g=>`<option value="${g.id}" ${g.id===b.guestId?'selected':''}>${g.firstName} ${g.lastName}</option>`).join('')}</select></div>
-    <div class="form-group"><label>Room</label><select class="form-control" id="eBkRoom">${avail.map(r=>`<option value="${r.id}" ${r.id===b.roomId?'selected':''}>${r.number} - ${r.type} (${fmt$(r.price)}/night)</option>`).join('')}</select></div>
-    <div class="form-row"><div class="form-group"><label>Check-in</label><input type="date" class="form-control" id="eBkIn" value="${b.checkin}"></div><div class="form-group"><label>Check-out</label><input type="date" class="form-control" id="eBkOut" value="${b.checkout}"></div></div>
-    <div class="form-group"><label>Status</label><select class="form-control" id="eBkStatus">${['pending','reserved','checked-in','checked-out'].map(s=>`<option value="${s}" ${s===b.status?'selected':''}>${s.replace('-',' ')}</option>`).join('')}</select></div>
+  const avail = rooms.filter(r=>r.occupancyStatus==='Vacant'||r.id===b.roomId);
+  openModal(`<div class="modal-header"><h2>Edit Booking ${b.bookingId}</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body">
+    <div class="form-group"><label>Guest Name</label><input type="text" class="form-control" id="eBkGuest" value="${b.guestName}"></div>
+    <div class="form-group"><label>Room</label><select class="form-control" id="eBkRoom">${avail.map(r=>`<option value="${r.id}" ${r.id===b.roomId?'selected':''}>${r.roomNumber} - ${r.roomType} (${fmt$(r.price)}/night)</option>`).join('')}</select></div>
+    <div class="form-row"><div class="form-group"><label>Check-in Date</label><input type="date" class="form-control" id="eBkInD" value="${b.checkinDate}"></div><div class="form-group"><label>Check-in Time</label><input type="time" class="form-control" id="eBkInT" value="${b.checkinTime||'14:00'}"></div></div>
+    <div class="form-row"><div class="form-group"><label>Check-out Date</label><input type="date" class="form-control" id="eBkOutD" value="${b.checkoutDate}"></div><div class="form-group"><label>Check-out Time</label><input type="time" class="form-control" id="eBkOutT" value="${b.checkoutTime||'12:00'}"></div></div>
+    <div class="form-row"><div class="form-group"><label>Adults</label><input type="number" class="form-control" id="eBkAdults" value="${b.numAdults||1}" min="1"></div><div class="form-group"><label>Children</label><input type="number" class="form-control" id="eBkChildren" value="${b.numChildren||0}" min="0"></div></div>
+    <div class="form-row"><div class="form-group"><label>Booking Source</label><select class="form-control" id="eBkSrc">${['Direct','Booking.com','Expedia','Walk-in'].map(s=>`<option ${s===b.bookingSource?'selected':''}>${s}</option>`).join('')}</select></div><div class="form-group"><label>Cancellation Policy</label><select class="form-control" id="eBkCancel">${['Free cancellation','Non-refundable'].map(s=>`<option ${s===b.cancellationPolicy?'selected':''}>${s}</option>`).join('')}</select></div></div>
+    <div class="form-group"><label>Arrival Status</label><select class="form-control" id="eBkStatus">${['Expected','Checked-in','Checked-out','No-show'].map(s=>`<option ${s===b.arrivalStatus?'selected':''}>${s}</option>`).join('')}</select></div>
+    <div class="form-group"><label>Special Requests</label><textarea class="form-control" id="eBkReq" rows="2">${b.specialRequests||''}</textarea></div>
     <div class="form-group"><label>Notes</label><textarea class="form-control" id="eBkNotes" rows="2">${b.notes||''}</textarea></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateBooking('${b.id}')">Save</button></div>`);
 };
 window.updateBooking = function(id) {
   const b = bookings.find(x=>x.id===id); if(!b) return;
-  const gId = document.getElementById('eBkGuest').value; const rId = document.getElementById('eBkRoom').value;
-  const g = guests.find(x=>x.id===gId); const r = rooms.find(x=>x.id===rId);
-  if(g) { b.guestId = g.id; b.guestName = g.firstName+' '+g.lastName; }
-  if(r) { b.roomId = r.id; b.roomNumber = r.number; b.roomType = r.type; }
-  b.checkin = document.getElementById('eBkIn').value||b.checkin; b.checkout = document.getElementById('eBkOut').value||b.checkout;
-  b.status = document.getElementById('eBkStatus').value; b.notes = document.getElementById('eBkNotes').value;
-  save('bookings',bookings); closeModal(); renderBookings(); toast('Booking updated');
+  b.guestName = document.getElementById('eBkGuest').value||b.guestName;
+  const rId = document.getElementById('eBkRoom').value; const r = rooms.find(x=>x.id===rId);
+  if(r) { b.roomId = r.id; b.roomNumber = r.roomNumber; b.roomType = r.roomType; }
+  b.checkinDate = document.getElementById('eBkInD').value||b.checkinDate;
+  b.checkinTime = document.getElementById('eBkInT').value||b.checkinTime;
+  b.checkoutDate = document.getElementById('eBkOutD').value||b.checkoutDate;
+  b.checkoutTime = document.getElementById('eBkOutT').value||b.checkoutTime;
+  b.numAdults = parseInt(document.getElementById('eBkAdults').value)||1;
+  b.numChildren = parseInt(document.getElementById('eBkChildren').value)||0;
+  b.bookingSource = document.getElementById('eBkSrc').value;
+  b.cancellationPolicy = document.getElementById('eBkCancel').value;
+  b.arrivalStatus = document.getElementById('eBkStatus').value;
+  b.specialRequests = document.getElementById('eBkReq').value;
+  b.notes = document.getElementById('eBkNotes').value;
+  save('bookings',bookings); logAudit('Update','Booking','Updated booking '+b.bookingId); closeModal(); renderBookings(); toast('Booking '+b.bookingId+' updated');
 };
 window.deleteBooking = function(id) {
   if(!confirm('Delete this booking?')) return;
   const b = bookings.find(x=>x.id===id);
-  if(b && (b.status==='reserved'||b.status==='pending')) { const r = rooms.find(x=>x.id===b.roomId); if(r && r.status==='reserved') { r.status='available'; save('rooms',rooms); } }
-  bookings = bookings.filter(x=>x.id!==id); save('bookings',bookings); renderBookings(); toast('Booking deleted');
+  if(b && (b.arrivalStatus==='Expected')) { const r = rooms.find(x=>x.id===b.roomId); if(r && r.occupancyStatus==='Reserved') { r.occupancyStatus='Vacant'; save('rooms',rooms); } }
+  bookings = bookings.filter(x=>x.id!==id); save('bookings',bookings); logAudit('Delete','Booking','Deleted booking '+(b?b.bookingId:id)); renderBookings(); toast('Booking deleted');
 };
 window.viewInvoice = function(bId) {
-  const inv = invoices.find(i=>i.bookingId===bId);
+  const b = bookings.find(x=>x.id===bId);
+  const inv = b ? invoices.find(i=>i.bookingId===b.bookingId) : null;
   if(inv) { document.querySelector('[data-page="invoices"]').click(); }
   else toast('No invoice found');
 };
@@ -699,14 +812,17 @@ function renderGuests() {
     columns: [
       {field:'firstName',label:'First Name',editable:true,filterable:true},
       {field:'lastName',label:'Last Name',editable:true,filterable:true},
+      {field:'passportId',label:'Passport/ID',editable:true,filterable:true},
+      {field:'nationality',label:'Nationality',editable:true,filterable:true},
       {field:'email',label:'Email',editable:true,filterable:true},
       {field:'phone',label:'Phone',editable:true,filterable:true},
-      {field:'idDoc',label:'ID/Passport',editable:true,filterable:true},
-      {field:'visits',label:'Visits',editable:true,editType:'number',width:'70px'},
+      {field:'paymentMethod',label:'Payment',editable:true,editType:'select',editOptions:['Credit Card','Cash','Bank Transfer'],filterable:true},
+      {field:'blacklist',label:'Blacklist',format:v=>v?'<span class="status status-maintenance">Yes</span>':'<span class="status status-active">No</span>',editable:true,editType:'select',editOptions:['0','1'],width:'80px'},
+      {field:'visits',label:'Visits',editable:true,editType:'number',width:'65px'},
     ],
     data: guests,
     onAdd: () => showAddGuest(),
-    onEdit: (row, field, val) => { const g = guests.find(x=>x.id===row.id); if(g){g[field]=val;save('guests',guests);toast('Guest updated');} },
+    onEdit: (row, field, val) => { const g = guests.find(x=>x.id===row.id); if(g){if(field==='blacklist')val=parseInt(val)||0;g[field]=val;save('guests',guests);logAudit('Update','Guest','Updated '+g.firstName+' '+g.lastName);toast('Guest updated');} },
     actions: [
       {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditGuest(id)},
       {name:'delete',label:'✕',cls:'btn-danger',handler:id=>deleteGuest(id)},
@@ -715,32 +831,49 @@ function renderGuests() {
 }
 window.showAddGuest = function() {
   openModal(`<div class="modal-header"><h2>Add Guest</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
-    <div class="modal-body"><div class="form-row"><div class="form-group"><label>First Name</label><input type="text" class="form-control" id="mGFirst"></div><div class="form-group"><label>Last Name</label><input type="text" class="form-control" id="mGLast"></div></div>
+    <div class="modal-body">
+    <div class="form-row"><div class="form-group"><label>First Name</label><input type="text" class="form-control" id="mGFirst"></div><div class="form-group"><label>Last Name</label><input type="text" class="form-control" id="mGLast"></div></div>
+    <div class="form-row"><div class="form-group"><label>Passport/ID</label><input type="text" class="form-control" id="mGPassport"></div><div class="form-group"><label>Nationality</label><input type="text" class="form-control" id="mGNat"></div></div>
+    <div class="form-row"><div class="form-group"><label>Date of Birth</label><input type="date" class="form-control" id="mGDob"></div><div class="form-group"><label>Phone</label><input type="tel" class="form-control" id="mGPhone"></div></div>
     <div class="form-group"><label>Email</label><input type="email" class="form-control" id="mGEmail"></div>
-    <div class="form-row"><div class="form-group"><label>Phone</label><input type="tel" class="form-control" id="mGPhone"></div><div class="form-group"><label>ID / Passport</label><input type="text" class="form-control" id="mGId"></div></div></div>
+    <div class="form-group"><label>Payment Method</label><select class="form-control" id="mGPay"><option>Credit Card</option><option>Cash</option><option>Bank Transfer</option></select></div>
+    <div class="form-group"><label>Guest Notes</label><textarea class="form-control" id="mGNotes" rows="2"></textarea></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addGuest()">Add Guest</button></div>`);
 };
 window.addGuest = function() {
   const fn = document.getElementById('mGFirst').value.trim(), ln = document.getElementById('mGLast').value.trim();
   if(!fn||!ln) { toast('Enter first and last name'); return; }
-  guests.push({id:genId(),firstName:fn,lastName:ln,email:document.getElementById('mGEmail').value,phone:document.getElementById('mGPhone').value,idDoc:document.getElementById('mGId').value,visits:0});
-  save('guests',guests); closeModal(); renderGuests(); toast(fn+' '+ln+' added');
+  guests.push({id:genId(),firstName:fn,lastName:ln,passportId:document.getElementById('mGPassport').value,nationality:document.getElementById('mGNat').value,dob:document.getElementById('mGDob').value,email:document.getElementById('mGEmail').value,phone:document.getElementById('mGPhone').value,paymentMethod:document.getElementById('mGPay').value,guestNotes:document.getElementById('mGNotes').value,blacklist:0,visits:0});
+  save('guests',guests); logAudit('Add','Guest','Added guest '+fn+' '+ln); closeModal(); renderGuests(); toast(fn+' '+ln+' added');
 };
 window.showEditGuest = function(id) {
   const g = guests.find(x=>x.id===id); if(!g) return;
   openModal(`<div class="modal-header"><h2>Edit Guest</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
-    <div class="modal-body"><div class="form-row"><div class="form-group"><label>First Name</label><input type="text" class="form-control" id="eGFirst" value="${g.firstName}"></div><div class="form-group"><label>Last Name</label><input type="text" class="form-control" id="eGLast" value="${g.lastName}"></div></div>
-    <div class="form-group"><label>Email</label><input type="email" class="form-control" id="eGEmail" value="${g.email}"></div>
-    <div class="form-row"><div class="form-group"><label>Phone</label><input type="tel" class="form-control" id="eGPhone" value="${g.phone}"></div><div class="form-group"><label>ID / Passport</label><input type="text" class="form-control" id="eGId" value="${g.idDoc}"></div></div></div>
+    <div class="modal-body">
+    <div class="form-row"><div class="form-group"><label>First Name</label><input type="text" class="form-control" id="eGFirst" value="${g.firstName}"></div><div class="form-group"><label>Last Name</label><input type="text" class="form-control" id="eGLast" value="${g.lastName}"></div></div>
+    <div class="form-row"><div class="form-group"><label>Passport/ID</label><input type="text" class="form-control" id="eGPassport" value="${g.passportId||''}"></div><div class="form-group"><label>Nationality</label><input type="text" class="form-control" id="eGNat" value="${g.nationality||''}"></div></div>
+    <div class="form-row"><div class="form-group"><label>Date of Birth</label><input type="date" class="form-control" id="eGDob" value="${g.dob||''}"></div><div class="form-group"><label>Phone</label><input type="tel" class="form-control" id="eGPhone" value="${g.phone||''}"></div></div>
+    <div class="form-group"><label>Email</label><input type="email" class="form-control" id="eGEmail" value="${g.email||''}"></div>
+    <div class="form-group"><label>Payment Method</label><select class="form-control" id="eGPay">${['Credit Card','Cash','Bank Transfer'].map(p=>`<option ${p===g.paymentMethod?'selected':''}>${p}</option>`).join('')}</select></div>
+    <div class="form-group"><label>Blacklist</label><select class="form-control" id="eGBL"><option value="0" ${!g.blacklist?'selected':''}>No</option><option value="1" ${g.blacklist?'selected':''}>Yes</option></select></div>
+    <div class="form-group"><label>Guest Notes</label><textarea class="form-control" id="eGNotes" rows="2">${g.guestNotes||''}</textarea></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateGuest('${g.id}')">Save</button></div>`);
 };
 window.updateGuest = function(id) {
   const g = guests.find(x=>x.id===id); if(!g) return;
   g.firstName = document.getElementById('eGFirst').value||g.firstName; g.lastName = document.getElementById('eGLast').value||g.lastName;
-  g.email = document.getElementById('eGEmail').value; g.phone = document.getElementById('eGPhone').value; g.idDoc = document.getElementById('eGId').value;
-  save('guests',guests); closeModal(); renderGuests(); toast('Guest updated');
+  g.passportId = document.getElementById('eGPassport').value; g.nationality = document.getElementById('eGNat').value;
+  g.dob = document.getElementById('eGDob').value; g.phone = document.getElementById('eGPhone').value;
+  g.email = document.getElementById('eGEmail').value; g.paymentMethod = document.getElementById('eGPay').value;
+  g.blacklist = parseInt(document.getElementById('eGBL').value)||0;
+  g.guestNotes = document.getElementById('eGNotes').value;
+  save('guests',guests); logAudit('Update','Guest','Updated guest '+g.firstName+' '+g.lastName); closeModal(); renderGuests(); toast('Guest updated');
 };
-window.deleteGuest = function(id) { if(!confirm('Delete this guest?')) return; guests = guests.filter(g=>g.id!==id); save('guests',guests); renderGuests(); toast('Guest deleted'); };
+window.deleteGuest = function(id) {
+  if(!confirm('Delete this guest?')) return;
+  const g = guests.find(x=>x.id===id);
+  guests = guests.filter(x=>x.id!==id); save('guests',guests); logAudit('Delete','Guest','Deleted guest '+(g?g.firstName+' '+g.lastName:id)); renderGuests(); toast('Guest deleted');
+};
 
 // ===== SERVICES =====
 let serviceGrid;
@@ -749,14 +882,16 @@ function renderServices() {
     <div class="card"><div class="card-header"><h2>Hotel Services</h2></div><div class="card-body"><div id="serviceGrid"></div></div></div>`;
   serviceGrid = new XGrid('serviceGrid', {
     columns: [
-      {field:'icon',label:'Icon',editable:true,width:'60px',filterable:false},
+      {field:'icon',label:'Icon',editable:true,width:'55px',filterable:false},
       {field:'name',label:'Service Name',editable:true,filterable:true},
-      {field:'category',label:'Category',editable:true,filterable:true},
-      {field:'price',label:'Price',format:v=>fmt$(v),editable:true,editType:'number',filterable:true},
+      {field:'serviceCategory',label:'Category',editable:true,editType:'select',editOptions:['Room Service','Laundry','Airport Transfer','Mini-bar','Spa','Pool'],filterable:true},
+      {field:'unitPrice',label:'Unit Price',format:v=>fmt$(v),editable:true,editType:'number',filterable:true},
+      {field:'taxRate',label:'Tax %',editable:true,editType:'number',width:'65px'},
+      {field:'quantity',label:'Default Qty',editable:true,editType:'number',width:'80px'},
     ],
     data: services,
     onAdd: () => showAddService(),
-    onEdit: (row, field, val) => { const s = services.find(x=>x.id===row.id); if(s){s[field]=val;save('services',services);toast(s.name+' updated');} },
+    onEdit: (row, field, val) => { const s = services.find(x=>x.id===row.id); if(s){s[field]=val;save('services',services);logAudit('Update','Service','Updated '+s.name);toast(s.name+' updated');} },
     actions: [
       {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditService(id)},
       {name:'delete',label:'✕',cls:'btn-danger',handler:id=>deleteService(id)},
@@ -765,130 +900,167 @@ function renderServices() {
 }
 window.showAddService = function() {
   openModal(`<div class="modal-header"><h2>Add Service</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
-    <div class="modal-body"><div class="form-group"><label>Icon (emoji)</label><input type="text" class="form-control" id="mSIcon" value="🛎️" maxlength="4"></div>
-    <div class="form-group"><label>Name</label><input type="text" class="form-control" id="mSName"></div>
-    <div class="form-row"><div class="form-group"><label>Category</label><input type="text" class="form-control" id="mSCat" placeholder="e.g. Food & Beverage"></div><div class="form-group"><label>Price ($)</label><input type="number" class="form-control" id="mSPrice" step="0.01"></div></div></div>
+    <div class="modal-body">
+    <div class="form-row"><div class="form-group"><label>Icon (emoji)</label><input type="text" class="form-control" id="mSIcon" value="🛎️" maxlength="4"></div><div class="form-group"><label>Service Name</label><input type="text" class="form-control" id="mSName"></div></div>
+    <div class="form-row"><div class="form-group"><label>Category</label><select class="form-control" id="mSCat"><option>Room Service</option><option>Laundry</option><option>Airport Transfer</option><option>Mini-bar</option><option>Spa</option><option>Pool</option></select></div><div class="form-group"><label>Unit Price ($)</label><input type="number" class="form-control" id="mSPrice" step="0.01"></div></div>
+    <div class="form-row"><div class="form-group"><label>Tax Rate (%)</label><input type="number" class="form-control" id="mSTax" value="7" step="0.1"></div><div class="form-group"><label>Default Quantity</label><input type="number" class="form-control" id="mSQty" value="1" min="1"></div></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addService()">Add Service</button></div>`);
 };
 window.addService = function() {
   const name = document.getElementById('mSName').value.trim(); if(!name) { toast('Enter service name'); return; }
-  services.push({id:genId(),name,category:document.getElementById('mSCat').value||'General',price:parseFloat(document.getElementById('mSPrice').value)||0,icon:document.getElementById('mSIcon').value||'🛎️'});
-  save('services',services); closeModal(); renderServices(); toast(name+' added');
+  services.push({id:genId(),serviceCategory:document.getElementById('mSCat').value,name:name,unitPrice:parseFloat(document.getElementById('mSPrice').value)||0,quantity:parseInt(document.getElementById('mSQty').value)||1,taxRate:parseFloat(document.getElementById('mSTax').value)||7,serviceDateTime:'',staffId:'',icon:document.getElementById('mSIcon').value||'🛎️'});
+  save('services',services); logAudit('Add','Service','Added service '+name); closeModal(); renderServices(); toast(name+' added');
 };
 window.showEditService = function(id) {
   const s = services.find(x=>x.id===id); if(!s) return;
   openModal(`<div class="modal-header"><h2>Edit Service</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
-    <div class="modal-body"><div class="form-group"><label>Icon</label><input type="text" class="form-control" id="eSIcon" value="${s.icon}" maxlength="4"></div>
-    <div class="form-group"><label>Name</label><input type="text" class="form-control" id="eSName" value="${s.name}"></div>
-    <div class="form-row"><div class="form-group"><label>Category</label><input type="text" class="form-control" id="eSCat" value="${s.category}"></div><div class="form-group"><label>Price ($)</label><input type="number" class="form-control" id="eSPrice" value="${s.price}" step="0.01"></div></div></div>
+    <div class="modal-body">
+    <div class="form-row"><div class="form-group"><label>Icon</label><input type="text" class="form-control" id="eSIcon" value="${s.icon}" maxlength="4"></div><div class="form-group"><label>Service Name</label><input type="text" class="form-control" id="eSName" value="${s.name}"></div></div>
+    <div class="form-row"><div class="form-group"><label>Category</label><select class="form-control" id="eSCat">${['Room Service','Laundry','Airport Transfer','Mini-bar','Spa','Pool'].map(c=>`<option ${c===s.serviceCategory?'selected':''}>${c}</option>`).join('')}</select></div><div class="form-group"><label>Unit Price ($)</label><input type="number" class="form-control" id="eSPrice" value="${s.unitPrice}" step="0.01"></div></div>
+    <div class="form-row"><div class="form-group"><label>Tax Rate (%)</label><input type="number" class="form-control" id="eSTax" value="${s.taxRate}" step="0.1"></div><div class="form-group"><label>Default Quantity</label><input type="number" class="form-control" id="eSQty" value="${s.quantity||1}" min="1"></div></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateService('${s.id}')">Save</button></div>`);
 };
 window.updateService = function(id) {
   const s = services.find(x=>x.id===id); if(!s) return;
-  s.name = document.getElementById('eSName').value||s.name; s.category = document.getElementById('eSCat').value||s.category;
-  s.price = parseFloat(document.getElementById('eSPrice').value)||s.price; s.icon = document.getElementById('eSIcon').value||s.icon;
-  save('services',services); closeModal(); renderServices(); toast(s.name+' updated');
+  s.name = document.getElementById('eSName').value||s.name; s.serviceCategory = document.getElementById('eSCat').value;
+  s.unitPrice = parseFloat(document.getElementById('eSPrice').value)||s.unitPrice; s.icon = document.getElementById('eSIcon').value||s.icon;
+  s.taxRate = parseFloat(document.getElementById('eSTax').value)||s.taxRate; s.quantity = parseInt(document.getElementById('eSQty').value)||1;
+  save('services',services); logAudit('Update','Service','Updated service '+s.name); closeModal(); renderServices(); toast(s.name+' updated');
 };
-window.deleteService = function(id) { if(!confirm('Delete?')) return; services = services.filter(s=>s.id!==id); save('services',services); renderServices(); toast('Service deleted'); };
+window.deleteService = function(id) { if(!confirm('Delete?')) return; const s=services.find(x=>x.id===id); services = services.filter(x=>x.id!==id); save('services',services); logAudit('Delete','Service','Deleted service '+(s?s.name:id)); renderServices(); toast('Service deleted'); };
 
 // ===== INVOICES =====
 let invoiceGrid;
 function renderInvoices() {
-  const invData = invoices.map((inv,i) => ({...inv, invNumber:'INV-'+String(2001+i).padStart(4,'0')}));
   document.getElementById('page-invoices').innerHTML = `
     <div class="card"><div class="card-header"><h2>Invoices</h2></div><div class="card-body"><div id="invoiceGrid"></div></div></div>`;
   invoiceGrid = new XGrid('invoiceGrid', {
     columns: [
-      {field:'invNumber',label:'Invoice #',filterable:true,width:'100px'},
+      {field:'invoiceNumber',label:'Invoice #',filterable:true,width:'100px'},
       {field:'date',label:'Date',format:v=>fmtDate(v),editable:true,editType:'date',filterable:true},
       {field:'guestName',label:'Guest',editable:true,filterable:true},
       {field:'roomNumber',label:'Room',editable:true,filterable:true,width:'70px'},
-      {field:'nights',label:'Nights',editable:true,editType:'number',width:'60px'},
-      {field:'roomCharge',label:'Room $',format:v=>fmt$(v),editable:true,editType:'number'},
-      {field:'serviceCharge',label:'Services $',format:v=>fmt$(v),editable:true,editType:'number'},
-      {field:'total',label:'Total',format:v=>'<strong>'+fmt$(v)+'</strong>'},
-      {field:'status',label:'Status',format:v=>`<span class="status status-${v}">${v==='paid'?'Paid':'Pending'}</span>`,editable:true,editType:'select',editOptions:['pending','paid'],filterable:true},
+      {field:'subtotal',label:'Subtotal',format:v=>fmt$(v),editable:true,editType:'number'},
+      {field:'discountAmount',label:'Discount',format:v=>fmt$(v),editable:true,editType:'number'},
+      {field:'taxTotal',label:'Tax',format:v=>fmt$(v),editable:true,editType:'number'},
+      {field:'grandTotal',label:'Grand Total',format:v=>'<strong>'+fmt$(v)+'</strong>'},
+      {field:'paymentStatus',label:'Status',format:v=>{const cls=v==='Fully Paid'?'paid':v==='Partially Paid'?'pending':'maintenance';return `<span class="status status-${cls}">${v}</span>`;},editable:true,editType:'select',editOptions:['Unpaid','Partially Paid','Fully Paid'],filterable:true},
+      {field:'currency',label:'Currency',editable:true,editType:'select',editOptions:['THB','USD','EUR'],width:'75px'},
     ],
-    data: invData,
+    data: invoices,
     onAdd: () => showAddInvoice(),
-    onEdit: (row, field, val) => { const inv = invoices.find(x=>x.id===row.id); if(inv){inv[field]=val; if(field==='roomCharge'||field==='serviceCharge'||field==='nights'){inv.total=(parseFloat(inv.roomCharge)||0)+(parseFloat(inv.serviceCharge)||0);} save('invoices',invoices);toast('Invoice updated');renderInvoices();} },
+    onEdit: (row, field, val) => {
+      const inv = invoices.find(x=>x.id===row.id); if(!inv) return;
+      inv[field]=val;
+      if(field==='subtotal'||field==='discountAmount'||field==='taxTotal'){
+        inv.grandTotal = (parseFloat(inv.subtotal)||0) - (parseFloat(inv.discountAmount)||0) + (parseFloat(inv.taxTotal)||0);
+      }
+      save('invoices',invoices); logAudit('Update','Invoice','Updated '+inv.invoiceNumber); toast('Invoice updated'); renderInvoices();
+    },
     actions: [
-      {name:'pay',label:'Pay',cls:'btn-success',condition:r=>r.status!=='paid',handler:id=>{ payInvoice(id); renderInvoices(); }},
+      {name:'pay',label:'Pay',cls:'btn-success',condition:r=>r.paymentStatus!=='Fully Paid',handler:id=>{ payInvoice(id); renderInvoices(); }},
       {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditInvoice(id)},
       {name:'view',label:'View',cls:'btn-outline',handler:id=>showInvoiceDetail(id)},
       {name:'delete',label:'✕',cls:'btn-danger',handler:id=>deleteInvoice(id)},
     ]
   });
 }
-window.payInvoice = function(id) { const inv = invoices.find(i=>i.id===id); if(inv) { inv.status='paid'; save('invoices',invoices); renderInvoices(); toast('Invoice marked as paid'); } };
-window.deleteInvoice = function(id) { if(!confirm('Delete this invoice?')) return; invoices = invoices.filter(i=>i.id!==id); save('invoices',invoices); renderInvoices(); toast('Invoice deleted'); };
+window.payInvoice = function(id) { const inv = invoices.find(i=>i.id===id); if(inv) { inv.paymentStatus='Fully Paid'; save('invoices',invoices); logAudit('Payment','Invoice',inv.invoiceNumber+' marked as Fully Paid'); renderInvoices(); toast('Invoice marked as paid'); } };
+window.deleteInvoice = function(id) { if(!confirm('Delete this invoice?')) return; const inv=invoices.find(i=>i.id===id); invoices = invoices.filter(i=>i.id!==id); save('invoices',invoices); logAudit('Delete','Invoice','Deleted '+(inv?inv.invoiceNumber:id)); renderInvoices(); toast('Invoice deleted'); };
 window.showAddInvoice = function() {
-  openModal(`<div class="modal-header"><h2>Add Invoice</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+  const invNum = nextInvoiceNumber();
+  openModal(`<div class="modal-header"><h2>Add Invoice (${invNum})</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
-    <div class="form-group"><label>Guest Name</label><select class="form-control" id="mInvGuest">${guests.map(g=>`<option value="${g.firstName} ${g.lastName}">${g.firstName} ${g.lastName}</option>`).join('')}</select></div>
-    <div class="form-row"><div class="form-group"><label>Room Number</label><input type="text" class="form-control" id="mInvRoom" placeholder="e.g. 201"></div><div class="form-group"><label>Date</label><input type="date" class="form-control" id="mInvDate" value="${today()}"></div></div>
-    <div class="form-row"><div class="form-group"><label>Nights</label><input type="number" class="form-control" id="mInvNights" value="1" min="1"></div><div class="form-group"><label>Room Charge ($)</label><input type="number" class="form-control" id="mInvRoom$" step="0.01" placeholder="0.00"></div></div>
-    <div class="form-row"><div class="form-group"><label>Service Charge ($)</label><input type="number" class="form-control" id="mInvSvc$" step="0.01" value="0"></div><div class="form-group"><label>Status</label><select class="form-control" id="mInvStatus"><option value="pending">Pending</option><option value="paid">Paid</option></select></div></div></div>
+    <div class="form-row"><div class="form-group"><label>Guest Name</label><input type="text" class="form-control" id="mInvGuest" placeholder="Enter guest name"></div><div class="form-group"><label>Room Number</label><input type="text" class="form-control" id="mInvRoom" placeholder="e.g. 201"></div></div>
+    <div class="form-row"><div class="form-group"><label>Date</label><input type="date" class="form-control" id="mInvDate" value="${today()}"></div><div class="form-group"><label>Currency</label><select class="form-control" id="mInvCur"><option>USD</option><option>THB</option><option>EUR</option></select></div></div>
+    <div class="form-row"><div class="form-group"><label>Subtotal</label><input type="number" class="form-control" id="mInvSub" step="0.01" placeholder="0.00"></div><div class="form-group"><label>Discount</label><input type="number" class="form-control" id="mInvDisc" step="0.01" value="0"></div></div>
+    <div class="form-row"><div class="form-group"><label>Tax Total</label><input type="number" class="form-control" id="mInvTax" step="0.01" value="0"></div><div class="form-group"><label>Payment Status</label><select class="form-control" id="mInvStatus"><option>Unpaid</option><option>Partially Paid</option><option>Fully Paid</option></select></div></div>
+    <div class="form-group"><label>Transaction ID</label><input type="text" class="form-control" id="mInvTxn" placeholder="Optional"></div>
+    <div class="form-group"><label>Billing Address</label><input type="text" class="form-control" id="mInvAddr" placeholder="Optional"></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addInvoice()">Add Invoice</button></div>`);
 };
 window.addInvoice = function() {
-  const guestName = document.getElementById('mInvGuest').value; const roomNumber = document.getElementById('mInvRoom').value;
+  const guestName = document.getElementById('mInvGuest').value.trim(); const roomNumber = document.getElementById('mInvRoom').value.trim();
   if(!guestName||!roomNumber) { toast('Fill guest and room'); return; }
-  const nights = parseInt(document.getElementById('mInvNights').value)||1; const roomCharge = parseFloat(document.getElementById('mInvRoom$').value)||0;
-  const serviceCharge = parseFloat(document.getElementById('mInvSvc$').value)||0;
-  invoices.push({id:genId(),bookingId:null,guestName,roomNumber,nights,roomCharge,serviceCharge,total:roomCharge+serviceCharge,services:[],status:document.getElementById('mInvStatus').value,date:document.getElementById('mInvDate').value||today()});
-  save('invoices',invoices); closeModal(); renderInvoices(); toast('Invoice added');
+  const sub = parseFloat(document.getElementById('mInvSub').value)||0;
+  const disc = parseFloat(document.getElementById('mInvDisc').value)||0;
+  const tax = parseFloat(document.getElementById('mInvTax').value)||0;
+  const grand = sub - disc + tax;
+  const invNum = nextInvoiceNumber();
+  invoices.push({id:genId(),invoiceNumber:invNum,bookingId:'',guestName:guestName,roomNumber:roomNumber,subtotal:sub,discountAmount:disc,taxTotal:tax,grandTotal:Math.round(grand*100)/100,paymentStatus:document.getElementById('mInvStatus').value,paymentTransactionId:document.getElementById('mInvTxn').value,currency:document.getElementById('mInvCur').value,billingAddress:document.getElementById('mInvAddr').value,services:[],date:document.getElementById('mInvDate').value||today()});
+  save('invoices',invoices); logAudit('Add','Invoice','Created '+invNum); closeModal(); renderInvoices(); toast('Invoice '+invNum+' added');
 };
 window.showEditInvoice = function(id) {
   const inv = invoices.find(i=>i.id===id); if(!inv) return;
-  openModal(`<div class="modal-header"><h2>Edit Invoice</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+  openModal(`<div class="modal-header"><h2>Edit ${inv.invoiceNumber}</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
-    <div class="form-group"><label>Guest Name</label><input type="text" class="form-control" id="eInvGuest" value="${inv.guestName}"></div>
-    <div class="form-row"><div class="form-group"><label>Room Number</label><input type="text" class="form-control" id="eInvRoom" value="${inv.roomNumber}"></div><div class="form-group"><label>Date</label><input type="date" class="form-control" id="eInvDate" value="${inv.date}"></div></div>
-    <div class="form-row"><div class="form-group"><label>Nights</label><input type="number" class="form-control" id="eInvNights" value="${inv.nights}" min="1"></div><div class="form-group"><label>Room Charge ($)</label><input type="number" class="form-control" id="eInvRoom$" step="0.01" value="${inv.roomCharge}"></div></div>
-    <div class="form-row"><div class="form-group"><label>Service Charge ($)</label><input type="number" class="form-control" id="eInvSvc$" step="0.01" value="${inv.serviceCharge}"></div><div class="form-group"><label>Status</label><select class="form-control" id="eInvStatus"><option value="pending" ${inv.status==='pending'?'selected':''}>Pending</option><option value="paid" ${inv.status==='paid'?'selected':''}>Paid</option></select></div></div></div>
+    <div class="form-row"><div class="form-group"><label>Guest Name</label><input type="text" class="form-control" id="eInvGuest" value="${inv.guestName}"></div><div class="form-group"><label>Room Number</label><input type="text" class="form-control" id="eInvRoom" value="${inv.roomNumber}"></div></div>
+    <div class="form-row"><div class="form-group"><label>Date</label><input type="date" class="form-control" id="eInvDate" value="${inv.date}"></div><div class="form-group"><label>Currency</label><select class="form-control" id="eInvCur">${['THB','USD','EUR'].map(c=>`<option ${c===inv.currency?'selected':''}>${c}</option>`).join('')}</select></div></div>
+    <div class="form-row"><div class="form-group"><label>Subtotal</label><input type="number" class="form-control" id="eInvSub" step="0.01" value="${inv.subtotal}"></div><div class="form-group"><label>Discount</label><input type="number" class="form-control" id="eInvDisc" step="0.01" value="${inv.discountAmount}"></div></div>
+    <div class="form-row"><div class="form-group"><label>Tax Total</label><input type="number" class="form-control" id="eInvTax" step="0.01" value="${inv.taxTotal}"></div><div class="form-group"><label>Payment Status</label><select class="form-control" id="eInvStatus">${['Unpaid','Partially Paid','Fully Paid'].map(s=>`<option ${s===inv.paymentStatus?'selected':''}>${s}</option>`).join('')}</select></div></div>
+    <div class="form-group"><label>Transaction ID</label><input type="text" class="form-control" id="eInvTxn" value="${inv.paymentTransactionId||''}"></div>
+    <div class="form-group"><label>Billing Address</label><input type="text" class="form-control" id="eInvAddr" value="${inv.billingAddress||''}"></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateInvoice('${inv.id}')">Save</button></div>`);
 };
 window.updateInvoice = function(id) {
   const inv = invoices.find(i=>i.id===id); if(!inv) return;
-  inv.guestName = document.getElementById('eInvGuest').value||inv.guestName; inv.roomNumber = document.getElementById('eInvRoom').value||inv.roomNumber;
-  inv.date = document.getElementById('eInvDate').value||inv.date; inv.nights = parseInt(document.getElementById('eInvNights').value)||inv.nights;
-  inv.roomCharge = parseFloat(document.getElementById('eInvRoom$').value)||0; inv.serviceCharge = parseFloat(document.getElementById('eInvSvc$').value)||0;
-  inv.total = inv.roomCharge + inv.serviceCharge; inv.status = document.getElementById('eInvStatus').value;
-  save('invoices',invoices); closeModal(); renderInvoices(); toast('Invoice updated');
+  inv.guestName = document.getElementById('eInvGuest').value||inv.guestName;
+  inv.roomNumber = document.getElementById('eInvRoom').value||inv.roomNumber;
+  inv.date = document.getElementById('eInvDate').value||inv.date;
+  inv.currency = document.getElementById('eInvCur').value;
+  inv.subtotal = parseFloat(document.getElementById('eInvSub').value)||0;
+  inv.discountAmount = parseFloat(document.getElementById('eInvDisc').value)||0;
+  inv.taxTotal = parseFloat(document.getElementById('eInvTax').value)||0;
+  inv.grandTotal = Math.round((inv.subtotal - inv.discountAmount + inv.taxTotal)*100)/100;
+  inv.paymentStatus = document.getElementById('eInvStatus').value;
+  inv.paymentTransactionId = document.getElementById('eInvTxn').value;
+  inv.billingAddress = document.getElementById('eInvAddr').value;
+  save('invoices',invoices); logAudit('Update','Invoice','Updated '+inv.invoiceNumber); closeModal(); renderInvoices(); toast('Invoice updated');
 };
 window.showInvoiceDetail = function(id) {
   const inv = invoices.find(i=>i.id===id); if(!inv) return;
-  const idx = invoices.indexOf(inv);
-  openModal(`<div class="modal-header"><h2>Invoice INV-${String(2001+idx).padStart(4,'0')}</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+  openModal(`<div class="modal-header"><h2>${inv.invoiceNumber}</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body" style="font-size:0.9rem;">
-    <p><strong>Guest:</strong> ${inv.guestName}</p><p><strong>Room:</strong> ${inv.roomNumber}</p><p><strong>Date:</strong> ${fmtDate(inv.date)}</p><p><strong>Nights:</strong> ${inv.nights}</p>
+    <p><strong>Guest:</strong> ${inv.guestName}</p><p><strong>Room:</strong> ${inv.roomNumber}</p><p><strong>Date:</strong> ${fmtDate(inv.date)}</p><p><strong>Currency:</strong> ${inv.currency}</p>
+    ${inv.billingAddress?'<p><strong>Billing:</strong> '+inv.billingAddress+'</p>':''}
+    ${inv.bookingId?'<p><strong>Booking:</strong> '+inv.bookingId+'</p>':''}
     <hr style="margin:1rem 0;border:none;border-top:1px solid var(--border);">
-    <p>Room Charges: <strong>${fmt$(inv.roomCharge)}</strong></p>
-    ${(inv.services||[]).length?'<p style="margin-top:0.5rem;font-weight:600;">Services:</p><ul style="list-style:none;margin:0.25rem 0;">'+inv.services.map(s=>`<li style="padding:0.2rem 0;">${s.icon||'🛎️'} ${s.name} x${s.qty||1} — ${fmt$(s.price*(s.qty||1))}</li>`).join('')+'</ul>':''}
-    <p>Service Charges: <strong>${fmt$(inv.serviceCharge)}</strong></p>
+    <p>Subtotal: <strong>${fmt$(inv.subtotal)}</strong></p>
+    ${(inv.services||[]).length?'<p style="margin-top:0.5rem;font-weight:600;">Services:</p><ul style="list-style:none;margin:0.25rem 0;">'+inv.services.map(s=>`<li style="padding:0.2rem 0;">${s.icon||'🛎️'} ${s.name} x${s.quantity||1} — ${fmt$((parseFloat(s.unitPrice)||0)*(parseInt(s.quantity)||1))}</li>`).join('')+'</ul>':''}
+    <p>Discount: <strong>-${fmt$(inv.discountAmount)}</strong></p>
+    <p>Tax: <strong>${fmt$(inv.taxTotal)}</strong></p>
     <hr style="margin:1rem 0;border:none;border-top:2px solid var(--text);">
-    <p style="font-size:1.1rem;"><strong>Total: ${fmt$(inv.total)}</strong></p>
-    <p>Status: <span class="status status-${inv.status}">${inv.status==='paid'?'Paid':'Pending'}</span></p></div>
-    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Close</button>${inv.status!=='paid'?`<button class="btn btn-success" onclick="payInvoice('${inv.id}');closeModal();renderInvoices();">Mark as Paid</button>`:''}</div>`);
+    <p style="font-size:1.1rem;"><strong>Grand Total: ${fmt$(inv.grandTotal)}</strong></p>
+    <p>Status: <span class="status status-${inv.paymentStatus==='Fully Paid'?'paid':inv.paymentStatus==='Partially Paid'?'pending':'maintenance'}">${inv.paymentStatus}</span></p>
+    ${inv.paymentTransactionId?'<p style="margin-top:0.5rem;font-size:0.8rem;color:var(--text-light);">Transaction: '+inv.paymentTransactionId+'</p>':''}</div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Close</button>${inv.paymentStatus!=='Fully Paid'?`<button class="btn btn-success" onclick="payInvoice('${inv.id}');closeModal();renderInvoices();">Mark as Paid</button>`:''}</div>`);
 };
 
 // ===== REPORTS =====
 function renderReports() {
-  const totalRev = invoices.reduce((s,i)=>s+i.total,0); const paidRev = invoices.filter(i=>i.status==='paid').reduce((s,i)=>s+i.total,0);
-  const occ = rooms.length ? Math.round(rooms.filter(r=>r.status==='occupied').length/rooms.length*100) : 0;
+  const totalRev = invoices.reduce((s,i)=>s+(parseFloat(i.grandTotal)||0),0);
+  const paidRev = invoices.filter(i=>i.paymentStatus==='Fully Paid').reduce((s,i)=>s+(parseFloat(i.grandTotal)||0),0);
+  const totalRooms = rooms.length || 1;
+  const occRooms = rooms.filter(r=>r.occupancyStatus==='Occupied').length;
+  const occRate = Math.round(occRooms/totalRooms*100);
+  const revpar = totalRev / totalRooms;
+  const adr = occRooms > 0 ? totalRev / occRooms : 0;
+  const recentAudit = auditLog.slice(-5).reverse();
   document.getElementById('page-reports').innerHTML = `
     <div class="stats-grid">
-      <div class="stat-card"><div class="stat-icon blue">💰</div><div class="stat-info"><h3>${fmt$(totalRev)}</h3><p>Total Revenue</p></div></div>
-      <div class="stat-card"><div class="stat-icon green">📈</div><div class="stat-info"><h3>${occ}%</h3><p>Occupancy Rate</p></div></div>
-      <div class="stat-card"><div class="stat-icon orange">✅</div><div class="stat-info"><h3>${fmt$(paidRev)}</h3><p>Collected</p></div></div>
-      <div class="stat-card"><div class="stat-icon red">📊</div><div class="stat-info"><h3>${bookings.length}</h3><p>Total Bookings</p></div></div>
+      <div class="stat-card"><div class="stat-icon blue">📈</div><div class="stat-info"><h3>${occRate}%</h3><p>Occupancy Rate</p></div></div>
+      <div class="stat-card"><div class="stat-icon green">💰</div><div class="stat-info"><h3>${fmt$(revpar)}</h3><p>RevPAR</p></div></div>
+      <div class="stat-card"><div class="stat-icon orange">🏷️</div><div class="stat-info"><h3>${fmt$(adr)}</h3><p>ADR</p></div></div>
+      <div class="stat-card"><div class="stat-icon red">💵</div><div class="stat-info"><h3>${fmt$(totalRev)}</h3><p>Total Revenue</p></div></div>
     </div>
     <div class="card"><div class="card-header"><h2>Monthly Revenue</h2></div><div class="card-body">${renderBarChart([
       {label:'Oct',v1:8500,v2:2200},{label:'Nov',v1:9200,v2:2800},{label:'Dec',v1:11000,v2:3500},{label:'Jan',v1:9800,v2:2600},{label:'Feb',v1:10500,v2:3000},{label:'Mar',v1:totalRev*0.7||12450,v2:totalRev*0.3||3800}
     ])}</div></div>
     <div class="card"><div class="card-header"><h2>Booking Summary</h2></div><div class="card-body"><div class="table-wrap"><table><thead><tr><th>Status</th><th>Count</th><th>Percentage</th></tr></thead><tbody>
-      ${['checked-in','pending','reserved','checked-out'].map(st=>{const c=bookings.filter(b=>b.status===st).length;return `<tr><td><span class="status status-${st}">${st.replace('-',' ')}</span></td><td>${c}</td><td>${bookings.length?Math.round(c/bookings.length*100):0}%</td></tr>`;}).join('')}
+      ${['Checked-in','Expected','Checked-out','No-show'].map(st=>{const c=bookings.filter(b=>b.arrivalStatus===st).length;return `<tr><td><span class="status status-${st==='Checked-in'?'checked-in':st==='Expected'?'pending':st==='Checked-out'?'checked-out':'maintenance'}">${st}</span></td><td>${c}</td><td>${bookings.length?Math.round(c/bookings.length*100):0}%</td></tr>`;}).join('')}
+    </tbody></table></div></div></div>
+    <div class="card"><div class="card-header"><h2>Recent Audit Trail</h2></div><div class="card-body"><div class="table-wrap"><table><thead><tr><th>Time</th><th>Action</th><th>Entity</th><th>Detail</th><th>User</th></tr></thead><tbody>
+      ${recentAudit.length?recentAudit.map(a=>`<tr><td>${new Date(a.timestamp).toLocaleString()}</td><td>${a.action}</td><td>${a.entity}</td><td>${a.detail}</td><td>${a.user}</td></tr>`).join(''):'<tr><td colspan="5" style="text-align:center;color:var(--text-light);">No audit entries yet</td></tr>'}
     </tbody></table></div></div></div>`;
 }
 
@@ -901,12 +1073,12 @@ function renderAccounts() {
     columns: [
       {field:'name',label:'User',editable:true,filterable:true},
       {field:'email',label:'Email',editable:true,filterable:true},
-      {field:'role',label:'Role',editable:true,editType:'select',editOptions:['Administrator','Manager','Receptionist','Staff'],filterable:true},
+      {field:'role',label:'Role',editable:true,editType:'select',editOptions:['Admin','Receptionist','Housekeeper','Manager'],filterable:true},
       {field:'status',label:'Status',format:v=>`<span class="status status-${v}">${v==='active'?'Active':'Inactive'}</span>`,editable:true,editType:'select',editOptions:['active','inactive'],filterable:true},
     ],
     data: accounts,
     onAdd: () => showAddAccount(),
-    onEdit: (row, field, val) => { const a = accounts.find(x=>x.id===row.id); if(a){a[field]=val;save('accounts',accounts);toast('Account updated');} },
+    onEdit: (row, field, val) => { const a = accounts.find(x=>x.id===row.id); if(a){a[field]=val;save('accounts',accounts);logAudit('Update','Account','Updated account '+a.name);toast('Account updated');} },
     actions: [
       {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditAccount(id)},
       {name:'toggle',label:'Toggle',cls:'btn-warning',handler:id=>{ toggleAccount(id); renderAccounts(); }},
@@ -918,29 +1090,43 @@ window.showAddAccount = function() {
   openModal(`<div class="modal-header"><h2>Add User</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body"><div class="form-group"><label>Full Name</label><input type="text" class="form-control" id="mAName"></div>
     <div class="form-group"><label>Email</label><input type="email" class="form-control" id="mAEmail"></div>
-    <div class="form-group"><label>Role</label><select class="form-control" id="mARole"><option>Administrator</option><option>Manager</option><option>Receptionist</option><option>Staff</option></select></div></div>
+    <div class="form-group"><label>Role</label><select class="form-control" id="mARole"><option>Admin</option><option>Manager</option><option>Receptionist</option><option>Housekeeper</option></select></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addAccount()">Add User</button></div>`);
 };
 window.addAccount = function() {
   const name = document.getElementById('mAName').value.trim(); if(!name) { toast('Enter name'); return; }
   accounts.push({id:genId(),name,email:document.getElementById('mAEmail').value,role:document.getElementById('mARole').value,status:'active'});
-  save('accounts',accounts); closeModal(); renderAccounts(); toast(name+' added');
+  save('accounts',accounts); logAudit('Add','Account','Added account '+name); closeModal(); renderAccounts(); toast(name+' added');
 };
 window.showEditAccount = function(id) {
   const a = accounts.find(x=>x.id===id); if(!a) return;
   openModal(`<div class="modal-header"><h2>Edit User</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body"><div class="form-group"><label>Full Name</label><input type="text" class="form-control" id="eAName" value="${a.name}"></div>
     <div class="form-group"><label>Email</label><input type="email" class="form-control" id="eAEmail" value="${a.email}"></div>
-    <div class="form-group"><label>Role</label><select class="form-control" id="eARole">${['Administrator','Manager','Receptionist','Staff'].map(r=>`<option ${r===a.role?'selected':''}>${r}</option>`).join('')}</select></div></div>
+    <div class="form-group"><label>Role</label><select class="form-control" id="eARole">${['Admin','Manager','Receptionist','Housekeeper'].map(r=>`<option ${r===a.role?'selected':''}>${r}</option>`).join('')}</select></div></div>
     <div class="modal-footer"><button class="btn btn-danger" onclick="deleteAccount('${a.id}')">Delete</button><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateAccount('${a.id}')">Save</button></div>`);
 };
 window.updateAccount = function(id) {
   const a = accounts.find(x=>x.id===id); if(!a) return;
   a.name = document.getElementById('eAName').value||a.name; a.email = document.getElementById('eAEmail').value; a.role = document.getElementById('eARole').value;
-  save('accounts',accounts); closeModal(); renderAccounts(); toast('Account updated');
+  save('accounts',accounts); logAudit('Update','Account','Updated account '+a.name); closeModal(); renderAccounts(); toast('Account updated');
 };
-window.toggleAccount = function(id) { const a = accounts.find(x=>x.id===id); if(a) { a.status = a.status==='active'?'inactive':'active'; save('accounts',accounts); renderAccounts(); toast(a.name+' '+(a.status==='active'?'activated':'deactivated')); } };
-window.deleteAccount = function(id) { if(!confirm('Delete this account?')) return; accounts = accounts.filter(a=>a.id!==id); save('accounts',accounts); closeModal(); renderAccounts(); toast('Account deleted'); };
+window.toggleAccount = function(id) { const a = accounts.find(x=>x.id===id); if(a) { a.status = a.status==='active'?'inactive':'active'; save('accounts',accounts); logAudit('Toggle','Account',a.name+' '+(a.status==='active'?'activated':'deactivated')); renderAccounts(); toast(a.name+' '+(a.status==='active'?'activated':'deactivated')); } };
+window.deleteAccount = function(id) { if(!confirm('Delete this account?')) return; const a=accounts.find(x=>x.id===id); accounts = accounts.filter(x=>x.id!==id); save('accounts',accounts); logAudit('Delete','Account','Deleted account '+(a?a.name:id)); closeModal(); renderAccounts(); toast('Account deleted'); };
+
+// ===== AUDIT LOG =====
+function renderAuditLog() {
+  const sorted = [...auditLog].reverse();
+  document.getElementById('page-auditlog').innerHTML = `
+    <div class="card"><div class="card-header"><h2>Audit Log</h2><button class="btn btn-danger btn-sm" onclick="clearAuditLog()">Clear Log</button></div><div class="card-body">
+    <div class="table-wrap"><table><thead><tr><th>Timestamp</th><th>Action</th><th>Entity</th><th>Detail</th><th>User</th></tr></thead><tbody>
+      ${sorted.length?sorted.map(a=>`<tr><td style="white-space:nowrap;">${new Date(a.timestamp).toLocaleString()}</td><td>${a.action}</td><td>${a.entity}</td><td>${a.detail}</td><td>${a.user}</td></tr>`).join(''):'<tr><td colspan="5" style="text-align:center;color:var(--text-light);">No audit entries</td></tr>'}
+    </tbody></table></div></div></div>`;
+}
+window.clearAuditLog = function() {
+  if(!confirm('Clear all audit log entries?')) return;
+  auditLog = []; save('auditLog', auditLog); renderAuditLog(); toast('Audit log cleared');
+};
 
 // ===== SETTINGS =====
 function getDbCounts() {
@@ -962,7 +1148,7 @@ function renderSettings() {
   document.getElementById('page-settings').innerHTML = `
     <div class="card"><div class="card-header"><h2>Hotel Settings</h2></div><div class="card-body">
       <div class="form-row"><div class="form-group"><label>Hotel Name</label><input type="text" class="form-control" id="sName" value="${s.hotelName}"></div><div class="form-group"><label>Contact Email</label><input type="email" class="form-control" id="sEmail" value="${s.email}"></div></div>
-      <div class="form-row"><div class="form-group"><label>Phone Number</label><input type="tel" class="form-control" id="sPhone" value="${s.phone}"></div><div class="form-group"><label>Currency</label><select class="form-control" id="sCurrency">${['USD ($)','EUR (€)','GBP (£)','VND (₫)'].map(c=>`<option ${c===s.currency?'selected':''}>${c}</option>`).join('')}</select></div></div>
+      <div class="form-row"><div class="form-group"><label>Phone Number</label><input type="tel" class="form-control" id="sPhone" value="${s.phone}"></div><div class="form-group"><label>Currency</label><select class="form-control" id="sCurrency">${['USD ($)','EUR (€)','GBP (£)','THB (฿)'].map(c=>`<option ${c===s.currency?'selected':''}>${c}</option>`).join('')}</select></div></div>
       <div class="form-group"><label>Address</label><input type="text" class="form-control" id="sAddr" value="${s.address}"></div>
       <h3 style="margin:1.5rem 0 1rem;font-size:1rem;">Regulations</h3>
       <div class="form-row"><div class="form-group"><label>Max Guests Per Room</label><input type="number" class="form-control" id="sMaxG" value="${s.maxGuests}"></div><div class="form-group"><label>Surcharge Rate (%)</label><input type="number" class="form-control" id="sSur" value="${s.surcharge}"></div></div>
@@ -974,13 +1160,14 @@ function renderSettings() {
       <div class="table-wrap"><table>
         <thead><tr><th>Table</th><th>Rows</th><th>Description</th></tr></thead>
         <tbody>
-          <tr><td><strong>rooms</strong></td><td>${counts.rooms}</td><td>Room inventory (number, floor, type, price, status)</td></tr>
-          <tr><td><strong>guests</strong></td><td>${counts.guests}</td><td>Guest directory (name, email, phone, ID, visits)</td></tr>
-          <tr><td><strong>bookings</strong></td><td>${counts.bookings}</td><td>Reservations (guest, room, dates, status, services)</td></tr>
-          <tr><td><strong>services</strong></td><td>${counts.services}</td><td>Hotel services catalog (name, category, price)</td></tr>
-          <tr><td><strong>invoices</strong></td><td>${counts.invoices}</td><td>Billing records (charges, payments, totals)</td></tr>
+          <tr><td><strong>rooms</strong></td><td>${counts.rooms}</td><td>Room inventory (number, type, floor, bed, price, status)</td></tr>
+          <tr><td><strong>guests</strong></td><td>${counts.guests}</td><td>Guest directory (name, passport, nationality, payment, visits)</td></tr>
+          <tr><td><strong>bookings</strong></td><td>${counts.bookings}</td><td>Reservations (guest, room, dates, source, status, services)</td></tr>
+          <tr><td><strong>services</strong></td><td>${counts.services}</td><td>Hotel services catalog (category, name, price, tax)</td></tr>
+          <tr><td><strong>invoices</strong></td><td>${counts.invoices}</td><td>Billing records (subtotal, tax, discount, grand total, payment)</td></tr>
           <tr><td><strong>accounts</strong></td><td>${counts.accounts}</td><td>User accounts (name, email, role, status)</td></tr>
           <tr><td><strong>settings</strong></td><td>—</td><td>Hotel configuration (key/value pairs)</td></tr>
+          <tr><td><strong>auditLog</strong></td><td>${auditLog.length}</td><td>Audit trail (action, entity, detail, timestamp)</td></tr>
         </tbody>
       </table></div>
       <p style="margin-top:1rem;font-size:0.8rem;color:var(--text-light);">${isAndroid ? 'Data is stored in SQLite database on device. Persists across app restarts.' : 'Data is stored in browser localStorage. Persists in this browser only.'}</p>
@@ -988,7 +1175,7 @@ function renderSettings() {
 }
 window.saveSettings = function() {
   settings = {hotelName:document.getElementById('sName').value,email:document.getElementById('sEmail').value,phone:document.getElementById('sPhone').value,currency:document.getElementById('sCurrency').value,address:document.getElementById('sAddr').value,maxGuests:parseInt(document.getElementById('sMaxG').value)||3,surcharge:parseInt(document.getElementById('sSur').value)||25,checkinTime:document.getElementById('sIn').value,checkoutTime:document.getElementById('sOut').value};
-  save('settings',settings); toast('Settings saved');
+  save('settings',settings); logAudit('Update','Settings','Settings saved'); toast('Settings saved');
 };
 window.resetAll = function() {
   if(!confirm('Reset ALL data to defaults? This cannot be undone.')) return;
