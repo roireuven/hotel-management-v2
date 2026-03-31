@@ -259,9 +259,81 @@
     .topbar-user .user-role-tag { font-size: 0.72rem; color: var(--text-light); }
     .btn-logout { background: transparent; border: 1px solid var(--border); color: var(--text); padding: 0.3rem 0.75rem; border-radius: 8px; font-size: 0.8rem; cursor: pointer; font-family: inherit; transition: all 0.15s ease; }
     .btn-logout:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
+    /* Onboarding / Setup Screen */
+    #setupOverlay { position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e 0%, #2c3e50 50%, #1a73e8 100%); }
+    #setupOverlay.hidden { display: none; }
+    .setup-card { background: #fff; border-radius: 20px; padding: 2rem 2rem 1.5rem; width: 92%; max-width: 440px; box-shadow: 0 20px 60px rgba(0,0,0,0.4); text-align: center; max-height: 95vh; overflow-y: auto; }
+    .setup-card .setup-logo { font-size: 3.5rem; margin-bottom: 0.25rem; }
+    .setup-card h1 { font-size: 1.6rem; font-weight: 700; color: #2c3e50; margin-bottom: 0.15rem; }
+    .setup-card .setup-ver { font-size: 0.75rem; color: #999; margin-bottom: 1rem; }
+    .setup-card .setup-welcome { font-size: 0.95rem; color: #333; line-height: 1.6; margin-bottom: 1.25rem; text-align: left; }
+    .setup-card .setup-welcome strong { color: #1a73e8; }
+    .setup-step { background: #f8f9fb; border-radius: 12px; padding: 1rem; margin-bottom: 0.75rem; text-align: left; border: 1px solid #eee; }
+    .setup-step .step-num { display: inline-block; background: #1a73e8; color: #fff; width: 24px; height: 24px; border-radius: 50%; text-align: center; line-height: 24px; font-size: 0.75rem; font-weight: 700; margin-right: 0.5rem; }
+    .setup-step .step-title { font-weight: 600; font-size: 0.9rem; color: #2c3e50; display: inline; }
+    .setup-step p { font-size: 0.8rem; color: #65676b; margin-top: 0.35rem; line-height: 1.5; }
+    .setup-email-section { background: #e8f0fe; border-radius: 12px; padding: 1.25rem; margin: 1.25rem 0; text-align: left; border: 1px solid #c5d9f8; }
+    .setup-email-section h3 { font-size: 0.9rem; color: #1a73e8; margin-bottom: 0.5rem; }
+    .setup-email-section p { font-size: 0.8rem; color: #444; line-height: 1.5; margin-bottom: 0.75rem; }
+    .setup-email-section .sync-icon { font-size: 1.5rem; margin-bottom: 0.25rem; display: block; }
+    .setup-card .btn-setup { width: 100%; padding: 0.85rem; font-size: 1.05rem; margin-top: 0.5rem; border-radius: 12px; }
+    body.dark-mode #setupOverlay { background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #16213e 100%); }
+    body.dark-mode .setup-card { background: #16213e; }
+    body.dark-mode .setup-card h1 { color: #e0e0e0; }
+    body.dark-mode .setup-card .setup-welcome { color: #ccc; }
+    body.dark-mode .setup-step { background: #1a1a2e; border-color: #2a2a4a; }
+    body.dark-mode .setup-step .step-title { color: #e0e0e0; }
+    body.dark-mode .setup-step p { color: #a0a0a0; }
+    body.dark-mode .setup-email-section { background: #1a2744; border-color: #2a3a5a; }
+    body.dark-mode .setup-email-section h3 { color: #64b5f6; }
+    body.dark-mode .setup-email-section p { color: #b0b0b0; }
   </style>
 </head>
 <body>
+  <div id="setupOverlay" class="hidden">
+    <div class="setup-card">
+      <div class="setup-logo">🏨</div>
+      <h1>Welcome to Hotel Manager</h1>
+      <div class="setup-ver">v2.0 — First-Time Setup</div>
+
+      <div class="setup-welcome">
+        Thank you for installing <strong>Hotel Manager</strong>. This app is a complete hotel management system with rooms, bookings, guests, invoices, housekeeping, and more.
+      </div>
+
+      <div class="setup-step">
+        <span class="step-num">1</span><span class="step-title">Register Your Email</span>
+        <p>Enter your email below. This email links your data so that <strong>all devices using the same email will share the same data</strong>.</p>
+      </div>
+
+      <div class="setup-step">
+        <span class="step-num">2</span><span class="step-title">Login with Your Role</span>
+        <p>After setup, use one of the staff accounts to sign in. Each role (Admin, Manager, Receptionist, Housekeeper) has different access and features.</p>
+      </div>
+
+      <div class="setup-step">
+        <span class="step-num">3</span><span class="step-title">Sync Across Devices</span>
+        <p>Install the app on multiple phones or tablets. As long as they use the <strong>same email</strong>, all data (rooms, bookings, guests, invoices) stays synchronized.</p>
+      </div>
+
+      <div class="setup-email-section">
+        <span class="sync-icon">🔄</span>
+        <h3>Your Sync Email</h3>
+        <p>Enter the email address for this installation. All apps installed with this same email will share data.</p>
+        <div class="form-group" style="margin-bottom:0;">
+          <input type="email" class="form-control" id="setupEmail" placeholder="your.email@company.com" style="font-size:1rem;padding:0.7rem;">
+        </div>
+      </div>
+
+      <div class="setup-step" style="background:#e8f5e9;border-color:#c8e6c9;">
+        <span class="step-num" style="background:#42b72a;">✓</span><span class="step-title" style="color:#2e7d32;">How It Works</span>
+        <p style="color:#444;">After setup, you'll see the <strong>login screen</strong> with demo accounts for each role. Tap any email to auto-fill, then sign in. Your role determines what you can see and do in the app.</p>
+      </div>
+
+      <button class="btn btn-primary btn-setup" onclick="completeSetup()">Get Started →</button>
+      <div id="setupError" style="color:#e74c3c;font-size:0.85rem;margin-top:0.5rem;min-height:1.2em;"></div>
+    </div>
+  </div>
+
   <div id="loginOverlay">
     <div class="login-card" style="max-width:460px;">
       <div class="login-logo">🏨</div>
@@ -1822,7 +1894,33 @@ if (settings.darkMode || (function(){ try { return localStorage.getItem(DB_KEY +
   document.getElementById('darkToggle').textContent = '☀️';
 }
 
-(function initLogin() {
+// ===== FIRST-TIME SETUP =====
+window.completeSetup = function() {
+  const email = document.getElementById('setupEmail').value.trim();
+  if (!email || !email.includes('@')) {
+    document.getElementById('setupError').textContent = 'Please enter a valid email address';
+    return;
+  }
+  localStorage.setItem(DB_KEY + 'setupEmail', email);
+  localStorage.setItem(DB_KEY + 'setupDone', '1');
+  if (isAndroid) { try { HotelDB.saveSetting('setupEmail', email); HotelDB.saveSetting('setupDone', '1'); } catch(e){} }
+  document.getElementById('setupOverlay').classList.add('hidden');
+  document.getElementById('loginOverlay').classList.remove('hidden');
+  toast('Setup complete! Your sync email: ' + email);
+};
+
+(function initApp() {
+  const setupDone = localStorage.getItem(DB_KEY + 'setupDone') ||
+    (isAndroid ? (function(){ try { return HotelDB.getSetting('setupDone'); } catch(e){ return null; } })() : null);
+
+  if (!setupDone) {
+    document.getElementById('setupOverlay').classList.remove('hidden');
+    document.getElementById('loginOverlay').classList.add('hidden');
+    return;
+  }
+
+  document.getElementById('setupOverlay').classList.add('hidden');
+
   try {
     const stored = localStorage.getItem(DB_KEY + 'currentUser');
     if (stored) {
