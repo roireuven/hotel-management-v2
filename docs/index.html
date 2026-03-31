@@ -34,7 +34,7 @@
     .sidebar-nav a { display: flex; align-items: center; gap: 0.75rem; padding: 0.85rem 1.25rem; color: #bdc3c7; text-decoration: none; font-size: 0.95rem; transition: all 0.15s ease; cursor: pointer; border-left: 3px solid transparent; }
     .sidebar-nav a:hover { background: rgba(255,255,255,0.08); color: #fff; border-left-color: rgba(255,255,255,0.3); }
     .sidebar-nav a.active { background: rgba(26,115,232,0.3); color: #fff; border-left-color: #fff; }
-    .sidebar-nav a .icon { font-size: 1.25rem; width: 28px; text-align: center; }
+    .sidebar-nav a .icon { font-size: 1.1rem; width: 28px; text-align: center; opacity: 0.85; }
     .sidebar-nav a .badge { margin-left: auto; background: var(--danger); color: #fff; font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: 10px; font-weight: 600; }
     .main { margin-left: 0; flex: 1; min-height: 100vh; width: 100%; display: flex; flex-direction: column; }
     .topbar { background: linear-gradient(135deg, #1a3a5c 0%, #1a73e8 100%); border-bottom: none; padding: 0 1rem; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; color: #fff; }
@@ -55,7 +55,7 @@
     .card { background: var(--card-bg); border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 1rem; border: 1px solid var(--border); }
     .card-header { padding: 0.85rem 1rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; background: linear-gradient(135deg, #f8faff 0%, #eef3fb 100%); border-radius: 12px 12px 0 0; }
     .card-header h2 { font-size: 0.95rem; font-weight: 600; display: flex; align-items: center; gap: 0.4rem; }
-    .card-header h2::before { content: '🇺🇸'; font-size: 1rem; }
+    .card-header h2::before { content: '◆'; font-size: 0.6rem; color: var(--primary); vertical-align: middle; }
     .card-body { padding: 0.85rem; }
     .table-wrap { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
@@ -95,7 +95,7 @@
     .modal { background: var(--card-bg); border-radius: 0; width: 100%; max-width: 100%; min-height: 100vh; box-shadow: none; }
     .modal-header { padding: 1rem 1.25rem; border-bottom: 2px solid var(--primary); display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, #1a3a5c 0%, #1a73e8 100%); color: #fff; position: sticky; top: 0; z-index: 5; }
     .modal-header h2 { font-size: 1.15rem; color: #fff; display: flex; align-items: center; gap: 0.5rem; }
-    .modal-header h2::before { content: '🇺🇸'; font-size: 1.3rem; }
+    .modal-header h2::before { content: ''; }
     .modal-close { background: rgba(255,255,255,0.15); border: none; font-size: 1.3rem; cursor: pointer; color: #fff; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
     .modal-close:hover { background: rgba(255,255,255,0.3); }
     .modal-body { padding: 1.25rem 1rem; background: linear-gradient(180deg, #f8faff 0%, #eef3fb 100%); min-height: calc(100vh - 130px); }
@@ -310,7 +310,7 @@
 <body>
   <div id="setupOverlay" class="hidden">
     <div class="setup-card">
-      <div class="setup-logo">🏨</div>
+      <div class="setup-logo" style="font-size:2.5rem;background:linear-gradient(135deg,#1a3a5c,#1a73e8);color:#fff;width:64px;height:64px;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 0.5rem;font-weight:700;">H</div>
       <h1>Welcome to Hotel Manager</h1>
       <div class="setup-ver">v2.0 — First-Time Setup</div>
 
@@ -353,7 +353,7 @@
 
   <div id="loginOverlay">
     <div class="login-card" style="max-width:460px;">
-      <div class="login-logo">🏨</div>
+      <div class="login-logo" style="font-size:2.5rem;background:linear-gradient(135deg,#1a3a5c,#1a73e8);color:#fff;width:64px;height:64px;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 0.5rem;font-weight:700;">H</div>
       <h1>Hotel Manager</h1>
       <p class="login-sub">Management System — Please sign in</p>
       <div class="form-group"><label>Username (Email)</label><input type="text" class="form-control" id="loginUsername" placeholder="e.g. admin@hotel.com"></div>
@@ -365,10 +365,10 @@
         <table>
           <thead><tr><th>Role</th><th>Email (Username)</th><th>PWD</th></tr></thead>
           <tbody>
-            <tr data-tip="Full system control, settings, accounts, audit"><td class="cred-role">👑 Admin</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">admin@hotel.com</td><td class="cred-pw">1234</td></tr>
-            <tr data-tip="Reports, inventory, overrides, analytics"><td class="cred-role">📊 Manager</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">mike@hotel.com</td><td class="cred-pw">1234</td></tr>
-            <tr data-tip="Rooms, bookings, check-in/out, invoices"><td class="cred-role">🛎️ Reception</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">jane@hotel.com</td><td class="cred-pw">1234</td></tr>
-            <tr data-tip="Room cleaning status, maintenance tickets"><td class="cred-role">🧹 Housekeeper</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">tom@hotel.com</td><td class="cred-pw">1234</td></tr>
+            <tr data-tip="Full system control, settings, accounts, audit"><td class="cred-role">◆ Admin</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">admin@hotel.com</td><td class="cred-pw">1234</td></tr>
+            <tr data-tip="Reports, inventory, overrides, analytics"><td class="cred-role">◫ Manager</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">mike@hotel.com</td><td class="cred-pw">1234</td></tr>
+            <tr data-tip="Rooms, bookings, check-in/out, invoices"><td class="cred-role">◎ Reception</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">jane@hotel.com</td><td class="cred-pw">1234</td></tr>
+            <tr data-tip="Room cleaning status, maintenance tickets"><td class="cred-role">◧ Housekeeper</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">tom@hotel.com</td><td class="cred-pw">1234</td></tr>
           </tbody>
         </table>
         <p style="text-align:center;margin-top:0.6rem;font-size:0.72rem;color:#999;">Tap an email to auto-fill the username field</p>
@@ -377,33 +377,33 @@
   </div>
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
   <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header"><div class="logo">🏨</div><div><h2>Hotel Manager</h2><span>Management System</span></div></div>
+    <div class="sidebar-header"><div class="logo" style="font-size:1.6rem;background:rgba(255,255,255,0.1);width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;">H</div><div><h2>Hotel Manager</h2><span>Management System</span></div></div>
     <nav class="sidebar-nav" id="sidebarNav">
       <div class="nav-section">Main</div>
-      <a class="active" data-page="dashboard"><span class="icon">📊</span> Dashboard</a>
-      <a data-page="rooms"><span class="icon">🚪</span> Rooms <span class="badge" id="badgeMaint">0</span></a>
-      <a data-page="bookings"><span class="icon">📋</span> Bookings</a>
-      <a data-page="guests"><span class="icon">👥</span> Guests</a>
+      <a class="active" data-page="dashboard"><span class="icon">⊞</span> Dashboard</a>
+      <a data-page="rooms"><span class="icon">▣</span> Rooms <span class="badge" id="badgeMaint">0</span></a>
+      <a data-page="bookings"><span class="icon">▤</span> Bookings</a>
+      <a data-page="guests"><span class="icon">◉</span> Guests</a>
       <div class="nav-section">Operations</div>
-      <a data-page="housekeeping"><span class="icon">🧹</span> Housekeeping</a>
-      <a data-page="maintenance"><span class="icon">🔧</span> Maintenance</a>
+      <a data-page="housekeeping"><span class="icon">◧</span> Housekeeping</a>
+      <a data-page="maintenance"><span class="icon">⚡</span> Maintenance</a>
       <div class="nav-section">Services</div>
-      <a data-page="services"><span class="icon">🍽️</span> Services</a>
-      <a data-page="invoices"><span class="icon">🧾</span> Invoices</a>
-      <a data-page="inventory"><span class="icon">📦</span> Inventory</a>
+      <a data-page="services"><span class="icon">◈</span> Services</a>
+      <a data-page="invoices"><span class="icon">▥</span> Invoices</a>
+      <a data-page="inventory"><span class="icon">⬡</span> Inventory</a>
       <div class="nav-section">Guest</div>
-      <a data-page="guestportal"><span class="icon">🏷️</span> Guest Portal</a>
+      <a data-page="guestportal"><span class="icon">◎</span> Guest Portal</a>
       <div class="nav-section">Admin</div>
-      <a data-page="reports"><span class="icon">📈</span> Reports</a>
-      <a data-page="accounts"><span class="icon">👤</span> Accounts</a>
-      <a data-page="auditlog"><span class="icon">📜</span> Audit Log</a>
-      <a data-page="settings"><span class="icon">⚙️</span> Settings</a>
+      <a data-page="reports"><span class="icon">◫</span> Reports</a>
+      <a data-page="accounts"><span class="icon">◔</span> Accounts</a>
+      <a data-page="auditlog"><span class="icon">◳</span> Audit Log</a>
+      <a data-page="settings"><span class="icon">⊕</span> Settings</a>
     </nav>
   </aside>
   <div class="main">
     <div class="topbar">
       <div class="topbar-left"><button class="menu-toggle" id="menuToggle">☰</button><h1 id="pageTitle">Dashboard</h1></div>
-      <div class="topbar-right"><button class="dark-toggle" id="darkToggle" onclick="toggleDarkMode()" title="Toggle Dark Mode">🌙</button><div class="topbar-user"><div><div class="user-name" id="topbarUserName"></div><div class="user-role-tag" id="topbarUserRole"></div></div><div class="avatar" id="userAvatar">A</div></div><button class="btn-logout" id="logoutBtn" onclick="doLogout()">Logout</button></div>
+      <div class="topbar-right"><button class="dark-toggle" id="darkToggle" onclick="toggleDarkMode()" title="Toggle Dark Mode">◐</button><div class="topbar-user"><div><div class="user-name" id="topbarUserName"></div><div class="user-role-tag" id="topbarUserRole"></div></div><div class="avatar" id="userAvatar">A</div></div><button class="btn-logout" id="logoutBtn" onclick="doLogout()">Logout</button></div>
     </div>
     <div class="content">
       <div class="page active" id="page-dashboard"></div>
@@ -703,12 +703,12 @@ const defaultGuests = [
   {id:genId(),firstName:'Lin',lastName:'Wei',passportId:'CN-99887766',nationality:'Chinese',dob:'1995-12-05',email:'l.wei@email.com',phone:'+86 138-0000',paymentMethod:'Cash',guestNotes:'',blacklist:0,visits:4},
 ];
 const defaultServices = [
-  {id:genId(),serviceCategory:'Room Service',name:'Breakfast Buffet',unitPrice:25,quantity:1,taxRate:7,serviceDateTime:'',staffId:'',icon:'🍳'},
-  {id:genId(),serviceCategory:'Laundry',name:'Standard Wash & Iron',unitPrice:15,quantity:1,taxRate:7,serviceDateTime:'',staffId:'',icon:'🧺'},
-  {id:genId(),serviceCategory:'Airport Transfer',name:'Airport Pickup',unitPrice:45,quantity:1,taxRate:7,serviceDateTime:'',staffId:'',icon:'🚗'},
-  {id:genId(),serviceCategory:'Mini-bar',name:'Mini-bar Replenishment',unitPrice:35,quantity:1,taxRate:7,serviceDateTime:'',staffId:'',icon:'🍷'},
-  {id:genId(),serviceCategory:'Spa',name:'Thai Massage (60 min)',unitPrice:80,quantity:1,taxRate:7,serviceDateTime:'',staffId:'',icon:'💆'},
-  {id:genId(),serviceCategory:'Pool',name:'Pool Day Pass',unitPrice:10,quantity:1,taxRate:7,serviceDateTime:'',staffId:'',icon:'🏊'},
+  {id:genId(),serviceCategory:'Room Service',name:'Breakfast Buffet',unitPrice:25,quantity:1,taxRate:7,serviceDateTime:'',staffId:'',icon:'◈'},
+  {id:genId(),serviceCategory:'Laundry',name:'Standard Wash & Iron',unitPrice:15,quantity:1,taxRate:7,serviceDateTime:'',staffId:'',icon:'◇'},
+  {id:genId(),serviceCategory:'Airport Transfer',name:'Airport Pickup',unitPrice:45,quantity:1,taxRate:7,serviceDateTime:'',staffId:'',icon:'▷'},
+  {id:genId(),serviceCategory:'Mini-bar',name:'Mini-bar Replenishment',unitPrice:35,quantity:1,taxRate:7,serviceDateTime:'',staffId:'',icon:'◆'},
+  {id:genId(),serviceCategory:'Spa',name:'Thai Massage (60 min)',unitPrice:80,quantity:1,taxRate:7,serviceDateTime:'',staffId:'',icon:'◎'},
+  {id:genId(),serviceCategory:'Pool',name:'Pool Day Pass',unitPrice:10,quantity:1,taxRate:7,serviceDateTime:'',staffId:'',icon:'●'},
   {id:genId(),serviceCategory:'Room Service',name:'Dinner Set Menu',unitPrice:40,quantity:1,taxRate:7,serviceDateTime:'',staffId:'',icon:'🍽️'},
 ];
 const defaultAccounts = [
@@ -719,7 +719,7 @@ const defaultAccounts = [
 ];
 const defaultInvoices = [
   {id:genId(),invoiceNumber:'INV-2001',bookingId:'',guestName:'John Smith',roomNumber:'201',subtotal:240,discountAmount:0,taxTotal:16.80,grandTotal:256.80,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10001',currency:'USD',billingAddress:'123 Main St, New York, USA',services:[],date:'2026-03-15'},
-  {id:genId(),invoiceNumber:'INV-2002',bookingId:'',guestName:'Akira Tanaka',roomNumber:'305',subtotal:720,discountAmount:50,taxTotal:46.90,grandTotal:716.90,paymentStatus:'Partially Paid',paymentTransactionId:'TXN-10002',currency:'USD',billingAddress:'456 Sakura Ave, Tokyo, Japan',services:[{name:'Thai Massage',unitPrice:80,quantity:1,icon:'💆'}],date:'2026-03-20'},
+  {id:genId(),invoiceNumber:'INV-2002',bookingId:'',guestName:'Akira Tanaka',roomNumber:'305',subtotal:720,discountAmount:50,taxTotal:46.90,grandTotal:716.90,paymentStatus:'Partially Paid',paymentTransactionId:'TXN-10002',currency:'USD',billingAddress:'456 Sakura Ave, Tokyo, Japan',services:[{name:'Thai Massage',unitPrice:80,quantity:1,icon:'◎'}],date:'2026-03-20'},
   {id:genId(),invoiceNumber:'INV-2003',bookingId:'',guestName:'Sophie Laurent',roomNumber:'103',subtotal:400,discountAmount:0,taxTotal:28,grandTotal:428,paymentStatus:'Unpaid',paymentTransactionId:'',currency:'EUR',billingAddress:'789 Rue de Paris, Paris, France',services:[],date:'2026-03-25'},
 ];
 const defaultSettings = {hotelName:'Grand Hotel Management',email:'info@grandhotel.com',phone:'+1 555-0100',currency:'USD ($)',address:'123 Hotel Street, City, Country',maxGuests:3,surcharge:25,checkinTime:'14:00',checkoutTime:'12:00',darkMode:false};
@@ -843,17 +843,17 @@ function renderDashboard() {
   let statsHtml;
   if (isHK) {
     statsHtml = `<div class="stats-grid">
-      <div class="stat-card"><div class="stat-icon blue">🏨</div><div class="stat-info"><h3>${total}</h3><p>Total Rooms</p></div></div>
-      <div class="stat-card"><div class="stat-icon red">🔴</div><div class="stat-info"><h3>${dirtyCnt}</h3><p>Dirty</p></div></div>
-      <div class="stat-card"><div class="stat-icon green">🟢</div><div class="stat-info"><h3>${cleanCnt}</h3><p>Clean</p></div></div>
-      <div class="stat-card"><div class="stat-icon orange">🔧</div><div class="stat-info"><h3>${oos}</h3><p>Out of Service</p></div></div>
+      <div class="stat-card"><div class="stat-icon blue">▣</div><div class="stat-info"><h3>${total}</h3><p>Total Rooms</p></div></div>
+      <div class="stat-card"><div class="stat-icon red">●</div><div class="stat-info"><h3>${dirtyCnt}</h3><p>Dirty</p></div></div>
+      <div class="stat-card"><div class="stat-icon green">●</div><div class="stat-info"><h3>${cleanCnt}</h3><p>Clean</p></div></div>
+      <div class="stat-card"><div class="stat-icon orange">⚡</div><div class="stat-info"><h3>${oos}</h3><p>Out of Service</p></div></div>
     </div>`;
   } else {
     statsHtml = `<div class="stats-grid">
-      <div class="stat-card"><div class="stat-icon blue">🏨</div><div class="stat-info"><h3>${total}</h3><p>Total Rooms</p></div></div>
-      <div class="stat-card"><div class="stat-icon green">✅</div><div class="stat-info"><h3>${vacant}</h3><p>Vacant</p></div></div>
-      <div class="stat-card"><div class="stat-icon orange">📋</div><div class="stat-info"><h3>${occ}</h3><p>Occupied</p></div></div>
-      <div class="stat-card"><div class="stat-icon red">🔧</div><div class="stat-info"><h3>${oos}</h3><p>Out of Service</p></div></div>
+      <div class="stat-card"><div class="stat-icon blue">▣</div><div class="stat-info"><h3>${total}</h3><p>Total Rooms</p></div></div>
+      <div class="stat-card"><div class="stat-icon green">◆</div><div class="stat-info"><h3>${vacant}</h3><p>Vacant</p></div></div>
+      <div class="stat-card"><div class="stat-icon orange">▤</div><div class="stat-info"><h3>${occ}</h3><p>Occupied</p></div></div>
+      <div class="stat-card"><div class="stat-icon red">⚡</div><div class="stat-info"><h3>${oos}</h3><p>Out of Service</p></div></div>
     </div>`;
   }
 
@@ -871,7 +871,7 @@ function renderDashboard() {
   } else {
     bodyHtml += `<div class="card"><div class="card-header"><h2>Your Tasks Today</h2></div><div class="card-body">
       <p style="font-size:1rem;margin-bottom:1rem;">You have <strong>${dirtyCnt}</strong> rooms that need cleaning and <strong>${oos}</strong> rooms out of service.</p>
-      <button class="btn btn-primary hk-large-btn" onclick="document.querySelector('[data-page=housekeeping]').click()">🧹 Go to Housekeeping Board</button>
+      <button class="btn btn-primary hk-large-btn" onclick="document.querySelector('[data-page=housekeeping]').click()">◧ Go to Housekeeping Board</button>
     </div></div>`;
   }
 
@@ -963,7 +963,7 @@ function renderBookings() {
     {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditBooking(id)},
     {name:'checkin',label:'Check In',cls:'btn-primary',condition:r=>r.arrivalStatus==='Expected',handler:id=>checkIn(id)},
     {name:'checkout',label:'Check Out',cls:'btn-danger',condition:r=>r.arrivalStatus==='Checked-in',handler:id=>checkOut(id)},
-    {name:'services',label:'🛎️',cls:'btn-warning',condition:r=>r.arrivalStatus==='Checked-in',handler:id=>showOrderService(id)},
+    {name:'services',label:'◈',cls:'btn-warning',condition:r=>r.arrivalStatus==='Checked-in',handler:id=>showOrderService(id)},
     {name:'invoice',label:'Invoice',cls:'btn-outline',condition:r=>r.arrivalStatus==='Checked-out',handler:id=>viewInvoice(id)},
   ];
   if (currentRole === 'Manager') {
@@ -1046,7 +1046,7 @@ window.showOrderService = function(id) {
     <div class="modal-body"><div class="form-group"><label>Select Service</label><select class="form-control" id="mSvcSelect">${services.map(s=>`<option value="${s.id}">${s.icon} ${s.name} - ${fmt$(s.unitPrice)}</option>`).join('')}</select></div>
     <div class="form-group"><label>Quantity</label><input type="number" class="form-control" id="mSvcQty" value="1" min="1"></div>
     <h3 style="margin:1rem 0 0.5rem;font-size:0.95rem;">Ordered Services</h3>
-    <ul class="service-list" style="max-height:200px;overflow-y:auto;">${(b.services||[]).length?(b.services||[]).map(s=>`<li class="service-item"><div class="service-left"><div class="service-icon">${s.icon||'🛎️'}</div><div><div class="service-name">${s.name} x${s.quantity||1}</div></div></div><div class="service-price">${fmt$((parseFloat(s.unitPrice)||0)*(parseInt(s.quantity)||1))}</div></li>`).join(''):'<li style="padding:1rem;text-align:center;color:var(--text-light);">No services ordered yet</li>'}</ul></div>
+    <ul class="service-list" style="max-height:200px;overflow-y:auto;">${(b.services||[]).length?(b.services||[]).map(s=>`<li class="service-item"><div class="service-left"><div class="service-icon">${s.icon||'◈'}</div><div><div class="service-name">${s.name} x${s.quantity||1}</div></div></div><div class="service-price">${fmt$((parseFloat(s.unitPrice)||0)*(parseInt(s.quantity)||1))}</div></li>`).join(''):'<li style="padding:1rem;text-align:center;color:var(--text-light);">No services ordered yet</li>'}</ul></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Close</button><button class="btn btn-primary" onclick="orderService('${b.id}')">Add Service</button></div>`);
 };
 window.orderService = function(bId) {
@@ -1227,14 +1227,14 @@ function renderServices() {
 window.showAddService = function() {
   openModal(`<div class="modal-header"><h2>Add Service</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
-    <div class="form-row"><div class="form-group"><label>Icon (emoji)</label><input type="text" class="form-control" id="mSIcon" value="🛎️" maxlength="4"></div><div class="form-group"><label>Service Name</label><input type="text" class="form-control" id="mSName"></div></div>
+    <div class="form-row"><div class="form-group"><label>Icon (emoji)</label><input type="text" class="form-control" id="mSIcon" value="◈" maxlength="4"></div><div class="form-group"><label>Service Name</label><input type="text" class="form-control" id="mSName"></div></div>
     <div class="form-row"><div class="form-group"><label>Category</label><select class="form-control" id="mSCat"><option>Room Service</option><option>Laundry</option><option>Airport Transfer</option><option>Mini-bar</option><option>Spa</option><option>Pool</option></select></div><div class="form-group"><label>Unit Price ($)</label><input type="number" class="form-control" id="mSPrice" step="0.01"></div></div>
     <div class="form-row"><div class="form-group"><label>Tax Rate (%)</label><input type="number" class="form-control" id="mSTax" value="7" step="0.1"></div><div class="form-group"><label>Default Quantity</label><input type="number" class="form-control" id="mSQty" value="1" min="1"></div></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addService()">Add Service</button></div>`);
 };
 window.addService = function() {
   const name = document.getElementById('mSName').value.trim(); if(!name) { toast('Enter service name'); return; }
-  services.push({id:genId(),serviceCategory:document.getElementById('mSCat').value,name:name,unitPrice:parseFloat(document.getElementById('mSPrice').value)||0,quantity:parseInt(document.getElementById('mSQty').value)||1,taxRate:parseFloat(document.getElementById('mSTax').value)||7,serviceDateTime:'',staffId:'',icon:document.getElementById('mSIcon').value||'🛎️'});
+  services.push({id:genId(),serviceCategory:document.getElementById('mSCat').value,name:name,unitPrice:parseFloat(document.getElementById('mSPrice').value)||0,quantity:parseInt(document.getElementById('mSQty').value)||1,taxRate:parseFloat(document.getElementById('mSTax').value)||7,serviceDateTime:'',staffId:'',icon:document.getElementById('mSIcon').value||'◈'});
   save('services',services); logAudit('Add','Service','Added service '+name); closeModal(); renderServices(); toast(name+' added');
 };
 window.showEditService = function(id) {
@@ -1353,7 +1353,7 @@ window.showInvoiceDetail = function(id) {
     ${inv.bookingId?'<p><strong>Booking:</strong> '+inv.bookingId+'</p>':''}
     <hr style="margin:1rem 0;border:none;border-top:1px solid var(--border);">
     <p>Subtotal: <strong>${fmt$(inv.subtotal)}</strong></p>
-    ${(inv.services||[]).length?'<p style="margin-top:0.5rem;font-weight:600;">Services:</p><ul style="list-style:none;margin:0.25rem 0;">'+inv.services.map(s=>`<li style="padding:0.2rem 0;">${s.icon||'🛎️'} ${s.name} x${s.quantity||1} — ${fmt$((parseFloat(s.unitPrice)||0)*(parseInt(s.quantity)||1))}</li>`).join('')+'</ul>':''}
+    ${(inv.services||[]).length?'<p style="margin-top:0.5rem;font-weight:600;">Services:</p><ul style="list-style:none;margin:0.25rem 0;">'+inv.services.map(s=>`<li style="padding:0.2rem 0;">${s.icon||'◈'} ${s.name} x${s.quantity||1} — ${fmt$((parseFloat(s.unitPrice)||0)*(parseInt(s.quantity)||1))}</li>`).join('')+'</ul>':''}
     <p>Discount: <strong>-${fmt$(inv.discountAmount)}</strong></p>
     <p>Tax: <strong>${fmt$(inv.taxTotal)}</strong></p>
     <hr style="margin:1rem 0;border:none;border-top:2px solid var(--text);">
@@ -1378,10 +1378,10 @@ function renderReports() {
   const maxSrc = Math.max(...srcCounts, 1);
   document.getElementById('page-reports').innerHTML = `
     <div class="stats-grid">
-      <div class="stat-card"><div class="stat-icon blue">📈</div><div class="stat-info"><h3>${occRate}%</h3><p>Occupancy Rate (${occRooms}/${totalRooms})</p></div></div>
-      <div class="stat-card"><div class="stat-icon green">💰</div><div class="stat-info"><h3>${fmt$(revpar)}</h3><p>RevPAR</p></div></div>
-      <div class="stat-card"><div class="stat-icon orange">🏷️</div><div class="stat-info"><h3>${fmt$(adr)}</h3><p>ADR</p></div></div>
-      <div class="stat-card"><div class="stat-icon red">💵</div><div class="stat-info"><h3>${fmt$(totalRev)}</h3><p>Total Revenue</p></div></div>
+      <div class="stat-card"><div class="stat-icon blue">◫</div><div class="stat-info"><h3>${occRate}%</h3><p>Occupancy Rate (${occRooms}/${totalRooms})</p></div></div>
+      <div class="stat-card"><div class="stat-icon green">◆</div><div class="stat-info"><h3>${fmt$(revpar)}</h3><p>RevPAR</p></div></div>
+      <div class="stat-card"><div class="stat-icon orange">◈</div><div class="stat-info"><h3>${fmt$(adr)}</h3><p>ADR</p></div></div>
+      <div class="stat-card"><div class="stat-icon red">▥</div><div class="stat-info"><h3>${fmt$(totalRev)}</h3><p>Total Revenue</p></div></div>
     </div>
     <div class="dash-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
       <div class="card"><div class="card-header"><h2>Monthly Revenue</h2></div><div class="card-body">${renderBarChart([
@@ -1623,10 +1623,10 @@ function renderHousekeeping() {
   const largeCls = isHK ? ' hk-large' : '';
   document.getElementById('page-housekeeping').innerHTML = `
     <div class="stats-grid">
-      <div class="stat-card"><div class="stat-icon red">🔴</div><div class="stat-info"><h3>${dirtyCnt}</h3><p>Dirty</p></div></div>
-      <div class="stat-card"><div class="stat-icon orange">🟠</div><div class="stat-info"><h3>${ipCnt}</h3><p>In Progress</p></div></div>
-      <div class="stat-card"><div class="stat-icon green">🟢</div><div class="stat-info"><h3>${cleanCnt}</h3><p>Clean</p></div></div>
-      <div class="stat-card"><div class="stat-icon blue">🔵</div><div class="stat-info"><h3>${inspCnt}</h3><p>Inspected</p></div></div>
+      <div class="stat-card"><div class="stat-icon red">●</div><div class="stat-info"><h3>${dirtyCnt}</h3><p>Dirty</p></div></div>
+      <div class="stat-card"><div class="stat-icon orange">●</div><div class="stat-info"><h3>${ipCnt}</h3><p>In Progress</p></div></div>
+      <div class="stat-card"><div class="stat-icon green">●</div><div class="stat-info"><h3>${cleanCnt}</h3><p>Clean</p></div></div>
+      <div class="stat-card"><div class="stat-icon blue">●</div><div class="stat-info"><h3>${inspCnt}</h3><p>Inspected</p></div></div>
     </div>
     <div class="card"><div class="card-header"><h2>Housekeeping Board</h2><div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;"><span style="font-size:0.78rem;color:var(--text-light);">Click a card to cycle: Dirty → In Progress → Clean → Inspected</span>${isHK?'<button class="btn btn-warning hk-large-btn" onclick="showReportIssue()">🔧 Report Issue</button>':''}</div></div><div class="card-body">
       <div class="hk-grid">${sorted.map(r => {
@@ -1755,7 +1755,7 @@ window.lookupBooking = function() {
       <p><strong>Guests:</strong> ${b.numAdults} adult(s), ${b.numChildren||0} child(ren)</p>
       ${b.specialRequests?'<p><strong>Special Requests:</strong> '+b.specialRequests+'</p>':''}
       <h3 style="margin:1.5rem 0 0.75rem;font-size:0.95rem;">Ordered Services</h3>
-      <ul class="service-list">${(b.services||[]).length?(b.services||[]).map(s=>`<li class="service-item"><div class="service-left"><div class="service-icon">${s.icon||'🛎️'}</div><div><div class="service-name">${s.name} x${s.quantity||1}</div></div></div><div class="service-price">${fmt$((parseFloat(s.unitPrice)||0)*(parseInt(s.quantity)||1))}</div></li>`).join(''):'<li style="padding:0.75rem;text-align:center;color:var(--text-light);">No services ordered</li>'}</ul>
+      <ul class="service-list">${(b.services||[]).length?(b.services||[]).map(s=>`<li class="service-item"><div class="service-left"><div class="service-icon">${s.icon||'◈'}</div><div><div class="service-name">${s.name} x${s.quantity||1}</div></div></div><div class="service-price">${fmt$((parseFloat(s.unitPrice)||0)*(parseInt(s.quantity)||1))}</div></li>`).join(''):'<li style="padding:0.75rem;text-align:center;color:var(--text-light);">No services ordered</li>'}</ul>
       ${b.arrivalStatus==='Checked-in'?`<h3 style="margin:1.5rem 0 0.75rem;font-size:0.95rem;">Request a Service</h3>
       <div class="form-row"><div class="form-group"><label>Service</label><select class="form-control" id="gpSvcSelect">${services.map(s=>`<option value="${s.id}">${s.icon} ${s.name} — ${fmt$(s.unitPrice)}</option>`).join('')}</select></div><div class="form-group"><label>Note</label><input type="text" class="form-control" id="gpSvcNote" placeholder="Optional note"></div></div>
       <button class="btn btn-primary" onclick="gpOrderService('${b.id}')">Submit Service Request</button>`:''}
@@ -1869,7 +1869,7 @@ function navigateToDefaultPage() {
 window.toggleDarkMode = function() {
   document.body.classList.toggle('dark-mode');
   const isDark = document.body.classList.contains('dark-mode');
-  document.getElementById('darkToggle').textContent = isDark ? '☀️' : '🌙';
+  document.getElementById('darkToggle').textContent = isDark ? '◑' : '◐';
   settings.darkMode = isDark;
   save('settings', settings);
   try { localStorage.setItem(DB_KEY + 'darkMode', isDark ? '1' : '0'); } catch(e) {}
@@ -1911,7 +1911,7 @@ function applyRBAC() {
 // ===== INIT =====
 if (settings.darkMode || (function(){ try { return localStorage.getItem(DB_KEY + 'darkMode') === '1'; } catch(e) { return false; } })()) {
   document.body.classList.add('dark-mode');
-  document.getElementById('darkToggle').textContent = '☀️';
+  document.getElementById('darkToggle').textContent = '◑';
 }
 
 // ===== FIRST-TIME SETUP =====
