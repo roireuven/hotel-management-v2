@@ -207,13 +207,13 @@
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label17.Font = new System.Drawing.Font("Segoe UI", 9.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label17.ForeColor = System.Drawing.Color.SeaGreen;
             this.label17.Location = new System.Drawing.Point(23, 31);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(73, 20);
             this.label17.TabIndex = 63;
-            this.label17.Text = "Mật khẩu:";
+            this.label17.Text = "Pass";
             // 
             // bunifuCheckbox2
             // 
