@@ -2088,10 +2088,7 @@ function renderInventory() {
       {field:'status',label:'Status',format:(v,r)=>{const st=inventoryStatus(r);const cls=st==='In Stock'?'active':st==='Low'?'pending':'maintenance';return `<span class="status status-${cls}">${st}</span>`;},filterable:true},
     ],
     data: inventory,
-    onAdd: () => {
-      inventory.push({id:genId(),itemName:'New Item',category:'Supplies',quantity:0,reorderLevel:10,lastOrdered:today(),status:'Out of Stock'});
-      save('inventory',inventory); logAudit('Add','Inventory','Added new inventory item'); renderInventory(); toast('Item added');
-    },
+    onAdd: () => showAddInventory(), addLabel: 'Add New Item',
     onEdit: (row, field, val) => {
       const it = inventory.find(x=>x.id===row.id); if(!it) return;
       it[field] = val;
@@ -2099,6 +2096,7 @@ function renderInventory() {
       save('inventory',inventory); logAudit('Update','Inventory','Updated '+it.itemName); toast('Inventory updated'); renderInventory();
     },
     actions: [
+      {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditInventory(id)},
       {name:'delete',label:'✕',cls:'btn-danger',handler:id=>{
         if(!confirm('Delete this item?')) return;
         const it = inventory.find(x=>x.id===id);
@@ -2108,6 +2106,45 @@ function renderInventory() {
     ]
   });
 }
+window.showAddInventory = function() {
+  openModal(`<div class="modal-header"><h2>Add Inventory Item</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body">
+    <div class="form-group"><label>Item Name</label><input type="text" class="form-control" id="mInvName" placeholder="e.g. Bath Towels"></div>
+    <div class="form-row"><div class="form-group"><label>Category</label><select class="form-control" id="mInvCat"><option>Linen</option><option>Toiletries</option><option>F&B</option><option>Supplies</option></select></div><div class="form-group"><label>Quantity</label><input type="number" class="form-control" id="mInvQty" value="0" min="0"></div></div>
+    <div class="form-row"><div class="form-group"><label>Reorder Level</label><input type="number" class="form-control" id="mInvReorder" value="10" min="0"></div><div class="form-group"><label>Last Ordered</label><input type="date" class="form-control" id="mInvDate" value="${today()}"></div></div></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addInventoryItem()">Add Item</button></div>`);
+};
+window.addInventoryItem = function() {
+  const name = document.getElementById('mInvName').value.trim(); if(!name) { toast('Enter item name'); return; }
+  const it = {id:genId(),itemName:name,category:document.getElementById('mInvCat').value,quantity:parseInt(document.getElementById('mInvQty').value)||0,reorderLevel:parseInt(document.getElementById('mInvReorder').value)||10,lastOrdered:document.getElementById('mInvDate').value||today(),status:''};
+  it.status = inventoryStatus(it);
+  inventory.push(it); save('inventory',inventory); logAudit('Add','Inventory','Added '+name); closeModal(); renderInventory(); toast(name+' added');
+};
+window.showEditInventory = function(id) {
+  const it = inventory.find(x=>x.id===id); if(!it) return;
+  openModal(`<div class="modal-header"><h2>Edit Inventory Item</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body">
+    <div class="form-group"><label>Item Name</label><input type="text" class="form-control" id="eInvName" value="${it.itemName}"></div>
+    <div class="form-row"><div class="form-group"><label>Category</label><select class="form-control" id="eInvCat">${['Linen','Toiletries','F&B','Supplies'].map(c=>`<option ${c===it.category?'selected':''}>${c}</option>`).join('')}</select></div><div class="form-group"><label>Quantity</label><input type="number" class="form-control" id="eInvQty" value="${it.quantity}" min="0"></div></div>
+    <div class="form-row"><div class="form-group"><label>Reorder Level</label><input type="number" class="form-control" id="eInvReorder" value="${it.reorderLevel}" min="0"></div><div class="form-group"><label>Last Ordered</label><input type="date" class="form-control" id="eInvDate" value="${it.lastOrdered||''}"></div></div></div>
+    <div class="modal-footer"><button class="btn btn-danger" onclick="deleteInventoryItem('${it.id}')">Delete</button><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateInventoryItem('${it.id}')">Save</button></div>`);
+};
+window.updateInventoryItem = function(id) {
+  const it = inventory.find(x=>x.id===id); if(!it) return;
+  it.itemName = document.getElementById('eInvName').value||it.itemName;
+  it.category = document.getElementById('eInvCat').value;
+  it.quantity = parseInt(document.getElementById('eInvQty').value)||0;
+  it.reorderLevel = parseInt(document.getElementById('eInvReorder').value)||0;
+  it.lastOrdered = document.getElementById('eInvDate').value;
+  it.status = inventoryStatus(it);
+  save('inventory',inventory); logAudit('Update','Inventory','Updated '+it.itemName); closeModal(); renderInventory(); toast(it.itemName+' updated');
+};
+window.deleteInventoryItem = function(id) {
+  if(!confirm('Delete this item?')) return;
+  const it = inventory.find(x=>x.id===id);
+  inventory = inventory.filter(x=>x.id!==id); save('inventory',inventory);
+  logAudit('Delete','Inventory','Deleted '+(it?it.itemName:id)); closeModal(); renderInventory(); toast('Item deleted');
+};
 
 // ===== LOGIN / LOGOUT =====
 window.doLogin = function() {
@@ -2275,11 +2312,10 @@ let _cselTarget = null;
 function closeCsel() { document.getElementById('cselOverlay').classList.remove('active'); _cselTarget = null; }
 document.getElementById('cselOverlay').addEventListener('click', function(e) { if(e.target === this) closeCsel(); });
 
-document.addEventListener('mousedown', function(e) {
-  const sel = e.target.closest('select.form-control');
-  if (!sel) return;
-  e.preventDefault(); e.stopPropagation();
+function openCsel(sel) {
+  if (!sel || sel.tagName !== 'SELECT') return;
   _cselTarget = sel;
+  sel.blur();
   const label = sel.closest('.form-group')?.querySelector('label')?.textContent?.replace('⊕','').trim() || 'Select';
   document.getElementById('cselTitle').textContent = label;
   const list = document.getElementById('cselList');
@@ -2290,7 +2326,7 @@ document.addEventListener('mousedown', function(e) {
   });
   list.innerHTML = html;
   document.getElementById('cselOverlay').classList.add('active');
-  list.addEventListener('click', function handler(ev) {
+  list.onclick = function(ev) {
     const item = ev.target.closest('.csel-item');
     if (!item) return;
     const idx = parseInt(item.getAttribute('data-idx'));
@@ -2299,9 +2335,11 @@ document.addEventListener('mousedown', function(e) {
       _cselTarget.dispatchEvent(new Event('change', {bubbles:true}));
     }
     closeCsel();
-    list.removeEventListener('click', handler);
-  });
-}, true);
+  };
+}
+document.addEventListener('mousedown', function(e) { const sel = e.target.closest('select.form-control'); if(sel){e.preventDefault();e.stopPropagation();openCsel(sel);} }, true);
+document.addEventListener('touchstart', function(e) { const sel = e.target.closest('select.form-control'); if(sel){e.preventDefault();e.stopPropagation();openCsel(sel);} }, {capture:true, passive:false});
+document.addEventListener('focus', function(e) { if(e.target && e.target.matches && e.target.matches('select.form-control')){e.target.blur();openCsel(e.target);} }, true);
 </script>
 </body>
 </html>
