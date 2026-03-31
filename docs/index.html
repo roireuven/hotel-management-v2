@@ -236,6 +236,8 @@
     .login-creds .cred-role { font-weight: 600; white-space: nowrap; }
     .login-creds .cred-email { font-family: monospace; font-size: 0.75rem; color: #1a73e8; cursor: pointer; }
     .login-creds .cred-access { font-size: 0.7rem; color: #65676b; }
+    .login-creds tr { position: relative; }
+    .login-creds tr[data-tip]:hover::after, .login-creds tr[data-tip]:active::after { content: attr(data-tip); position: absolute; left: 0; bottom: 100%; background: #323232; color: #fff; padding: 0.4rem 0.7rem; border-radius: 6px; font-size: 0.75rem; white-space: nowrap; z-index: 10; pointer-events: none; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
     .login-creds .cred-pw { font-family: monospace; }
     body.dark-mode .login-creds { border-top-color: #2a2a4a; }
     body.dark-mode .login-creds th { background: #1a1a2e; color: #a0a0a0; border-bottom-color: #2a2a4a; }
@@ -272,12 +274,12 @@
       <div class="login-creds">
         <h3>Demo Credentials</h3>
         <table>
-          <thead><tr><th>Role</th><th>Email (Username)</th><th>Password</th><th>Access</th></tr></thead>
+          <thead><tr><th>Role</th><th>Email (Username)</th><th>Password</th></tr></thead>
           <tbody>
-            <tr><td class="cred-role">👑 Admin</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">admin@hotel.com</td><td class="cred-pw">1234</td><td class="cred-access">Full system control, settings, accounts, audit</td></tr>
-            <tr><td class="cred-role">📊 Manager</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">mike@hotel.com</td><td class="cred-pw">1234</td><td class="cred-access">Reports, inventory, overrides, analytics</td></tr>
-            <tr><td class="cred-role">🛎️ Reception</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">jane@hotel.com</td><td class="cred-pw">1234</td><td class="cred-access">Rooms, bookings, check-in/out, invoices</td></tr>
-            <tr><td class="cred-role">🧹 Housekeeper</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">tom@hotel.com</td><td class="cred-pw">1234</td><td class="cred-access">Room cleaning status, maintenance tickets</td></tr>
+            <tr data-tip="Full system control, settings, accounts, audit"><td class="cred-role">👑 Admin</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">admin@hotel.com</td><td class="cred-pw">1234</td></tr>
+            <tr data-tip="Reports, inventory, overrides, analytics"><td class="cred-role">📊 Manager</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">mike@hotel.com</td><td class="cred-pw">1234</td></tr>
+            <tr data-tip="Rooms, bookings, check-in/out, invoices"><td class="cred-role">🛎️ Reception</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">jane@hotel.com</td><td class="cred-pw">1234</td></tr>
+            <tr data-tip="Room cleaning status, maintenance tickets"><td class="cred-role">🧹 Housekeeper</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">tom@hotel.com</td><td class="cred-pw">1234</td></tr>
           </tbody>
         </table>
         <p style="text-align:center;margin-top:0.6rem;font-size:0.72rem;color:#999;">Tap an email to auto-fill the username field</p>
