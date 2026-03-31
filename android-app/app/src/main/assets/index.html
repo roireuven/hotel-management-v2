@@ -217,9 +217,47 @@
     .msg-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; }
     .msg-icon.welcome { background: #e8f5e9; } .msg-icon.invoice { background: #e3f2fd; } .msg-icon.reminder { background: #fff3e0; }
     .msg-text { flex: 1; } .msg-meta { font-size: 0.72rem; color: var(--text-light); margin-top: 0.15rem; }
+    /* Login Overlay */
+    #loginOverlay { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #2c3e50 0%, #1a73e8 100%); }
+    #loginOverlay.hidden { display: none; }
+    .login-card { background: #fff; border-radius: 16px; padding: 2.5rem; width: 90%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); text-align: center; }
+    .login-card .login-logo { font-size: 3rem; margin-bottom: 0.5rem; }
+    .login-card h1 { font-size: 1.5rem; font-weight: 700; color: #2c3e50; margin-bottom: 0.25rem; }
+    .login-card .login-sub { font-size: 0.85rem; color: #65676b; margin-bottom: 1.5rem; }
+    .login-card .form-group { text-align: left; }
+    .login-card .login-error { color: #e74c3c; font-size: 0.85rem; margin-top: 0.5rem; min-height: 1.2em; }
+    .login-card .btn-login { width: 100%; padding: 0.75rem; font-size: 1rem; margin-top: 0.5rem; }
+    .login-card .login-hint { font-size: 0.78rem; color: #65676b; margin-top: 1.25rem; line-height: 1.5; }
+    body.dark-mode #loginOverlay { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); }
+    body.dark-mode .login-card { background: #16213e; }
+    body.dark-mode .login-card h1 { color: #e0e0e0; }
+    body.dark-mode .login-card .login-sub, body.dark-mode .login-card .login-hint { color: #a0a0a0; }
+    /* Housekeeper large buttons */
+    .hk-card.hk-large { min-height: 100px; padding: 1.25rem; }
+    .hk-card.hk-large .hk-room { font-size: 1.6rem; }
+    .hk-card.hk-large .hk-status { font-size: 0.85rem; margin-top: 0.5rem; }
+    .hk-large-btn { min-height: 60px; font-size: 1.1rem; padding: 0.75rem 1.5rem; border-radius: 12px; }
+    /* Topbar user display */
+    .topbar-user { display: flex; align-items: center; gap: 0.75rem; }
+    .topbar-user .user-name { font-size: 0.85rem; font-weight: 500; }
+    .topbar-user .user-role-tag { font-size: 0.72rem; color: var(--text-light); }
+    .btn-logout { background: transparent; border: 1px solid var(--border); color: var(--text); padding: 0.3rem 0.75rem; border-radius: 8px; font-size: 0.8rem; cursor: pointer; font-family: inherit; transition: all 0.15s ease; }
+    .btn-logout:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
   </style>
 </head>
 <body>
+  <div id="loginOverlay">
+    <div class="login-card">
+      <div class="login-logo">🏨</div>
+      <h1>Hotel Manager</h1>
+      <p class="login-sub">Management System — Please sign in</p>
+      <div class="form-group"><label>Username</label><input type="text" class="form-control" id="loginUsername" placeholder="Enter your email"></div>
+      <div class="form-group"><label>Password</label><input type="password" class="form-control" id="loginPassword" placeholder="Enter password"></div>
+      <button class="btn btn-primary btn-login" onclick="doLogin()">Sign In</button>
+      <div class="login-error" id="loginError"></div>
+      <div class="login-hint">Default password for all accounts: <strong>1234</strong></div>
+    </div>
+  </div>
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header"><div class="logo">🏨</div><div><h2>Hotel Manager</h2><span>Management System</span></div></div>
@@ -235,6 +273,7 @@
       <div class="nav-section">Services</div>
       <a data-page="services"><span class="icon">🍽️</span> Services</a>
       <a data-page="invoices"><span class="icon">🧾</span> Invoices</a>
+      <a data-page="inventory"><span class="icon">📦</span> Inventory</a>
       <div class="nav-section">Guest</div>
       <a data-page="guestportal"><span class="icon">🏷️</span> Guest Portal</a>
       <div class="nav-section">Admin</div>
@@ -247,7 +286,7 @@
   <div class="main">
     <div class="topbar">
       <div class="topbar-left"><button class="menu-toggle" id="menuToggle">☰</button><h1 id="pageTitle">Dashboard</h1></div>
-      <div class="topbar-right"><button class="dark-toggle" id="darkToggle" onclick="toggleDarkMode()" title="Toggle Dark Mode">🌙</button><select class="role-select" id="roleSelect" onchange="changeRole(this.value)"><option value="Admin">Admin</option><option value="Receptionist">Receptionist</option><option value="Housekeeper">Housekeeper</option></select><div class="user-info"><span id="userRoleLabel">Admin</span><div class="avatar" id="userAvatar">A</div></div></div>
+      <div class="topbar-right"><button class="dark-toggle" id="darkToggle" onclick="toggleDarkMode()" title="Toggle Dark Mode">🌙</button><div class="topbar-user"><div><div class="user-name" id="topbarUserName"></div><div class="user-role-tag" id="topbarUserRole"></div></div><div class="avatar" id="userAvatar">A</div></div><button class="btn-logout" id="logoutBtn" onclick="doLogout()">Logout</button></div>
     </div>
     <div class="content">
       <div class="page active" id="page-dashboard"></div>
@@ -263,6 +302,7 @@
       <div class="page" id="page-maintenance"></div>
       <div class="page" id="page-guestportal"></div>
       <div class="page" id="page-settings"></div>
+      <div class="page" id="page-inventory"></div>
     </div>
   </div>
   <div class="modal-overlay" id="modalOverlay"><div class="modal" id="modalContent"></div></div>
@@ -358,6 +398,7 @@ class XGrid {
     this.onDelete = opts.onDelete || null;
     this.onAdd = opts.onAdd || null;
     this.actions = opts.actions || [];
+    this.hideExport = opts.hideExport || false;
     this.sortCol = null; this.sortDir = 'asc';
     this.filters = {};
     this.pageSize = 15; this.page = 0;
@@ -406,9 +447,10 @@ class XGrid {
     const paged = this.getPaged(); const filtered = this.getFiltered();
     const totalPages = this.getTotalPages();
     const addBtn = this.onAdd ? `<button class="btn btn-sm btn-primary" onclick="window._xg_${this.container.id}.onAdd()">+ Add Row</button>` : '';
+    const exportBtn = this.hideExport ? '' : `<button class="btn btn-sm btn-outline" onclick="window._xg_${this.container.id}.exportCSV()">📥 Export CSV</button>`;
     let html = `<div class="xgrid-toolbar">
       ${addBtn}
-      <button class="btn btn-sm btn-outline" onclick="window._xg_${this.container.id}.exportCSV()">📥 Export CSV</button>
+      ${exportBtn}
       <span class="xg-info">${filtered.length} row${filtered.length !== 1 ? 's' : ''}</span>
     </div>`;
     html += `<div class="xgrid-wrap"><table class="xgrid"><thead><tr>`;
@@ -503,9 +545,11 @@ function nextInvoiceNumber() {
 
 // ===== AUDIT LOG =====
 let currentRole = 'Admin';
+let currentUser = null;
 function logAudit(action, tableName, recordId, details) {
   if (details === undefined) { details = recordId; recordId = ''; }
-  auditLog.push({id:genId(), timestamp:new Date().toISOString(), action:action, entity:tableName, recordId:String(recordId), detail:details, user:currentRole||'Admin'});
+  const userName = currentUser ? currentUser.name : (currentRole || 'Admin');
+  auditLog.push({id:genId(), timestamp:new Date().toISOString(), action:action, entity:tableName, recordId:String(recordId), detail:details, user:userName});
   if (auditLog.length > 500) auditLog = auditLog.slice(-500);
   save('auditLog', auditLog);
 }
@@ -573,6 +617,18 @@ const defaultMessages = [
   {id:genId(),bookingId:'BK-1003',guestName:'Akira Tanaka',type:'Welcome',message:'Welcome to Grand Hotel Management! Your room 201 is ready. We hope you enjoy your stay.',sentAt:'2026-03-30T14:00:00',channel:'Email'},
   {id:genId(),bookingId:'BK-1006',guestName:'Lin Wei',type:'Welcome',message:'Welcome to Grand Hotel Management! Your room 305 is ready. We hope you enjoy your stay.',sentAt:'2026-03-27T14:00:00',channel:'Email'},
 ];
+const defaultInventory = [
+  {id:genId(),itemName:'Bath Towels',category:'Linen',quantity:120,reorderLevel:30,lastOrdered:'2026-03-15'},
+  {id:genId(),itemName:'Bed Sheets (King)',category:'Linen',quantity:80,reorderLevel:20,lastOrdered:'2026-03-10'},
+  {id:genId(),itemName:'Bed Sheets (Twin)',category:'Linen',quantity:60,reorderLevel:15,lastOrdered:'2026-03-10'},
+  {id:genId(),itemName:'Shampoo Bottles',category:'Toiletries',quantity:200,reorderLevel:50,lastOrdered:'2026-03-20'},
+  {id:genId(),itemName:'Soap Bars',category:'Toiletries',quantity:250,reorderLevel:60,lastOrdered:'2026-03-18'},
+  {id:genId(),itemName:'Water Bottles',category:'F&B',quantity:500,reorderLevel:100,lastOrdered:'2026-03-25'},
+  {id:genId(),itemName:'Coffee Pods',category:'F&B',quantity:8,reorderLevel:40,lastOrdered:'2026-02-28'},
+  {id:genId(),itemName:'Toilet Paper Rolls',category:'Supplies',quantity:0,reorderLevel:50,lastOrdered:'2026-03-01'},
+  {id:genId(),itemName:'Pillow Cases',category:'Linen',quantity:90,reorderLevel:25,lastOrdered:'2026-03-12'},
+  {id:genId(),itemName:'Hand Sanitizer',category:'Supplies',quantity:45,reorderLevel:20,lastOrdered:'2026-03-22'},
+];
 
 // ===== LOAD DATA =====
 let rooms = load('rooms', null); if(!rooms) { rooms = defaultRooms; save('rooms', rooms); }
@@ -585,6 +641,7 @@ let auditLog = load('auditLog', []);
 let settings = load('settings', defaultSettings);
 let tickets = load('tickets', null); if(!tickets) { tickets = defaultTickets; save('tickets', tickets); }
 let messages = load('messages', null); if(!messages) { messages = defaultMessages; save('messages', messages); }
+let inventory = load('inventory', null); if(!inventory) { inventory = defaultInventory; save('inventory', inventory); }
 
 if(bookings.length === 0) {
   const seed = [
@@ -605,7 +662,7 @@ if(bookings.length === 0) {
 }
 
 // ===== NAVIGATION =====
-const pageTitles = {dashboard:'Dashboard',rooms:'Room Management',bookings:'Bookings',guests:'Guest Directory',housekeeping:'Housekeeping',maintenance:'Maintenance Tickets',services:'Services',invoices:'Invoices',guestportal:'Guest Portal',reports:'Reports & Analytics',accounts:'User Accounts',auditlog:'Audit Log',settings:'Settings & Regulations'};
+const pageTitles = {dashboard:'Dashboard',rooms:'Room Management',bookings:'Bookings',guests:'Guest Directory',housekeeping:'Housekeeping',maintenance:'Maintenance Tickets',services:'Services',invoices:'Invoices',guestportal:'Guest Portal',reports:'Reports & Analytics',accounts:'User Accounts',auditlog:'Audit Log',settings:'Settings & Regulations',inventory:'Inventory Management'};
 
 document.querySelectorAll('#sidebarNav a[data-page]').forEach(link => {
   link.addEventListener('click', () => {
@@ -628,7 +685,7 @@ function closeModal() { document.getElementById('modalOverlay').classList.remove
 document.getElementById('modalOverlay').addEventListener('click', e => { if(e.target === document.getElementById('modalOverlay')) closeModal(); });
 
 function renderPage(page) {
-  const fn = {dashboard:renderDashboard,rooms:renderRooms,bookings:renderBookings,guests:renderGuests,housekeeping:renderHousekeeping,maintenance:renderMaintenance,services:renderServices,invoices:renderInvoices,guestportal:renderGuestPortal,reports:renderReports,accounts:renderAccounts,auditlog:renderAuditLog,settings:renderSettings};
+  const fn = {dashboard:renderDashboard,rooms:renderRooms,bookings:renderBookings,guests:renderGuests,housekeeping:renderHousekeeping,maintenance:renderMaintenance,services:renderServices,invoices:renderInvoices,guestportal:renderGuestPortal,reports:renderReports,accounts:renderAccounts,auditlog:renderAuditLog,settings:renderSettings,inventory:renderInventory};
   if(fn[page]) fn[page]();
   updateBadges();
 }
@@ -659,17 +716,33 @@ function renderDashboard() {
   const vacant = rooms.filter(r=>r.occupancyStatus==='Vacant' && r.housekeepingStatus!=='Out of Service').length;
   const occ = rooms.filter(r=>r.occupancyStatus==='Occupied').length;
   const oos = rooms.filter(r=>r.housekeepingStatus==='Out of Service').length;
+  const isHK = currentRole === 'Housekeeper';
   const recent = bookings.filter(b=>b.arrivalStatus==='Checked-in'||b.arrivalStatus==='Expected').slice(-5).reverse();
   const totalRev = invoices.reduce((s,i)=>s+(parseFloat(i.grandTotal)||0),0);
   const recentMsgs = messages.slice(-5).reverse();
-  document.getElementById('page-dashboard').innerHTML = `
-    <div class="stats-grid">
+  const dirtyCnt = rooms.filter(r=>r.housekeepingStatus==='Dirty').length;
+  const cleanCnt = rooms.filter(r=>r.housekeepingStatus==='Clean').length;
+
+  let statsHtml;
+  if (isHK) {
+    statsHtml = `<div class="stats-grid">
+      <div class="stat-card"><div class="stat-icon blue">🏨</div><div class="stat-info"><h3>${total}</h3><p>Total Rooms</p></div></div>
+      <div class="stat-card"><div class="stat-icon red">🔴</div><div class="stat-info"><h3>${dirtyCnt}</h3><p>Dirty</p></div></div>
+      <div class="stat-card"><div class="stat-icon green">🟢</div><div class="stat-info"><h3>${cleanCnt}</h3><p>Clean</p></div></div>
+      <div class="stat-card"><div class="stat-icon orange">🔧</div><div class="stat-info"><h3>${oos}</h3><p>Out of Service</p></div></div>
+    </div>`;
+  } else {
+    statsHtml = `<div class="stats-grid">
       <div class="stat-card"><div class="stat-icon blue">🏨</div><div class="stat-info"><h3>${total}</h3><p>Total Rooms</p></div></div>
       <div class="stat-card"><div class="stat-icon green">✅</div><div class="stat-info"><h3>${vacant}</h3><p>Vacant</p></div></div>
       <div class="stat-card"><div class="stat-icon orange">📋</div><div class="stat-info"><h3>${occ}</h3><p>Occupied</p></div></div>
       <div class="stat-card"><div class="stat-icon red">🔧</div><div class="stat-info"><h3>${oos}</h3><p>Out of Service</p></div></div>
-    </div>
-    <div class="dash-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+    </div>`;
+  }
+
+  let bodyHtml = '';
+  if (!isHK) {
+    bodyHtml += `<div class="dash-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
       <div class="card"><div class="card-header"><h2>Revenue (Last 7 Days)</h2></div><div class="card-body">${renderBarChart([
         {label:'Mon',v1:1200,v2:300},{label:'Tue',v1:1500,v2:450},{label:'Wed',v1:1800,v2:400},{label:'Thu',v1:1400,v2:500},{label:'Fri',v1:2100,v2:600},{label:'Sat',v1:2400,v2:700},{label:'Sun',v1:2000,v2:550}
       ])}</div></div>
@@ -678,6 +751,14 @@ function renderDashboard() {
     <div class="card"><div class="card-header"><h2>📨 Communication Log</h2></div><div class="card-body">
       ${recentMsgs.length?recentMsgs.map(m=>`<div class="msg-item"><div class="msg-icon ${m.type.toLowerCase()}">${m.type==='Welcome'?'👋':m.type==='Invoice'?'🧾':'🔔'}</div><div class="msg-text"><strong>${m.guestName}</strong> — ${m.message}<div class="msg-meta">${m.type} · ${m.channel} · ${new Date(m.sentAt).toLocaleString()}</div></div></div>`).join(''):'<p style="text-align:center;color:var(--text-light);padding:1rem;">No messages yet</p>'}
     </div></div>`;
+  } else {
+    bodyHtml += `<div class="card"><div class="card-header"><h2>Your Tasks Today</h2></div><div class="card-body">
+      <p style="font-size:1rem;margin-bottom:1rem;">You have <strong>${dirtyCnt}</strong> rooms that need cleaning and <strong>${oos}</strong> rooms out of service.</p>
+      <button class="btn btn-primary hk-large-btn" onclick="document.querySelector('[data-page=housekeeping]').click()">🧹 Go to Housekeeping Board</button>
+    </div></div>`;
+  }
+
+  document.getElementById('page-dashboard').innerHTML = statsHtml + bodyHtml;
 }
 
 // ===== ROOMS =====
@@ -693,10 +774,12 @@ function renderRooms() {
   let filtered = rooms;
   if (roomFilter === 'Out of Service') filtered = rooms.filter(r=>r.housekeepingStatus==='Out of Service');
   else if (roomFilter !== 'all') filtered = rooms.filter(r=>r.occupancyStatus===roomFilter && r.housekeepingStatus!=='Out of Service');
+  const addRoomBtn = (currentRole === 'Receptionist' || currentRole === 'Housekeeper') ? '' : '<button class="btn btn-primary" onclick="showAddRoom()">+ Add Room</button>';
+  const showPrice = currentRole !== 'Housekeeper';
   document.getElementById('page-rooms').innerHTML = `
-    <div class="card"><div class="card-header"><h2>Room Overview</h2><button class="btn btn-primary" onclick="showAddRoom()">+ Add Room</button></div><div class="card-body">
+    <div class="card"><div class="card-header"><h2>Room Overview</h2>${addRoomBtn}</div><div class="card-body">
       <div style="display:flex;gap:0.75rem;margin-bottom:1.25rem;flex-wrap:wrap;">${['all','Vacant','Occupied','Reserved','Out of Service'].map(f=>`<button class="btn ${roomFilter===f?'btn-primary':'btn-outline'}" onclick="roomFilter='${f}';renderRooms()">${f==='all'?'All':f} (${counts[f]})</button>`).join('')}</div>
-      <div class="room-grid">${filtered.map(r=>`<div class="room-tile room-${roomTileClass(r)}" onclick="showRoomDetail('${r.id}')"><div class="room-number">${r.roomNumber}</div><div class="room-type">${r.roomType} · ${r.bedConfig}</div><div class="room-price">${fmt$(r.price)}/night</div><div class="room-status">${roomTileLabel(r)}</div></div>`).join('')}</div>
+      <div class="room-grid">${filtered.map(r=>`<div class="room-tile room-${roomTileClass(r)}" onclick="showRoomDetail('${r.id}')"><div class="room-number">${r.roomNumber}</div><div class="room-type">${r.roomType} · ${r.bedConfig}</div>${showPrice?`<div class="room-price">${fmt$(r.price)}/night</div>`:''}<div class="room-status">${roomTileLabel(r)}</div></div>`).join('')}</div>
     </div></div>`;
 }
 window.showAddRoom = function() {
@@ -730,7 +813,7 @@ window.showRoomDetail = function(id) {
     <div class="form-row"><div class="form-group"><label>Housekeeping Status</label><select class="form-control" id="eRoomHK">${hkStatuses.map(s=>`<option ${s===r.housekeepingStatus?'selected':''}>${s}</option>`).join('')}</select></div><div class="form-group"><label>Occupancy Status</label><select class="form-control" id="eRoomOcc">${occStatuses.map(s=>`<option ${s===r.occupancyStatus?'selected':''}>${s}</option>`).join('')}</select></div></div>
     <div class="form-group"><label>Amenities</label><input type="text" class="form-control" id="eRoomAmen" value="${r.amenities||''}"></div>
     <div class="form-group"><label>Maintenance Logs</label><textarea class="form-control" id="eRoomMaint" rows="2">${r.maintenanceLogs||''}</textarea></div></div>
-    <div class="modal-footer"><button class="btn btn-danger" onclick="deleteRoom('${r.id}')">Delete</button><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateRoom('${r.id}')">Save</button></div>`);
+    <div class="modal-footer">${(currentRole !== 'Receptionist' && currentRole !== 'Housekeeper') ? '<button class="btn btn-danger" onclick="deleteRoom(\''+r.id+'\')">Delete</button>' : ''}<button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateRoom('${r.id}')">Save</button></div>`);
 };
 window.updateRoom = function(id) {
   const r = rooms.find(x=>x.id===id); if(!r) return;
@@ -759,6 +842,20 @@ function renderBookings() {
   const sorted = [...bookings].sort((a,b)=>a.checkinDate>b.checkinDate?-1:1);
   document.getElementById('page-bookings').innerHTML = `
     <div class="card"><div class="card-header"><h2>Bookings</h2></div><div class="card-body"><div id="bookingGrid"></div></div></div>`;
+  const bkActions = [
+    {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditBooking(id)},
+    {name:'checkin',label:'Check In',cls:'btn-primary',condition:r=>r.arrivalStatus==='Expected',handler:id=>checkIn(id)},
+    {name:'checkout',label:'Check Out',cls:'btn-danger',condition:r=>r.arrivalStatus==='Checked-in',handler:id=>checkOut(id)},
+    {name:'services',label:'🛎️',cls:'btn-warning',condition:r=>r.arrivalStatus==='Checked-in',handler:id=>showOrderService(id)},
+    {name:'invoice',label:'Invoice',cls:'btn-outline',condition:r=>r.arrivalStatus==='Checked-out',handler:id=>viewInvoice(id)},
+  ];
+  if (currentRole === 'Manager') {
+    bkActions.push({name:'discount',label:'💲 Discount',cls:'btn-warning',condition:r=>r.arrivalStatus!=='Checked-out',handler:id=>showApplyDiscount(id)});
+    bkActions.push({name:'waive',label:'Waive Fee',cls:'btn-outline',condition:r=>r.cancellationPolicy==='Non-refundable',handler:id=>{const b=bookings.find(x=>x.id===id);if(b){b.cancellationPolicy='Free cancellation';save('bookings',bookings);logAudit('Override','Booking','Waived cancellation fee on '+b.bookingId);toast('Cancellation fee waived');renderBookings();}}});
+  }
+  if (currentRole !== 'Receptionist' && currentRole !== 'Housekeeper') {
+    bkActions.push({name:'delete',label:'✕',cls:'btn-danger',handler:id=>deleteBooking(id)});
+  }
   bookingGrid = new XGrid('bookingGrid', {
     columns: [
       {field:'bookingId',label:'Booking #',filterable:true,width:'95px'},
@@ -771,16 +868,10 @@ function renderBookings() {
       {field:'arrivalStatus',label:'Status',format:v=>{const cls=v==='Checked-in'?'checked-in':v==='Expected'?'pending':v==='Checked-out'?'checked-out':'maintenance';return `<span class="status status-${cls}">${v}</span>`;},editable:true,editType:'select',editOptions:['Expected','Checked-in','Checked-out','No-show'],filterable:true},
     ],
     data: sorted,
+    hideExport: currentRole === 'Receptionist' || currentRole === 'Housekeeper',
     onAdd: () => showAddBooking(),
     onEdit: (row, field, val) => { const b = bookings.find(x=>x.id===row.id); if(b){b[field]=val;save('bookings',bookings);logAudit('Update','Booking','Updated '+field+' on '+b.bookingId);toast('Booking updated');} },
-    actions: [
-      {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditBooking(id)},
-      {name:'checkin',label:'Check In',cls:'btn-primary',condition:r=>r.arrivalStatus==='Expected',handler:id=>checkIn(id)},
-      {name:'checkout',label:'Check Out',cls:'btn-danger',condition:r=>r.arrivalStatus==='Checked-in',handler:id=>checkOut(id)},
-      {name:'services',label:'🛎️',cls:'btn-warning',condition:r=>r.arrivalStatus==='Checked-in',handler:id=>showOrderService(id)},
-      {name:'invoice',label:'Invoice',cls:'btn-outline',condition:r=>r.arrivalStatus==='Checked-out',handler:id=>viewInvoice(id)},
-      {name:'delete',label:'✕',cls:'btn-danger',handler:id=>deleteBooking(id)},
-    ]
+    actions: bkActions
   });
 }
 window.showAddBooking = function() {
@@ -895,12 +986,36 @@ window.viewInvoice = function(bId) {
   if(inv) { document.querySelector('[data-page="invoices"]').click(); }
   else toast('No invoice found');
 };
+window.showApplyDiscount = function(id) {
+  const b = bookings.find(x=>x.id===id); if(!b) return;
+  openModal(`<div class="modal-header"><h2>Apply Discount — ${b.bookingId}</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body">
+    <p style="margin-bottom:1rem;">Guest: <strong>${b.guestName}</strong> · Room: <strong>${b.roomNumber}</strong></p>
+    <div class="form-group"><label>Discount Percentage (%)</label><input type="number" class="form-control" id="mDiscPct" value="10" min="1" max="100"></div>
+    <div class="form-group"><label>Reason</label><input type="text" class="form-control" id="mDiscReason" placeholder="e.g. Loyalty reward"></div></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="applyBookingDiscount('${b.id}')">Apply</button></div>`);
+};
+window.applyBookingDiscount = function(id) {
+  const b = bookings.find(x=>x.id===id); if(!b) return;
+  const pct = parseInt(document.getElementById('mDiscPct').value) || 10;
+  const reason = document.getElementById('mDiscReason').value || 'Manager discount';
+  if (!b.discountPct) b.discountPct = 0;
+  b.discountPct = pct;
+  b.discountReason = reason;
+  save('bookings', bookings);
+  logAudit('Override','Booking','Applied '+pct+'% discount on '+b.bookingId+': '+reason);
+  closeModal(); renderBookings(); toast(pct+'% discount applied to '+b.bookingId);
+};
 
 // ===== GUESTS =====
 let guestGrid;
 function renderGuests() {
   document.getElementById('page-guests').innerHTML = `
     <div class="card"><div class="card-header"><h2>Guest Directory</h2></div><div class="card-body"><div id="guestGrid"></div></div></div>`;
+  const guestActions = [{name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditGuest(id)}];
+  if (currentRole !== 'Receptionist' && currentRole !== 'Housekeeper') {
+    guestActions.push({name:'delete',label:'✕',cls:'btn-danger',handler:id=>deleteGuest(id)});
+  }
   guestGrid = new XGrid('guestGrid', {
     columns: [
       {field:'firstName',label:'First Name',editable:true,filterable:true},
@@ -914,12 +1029,10 @@ function renderGuests() {
       {field:'visits',label:'Visits',editable:true,editType:'number',width:'65px'},
     ],
     data: guests,
+    hideExport: currentRole === 'Receptionist' || currentRole === 'Housekeeper',
     onAdd: () => showAddGuest(),
     onEdit: (row, field, val) => { const g = guests.find(x=>x.id===row.id); if(g){if(field==='blacklist')val=parseInt(val)||0;g[field]=val;save('guests',guests);logAudit('Update','Guest','Updated '+g.firstName+' '+g.lastName);toast('Guest updated');} },
-    actions: [
-      {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditGuest(id)},
-      {name:'delete',label:'✕',cls:'btn-danger',handler:id=>deleteGuest(id)},
-    ]
+    actions: guestActions
   });
 }
 window.showAddGuest = function() {
@@ -973,16 +1086,19 @@ let serviceGrid;
 function renderServices() {
   document.getElementById('page-services').innerHTML = `
     <div class="card"><div class="card-header"><h2>Hotel Services</h2></div><div class="card-body"><div id="serviceGrid"></div></div></div>`;
+  const svcCols = [
+    {field:'icon',label:'Icon',editable:true,width:'55px',filterable:false},
+    {field:'name',label:'Service Name',editable:true,filterable:true},
+    {field:'serviceCategory',label:'Category',editable:true,editType:'select',editOptions:['Room Service','Laundry','Airport Transfer','Mini-bar','Spa','Pool'],filterable:true},
+    {field:'unitPrice',label:'Unit Price',format:v=>fmt$(v),editable:true,editType:'number',filterable:true},
+    {field:'taxRate',label:'Tax %',editable:true,editType:'number',width:'65px'},
+    {field:'quantity',label:'Default Qty',editable:true,editType:'number',width:'80px'},
+  ];
+  if (currentRole === 'Housekeeper') { svcCols.splice(3, 2); }
   serviceGrid = new XGrid('serviceGrid', {
-    columns: [
-      {field:'icon',label:'Icon',editable:true,width:'55px',filterable:false},
-      {field:'name',label:'Service Name',editable:true,filterable:true},
-      {field:'serviceCategory',label:'Category',editable:true,editType:'select',editOptions:['Room Service','Laundry','Airport Transfer','Mini-bar','Spa','Pool'],filterable:true},
-      {field:'unitPrice',label:'Unit Price',format:v=>fmt$(v),editable:true,editType:'number',filterable:true},
-      {field:'taxRate',label:'Tax %',editable:true,editType:'number',width:'65px'},
-      {field:'quantity',label:'Default Qty',editable:true,editType:'number',width:'80px'},
-    ],
+    columns: svcCols,
     data: services,
+    hideExport: currentRole === 'Receptionist' || currentRole === 'Housekeeper',
     onAdd: () => showAddService(),
     onEdit: (row, field, val) => { const s = services.find(x=>x.id===row.id); if(s){s[field]=val;save('services',services);logAudit('Update','Service','Updated '+s.name);toast(s.name+' updated');} },
     actions: [
@@ -1041,6 +1157,7 @@ function renderInvoices() {
       {field:'currency',label:'Currency',editable:true,editType:'select',editOptions:['THB','USD','EUR'],width:'75px'},
     ],
     data: invoices,
+    hideExport: currentRole === 'Receptionist' || currentRole === 'Housekeeper',
     onAdd: () => showAddInvoice(),
     onEdit: (row, field, val) => {
       const inv = invoices.find(x=>x.id===row.id); if(!inv) return;
@@ -1231,14 +1348,14 @@ window.clearAuditLog = function() {
 
 // ===== SETTINGS =====
 function getDbCounts() {
-  const tables = ['rooms','guests','bookings','services','invoices','accounts','tickets','messages'];
+  const tables = ['rooms','guests','bookings','services','invoices','accounts','tickets','messages','inventory'];
   const counts = {};
   if (isAndroid) {
     tables.forEach(t => { try { counts[t] = HotelDB.count(t); } catch(e) { counts[t] = '?'; } });
   } else {
     counts.rooms = rooms.length; counts.guests = guests.length; counts.bookings = bookings.length;
     counts.services = services.length; counts.invoices = invoices.length; counts.accounts = accounts.length;
-    counts.tickets = tickets.length; counts.messages = messages.length;
+    counts.tickets = tickets.length; counts.messages = messages.length; counts.inventory = inventory.length;
   }
   return counts;
 }
@@ -1257,6 +1374,21 @@ function renderSettings() {
       <div class="form-row"><div class="form-group"><label>Check-in Time</label><input type="time" class="form-control" id="sIn" value="${s.checkinTime}"></div><div class="form-group"><label>Check-out Time</label><input type="time" class="form-control" id="sOut" value="${s.checkoutTime}"></div></div>
       <div style="margin-top:1rem;display:flex;gap:0.75rem;"><button class="btn btn-primary" onclick="saveSettings()">Save Settings</button><button class="btn btn-danger" onclick="resetAll()">Reset All Data</button></div>
     </div></div>
+    <div class="card"><div class="card-header"><h2>⚙️ System Configuration</h2></div><div class="card-body">
+      <h3 style="margin-bottom:1rem;font-size:1rem;">Room Rates & Pricing</h3>
+      <div class="form-row"><div class="form-group"><label>Default Tax Rate (%)</label><input type="number" class="form-control" id="sTaxRate" value="${s.taxRate||7}" step="0.1"></div><div class="form-group"><label>Service Tax (%)</label><input type="number" class="form-control" id="sServiceTax" value="${s.serviceTax||7}" step="0.1"></div></div>
+      <div class="form-row"><div class="form-group"><label>Peak Season Multiplier</label><input type="number" class="form-control" id="sPeakMul" value="${s.peakMultiplier||1.5}" step="0.1" min="1"></div><div class="form-group"><label>Off-Season Multiplier</label><input type="number" class="form-control" id="sOffMul" value="${s.offMultiplier||0.8}" step="0.1" min="0.1"></div></div>
+      <div class="form-row"><div class="form-group"><label>Peak Season Start</label><input type="date" class="form-control" id="sPeakStart" value="${s.peakStart||'2026-06-01'}"></div><div class="form-group"><label>Peak Season End</label><input type="date" class="form-control" id="sPeakEnd" value="${s.peakEnd||'2026-08-31'}"></div></div>
+      <div style="margin-top:1rem;"><button class="btn btn-primary" onclick="saveSystemConfig()">Save Configuration</button></div>
+    </div></div>
+    <div class="card"><div class="card-header"><h2>🗄️ Database Management</h2></div><div class="card-body">
+      <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="exportAllData()">📥 Export All Data (JSON)</button>
+        <button class="btn btn-outline" onclick="document.getElementById('importFileInput').click()">📤 Import Data</button>
+        <input type="file" id="importFileInput" accept=".json" style="display:none" onchange="importData(this)">
+        <button class="btn btn-danger" onclick="clearAllData()">🗑️ Clear All Data</button>
+      </div>
+    </div></div>
     <div class="card"><div class="card-header"><h2>📀 Database Info</h2></div><div class="card-body">
       <p style="margin-bottom:1rem;font-size:0.9rem;"><strong>Storage Backend:</strong> ${dbType}</p>
       <div class="table-wrap"><table>
@@ -1270,6 +1402,7 @@ function renderSettings() {
           <tr><td><strong>accounts</strong></td><td>${counts.accounts}</td><td>User accounts (name, email, role, status)</td></tr>
           <tr><td><strong>tickets</strong></td><td>${counts.tickets}</td><td>Maintenance tickets (room, issue, priority, status)</td></tr>
           <tr><td><strong>messages</strong></td><td>${counts.messages}</td><td>Communication log (guest, type, message, channel)</td></tr>
+          <tr><td><strong>inventory</strong></td><td>${inventory.length}</td><td>Inventory items (name, category, quantity, reorder level)</td></tr>
           <tr><td><strong>settings</strong></td><td>—</td><td>Hotel configuration (key/value pairs)</td></tr>
           <tr><td><strong>auditLog</strong></td><td>${auditLog.length}</td><td>Audit trail (action, entity, detail, timestamp)</td></tr>
         </tbody>
@@ -1278,13 +1411,77 @@ function renderSettings() {
     </div></div>`;
 }
 window.saveSettings = function() {
-  settings = {hotelName:document.getElementById('sName').value,email:document.getElementById('sEmail').value,phone:document.getElementById('sPhone').value,currency:document.getElementById('sCurrency').value,address:document.getElementById('sAddr').value,maxGuests:parseInt(document.getElementById('sMaxG').value)||3,surcharge:parseInt(document.getElementById('sSur').value)||25,checkinTime:document.getElementById('sIn').value,checkoutTime:document.getElementById('sOut').value};
+  const prev = {...settings};
+  settings.hotelName = document.getElementById('sName').value;
+  settings.email = document.getElementById('sEmail').value;
+  settings.phone = document.getElementById('sPhone').value;
+  settings.currency = document.getElementById('sCurrency').value;
+  settings.address = document.getElementById('sAddr').value;
+  settings.maxGuests = parseInt(document.getElementById('sMaxG').value)||3;
+  settings.surcharge = parseInt(document.getElementById('sSur').value)||25;
+  settings.checkinTime = document.getElementById('sIn').value;
+  settings.checkoutTime = document.getElementById('sOut').value;
   save('settings',settings); logAudit('Update','Settings','Settings saved'); toast('Settings saved');
+};
+window.saveSystemConfig = function() {
+  settings.taxRate = parseFloat(document.getElementById('sTaxRate').value)||7;
+  settings.serviceTax = parseFloat(document.getElementById('sServiceTax').value)||7;
+  settings.peakMultiplier = parseFloat(document.getElementById('sPeakMul').value)||1.5;
+  settings.offMultiplier = parseFloat(document.getElementById('sOffMul').value)||0.8;
+  settings.peakStart = document.getElementById('sPeakStart').value;
+  settings.peakEnd = document.getElementById('sPeakEnd').value;
+  save('settings',settings); logAudit('Update','Settings','System configuration updated'); toast('System configuration saved');
+};
+window.exportAllData = function() {
+  const data = {rooms,guests,bookings,services,invoices,accounts,auditLog,settings,tickets,messages,inventory};
+  const json = JSON.stringify(data, null, 2);
+  try {
+    const blob = new Blob([json], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = 'hotel_backup_' + today() + '.json';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+  } catch(e) { const w = window.open(''); if(w) { w.document.write('<pre>'+json.replace(/</g,'&lt;')+'</pre>'); } }
+  logAudit('Export','System','Exported all data'); toast('Data exported');
+};
+window.importData = function(input) {
+  const file = input.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if(data.rooms) { rooms = data.rooms; save('rooms',rooms); }
+      if(data.guests) { guests = data.guests; save('guests',guests); }
+      if(data.bookings) { bookings = data.bookings; save('bookings',bookings); }
+      if(data.services) { services = data.services; save('services',services); }
+      if(data.invoices) { invoices = data.invoices; save('invoices',invoices); }
+      if(data.accounts) { accounts = data.accounts; save('accounts',accounts); }
+      if(data.tickets) { tickets = data.tickets; save('tickets',tickets); }
+      if(data.messages) { messages = data.messages; save('messages',messages); }
+      if(data.inventory) { inventory = data.inventory; save('inventory',inventory); }
+      if(data.settings) { settings = data.settings; save('settings',settings); }
+      if(data.auditLog) { auditLog = data.auditLog; save('auditLog',auditLog); }
+      logAudit('Import','System','Imported data from file');
+      toast('Data imported successfully');
+      renderSettings();
+    } catch(err) { toast('Invalid JSON file'); }
+  };
+  reader.readAsText(file);
+  input.value = '';
+};
+window.clearAllData = function() {
+  if(!confirm('This will permanently delete ALL data. Are you sure?')) return;
+  if(!confirm('This cannot be undone. Proceed?')) return;
+  if (isAndroid) {
+    ['rooms','guests','bookings','services','invoices','accounts','tickets','messages','inventory','settings'].forEach(t => { try { HotelDB.deleteAll(t); } catch(e){} });
+  }
+  Object.keys(localStorage).forEach(k => { if(k.startsWith(DB_KEY) && k !== DB_KEY+'currentUser') localStorage.removeItem(k); });
+  logAudit('Clear','System','All data cleared');
+  location.reload();
 };
 window.resetAll = function() {
   if(!confirm('Reset ALL data to defaults? This cannot be undone.')) return;
   if (isAndroid) {
-    ['rooms','guests','bookings','services','invoices','accounts','tickets','messages','settings'].forEach(t => { try { HotelDB.deleteAll(t); } catch(e){} });
+    ['rooms','guests','bookings','services','invoices','accounts','tickets','messages','inventory','settings'].forEach(t => { try { HotelDB.deleteAll(t); } catch(e){} });
   }
   Object.keys(localStorage).forEach(k => { if(k.startsWith(DB_KEY)) localStorage.removeItem(k); });
   location.reload();
@@ -1292,12 +1489,21 @@ window.resetAll = function() {
 
 // ===== HOUSEKEEPING =====
 function renderHousekeeping() {
+  const isHK = currentRole === 'Housekeeper';
   const statusOrder = {'Dirty':0,'In Progress':1,'Clean':2,'Inspected':3,'Out of Service':4};
-  const sorted = [...rooms].sort((a,b) => (statusOrder[a.housekeepingStatus]||0) - (statusOrder[b.housekeepingStatus]||0));
+  const sorted = [...rooms].sort((a,b) => {
+    if (isHK) {
+      const aCheckout = bookings.some(bk => String(bk.roomNumber) === String(a.roomNumber) && bk.arrivalStatus === 'Checked-out');
+      const bCheckout = bookings.some(bk => String(bk.roomNumber) === String(b.roomNumber) && bk.arrivalStatus === 'Checked-out');
+      if (aCheckout !== bCheckout) return aCheckout ? -1 : 1;
+    }
+    return (statusOrder[a.housekeepingStatus]||0) - (statusOrder[b.housekeepingStatus]||0);
+  });
   const dirtyCnt = rooms.filter(r=>r.housekeepingStatus==='Dirty').length;
   const ipCnt = rooms.filter(r=>r.housekeepingStatus==='In Progress').length;
   const cleanCnt = rooms.filter(r=>r.housekeepingStatus==='Clean').length;
   const inspCnt = rooms.filter(r=>r.housekeepingStatus==='Inspected').length;
+  const largeCls = isHK ? ' hk-large' : '';
   document.getElementById('page-housekeeping').innerHTML = `
     <div class="stats-grid">
       <div class="stat-card"><div class="stat-icon red">🔴</div><div class="stat-info"><h3>${dirtyCnt}</h3><p>Dirty</p></div></div>
@@ -1305,13 +1511,31 @@ function renderHousekeeping() {
       <div class="stat-card"><div class="stat-icon green">🟢</div><div class="stat-info"><h3>${cleanCnt}</h3><p>Clean</p></div></div>
       <div class="stat-card"><div class="stat-icon blue">🔵</div><div class="stat-info"><h3>${inspCnt}</h3><p>Inspected</p></div></div>
     </div>
-    <div class="card"><div class="card-header"><h2>Housekeeping Board</h2><span style="font-size:0.78rem;color:var(--text-light);">Click a card to cycle: Dirty → In Progress → Clean → Inspected</span></div><div class="card-body">
+    <div class="card"><div class="card-header"><h2>Housekeeping Board</h2><div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;"><span style="font-size:0.78rem;color:var(--text-light);">Click a card to cycle: Dirty → In Progress → Clean → Inspected</span>${isHK?'<button class="btn btn-warning hk-large-btn" onclick="showReportIssue()">🔧 Report Issue</button>':''}</div></div><div class="card-body">
       <div class="hk-grid">${sorted.map(r => {
         const cls = r.housekeepingStatus==='Dirty'?'hk-dirty':r.housekeepingStatus==='In Progress'?'hk-inprogress':r.housekeepingStatus==='Clean'?'hk-clean':r.housekeepingStatus==='Inspected'?'hk-inspected':'hk-oos';
-        return `<div class="hk-card ${cls}" onclick="cycleHousekeeping('${r.id}')"><div class="hk-room">${r.roomNumber}</div><div class="hk-type">${r.roomType}</div><div class="hk-floor">Floor ${r.floorNumber}</div><div class="hk-status">${r.housekeepingStatus}</div></div>`;
+        return `<div class="hk-card ${cls}${largeCls}" onclick="cycleHousekeeping('${r.id}')"><div class="hk-room">${r.roomNumber}</div><div class="hk-type">${r.roomType}</div><div class="hk-floor">Floor ${r.floorNumber}</div><div class="hk-status">${r.housekeepingStatus}</div></div>`;
       }).join('')}</div>
     </div></div>`;
 }
+window.showReportIssue = function() {
+  openModal(`<div class="modal-header"><h2>🔧 Report Issue</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body">
+    <div class="form-group"><label>Room</label><select class="form-control" id="mRptRoom">${rooms.map(r=>`<option value="${r.roomNumber}">${r.roomNumber} - ${r.roomType}</option>`).join('')}</select></div>
+    <div class="form-group"><label>Issue Description</label><textarea class="form-control" id="mRptIssue" rows="3" placeholder="Describe the issue..." style="min-height:60px;"></textarea></div>
+    <div class="form-group"><label>Priority</label><select class="form-control" id="mRptPri"><option>Low</option><option selected>Medium</option><option>High</option><option>Urgent</option></select></div></div>
+    <div class="modal-footer"><button class="btn btn-outline hk-large-btn" onclick="closeModal()">Cancel</button><button class="btn btn-primary hk-large-btn" onclick="submitReportIssue()">Submit Ticket</button></div>`);
+};
+window.submitReportIssue = function() {
+  const issue = document.getElementById('mRptIssue').value.trim(); if(!issue) { toast('Describe the issue'); return; }
+  const roomNum = document.getElementById('mRptRoom').value;
+  const t = {id:genId(),roomNumber:roomNum,issue:issue,priority:document.getElementById('mRptPri').value,status:'Open',reportedBy:currentUser?currentUser.name:'Housekeeper',reportedAt:new Date().toISOString(),resolvedAt:'',notes:''};
+  tickets.push(t);
+  const rm = rooms.find(r=>String(r.roomNumber)===String(roomNum));
+  if (rm) { rm.housekeepingStatus = 'Out of Service'; save('rooms', rooms); }
+  save('tickets', tickets); logAudit('Created','Ticket',t.id,'Housekeeper reported issue for room '+roomNum+': '+issue);
+  closeModal(); renderHousekeeping(); updateBadges(); toast('Maintenance ticket created for room '+roomNum);
+};
 window.cycleHousekeeping = function(id) {
   const r = rooms.find(x=>x.id===id); if(!r) return;
   if (r.housekeepingStatus === 'Out of Service') { toast('Room is out of service — resolve maintenance ticket first'); return; }
@@ -1383,7 +1607,7 @@ window.showAddTicket = function() {
 window.addTicket = function() {
   const issue = document.getElementById('mTkIssue').value.trim(); if(!issue) { toast('Describe the issue'); return; }
   const roomNum = document.getElementById('mTkRoom').value;
-  const t = {id:genId(),roomNumber:roomNum,issue:issue,priority:document.getElementById('mTkPri').value,status:'Open',reportedBy:currentRole,reportedAt:new Date().toISOString(),resolvedAt:'',notes:document.getElementById('mTkNotes').value};
+  const t = {id:genId(),roomNumber:roomNum,issue:issue,priority:document.getElementById('mTkPri').value,status:'Open',reportedBy:currentUser?currentUser.name:currentRole,reportedAt:new Date().toISOString(),resolvedAt:'',notes:document.getElementById('mTkNotes').value};
   tickets.push(t);
   const rm = rooms.find(r=>String(r.roomNumber)===String(roomNum));
   if (rm) { rm.housekeepingStatus = 'Out of Service'; save('rooms', rooms); }
@@ -1432,6 +1656,95 @@ window.gpOrderService = function(bId) {
   lookupBooking();
 };
 
+// ===== INVENTORY (Manager & Admin) =====
+function inventoryStatus(item) {
+  if (item.quantity <= 0) return 'Out of Stock';
+  if (item.quantity <= item.reorderLevel) return 'Low';
+  return 'In Stock';
+}
+let inventoryGrid;
+function renderInventory() {
+  inventory.forEach(it => { it.status = inventoryStatus(it); });
+  document.getElementById('page-inventory').innerHTML = `
+    <div class="card"><div class="card-header"><h2>📦 Inventory Management</h2></div><div class="card-body"><div id="inventoryGrid"></div></div></div>`;
+  inventoryGrid = new XGrid('inventoryGrid', {
+    columns: [
+      {field:'itemName',label:'Item Name',editable:true,filterable:true},
+      {field:'category',label:'Category',editable:true,editType:'select',editOptions:['Linen','Toiletries','F&B','Supplies'],filterable:true},
+      {field:'quantity',label:'Quantity',editable:true,editType:'number',width:'80px',filterable:true},
+      {field:'reorderLevel',label:'Reorder Level',editable:true,editType:'number',width:'100px'},
+      {field:'lastOrdered',label:'Last Ordered',format:v=>fmtDate(v),editable:true,editType:'date',filterable:true},
+      {field:'status',label:'Status',format:(v,r)=>{const st=inventoryStatus(r);const cls=st==='In Stock'?'active':st==='Low'?'pending':'maintenance';return `<span class="status status-${cls}">${st}</span>`;},filterable:true},
+    ],
+    data: inventory,
+    onAdd: () => {
+      inventory.push({id:genId(),itemName:'New Item',category:'Supplies',quantity:0,reorderLevel:10,lastOrdered:today(),status:'Out of Stock'});
+      save('inventory',inventory); logAudit('Add','Inventory','Added new inventory item'); renderInventory(); toast('Item added');
+    },
+    onEdit: (row, field, val) => {
+      const it = inventory.find(x=>x.id===row.id); if(!it) return;
+      it[field] = val;
+      it.status = inventoryStatus(it);
+      save('inventory',inventory); logAudit('Update','Inventory','Updated '+it.itemName); toast('Inventory updated'); renderInventory();
+    },
+    actions: [
+      {name:'delete',label:'✕',cls:'btn-danger',handler:id=>{
+        if(!confirm('Delete this item?')) return;
+        const it = inventory.find(x=>x.id===id);
+        inventory = inventory.filter(x=>x.id!==id); save('inventory',inventory);
+        logAudit('Delete','Inventory','Deleted '+(it?it.itemName:id)); renderInventory(); toast('Item deleted');
+      }}
+    ]
+  });
+}
+
+// ===== LOGIN / LOGOUT =====
+window.doLogin = function() {
+  const username = document.getElementById('loginUsername').value.trim().toLowerCase();
+  const password = document.getElementById('loginPassword').value;
+  const errEl = document.getElementById('loginError');
+  if (!username || !password) { errEl.textContent = 'Please enter username and password'; return; }
+  const account = accounts.find(a => a.email.toLowerCase() === username && a.status === 'active');
+  if (!account || password !== '1234') { errEl.textContent = 'Invalid credentials or inactive account'; return; }
+  currentUser = { id: account.id, name: account.name, email: account.email, role: account.role };
+  currentRole = account.role;
+  localStorage.setItem(DB_KEY + 'currentUser', JSON.stringify(currentUser));
+  document.getElementById('loginOverlay').classList.add('hidden');
+  updateTopbarUser();
+  applyRBAC();
+  navigateToDefaultPage();
+  logAudit('Login','Account',account.id,account.name + ' logged in');
+  toast('Welcome, ' + account.name);
+};
+document.getElementById('loginPassword').addEventListener('keydown', function(e) { if (e.key === 'Enter') doLogin(); });
+document.getElementById('loginUsername').addEventListener('keydown', function(e) { if (e.key === 'Enter') document.getElementById('loginPassword').focus(); });
+
+window.doLogout = function() {
+  logAudit('Logout','Account','',currentUser ? currentUser.name + ' logged out' : 'Logged out');
+  currentUser = null;
+  currentRole = 'Admin';
+  localStorage.removeItem(DB_KEY + 'currentUser');
+  document.getElementById('loginOverlay').classList.remove('hidden');
+  document.getElementById('loginUsername').value = '';
+  document.getElementById('loginPassword').value = '';
+  document.getElementById('loginError').textContent = '';
+};
+
+function updateTopbarUser() {
+  if (currentUser) {
+    document.getElementById('topbarUserName').textContent = currentUser.name;
+    document.getElementById('topbarUserRole').textContent = currentUser.role;
+    document.getElementById('userAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
+  }
+}
+
+function navigateToDefaultPage() {
+  const defaultPages = { 'Admin': 'dashboard', 'Manager': 'reports', 'Receptionist': 'rooms', 'Housekeeper': 'housekeeping' };
+  const page = defaultPages[currentRole] || 'dashboard';
+  const link = document.querySelector('#sidebarNav a[data-page="' + page + '"]');
+  if (link) link.click();
+}
+
 // ===== DARK MODE =====
 window.toggleDarkMode = function() {
   document.body.classList.toggle('dark-mode');
@@ -1443,15 +1756,10 @@ window.toggleDarkMode = function() {
 };
 
 // ===== ROLE-BASED ACCESS CONTROL =====
-window.changeRole = function(role) {
-  currentRole = role;
-  document.getElementById('userRoleLabel').textContent = role;
-  document.getElementById('userAvatar').textContent = role[0];
-  applyRBAC();
-};
 function applyRBAC() {
   const allowedPages = {
     'Admin': null,
+    'Manager': ['dashboard','rooms','bookings','guests','services','invoices','reports','inventory'],
     'Receptionist': ['dashboard','rooms','bookings','guests','services','invoices'],
     'Housekeeper': ['dashboard','housekeeping','maintenance'],
   };
@@ -1473,7 +1781,10 @@ function applyRBAC() {
   });
   const activePage = document.querySelector('#sidebarNav a.active');
   if (activePage && activePage.style.display === 'none') {
-    document.querySelector('#sidebarNav a[data-page="dashboard"]').click();
+    const defaultPages = { 'Admin': 'dashboard', 'Manager': 'reports', 'Receptionist': 'rooms', 'Housekeeper': 'housekeeping' };
+    const defPage = defaultPages[currentRole] || 'dashboard';
+    const link = document.querySelector('#sidebarNav a[data-page="' + defPage + '"]');
+    if (link) link.click();
   }
 }
 
@@ -1482,9 +1793,28 @@ if (settings.darkMode || (function(){ try { return localStorage.getItem(DB_KEY +
   document.body.classList.add('dark-mode');
   document.getElementById('darkToggle').textContent = '☀️';
 }
-renderDashboard();
+
+(function initLogin() {
+  try {
+    const stored = localStorage.getItem(DB_KEY + 'currentUser');
+    if (stored) {
+      const user = JSON.parse(stored);
+      const account = accounts.find(a => a.id === user.id && a.status === 'active');
+      if (account) {
+        currentUser = { id: account.id, name: account.name, email: account.email, role: account.role };
+        currentRole = account.role;
+        document.getElementById('loginOverlay').classList.add('hidden');
+        updateTopbarUser();
+        applyRBAC();
+        navigateToDefaultPage();
+        return;
+      }
+    }
+  } catch(e) {}
+  document.getElementById('loginOverlay').classList.remove('hidden');
+})();
+
 updateBadges();
-applyRBAC();
 </script>
 </body>
 </html>
