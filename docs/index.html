@@ -86,14 +86,27 @@
     .form-control { width: 100%; padding: 0.55rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; font-family: inherit; transition: border-color 0.15s ease; background: #fff; }
     .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,115,232,0.15); }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; }
+    .modal-overlay { display: none; position: fixed; inset: 0; background: linear-gradient(135deg, rgba(10,30,60,0.97) 0%, rgba(26,115,232,0.92) 100%); z-index: 200; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 0; }
     .modal-overlay.active { display: flex; }
-    .modal { background: var(--card-bg); border-radius: 12px; width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
-    .modal-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-    .modal-header h2 { font-size: 1.1rem; }
-    .modal-close { background: none; border: none; font-size: 1.3rem; cursor: pointer; color: var(--text-light); }
-    .modal-body { padding: 1.25rem; }
-    .modal-footer { padding: 1rem 1.25rem; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 0.5rem; }
+    .modal { background: var(--card-bg); border-radius: 0; width: 100%; max-width: 100%; min-height: 100vh; box-shadow: none; }
+    .modal-header { padding: 1rem 1.25rem; border-bottom: 2px solid var(--primary); display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, #1a3a5c 0%, #1a73e8 100%); color: #fff; position: sticky; top: 0; z-index: 5; }
+    .modal-header h2 { font-size: 1.15rem; color: #fff; display: flex; align-items: center; gap: 0.5rem; }
+    .modal-header h2::before { content: '🇺🇸'; font-size: 1.3rem; }
+    .modal-close { background: rgba(255,255,255,0.15); border: none; font-size: 1.3rem; cursor: pointer; color: #fff; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
+    .modal-close:hover { background: rgba(255,255,255,0.3); }
+    .modal-body { padding: 1.25rem 1rem; background: linear-gradient(180deg, #f8faff 0%, #eef3fb 100%); min-height: calc(100vh - 130px); }
+    .modal-body .form-row { grid-template-columns: 1fr 1fr; }
+    .modal-body .form-group { margin-bottom: 0.85rem; }
+    .modal-body .form-group label { font-size: 0.8rem; font-weight: 600; color: #1a3a5c; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.35rem; }
+    .modal-body .form-control { border-radius: 10px; border: 1.5px solid #c5d9f8; padding: 0.65rem 0.85rem; font-size: 0.95rem; background: #fff; transition: border-color 0.15s, box-shadow 0.15s; }
+    .modal-body .form-control:focus { border-color: #1a73e8; box-shadow: 0 0 0 3px rgba(26,115,232,0.18); }
+    .modal-footer { padding: 1rem 1.25rem; border-top: 2px solid #e0e8f5; display: flex; justify-content: flex-end; gap: 0.75rem; background: #f0f4fb; position: sticky; bottom: 0; z-index: 5; }
+    .modal-footer .btn { min-height: 44px; min-width: 100px; font-size: 0.95rem; border-radius: 10px; }
+    body.dark-mode .modal-header { background: linear-gradient(135deg, #0a1628 0%, #16213e 100%); }
+    body.dark-mode .modal-body { background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%); }
+    body.dark-mode .modal-body .form-group label { color: #90b8f8; }
+    body.dark-mode .modal-body .form-control { background: #1a2744; border-color: #2a3a5a; color: #e0e0e0; }
+    body.dark-mode .modal-footer { background: #16213e; border-top-color: #2a3a5a; }
     .chart-container { width: 100%; height: 250px; display: flex; flex-direction: column; }
     .bar-chart { display: flex; align-items: flex-end; gap: 0.75rem; height: 200px; padding: 0 0.5rem; border-bottom: 2px solid var(--border); }
     .bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.3rem; }
