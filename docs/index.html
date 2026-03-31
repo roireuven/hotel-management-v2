@@ -1100,16 +1100,24 @@ window.openNationalityPicker = function(fieldId) {
   }
   renderNatPicker();
 };
+function reopenNewGuestForm(backup) {
+  openModal(`<div class="modal-header"><h2>New Guest</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body">
+    <div class="form-row"><div class="form-group"><label>First Name</label><input type="text" class="form-control" id="mNgFirst" placeholder="First name"></div><div class="form-group"><label>Last Name</label><input type="text" class="form-control" id="mNgLast" placeholder="Last name"></div></div>
+    <div class="form-row"><div class="form-group"><label>Passport / ID</label><input type="text" class="form-control" id="mNgPassport" placeholder="e.g. US-12345678"></div><div class="form-group"><label>Nationality</label><input type="text" class="form-control" id="mNgNat" placeholder="Tap to select" readonly onclick="openNationalityPicker('mNgNat')" style="cursor:pointer;"></div></div>
+    <div class="form-row"><div class="form-group"><label>Date of Birth</label><input type="date" class="form-control" id="mNgDob"></div><div class="form-group"><label>Payment Method</label><select class="form-control" id="mNgPay"><option>Credit Card</option><option>Cash</option><option>Bank Transfer</option></select></div></div>
+    <div class="form-row"><div class="form-group"><label>Email</label><input type="email" class="form-control" id="mNgEmail" placeholder="email@example.com"></div><div class="form-group"><label>Phone</label><input type="tel" class="form-control" id="mNgPhone" placeholder="+1 555-0000"></div></div>
+    <div class="form-group"><label>Guest Notes</label><textarea class="form-control" id="mNgNotes" rows="2" placeholder="Allergies, preferences..."></textarea></div></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="cancelNewGuestFromBooking()">Cancel</button><button class="btn btn-primary" onclick="saveNewGuestFromBooking()">Add Guest & Return</button></div>`);
+  setTimeout(()=>{ for(const [k,v] of Object.entries(backup||{})) { const el = document.getElementById(k); if(el) el.value = v; } }, 50);
+}
 window.pickNationality = function(nat) {
   const backup = _natFormBackup || {};
   backup[_natTargetField] = nat;
-  addNewGuestFromBooking();
-  setTimeout(()=>{ for(const [k,v] of Object.entries(backup)) { const el = document.getElementById(k); if(el) el.value = v; } }, 100);
+  reopenNewGuestForm(backup);
 };
 window.cancelNatPicker = function() {
-  const backup = _natFormBackup || {};
-  addNewGuestFromBooking();
-  setTimeout(()=>{ for(const [k,v] of Object.entries(backup)) { const el = document.getElementById(k); if(el) el.value = v; } }, 100);
+  reopenNewGuestForm(_natFormBackup);
 };
 window.openGuestPicker = function() {
   const bookingFormData = {
