@@ -1104,6 +1104,39 @@ window.openNationalityPicker = function(fieldId) {
   }
   renderNatPicker();
 };
+let _natStandaloneMode = null;
+let _natStandaloneBackup = null;
+window.openNatPickerStandalone = function(fieldId, mode) {
+  _natStandaloneMode = mode;
+  _natTargetField = fieldId;
+  _natStandaloneBackup = {};
+  document.querySelectorAll('.modal-body input,.modal-body select,.modal-body textarea').forEach(el => { if(el.id) _natStandaloneBackup[el.id] = el.value; });
+  let filterVal = '';
+  function renderNP() {
+    const filtered = filterVal ? _nationalities.filter(n => n.toLowerCase().includes(filterVal.toLowerCase())) : _nationalities;
+    openModal(`<div class="modal-header"><h2>Select Nationality</h2><button class="modal-close" onclick="cancelNatStandalone()">&times;</button></div>
+      <div class="modal-body" style="padding:0.75rem;">
+      <div style="padding:0.5rem 0;"><input type="text" class="form-control" id="natSSearch" placeholder="Search nationality..." value="${filterVal}" oninput="window._nsFilter(this.value)" style="font-size:1rem;"></div>
+      <div id="natSList" style="max-height:calc(100vh - 200px);overflow-y:auto;">
+      ${filtered.map(n => '<div class="nat-item" data-nat="'+n+'" style="padding:0.85rem 1rem;border-bottom:1px solid var(--border);cursor:pointer;font-size:1rem;">'+n+'</div>').join('')}
+      ${filtered.length===0?'<div style="padding:2rem;text-align:center;color:#999;">No match</div>':''}
+      </div></div>`);
+    document.getElementById('natSList').addEventListener('click', function(e) {
+      const item = e.target.closest('.nat-item');
+      if (item) { const nat = item.getAttribute('data-nat'); _natStandaloneBackup[_natTargetField] = nat; reopenStandaloneForm(); }
+    });
+    window._nsFilter = function(v) { filterVal = v; renderNP(); setTimeout(()=>{ const el = document.getElementById('natSSearch'); if(el){el.focus();el.setSelectionRange(v.length,v.length);} },50); };
+  }
+  renderNP();
+};
+function reopenStandaloneForm() {
+  const backup = _natStandaloneBackup || {};
+  if (_natStandaloneMode === 'add') { showAddGuest(); }
+  else if (_natStandaloneMode === 'edit') { const gId = backup._editGuestId; if(gId) showEditGuest(gId); }
+  setTimeout(()=>{ for(const [k,v] of Object.entries(backup)) { if(k.startsWith('_')) continue; const el = document.getElementById(k); if(el) el.value = v; } }, 100);
+}
+window.cancelNatStandalone = function() { reopenStandaloneForm(); };
+
 function reopenNewGuestForm(backup) {
   openModal(`<div class="modal-header"><h2>New Guest</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
@@ -1355,18 +1388,18 @@ function renderGuests() {
 window.showAddGuest = function() {
   openModal(`<div class="modal-header"><h2>Add Guest</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
-    <div class="form-row"><div class="form-group"><label>First Name</label><input type="text" class="form-control" id="mGFirst"></div><div class="form-group"><label>Last Name</label><input type="text" class="form-control" id="mGLast"></div></div>
-    <div class="form-row"><div class="form-group"><label>Passport/ID</label><input type="text" class="form-control" id="mGPassport"></div><div class="form-group"><label>Nationality</label><input type="text" class="form-control" id="mGNat"></div></div>
-    <div class="form-row"><div class="form-group"><label>Date of Birth</label><input type="date" class="form-control" id="mGDob"></div><div class="form-group"><label>Phone</label><input type="tel" class="form-control" id="mGPhone"></div></div>
-    <div class="form-group"><label>Email</label><input type="email" class="form-control" id="mGEmail"></div>
-    <div class="form-group"><label>Payment Method</label><select class="form-control" id="mGPay"><option>Credit Card</option><option>Cash</option><option>Bank Transfer</option></select></div>
-    <div class="form-group"><label>Guest Notes</label><textarea class="form-control" id="mGNotes" rows="2"></textarea></div></div>
+    <div class="form-row"><div class="form-group"><label>First Name</label><input type="text" class="form-control" id="mGFirst" placeholder="First name"></div><div class="form-group"><label>Last Name</label><input type="text" class="form-control" id="mGLast" placeholder="Last name"></div></div>
+    <div class="form-row"><div class="form-group"><label>Passport / ID</label><input type="text" class="form-control" id="mGPassport" placeholder="e.g. US-12345678"></div><div class="form-group"><label>Nationality</label><input type="text" class="form-control" id="mGNat" placeholder="Tap to select" readonly onclick="openNatPickerStandalone('mGNat','add')" style="cursor:pointer;"></div></div>
+    <div class="form-row"><div class="form-group"><label>Date of Birth</label><input type="date" class="form-control" id="mGDob"></div><div class="form-group"><label>Phone</label><input type="tel" class="form-control" id="mGPhone" placeholder="+1 555-0000"></div></div>
+    <div class="form-group"><label>Email</label><input type="email" class="form-control" id="mGEmail" placeholder="email@example.com"></div>
+    <div class="form-row"><div class="form-group"><label>Payment Method</label><select class="form-control" id="mGPay"><option>Credit Card</option><option>Cash</option><option>Bank Transfer</option></select></div><div class="form-group"><label>Blacklist</label><select class="form-control" id="mGBL"><option value="0">No</option><option value="1">Yes</option></select></div></div>
+    <div class="form-group"><label>Guest Notes</label><textarea class="form-control" id="mGNotes" rows="2" placeholder="Allergies, preferences..."></textarea></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addGuest()">Add Guest</button></div>`);
 };
 window.addGuest = function() {
   const fn = document.getElementById('mGFirst').value.trim(), ln = document.getElementById('mGLast').value.trim();
   if(!fn||!ln) { toast('Enter first and last name'); return; }
-  guests.push({id:genId(),firstName:fn,lastName:ln,passportId:document.getElementById('mGPassport').value,nationality:document.getElementById('mGNat').value,dob:document.getElementById('mGDob').value,email:document.getElementById('mGEmail').value,phone:document.getElementById('mGPhone').value,paymentMethod:document.getElementById('mGPay').value,guestNotes:document.getElementById('mGNotes').value,blacklist:0,visits:0});
+  guests.push({id:genId(),firstName:fn,lastName:ln,passportId:document.getElementById('mGPassport').value,nationality:document.getElementById('mGNat').value,dob:document.getElementById('mGDob').value,email:document.getElementById('mGEmail').value,phone:document.getElementById('mGPhone').value,paymentMethod:document.getElementById('mGPay').value,guestNotes:document.getElementById('mGNotes').value,blacklist:parseInt(document.getElementById('mGBL').value)||0,visits:0});
   save('guests',guests); logAudit('Add','Guest','Added guest '+fn+' '+ln); closeModal(); renderGuests(); toast(fn+' '+ln+' added');
 };
 window.showEditGuest = function(id) {
@@ -1374,7 +1407,7 @@ window.showEditGuest = function(id) {
   openModal(`<div class="modal-header"><h2>Edit Guest</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <div class="form-row"><div class="form-group"><label>First Name</label><input type="text" class="form-control" id="eGFirst" value="${g.firstName}"></div><div class="form-group"><label>Last Name</label><input type="text" class="form-control" id="eGLast" value="${g.lastName}"></div></div>
-    <div class="form-row"><div class="form-group"><label>Passport/ID</label><input type="text" class="form-control" id="eGPassport" value="${g.passportId||''}"></div><div class="form-group"><label>Nationality</label><input type="text" class="form-control" id="eGNat" value="${g.nationality||''}"></div></div>
+    <div class="form-row"><div class="form-group"><label>Passport/ID</label><input type="text" class="form-control" id="eGPassport" value="${g.passportId||''}"></div><div class="form-group"><label>Nationality</label><input type="text" class="form-control" id="eGNat" value="${g.nationality||''}" placeholder="Tap to select" readonly onclick="_natStandaloneBackup={};document.querySelectorAll('.modal-body input,.modal-body select,.modal-body textarea').forEach(function(el){if(el.id)_natStandaloneBackup[el.id]=el.value;});_natStandaloneBackup._editGuestId='${g.id}';openNatPickerStandalone('eGNat','edit');" style="cursor:pointer;"></div></div>
     <div class="form-row"><div class="form-group"><label>Date of Birth</label><input type="date" class="form-control" id="eGDob" value="${g.dob||''}"></div><div class="form-group"><label>Phone</label><input type="tel" class="form-control" id="eGPhone" value="${g.phone||''}"></div></div>
     <div class="form-group"><label>Email</label><input type="email" class="form-control" id="eGEmail" value="${g.email||''}"></div>
     <div class="form-group"><label>Payment Method</label><select class="form-control" id="eGPay">${['Credit Card','Cash','Bank Transfer'].map(p=>`<option ${p===g.paymentMethod?'selected':''}>${p}</option>`).join('')}</select></div>
