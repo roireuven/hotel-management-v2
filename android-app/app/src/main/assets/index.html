@@ -297,39 +297,38 @@
       <div class="setup-ver">v2.0 — First-Time Setup</div>
 
       <div class="setup-welcome">
-        Thank you for installing <strong>Hotel Manager</strong>. This app is a complete hotel management system with rooms, bookings, guests, invoices, housekeeping, and more.
-      </div>
-
-      <div class="setup-step">
-        <span class="step-num">1</span><span class="step-title">Register Your Email</span>
-        <p>Enter your email below. This email links your data so that <strong>all devices using the same email will share the same data</strong>.</p>
-      </div>
-
-      <div class="setup-step">
-        <span class="step-num">2</span><span class="step-title">Login with Your Role</span>
-        <p>After setup, use one of the staff accounts to sign in. Each role (Admin, Manager, Receptionist, Housekeeper) has different access and features.</p>
-      </div>
-
-      <div class="setup-step">
-        <span class="step-num">3</span><span class="step-title">Sync Across Devices</span>
-        <p>Install the app on multiple phones or tablets. As long as they use the <strong>same email</strong>, all data (rooms, bookings, guests, invoices) stays synchronized.</p>
+        Welcome to <strong>Hotel Manager</strong> — a complete hotel management system. Create your account below to get started.
       </div>
 
       <div class="setup-email-section">
-        <span class="sync-icon">🔄</span>
-        <h3>Your Sync Email</h3>
-        <p>Enter the email address for this installation. All apps installed with this same email will share data.</p>
-        <div class="form-group" style="margin-bottom:0;">
+        <h3>Create Your Account</h3>
+        <p>This is your personal login. All devices that sign in with the <strong>same email and password</strong> will synchronize data automatically.</p>
+        <div class="form-group">
+          <label style="color:#1a73e8;font-weight:600;">Email</label>
           <input type="email" class="form-control" id="setupEmail" placeholder="your.email@company.com" style="font-size:1rem;padding:0.7rem;">
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label style="color:#1a73e8;font-weight:600;">Password</label>
+          <input type="password" class="form-control" id="setupPassword" placeholder="Create a password" style="font-size:1rem;padding:0.7rem;">
         </div>
       </div>
 
-      <div class="setup-step" style="background:#e8f5e9;border-color:#c8e6c9;">
-        <span class="step-num" style="background:#42b72a;">✓</span><span class="step-title" style="color:#2e7d32;">How It Works</span>
-        <p style="color:#444;">After setup, you'll see the <strong>login screen</strong> with demo accounts for each role. Tap any email to auto-fill, then sign in. Your role determines what you can see and do in the app.</p>
+      <div class="setup-step">
+        <span class="step-num">1</span><span class="step-title">Sign In Anywhere</span>
+        <p>Use your email and password to log in on any device. Your data follows you.</p>
       </div>
 
-      <button class="btn btn-primary btn-setup" onclick="completeSetup()">Get Started →</button>
+      <div class="setup-step">
+        <span class="step-num">2</span><span class="step-title">Sync Across Devices</span>
+        <p>Install the app on multiple phones or tablets. All devices with the <strong>same email</strong> share rooms, bookings, guests, and invoices.</p>
+      </div>
+
+      <div class="setup-step">
+        <span class="step-num">3</span><span class="step-title">Role-Based Access</span>
+        <p>After first login, assign staff roles (Admin, Manager, Receptionist, Housekeeper). Each role sees different features and data.</p>
+      </div>
+
+      <button class="btn btn-primary btn-setup" onclick="completeSetup()">Create Account & Get Started →</button>
       <div id="setupError" style="color:#e74c3c;font-size:0.85rem;margin-top:0.5rem;min-height:1.2em;"></div>
     </div>
   </div>
@@ -1805,7 +1804,10 @@ window.doLogin = function() {
   const errEl = document.getElementById('loginError');
   if (!username || !password) { errEl.textContent = 'Please enter username and password'; return; }
   const account = accounts.find(a => a.email.toLowerCase() === username && a.status === 'active');
-  if (!account || password !== '1234') { errEl.textContent = 'Invalid credentials or inactive account'; return; }
+  if (!account) { errEl.textContent = 'Account not found or inactive'; return; }
+  const setupPw = localStorage.getItem(DB_KEY + 'setupPassword') || (isAndroid ? (function(){ try { return HotelDB.getSetting('setupPassword'); } catch(e){ return null; } })() : null);
+  const validPw = password === '1234' || (setupPw && password === setupPw);
+  if (!validPw) { errEl.textContent = 'Invalid password'; return; }
   currentUser = { id: account.id, name: account.name, email: account.email, role: account.role };
   currentRole = account.role;
   localStorage.setItem(DB_KEY + 'currentUser', JSON.stringify(currentUser));
@@ -1897,16 +1899,30 @@ if (settings.darkMode || (function(){ try { return localStorage.getItem(DB_KEY +
 // ===== FIRST-TIME SETUP =====
 window.completeSetup = function() {
   const email = document.getElementById('setupEmail').value.trim();
+  const password = document.getElementById('setupPassword').value;
   if (!email || !email.includes('@')) {
     document.getElementById('setupError').textContent = 'Please enter a valid email address';
     return;
   }
+  if (!password || password.length < 4) {
+    document.getElementById('setupError').textContent = 'Password must be at least 4 characters';
+    return;
+  }
   localStorage.setItem(DB_KEY + 'setupEmail', email);
+  localStorage.setItem(DB_KEY + 'setupPassword', password);
   localStorage.setItem(DB_KEY + 'setupDone', '1');
-  if (isAndroid) { try { HotelDB.saveSetting('setupEmail', email); HotelDB.saveSetting('setupDone', '1'); } catch(e){} }
+  if (isAndroid) { try { HotelDB.saveSetting('setupEmail', email); HotelDB.saveSetting('setupPassword', password); HotelDB.saveSetting('setupDone', '1'); } catch(e){} }
+  const existing = accounts.find(a => a.email.toLowerCase() === email.toLowerCase());
+  if (!existing) {
+    const name = email.split('@')[0].replace(/[._-]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+    accounts.push({id:genId(), name:name, email:email, role:'Admin', status:'active'});
+    save('accounts', accounts);
+  }
   document.getElementById('setupOverlay').classList.add('hidden');
   document.getElementById('loginOverlay').classList.remove('hidden');
-  toast('Setup complete! Your sync email: ' + email);
+  document.getElementById('loginUsername').value = email;
+  document.getElementById('loginPassword').value = password;
+  toast('Account created! Sign in with your email and password.');
 };
 
 (function initApp() {
