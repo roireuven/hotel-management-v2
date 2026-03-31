@@ -1001,8 +1001,9 @@ window.showAddBooking = function() {
   const avail = rooms.filter(r=>r.occupancyStatus==='Vacant' && r.housekeepingStatus!=='Out of Service');
   openModal(`<div class="modal-header"><h2>New Booking</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
-    <div class="form-row"><div class="form-group" style="flex:2;"><label>Guest Name</label><input type="text" class="form-control" id="mBkGuest" placeholder="Type name or select from list"></div><div class="form-group" style="flex:1;display:flex;flex-direction:column;"><label>Guest ID</label><input type="text" class="form-control" id="mBkGuestId" placeholder="Auto" readonly style="background:#f0f4fb;color:#1a3a5c;font-weight:600;"></div></div>
-    <div style="margin:-0.5rem 0 0.85rem;"><button class="btn btn-outline" style="width:100%;justify-content:center;" onclick="openGuestPicker()">◉ Select Existing Guest</button></div>
+    <div class="form-group"><label>Guest Name</label><input type="text" class="form-control" id="mBkGuest" placeholder="Type name or select from list"></div>
+    <div class="form-row"><div class="form-group"><label>Guest ID</label><input type="text" class="form-control" id="mBkGuestId" placeholder="Auto-generated" readonly style="background:#f0f4fb;color:#1a3a5c;font-weight:700;font-size:0.95rem;"></div><div class="form-group"><label>Passport / ID</label><input type="text" class="form-control" id="mBkPassport" placeholder="—" readonly style="background:#f0f4fb;color:#1a3a5c;font-weight:600;"></div></div>
+    <div style="margin:-0.25rem 0 0.85rem;"><button class="btn btn-outline" style="width:100%;justify-content:center;padding:0.65rem;" onclick="openGuestPicker()">◉ SELECT EXISTING GUEST</button></div>
     <div class="form-group"><label>Room</label><select class="form-control" id="mBkRoom">${avail.length?avail.map(r=>`<option value="${r.id}">${r.roomNumber} - ${r.roomType} (${fmt$(r.price)}/night)</option>`).join(''):'<option disabled>No rooms available</option>'}</select></div>
     <div class="form-row"><div class="form-group"><label>Check-in Date</label><input type="date" class="form-control" id="mBkInD" value="${today()}"></div><div class="form-group"><label>Check-in Time</label><input type="time" class="form-control" id="mBkInT" value="14:00"></div></div>
     <div class="form-row"><div class="form-group"><label>Check-out Date</label><input type="date" class="form-control" id="mBkOutD"></div><div class="form-group"><label>Check-out Time</label><input type="time" class="form-control" id="mBkOutT" value="12:00"></div></div>
@@ -1020,7 +1021,9 @@ window.openGuestPicker = function() {
     adults: document.getElementById('mBkAdults').value, children: document.getElementById('mBkChildren').value,
     src: document.getElementById('mBkSrc').value, cancel: document.getElementById('mBkCancel').value,
     req: document.getElementById('mBkReq').value, notes: document.getElementById('mBkNotes').value,
-    guest: document.getElementById('mBkGuest').value
+    guest: document.getElementById('mBkGuest').value,
+    guestId: document.getElementById('mBkGuestId').value,
+    passport: document.getElementById('mBkPassport').value
   };
   let filterVal = '';
   function renderPicker() {
@@ -1048,6 +1051,7 @@ window.pickGuest = function(gId) {
   setTimeout(()=>{
     document.getElementById('mBkGuest').value = g.firstName + ' ' + g.lastName;
     document.getElementById('mBkGuestId').value = guestDisplayId(g);
+    document.getElementById('mBkPassport').value = g.passportId || '—';
     if(fd.room) document.getElementById('mBkRoom').value = fd.room;
     if(fd.inD) document.getElementById('mBkInD').value = fd.inD;
     if(fd.inT) document.getElementById('mBkInT').value = fd.inT;
@@ -1066,6 +1070,8 @@ window.cancelGuestPicker = function() {
   showAddBooking();
   setTimeout(()=>{
     if(fd.guest) document.getElementById('mBkGuest').value = fd.guest;
+    if(fd.guestId) document.getElementById('mBkGuestId').value = fd.guestId;
+    if(fd.passport) document.getElementById('mBkPassport').value = fd.passport;
     if(fd.room) document.getElementById('mBkRoom').value = fd.room;
     if(fd.inD) document.getElementById('mBkInD').value = fd.inD;
     if(fd.inT) document.getElementById('mBkInT').value = fd.inT;
