@@ -574,6 +574,7 @@ class XGrid {
     this.onEdit = opts.onEdit || null;
     this.onDelete = opts.onDelete || null;
     this.onAdd = opts.onAdd || null;
+    this.addLabel = opts.addLabel || 'Add Row';
     this.actions = opts.actions || [];
     this.hideExport = opts.hideExport || false;
     this.sortCol = null; this.sortDir = 'asc';
@@ -623,7 +624,7 @@ class XGrid {
   render() {
     const paged = this.getPaged(); const filtered = this.getFiltered();
     const totalPages = this.getTotalPages();
-    const addBtn = this.onAdd ? `<button class="btn btn-sm btn-primary" onclick="window._xg_${this.container.id}.onAdd()">+ Add Row</button>` : '';
+    const addBtn = this.onAdd ? `<button class="btn btn-sm btn-primary" onclick="window._xg_${this.container.id}.onAdd()">+ ${this.addLabel || 'Add Row'}</button>` : '';
     const exportBtn = this.hideExport ? '' : `<button class="btn btn-sm btn-outline" onclick="window._xg_${this.container.id}.exportCSV()">📥 Export CSV</button>`;
     let html = `<div class="xgrid-toolbar">
       ${addBtn}
@@ -1046,7 +1047,7 @@ function renderBookings() {
     ],
     data: sorted,
     hideExport: currentRole === 'Receptionist' || currentRole === 'Housekeeper',
-    onAdd: () => showAddBooking(),
+    onAdd: () => showAddBooking(), addLabel: 'Add New Booking',
     onEdit: (row, field, val) => { const b = bookings.find(x=>x.id===row.id); if(b){b[field]=val;save('bookings',bookings);logAudit('Update','Booking','Updated '+field+' on '+b.bookingId);toast('Booking updated');} },
     actions: bkActions
   });
