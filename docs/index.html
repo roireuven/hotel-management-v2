@@ -499,6 +499,38 @@ function deleteOne(key, id) {
 }
 
 function genId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 5); }
+function getRoomTypes() { return (settings.roomTypes || 'Single,Double,Deluxe,Suite,Penthouse').split(',').map(s=>s.trim()).filter(Boolean); }
+function getBedConfigs() { return (settings.bedConfigs || 'King,Twin,Queen+Single').split(',').map(s=>s.trim()).filter(Boolean); }
+function selectOpts(arr, sel) { return arr.map(v=>`<option ${v===sel?'selected':''}>${v}</option>`).join(''); }
+function adminEditBtn(listName) { return currentRole==='Admin' ? ` <button class="btn btn-sm btn-outline" onclick="manageList('${listName}')" style="padding:0.2rem 0.5rem;font-size:0.7rem;min-height:auto;min-width:auto;">⊕</button>` : ''; }
+window.manageList = function(listName) {
+  const label = listName === 'roomTypes' ? 'Room Types' : 'Bed Configurations';
+  const items = (settings[listName] || '').split(',').map(s=>s.trim()).filter(Boolean);
+  let html = `<div class="modal-header"><h2>Manage ${label}</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body">
+    <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:1rem;">Add, edit or delete values. These appear in all dropdown menus across the app.</p>
+    <div id="listItems">`;
+  items.forEach((item, i) => {
+    html += `<div style="display:flex;gap:0.5rem;align-items:center;margin-bottom:0.5rem;">
+      <input type="text" class="form-control list-val" value="${item}" style="flex:1;">
+      <button class="btn btn-sm btn-danger" onclick="this.parentElement.remove()" style="min-width:36px;">✕</button></div>`;
+  });
+  html += `</div>
+    <button class="btn btn-outline" style="width:100%;justify-content:center;margin-top:0.5rem;" onclick="document.getElementById('listItems').insertAdjacentHTML('beforeend','<div style=\\'display:flex;gap:0.5rem;align-items:center;margin-bottom:0.5rem;\\'>'+' <input type=\\'text\\' class=\\'form-control list-val\\' placeholder=\\'New value\\' style=\\'flex:1;\\'>'+'<button class=\\'btn btn-sm btn-danger\\' onclick=\\'this.parentElement.remove()\\' style=\\'min-width:36px;\\'>✕</button></div>')">+ Add Value</button></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveList('${listName}')">Save</button></div>`;
+  openModal(html);
+};
+window.saveList = function(listName) {
+  const inputs = document.querySelectorAll('#listItems .list-val');
+  const values = [];
+  inputs.forEach(inp => { const v = inp.value.trim(); if(v) values.push(v); });
+  if(values.length === 0) { toast('Add at least one value'); return; }
+  settings[listName] = values.join(',');
+  save('settings', settings);
+  logAudit('Update','Settings','Updated '+listName+': '+values.join(', '));
+  closeModal();
+  toast((listName === 'roomTypes' ? 'Room Types' : 'Bed Configs') + ' updated');
+};
 function fmt$(n) { return '$' + Number(n).toFixed(2); }
 function fmtDate(d) { if (!d) return ''; const dt = new Date(d + 'T00:00:00'); return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
 function today() { return new Date().toISOString().split('T')[0]; }
@@ -722,7 +754,7 @@ const defaultInvoices = [
   {id:genId(),invoiceNumber:'INV-2002',bookingId:'',guestName:'Akira Tanaka',roomNumber:'305',subtotal:720,discountAmount:50,taxTotal:46.90,grandTotal:716.90,paymentStatus:'Partially Paid',paymentTransactionId:'TXN-10002',currency:'USD',billingAddress:'456 Sakura Ave, Tokyo, Japan',services:[{name:'Thai Massage',unitPrice:80,quantity:1,icon:'◎'}],date:'2026-03-20'},
   {id:genId(),invoiceNumber:'INV-2003',bookingId:'',guestName:'Sophie Laurent',roomNumber:'103',subtotal:400,discountAmount:0,taxTotal:28,grandTotal:428,paymentStatus:'Unpaid',paymentTransactionId:'',currency:'EUR',billingAddress:'789 Rue de Paris, Paris, France',services:[],date:'2026-03-25'},
 ];
-const defaultSettings = {hotelName:'Grand Hotel Management',email:'info@grandhotel.com',phone:'+1 555-0100',currency:'USD ($)',address:'123 Hotel Street, City, Country',maxGuests:3,surcharge:25,checkinTime:'14:00',checkoutTime:'12:00',darkMode:false};
+const defaultSettings = {hotelName:'Grand Hotel Management',email:'info@grandhotel.com',phone:'+1 555-0100',currency:'USD ($)',address:'123 Hotel Street, City, Country',maxGuests:3,surcharge:25,checkinTime:'14:00',checkoutTime:'12:00',darkMode:false,roomTypes:'Single,Double,Deluxe,Suite,Penthouse',bedConfigs:'King,Twin,Queen+Single,Double,King+Sofa'};
 const defaultTickets = [
   {id:genId(),roomNumber:'303',issue:'Bathroom renovation in progress',priority:'High',status:'Open',reportedBy:'Admin',reportedAt:'2026-03-28T10:00:00',resolvedAt:'',notes:'Major plumbing work required'},
   {id:genId(),roomNumber:'201',issue:'AC not cooling properly',priority:'Medium',status:'In Progress',reportedBy:'Receptionist',reportedAt:'2026-03-29T14:30:00',resolvedAt:'',notes:'Technician dispatched'},
@@ -903,7 +935,7 @@ window.showAddRoom = function() {
   openModal(`<div class="modal-header"><h2>Add New Room</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <div class="form-row"><div class="form-group"><label>Room Number</label><input type="text" class="form-control" id="mRoomNum" placeholder="e.g. 501"></div><div class="form-group"><label>Floor Number</label><input type="number" class="form-control" id="mRoomFloor" placeholder="e.g. 5"></div></div>
-    <div class="form-row"><div class="form-group"><label>Room Type</label><select class="form-control" id="mRoomType"><option>Single</option><option>Double</option><option>Deluxe</option><option>Suite</option><option>Penthouse</option></select></div><div class="form-group"><label>Bed Config</label><select class="form-control" id="mRoomBed"><option>King</option><option>Twin</option><option>Queen+Single</option></select></div></div>
+    <div class="form-row"><div class="form-group"><label>Room Type${adminEditBtn('roomTypes')}</label><select class="form-control" id="mRoomType">${selectOpts(getRoomTypes())}</select></div><div class="form-group"><label>Bed Config${adminEditBtn('bedConfigs')}</label><select class="form-control" id="mRoomBed">${selectOpts(getBedConfigs())}</select></div></div>
     <div class="form-row"><div class="form-group"><label>Max Adults</label><input type="number" class="form-control" id="mRoomMaxA" value="2"></div><div class="form-group"><label>Max Children</label><input type="number" class="form-control" id="mRoomMaxC" value="1"></div></div>
     <div class="form-group"><label>Price Per Night ($)</label><input type="number" class="form-control" id="mRoomPrice" placeholder="e.g. 120" step="0.01"></div>
     <div class="form-group"><label>Amenities (comma separated)</label><input type="text" class="form-control" id="mRoomAmen" placeholder="TV, WiFi, Mini-bar"></div></div>
@@ -917,14 +949,12 @@ window.addRoom = function() {
 };
 window.showRoomDetail = function(id) {
   const r = rooms.find(x=>x.id===id); if(!r) return;
-  const types = ['Single','Double','Deluxe','Suite','Penthouse'];
-  const beds = ['King','Twin','Queen+Single'];
   const hkStatuses = ['Clean','Dirty','Inspected','Out of Service'];
   const occStatuses = ['Occupied','Vacant','Reserved'];
   openModal(`<div class="modal-header"><h2>Room ${r.roomNumber}</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <div class="form-row"><div class="form-group"><label>Room Number</label><input type="text" class="form-control" id="eRoomNum" value="${r.roomNumber}"></div><div class="form-group"><label>Floor Number</label><input type="number" class="form-control" id="eRoomFloor" value="${r.floorNumber}"></div></div>
-    <div class="form-row"><div class="form-group"><label>Room Type</label><select class="form-control" id="eRoomType">${types.map(t=>`<option ${t===r.roomType?'selected':''}>${t}</option>`).join('')}</select></div><div class="form-group"><label>Bed Config</label><select class="form-control" id="eRoomBed">${beds.map(b=>`<option ${b===r.bedConfig?'selected':''}>${b}</option>`).join('')}</select></div></div>
+    <div class="form-row"><div class="form-group"><label>Room Type${adminEditBtn('roomTypes')}</label><select class="form-control" id="eRoomType">${selectOpts(getRoomTypes(),r.roomType)}</select></div><div class="form-group"><label>Bed Config${adminEditBtn('bedConfigs')}</label><select class="form-control" id="eRoomBed">${selectOpts(getBedConfigs(),r.bedConfig)}</select></div></div>
     <div class="form-row"><div class="form-group"><label>Max Adults</label><input type="number" class="form-control" id="eRoomMaxA" value="${r.maxAdults}"></div><div class="form-group"><label>Max Children</label><input type="number" class="form-control" id="eRoomMaxC" value="${r.maxChildren}"></div></div>
     <div class="form-group"><label>Price Per Night ($)</label><input type="number" class="form-control" id="eRoomPrice" value="${r.price}" step="0.01"></div>
     <div class="form-row"><div class="form-group"><label>Housekeeping Status</label><select class="form-control" id="eRoomHK">${hkStatuses.map(s=>`<option ${s===r.housekeepingStatus?'selected':''}>${s}</option>`).join('')}</select></div><div class="form-group"><label>Occupancy Status</label><select class="form-control" id="eRoomOcc">${occStatuses.map(s=>`<option ${s===r.occupancyStatus?'selected':''}>${s}</option>`).join('')}</select></div></div>
