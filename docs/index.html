@@ -1092,10 +1092,14 @@ window.openNationalityPicker = function(fieldId) {
     openModal(`<div class="modal-header"><h2>Select Nationality</h2><button class="modal-close" onclick="cancelNatPicker()">&times;</button></div>
       <div class="modal-body" style="padding:0.75rem;">
       <div style="padding:0.5rem 0;"><input type="text" class="form-control" id="natPickerSearch" placeholder="Search nationality..." value="${filterVal}" oninput="window._natFilter(this.value)" style="font-size:1rem;"></div>
-      <div style="max-height:calc(100vh - 200px);overflow-y:auto;">
-      ${filtered.map(n => '<div onclick="pickNationality(\''+n+'\')" style="padding:0.85rem 1rem;border-bottom:1px solid var(--border);cursor:pointer;font-size:1rem;transition:background 0.1s;" ontouchstart="this.style.background=\'#e3f2fd\'" ontouchend="this.style.background=\'\'" onmouseover="this.style.background=\'#e3f2fd\'" onmouseout="this.style.background=\'\'">'+n+'</div>').join('')}
+      <div id="natList" style="max-height:calc(100vh - 200px);overflow-y:auto;">
+      ${filtered.map(n => '<div class="nat-item" data-nat="'+n+'" style="padding:0.85rem 1rem;border-bottom:1px solid var(--border);cursor:pointer;font-size:1rem;">'+n+'</div>').join('')}
       ${filtered.length===0?'<div style="padding:2rem;text-align:center;color:#999;">No match found</div>':''}
       </div></div>`);
+    document.getElementById('natList').addEventListener('click', function(e) {
+      const item = e.target.closest('.nat-item');
+      if (item) pickNationality(item.getAttribute('data-nat'));
+    });
     window._natFilter = function(v) { filterVal = v; renderNatPicker(); setTimeout(()=>{ const el = document.getElementById('natPickerSearch'); if(el){el.focus();el.setSelectionRange(v.length,v.length);} },50); };
   }
   renderNatPicker();
