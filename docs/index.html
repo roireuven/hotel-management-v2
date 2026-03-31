@@ -2096,6 +2096,8 @@ function renderInventory() {
       save('inventory',inventory); logAudit('Update','Inventory','Updated '+it.itemName); toast('Inventory updated'); renderInventory();
     },
     actions: [
+      {name:'plus',label:'+1',cls:'btn-success',handler:id=>{ const it=inventory.find(x=>x.id===id); if(it){it.quantity=(parseInt(it.quantity)||0)+1;it.status=inventoryStatus(it);save('inventory',inventory);renderInventory();} }},
+      {name:'minus',label:'-1',cls:'btn-warning',handler:id=>{ const it=inventory.find(x=>x.id===id); if(it){it.quantity=Math.max(0,(parseInt(it.quantity)||0)-1);it.status=inventoryStatus(it);save('inventory',inventory);renderInventory();} }},
       {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditInventory(id)},
       {name:'delete',label:'✕',cls:'btn-danger',handler:id=>{
         if(!confirm('Delete this item?')) return;
