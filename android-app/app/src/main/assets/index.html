@@ -157,6 +157,66 @@
     .cell-actions { flex-wrap: wrap; }
     .xgrid td .cell.editing { display: flex; align-items: center; }
     .modal-footer .btn { min-height: 40px; min-width: 80px; font-size: 0.9rem; }
+    /* Dark Mode */
+    body.dark-mode { --bg: #1a1a2e; --card-bg: #16213e; --text: #e0e0e0; --text-light: #a0a0a0; --border: #2a2a4a; }
+    body.dark-mode .topbar { background: var(--card-bg); }
+    body.dark-mode th { background: #1a1a2e; color: #a0a0a0; }
+    body.dark-mode tr:hover td { background: #1e2a4a; }
+    body.dark-mode .xgrid th { background: #1a1a2e; }
+    body.dark-mode .xgrid th .th-inner:hover { background: #2a2a4a; }
+    body.dark-mode .xgrid th .col-filter { background: #16213e; color: #e0e0e0; border-top-color: #2a2a4a; }
+    body.dark-mode .xgrid th .col-filter:focus { background: #1e2a4a; }
+    body.dark-mode .xgrid td .cell:hover { background: #1e2a4a; }
+    body.dark-mode .xgrid tr:hover td .cell { background: #1e2a4a; }
+    body.dark-mode .xgrid tr.selected td { background: #1a3a5e; }
+    body.dark-mode .xgrid td .cell.editing input, body.dark-mode .xgrid td .cell.editing select { background: #1a1a2e; color: #e0e0e0; }
+    body.dark-mode .form-control { background: #1a1a2e; color: #e0e0e0; border-color: #2a2a4a; }
+    body.dark-mode .btn-outline { border-color: #2a2a4a; color: #e0e0e0; }
+    body.dark-mode .btn-outline:hover { background: #2a2a4a; }
+    body.dark-mode .search-bar { background: #1a1a2e; color: #e0e0e0; border-color: #2a2a4a; }
+    body.dark-mode .modal { background: var(--card-bg); }
+    body.dark-mode .stat-icon.blue { background: #1a3a5e; }
+    body.dark-mode .stat-icon.green { background: #1a3e1a; }
+    body.dark-mode .stat-icon.orange { background: #3e2a0a; }
+    body.dark-mode .stat-icon.red { background: #3e1a1a; }
+    body.dark-mode .room-available { background: #1a3e1a; border-color: #2e7d32; }
+    body.dark-mode .room-occupied { background: #1a3a5e; border-color: #1565c0; }
+    body.dark-mode .room-reserved { background: #3e2a0a; border-color: #e65100; }
+    body.dark-mode .room-maintenance { background: #3e1a1a; border-color: #c62828; }
+    body.dark-mode .xgrid-wrap { border-color: #2a2a4a; }
+    body.dark-mode .xgrid th, body.dark-mode .xgrid td { border-color: #2a2a4a; }
+    body.dark-mode .xg-page-btns button { background: #16213e; color: #e0e0e0; border-color: #2a2a4a; }
+    body.dark-mode .xg-page-btns button.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    body.dark-mode .xgrid-footer select { background: #16213e; color: #e0e0e0; border-color: #2a2a4a; }
+    /* Housekeeping Cards */
+    .hk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
+    .hk-card { border-radius: 10px; padding: 1rem; text-align: center; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease; border: 2px solid transparent; }
+    .hk-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+    .hk-card .hk-room { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .hk-card .hk-type { font-size: 0.78rem; opacity: 0.8; margin-bottom: 0.2rem; }
+    .hk-card .hk-floor { font-size: 0.7rem; opacity: 0.6; margin-bottom: 0.4rem; }
+    .hk-card .hk-status { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+    .hk-dirty { background: #fce4ec; border-color: #ef9a9a; color: #c62828; }
+    .hk-inprogress { background: #fff3e0; border-color: #ffcc80; color: #e65100; }
+    .hk-clean { background: #e8f5e9; border-color: #a5d6a7; color: #2e7d32; }
+    .hk-inspected { background: #e3f2fd; border-color: #90caf9; color: #1565c0; }
+    .hk-oos { background: #f3e5f5; border-color: #ce93d8; color: #6a1b9a; }
+    body.dark-mode .hk-dirty { background: #3e1a1a; border-color: #c62828; }
+    body.dark-mode .hk-inprogress { background: #3e2a0a; border-color: #e65100; }
+    body.dark-mode .hk-clean { background: #1a3e1a; border-color: #2e7d32; }
+    body.dark-mode .hk-inspected { background: #1a3a5e; border-color: #1565c0; }
+    body.dark-mode .hk-oos { background: #2a1a3e; border-color: #6a1b9a; }
+    /* Topbar Controls */
+    .dark-toggle { background: none; border: 1px solid var(--border); border-radius: 8px; padding: 0.3rem 0.55rem; cursor: pointer; font-size: 1.05rem; transition: all 0.15s ease; line-height: 1; }
+    .dark-toggle:hover { background: var(--bg); }
+    .role-select { font-size: 0.82rem; font-family: inherit; color: var(--text); background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.35rem 0.5rem; cursor: pointer; }
+    body.dark-mode .role-select { background: #1a1a2e; color: #e0e0e0; border-color: #2a2a4a; }
+    /* Messages list */
+    .msg-item { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.6rem 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+    .msg-item:last-child { border-bottom: none; }
+    .msg-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; }
+    .msg-icon.welcome { background: #e8f5e9; } .msg-icon.invoice { background: #e3f2fd; } .msg-icon.reminder { background: #fff3e0; }
+    .msg-text { flex: 1; } .msg-meta { font-size: 0.72rem; color: var(--text-light); margin-top: 0.15rem; }
   </style>
 </head>
 <body>
@@ -169,9 +229,14 @@
       <a data-page="rooms"><span class="icon">🚪</span> Rooms <span class="badge" id="badgeMaint">0</span></a>
       <a data-page="bookings"><span class="icon">📋</span> Bookings</a>
       <a data-page="guests"><span class="icon">👥</span> Guests</a>
+      <div class="nav-section">Operations</div>
+      <a data-page="housekeeping"><span class="icon">🧹</span> Housekeeping</a>
+      <a data-page="maintenance"><span class="icon">🔧</span> Maintenance</a>
       <div class="nav-section">Services</div>
       <a data-page="services"><span class="icon">🍽️</span> Services</a>
       <a data-page="invoices"><span class="icon">🧾</span> Invoices</a>
+      <div class="nav-section">Guest</div>
+      <a data-page="guestportal"><span class="icon">🏷️</span> Guest Portal</a>
       <div class="nav-section">Admin</div>
       <a data-page="reports"><span class="icon">📈</span> Reports</a>
       <a data-page="accounts"><span class="icon">👤</span> Accounts</a>
@@ -182,7 +247,7 @@
   <div class="main">
     <div class="topbar">
       <div class="topbar-left"><button class="menu-toggle" id="menuToggle">☰</button><h1 id="pageTitle">Dashboard</h1></div>
-      <div class="topbar-right"><div class="user-info"><span>Admin</span><div class="avatar">A</div></div></div>
+      <div class="topbar-right"><button class="dark-toggle" id="darkToggle" onclick="toggleDarkMode()" title="Toggle Dark Mode">🌙</button><select class="role-select" id="roleSelect" onchange="changeRole(this.value)"><option value="Admin">Admin</option><option value="Receptionist">Receptionist</option><option value="Housekeeper">Housekeeper</option></select><div class="user-info"><span id="userRoleLabel">Admin</span><div class="avatar" id="userAvatar">A</div></div></div>
     </div>
     <div class="content">
       <div class="page active" id="page-dashboard"></div>
@@ -194,6 +259,9 @@
       <div class="page" id="page-reports"></div>
       <div class="page" id="page-accounts"></div>
       <div class="page" id="page-auditlog"></div>
+      <div class="page" id="page-housekeeping"></div>
+      <div class="page" id="page-maintenance"></div>
+      <div class="page" id="page-guestportal"></div>
       <div class="page" id="page-settings"></div>
     </div>
   </div>
@@ -434,8 +502,10 @@ function nextInvoiceNumber() {
 }
 
 // ===== AUDIT LOG =====
-function logAudit(action, entity, detail) {
-  auditLog.push({id:genId(), timestamp:new Date().toISOString(), action:action, entity:entity, detail:detail, user:'Admin'});
+let currentRole = 'Admin';
+function logAudit(action, tableName, recordId, details) {
+  if (details === undefined) { details = recordId; recordId = ''; }
+  auditLog.push({id:genId(), timestamp:new Date().toISOString(), action:action, entity:tableName, recordId:String(recordId), detail:details, user:currentRole||'Admin'});
   if (auditLog.length > 500) auditLog = auditLog.slice(-500);
   save('auditLog', auditLog);
 }
@@ -491,7 +561,18 @@ const defaultInvoices = [
   {id:genId(),invoiceNumber:'INV-2002',bookingId:'',guestName:'Akira Tanaka',roomNumber:'305',subtotal:720,discountAmount:50,taxTotal:46.90,grandTotal:716.90,paymentStatus:'Partially Paid',paymentTransactionId:'TXN-10002',currency:'USD',billingAddress:'456 Sakura Ave, Tokyo, Japan',services:[{name:'Thai Massage',unitPrice:80,quantity:1,icon:'💆'}],date:'2026-03-20'},
   {id:genId(),invoiceNumber:'INV-2003',bookingId:'',guestName:'Sophie Laurent',roomNumber:'103',subtotal:400,discountAmount:0,taxTotal:28,grandTotal:428,paymentStatus:'Unpaid',paymentTransactionId:'',currency:'EUR',billingAddress:'789 Rue de Paris, Paris, France',services:[],date:'2026-03-25'},
 ];
-const defaultSettings = {hotelName:'Grand Hotel Management',email:'info@grandhotel.com',phone:'+1 555-0100',currency:'USD ($)',address:'123 Hotel Street, City, Country',maxGuests:3,surcharge:25,checkinTime:'14:00',checkoutTime:'12:00'};
+const defaultSettings = {hotelName:'Grand Hotel Management',email:'info@grandhotel.com',phone:'+1 555-0100',currency:'USD ($)',address:'123 Hotel Street, City, Country',maxGuests:3,surcharge:25,checkinTime:'14:00',checkoutTime:'12:00',darkMode:false};
+const defaultTickets = [
+  {id:genId(),roomNumber:'303',issue:'Bathroom renovation in progress',priority:'High',status:'Open',reportedBy:'Admin',reportedAt:'2026-03-28T10:00:00',resolvedAt:'',notes:'Major plumbing work required'},
+  {id:genId(),roomNumber:'201',issue:'AC not cooling properly',priority:'Medium',status:'In Progress',reportedBy:'Receptionist',reportedAt:'2026-03-29T14:30:00',resolvedAt:'',notes:'Technician dispatched'},
+  {id:genId(),roomNumber:'405',issue:'TV remote not working',priority:'Low',status:'Resolved',reportedBy:'Receptionist',reportedAt:'2026-03-27T09:00:00',resolvedAt:'2026-03-27T11:00:00',notes:'Batteries replaced'},
+];
+const defaultMessages = [
+  {id:genId(),bookingId:'BK-1001',guestName:'John Smith',type:'Welcome',message:'Welcome to Grand Hotel Management! Your room 101 is ready. We hope you enjoy your stay.',sentAt:'2026-03-28T14:00:00',channel:'Email'},
+  {id:genId(),bookingId:'BK-1002',guestName:'Maria Garcia',type:'Welcome',message:'Welcome to Grand Hotel Management! Your room 103 is ready. We hope you enjoy your stay.',sentAt:'2026-03-29T14:00:00',channel:'Email'},
+  {id:genId(),bookingId:'BK-1003',guestName:'Akira Tanaka',type:'Welcome',message:'Welcome to Grand Hotel Management! Your room 201 is ready. We hope you enjoy your stay.',sentAt:'2026-03-30T14:00:00',channel:'Email'},
+  {id:genId(),bookingId:'BK-1006',guestName:'Lin Wei',type:'Welcome',message:'Welcome to Grand Hotel Management! Your room 305 is ready. We hope you enjoy your stay.',sentAt:'2026-03-27T14:00:00',channel:'Email'},
+];
 
 // ===== LOAD DATA =====
 let rooms = load('rooms', null); if(!rooms) { rooms = defaultRooms; save('rooms', rooms); }
@@ -502,6 +583,8 @@ let invoices = load('invoices', null); if(!invoices) { invoices = defaultInvoice
 let accounts = load('accounts', null); if(!accounts) { accounts = defaultAccounts; save('accounts', accounts); }
 let auditLog = load('auditLog', []);
 let settings = load('settings', defaultSettings);
+let tickets = load('tickets', null); if(!tickets) { tickets = defaultTickets; save('tickets', tickets); }
+let messages = load('messages', null); if(!messages) { messages = defaultMessages; save('messages', messages); }
 
 if(bookings.length === 0) {
   const seed = [
@@ -522,7 +605,7 @@ if(bookings.length === 0) {
 }
 
 // ===== NAVIGATION =====
-const pageTitles = {dashboard:'Dashboard',rooms:'Room Management',bookings:'Bookings',guests:'Guest Directory',services:'Services',invoices:'Invoices',reports:'Reports & Analytics',accounts:'User Accounts',auditlog:'Audit Log',settings:'Settings & Regulations'};
+const pageTitles = {dashboard:'Dashboard',rooms:'Room Management',bookings:'Bookings',guests:'Guest Directory',housekeeping:'Housekeeping',maintenance:'Maintenance Tickets',services:'Services',invoices:'Invoices',guestportal:'Guest Portal',reports:'Reports & Analytics',accounts:'User Accounts',auditlog:'Audit Log',settings:'Settings & Regulations'};
 
 document.querySelectorAll('#sidebarNav a[data-page]').forEach(link => {
   link.addEventListener('click', () => {
@@ -545,7 +628,7 @@ function closeModal() { document.getElementById('modalOverlay').classList.remove
 document.getElementById('modalOverlay').addEventListener('click', e => { if(e.target === document.getElementById('modalOverlay')) closeModal(); });
 
 function renderPage(page) {
-  const fn = {dashboard:renderDashboard,rooms:renderRooms,bookings:renderBookings,guests:renderGuests,services:renderServices,invoices:renderInvoices,reports:renderReports,accounts:renderAccounts,auditlog:renderAuditLog,settings:renderSettings};
+  const fn = {dashboard:renderDashboard,rooms:renderRooms,bookings:renderBookings,guests:renderGuests,housekeeping:renderHousekeeping,maintenance:renderMaintenance,services:renderServices,invoices:renderInvoices,guestportal:renderGuestPortal,reports:renderReports,accounts:renderAccounts,auditlog:renderAuditLog,settings:renderSettings};
   if(fn[page]) fn[page]();
   updateBadges();
 }
@@ -578,6 +661,7 @@ function renderDashboard() {
   const oos = rooms.filter(r=>r.housekeepingStatus==='Out of Service').length;
   const recent = bookings.filter(b=>b.arrivalStatus==='Checked-in'||b.arrivalStatus==='Expected').slice(-5).reverse();
   const totalRev = invoices.reduce((s,i)=>s+(parseFloat(i.grandTotal)||0),0);
+  const recentMsgs = messages.slice(-5).reverse();
   document.getElementById('page-dashboard').innerHTML = `
     <div class="stats-grid">
       <div class="stat-card"><div class="stat-icon blue">🏨</div><div class="stat-info"><h3>${total}</h3><p>Total Rooms</p></div></div>
@@ -590,7 +674,10 @@ function renderDashboard() {
         {label:'Mon',v1:1200,v2:300},{label:'Tue',v1:1500,v2:450},{label:'Wed',v1:1800,v2:400},{label:'Thu',v1:1400,v2:500},{label:'Fri',v1:2100,v2:600},{label:'Sat',v1:2400,v2:700},{label:'Sun',v1:2000,v2:550}
       ])}</div></div>
       <div class="card"><div class="card-header"><h2>Recent Activity</h2></div><div class="card-body"><div class="table-wrap"><table><thead><tr><th>Guest</th><th>Room</th><th>Status</th></tr></thead><tbody>${recent.length?recent.map(b=>`<tr><td>${b.guestName}</td><td>${b.roomNumber}</td><td><span class="status status-${b.arrivalStatus==='Checked-in'?'checked-in':b.arrivalStatus==='Expected'?'pending':'checked-out'}">${b.arrivalStatus}</span></td></tr>`).join(''):'<tr><td colspan="3" style="text-align:center;color:var(--text-light);">No recent activity</td></tr>'}</tbody></table></div></div></div>
-    </div>`;
+    </div>
+    <div class="card"><div class="card-header"><h2>📨 Communication Log</h2></div><div class="card-body">
+      ${recentMsgs.length?recentMsgs.map(m=>`<div class="msg-item"><div class="msg-icon ${m.type.toLowerCase()}">${m.type==='Welcome'?'👋':m.type==='Invoice'?'🧾':'🔔'}</div><div class="msg-text"><strong>${m.guestName}</strong> — ${m.message}<div class="msg-meta">${m.type} · ${m.channel} · ${new Date(m.sentAt).toLocaleString()}</div></div></div>`).join(''):'<p style="text-align:center;color:var(--text-light);padding:1rem;">No messages yet</p>'}
+    </div></div>`;
 }
 
 // ===== ROOMS =====
@@ -724,7 +811,10 @@ window.addBooking = function() {
 window.checkIn = function(id) {
   const b = bookings.find(x=>x.id===id); if(!b) return;
   b.arrivalStatus = 'Checked-in'; const r = rooms.find(x=>x.id===b.roomId); if(r) { r.occupancyStatus = 'Occupied'; save('rooms',rooms); }
-  save('bookings',bookings); logAudit('Check-in','Booking',b.guestName+' checked in to Room '+b.roomNumber); renderBookings(); toast(b.guestName+' checked in to Room '+b.roomNumber);
+  save('bookings',bookings); logAudit('Updated','Booking',b.bookingId,b.guestName+' checked in to Room '+b.roomNumber);
+  messages.push({id:genId(),bookingId:b.bookingId,guestName:b.guestName,type:'Welcome',message:'Welcome to '+(settings.hotelName||'our hotel')+'! Your room '+b.roomNumber+' is ready. We hope you enjoy your stay.',sentAt:new Date().toISOString(),channel:'Email'});
+  save('messages',messages);
+  renderBookings(); toast(b.guestName+' checked in to Room '+b.roomNumber);
 };
 window.checkOut = function(id) {
   const b = bookings.find(x=>x.id===id); if(!b) return;
@@ -737,7 +827,10 @@ window.checkOut = function(id) {
   const grandTotal = subtotal + svcCharges + taxTotal;
   const invNum = nextInvoiceNumber();
   invoices.push({id:genId(),invoiceNumber:invNum,bookingId:b.bookingId,guestName:b.guestName,roomNumber:b.roomNumber,subtotal:subtotal,discountAmount:0,taxTotal:Math.round(taxTotal*100)/100,grandTotal:Math.round(grandTotal*100)/100,paymentStatus:'Unpaid',paymentTransactionId:'',currency:'USD',billingAddress:'',services:b.services||[],date:today()});
-  save('invoices',invoices); save('bookings',bookings); logAudit('Check-out','Booking',b.guestName+' checked out from Room '+b.roomNumber+'. Invoice '+invNum+' generated.'); renderBookings(); toast(b.guestName+' checked out. Invoice '+invNum+' generated.');
+  save('invoices',invoices); save('bookings',bookings); logAudit('Updated','Booking',b.bookingId,b.guestName+' checked out from Room '+b.roomNumber+'. Invoice '+invNum+' generated.');
+  messages.push({id:genId(),bookingId:b.bookingId,guestName:b.guestName,type:'Invoice',message:'Thank you for staying with us! Your invoice '+invNum+' for '+fmt$(grandTotal)+' has been sent.',sentAt:new Date().toISOString(),channel:'Email'});
+  save('messages',messages);
+  renderBookings(); toast(b.guestName+' checked out. Invoice '+invNum+' generated.');
 };
 window.showOrderService = function(id) {
   const b = bookings.find(x=>x.id===id); if(!b) return;
@@ -1046,16 +1139,24 @@ function renderReports() {
   const revpar = totalRev / totalRooms;
   const adr = occRooms > 0 ? totalRev / occRooms : 0;
   const recentAudit = auditLog.slice(-5).reverse();
+  const srcList = ['Direct','Booking.com','Expedia','Walk-in'];
+  const srcCounts = srcList.map(src => bookings.filter(b=>b.bookingSource===src).length);
+  const maxSrc = Math.max(...srcCounts, 1);
   document.getElementById('page-reports').innerHTML = `
     <div class="stats-grid">
-      <div class="stat-card"><div class="stat-icon blue">📈</div><div class="stat-info"><h3>${occRate}%</h3><p>Occupancy Rate</p></div></div>
+      <div class="stat-card"><div class="stat-icon blue">📈</div><div class="stat-info"><h3>${occRate}%</h3><p>Occupancy Rate (${occRooms}/${totalRooms})</p></div></div>
       <div class="stat-card"><div class="stat-icon green">💰</div><div class="stat-info"><h3>${fmt$(revpar)}</h3><p>RevPAR</p></div></div>
       <div class="stat-card"><div class="stat-icon orange">🏷️</div><div class="stat-info"><h3>${fmt$(adr)}</h3><p>ADR</p></div></div>
       <div class="stat-card"><div class="stat-icon red">💵</div><div class="stat-info"><h3>${fmt$(totalRev)}</h3><p>Total Revenue</p></div></div>
     </div>
-    <div class="card"><div class="card-header"><h2>Monthly Revenue</h2></div><div class="card-body">${renderBarChart([
-      {label:'Oct',v1:8500,v2:2200},{label:'Nov',v1:9200,v2:2800},{label:'Dec',v1:11000,v2:3500},{label:'Jan',v1:9800,v2:2600},{label:'Feb',v1:10500,v2:3000},{label:'Mar',v1:totalRev*0.7||12450,v2:totalRev*0.3||3800}
-    ])}</div></div>
+    <div class="dash-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+      <div class="card"><div class="card-header"><h2>Monthly Revenue</h2></div><div class="card-body">${renderBarChart([
+        {label:'Oct',v1:8500,v2:2200},{label:'Nov',v1:9200,v2:2800},{label:'Dec',v1:11000,v2:3500},{label:'Jan',v1:9800,v2:2600},{label:'Feb',v1:10500,v2:3000},{label:'Mar',v1:totalRev*0.7||12450,v2:totalRev*0.3||3800}
+      ])}</div></div>
+      <div class="card"><div class="card-header"><h2>Bookings by Source</h2></div><div class="card-body">
+        <div class="chart-container"><div class="bar-chart">${srcList.map((src,i)=>`<div class="bar-group"><div class="bar-value">${srcCounts[i]}</div><div style="display:flex;flex-direction:column;width:100%;max-width:50px;"><div class="bar" style="height:${(srcCounts[i]/maxSrc)*160}px;background:${['#1a73e8','#42b72a','#f5a623','#e74c3c'][i]};border-radius:6px 6px 0 0;"></div></div><div class="bar-label">${src}</div></div>`).join('')}</div></div>
+      </div></div>
+    </div>
     <div class="card"><div class="card-header"><h2>Booking Summary</h2></div><div class="card-body"><div class="table-wrap"><table><thead><tr><th>Status</th><th>Count</th><th>Percentage</th></tr></thead><tbody>
       ${['Checked-in','Expected','Checked-out','No-show'].map(st=>{const c=bookings.filter(b=>b.arrivalStatus===st).length;return `<tr><td><span class="status status-${st==='Checked-in'?'checked-in':st==='Expected'?'pending':st==='Checked-out'?'checked-out':'maintenance'}">${st}</span></td><td>${c}</td><td>${bookings.length?Math.round(c/bookings.length*100):0}%</td></tr>`;}).join('')}
     </tbody></table></div></div></div>
@@ -1130,13 +1231,14 @@ window.clearAuditLog = function() {
 
 // ===== SETTINGS =====
 function getDbCounts() {
-  const tables = ['rooms','guests','bookings','services','invoices','accounts'];
+  const tables = ['rooms','guests','bookings','services','invoices','accounts','tickets','messages'];
   const counts = {};
   if (isAndroid) {
     tables.forEach(t => { try { counts[t] = HotelDB.count(t); } catch(e) { counts[t] = '?'; } });
   } else {
     counts.rooms = rooms.length; counts.guests = guests.length; counts.bookings = bookings.length;
     counts.services = services.length; counts.invoices = invoices.length; counts.accounts = accounts.length;
+    counts.tickets = tickets.length; counts.messages = messages.length;
   }
   return counts;
 }
@@ -1166,6 +1268,8 @@ function renderSettings() {
           <tr><td><strong>services</strong></td><td>${counts.services}</td><td>Hotel services catalog (category, name, price, tax)</td></tr>
           <tr><td><strong>invoices</strong></td><td>${counts.invoices}</td><td>Billing records (subtotal, tax, discount, grand total, payment)</td></tr>
           <tr><td><strong>accounts</strong></td><td>${counts.accounts}</td><td>User accounts (name, email, role, status)</td></tr>
+          <tr><td><strong>tickets</strong></td><td>${counts.tickets}</td><td>Maintenance tickets (room, issue, priority, status)</td></tr>
+          <tr><td><strong>messages</strong></td><td>${counts.messages}</td><td>Communication log (guest, type, message, channel)</td></tr>
           <tr><td><strong>settings</strong></td><td>—</td><td>Hotel configuration (key/value pairs)</td></tr>
           <tr><td><strong>auditLog</strong></td><td>${auditLog.length}</td><td>Audit trail (action, entity, detail, timestamp)</td></tr>
         </tbody>
@@ -1180,14 +1284,207 @@ window.saveSettings = function() {
 window.resetAll = function() {
   if(!confirm('Reset ALL data to defaults? This cannot be undone.')) return;
   if (isAndroid) {
-    ['rooms','guests','bookings','services','invoices','accounts','settings'].forEach(t => { try { HotelDB.deleteAll(t); } catch(e){} });
+    ['rooms','guests','bookings','services','invoices','accounts','tickets','messages','settings'].forEach(t => { try { HotelDB.deleteAll(t); } catch(e){} });
   }
   Object.keys(localStorage).forEach(k => { if(k.startsWith(DB_KEY)) localStorage.removeItem(k); });
   location.reload();
 };
 
+// ===== HOUSEKEEPING =====
+function renderHousekeeping() {
+  const statusOrder = {'Dirty':0,'In Progress':1,'Clean':2,'Inspected':3,'Out of Service':4};
+  const sorted = [...rooms].sort((a,b) => (statusOrder[a.housekeepingStatus]||0) - (statusOrder[b.housekeepingStatus]||0));
+  const dirtyCnt = rooms.filter(r=>r.housekeepingStatus==='Dirty').length;
+  const ipCnt = rooms.filter(r=>r.housekeepingStatus==='In Progress').length;
+  const cleanCnt = rooms.filter(r=>r.housekeepingStatus==='Clean').length;
+  const inspCnt = rooms.filter(r=>r.housekeepingStatus==='Inspected').length;
+  document.getElementById('page-housekeeping').innerHTML = `
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-icon red">🔴</div><div class="stat-info"><h3>${dirtyCnt}</h3><p>Dirty</p></div></div>
+      <div class="stat-card"><div class="stat-icon orange">🟠</div><div class="stat-info"><h3>${ipCnt}</h3><p>In Progress</p></div></div>
+      <div class="stat-card"><div class="stat-icon green">🟢</div><div class="stat-info"><h3>${cleanCnt}</h3><p>Clean</p></div></div>
+      <div class="stat-card"><div class="stat-icon blue">🔵</div><div class="stat-info"><h3>${inspCnt}</h3><p>Inspected</p></div></div>
+    </div>
+    <div class="card"><div class="card-header"><h2>Housekeeping Board</h2><span style="font-size:0.78rem;color:var(--text-light);">Click a card to cycle: Dirty → In Progress → Clean → Inspected</span></div><div class="card-body">
+      <div class="hk-grid">${sorted.map(r => {
+        const cls = r.housekeepingStatus==='Dirty'?'hk-dirty':r.housekeepingStatus==='In Progress'?'hk-inprogress':r.housekeepingStatus==='Clean'?'hk-clean':r.housekeepingStatus==='Inspected'?'hk-inspected':'hk-oos';
+        return `<div class="hk-card ${cls}" onclick="cycleHousekeeping('${r.id}')"><div class="hk-room">${r.roomNumber}</div><div class="hk-type">${r.roomType}</div><div class="hk-floor">Floor ${r.floorNumber}</div><div class="hk-status">${r.housekeepingStatus}</div></div>`;
+      }).join('')}</div>
+    </div></div>`;
+}
+window.cycleHousekeeping = function(id) {
+  const r = rooms.find(x=>x.id===id); if(!r) return;
+  if (r.housekeepingStatus === 'Out of Service') { toast('Room is out of service — resolve maintenance ticket first'); return; }
+  const cycle = {'Dirty':'In Progress','In Progress':'Clean','Clean':'Inspected','Inspected':'Dirty'};
+  const oldSt = r.housekeepingStatus;
+  r.housekeepingStatus = cycle[oldSt] || 'Dirty';
+  save('rooms', rooms);
+  logAudit('Updated','Housekeeping',r.roomNumber,'Status: '+oldSt+' → '+r.housekeepingStatus);
+  renderHousekeeping(); toast('Room '+r.roomNumber+': '+r.housekeepingStatus);
+};
+
+// ===== MAINTENANCE TICKETS =====
+let ticketGrid;
+function renderMaintenance() {
+  document.getElementById('page-maintenance').innerHTML = `
+    <div class="card"><div class="card-header"><h2>Maintenance Tickets</h2></div><div class="card-body"><div id="ticketGrid"></div></div></div>`;
+  ticketGrid = new XGrid('ticketGrid', {
+    columns: [
+      {field:'roomNumber',label:'Room',editable:true,filterable:true,width:'70px'},
+      {field:'issue',label:'Issue',editable:true,filterable:true},
+      {field:'priority',label:'Priority',format:v=>{const c=v==='Urgent'||v==='High'?'maintenance':v==='Medium'?'pending':'active';return `<span class="status status-${c}">${v}</span>`;},editable:true,editType:'select',editOptions:['Low','Medium','High','Urgent'],filterable:true},
+      {field:'status',label:'Status',format:v=>{const c=v==='Open'?'maintenance':v==='In Progress'?'pending':'active';return `<span class="status status-${c}">${v}</span>`;},editable:true,editType:'select',editOptions:['Open','In Progress','Resolved'],filterable:true},
+      {field:'reportedBy',label:'Reported By',editable:true,filterable:true},
+      {field:'reportedAt',label:'Reported',format:v=>v?new Date(v).toLocaleString():'',filterable:true},
+      {field:'resolvedAt',label:'Resolved',format:v=>v?new Date(v).toLocaleString():'—'},
+      {field:'notes',label:'Notes',editable:true,filterable:true},
+    ],
+    data: tickets,
+    onAdd: () => showAddTicket(),
+    onEdit: (row, field, val, oldVal) => {
+      const t = tickets.find(x=>x.id===row.id); if(!t) return;
+      t[field] = val;
+      if (field === 'status' && val === 'Resolved' && oldVal !== 'Resolved') {
+        t.resolvedAt = new Date().toISOString();
+        const rm = rooms.find(r=>String(r.roomNumber)===String(t.roomNumber));
+        if (rm) { rm.housekeepingStatus = 'Dirty'; save('rooms', rooms); }
+      }
+      if (field === 'status' && val === 'Open' && oldVal !== 'Open') {
+        const rm = rooms.find(r=>String(r.roomNumber)===String(t.roomNumber));
+        if (rm) { rm.housekeepingStatus = 'Out of Service'; save('rooms', rooms); }
+      }
+      save('tickets', tickets); logAudit('Updated','Ticket',t.id,'Updated '+field); toast('Ticket updated'); renderMaintenance();
+    },
+    actions: [
+      {name:'resolve',label:'Resolve',cls:'btn-success',condition:r=>r.status!=='Resolved',handler:id=>{
+        const t = tickets.find(x=>x.id===id); if(!t) return;
+        t.status = 'Resolved'; t.resolvedAt = new Date().toISOString();
+        const rm = rooms.find(r=>String(r.roomNumber)===String(t.roomNumber));
+        if (rm) { rm.housekeepingStatus = 'Dirty'; save('rooms', rooms); }
+        save('tickets', tickets); logAudit('Updated','Ticket',t.id,'Resolved'); renderMaintenance(); toast('Ticket resolved');
+      }},
+      {name:'delete',label:'✕',cls:'btn-danger',handler:id=>{
+        if(!confirm('Delete this ticket?')) return;
+        const t = tickets.find(x=>x.id===id);
+        tickets = tickets.filter(x=>x.id!==id); save('tickets', tickets);
+        logAudit('Deleted','Ticket',(t?t.id:id),'Deleted ticket'); renderMaintenance(); toast('Ticket deleted');
+      }},
+    ]
+  });
+}
+window.showAddTicket = function() {
+  openModal(`<div class="modal-header"><h2>New Maintenance Ticket</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body">
+    <div class="form-row"><div class="form-group"><label>Room Number</label><select class="form-control" id="mTkRoom">${rooms.map(r=>`<option value="${r.roomNumber}">${r.roomNumber} - ${r.roomType}</option>`).join('')}</select></div><div class="form-group"><label>Priority</label><select class="form-control" id="mTkPri"><option>Low</option><option>Medium</option><option selected>High</option><option>Urgent</option></select></div></div>
+    <div class="form-group"><label>Issue Description</label><textarea class="form-control" id="mTkIssue" rows="3" placeholder="Describe the issue..."></textarea></div>
+    <div class="form-group"><label>Notes</label><textarea class="form-control" id="mTkNotes" rows="2" placeholder="Additional notes..."></textarea></div></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addTicket()">Create Ticket</button></div>`);
+};
+window.addTicket = function() {
+  const issue = document.getElementById('mTkIssue').value.trim(); if(!issue) { toast('Describe the issue'); return; }
+  const roomNum = document.getElementById('mTkRoom').value;
+  const t = {id:genId(),roomNumber:roomNum,issue:issue,priority:document.getElementById('mTkPri').value,status:'Open',reportedBy:currentRole,reportedAt:new Date().toISOString(),resolvedAt:'',notes:document.getElementById('mTkNotes').value};
+  tickets.push(t);
+  const rm = rooms.find(r=>String(r.roomNumber)===String(roomNum));
+  if (rm) { rm.housekeepingStatus = 'Out of Service'; save('rooms', rooms); }
+  save('tickets', tickets); logAudit('Created','Ticket',t.id,'Ticket for room '+roomNum+': '+issue);
+  closeModal(); renderMaintenance(); updateBadges(); toast('Ticket created for room '+roomNum);
+};
+
+// ===== GUEST PORTAL =====
+function renderGuestPortal() {
+  document.getElementById('page-guestportal').innerHTML = `
+    <div class="card"><div class="card-header"><h2>🏷️ Guest Self-Service Portal</h2></div><div class="card-body">
+      <div class="form-group"><label>Enter your Booking ID</label><div style="display:flex;gap:0.5rem;"><input type="text" class="form-control" id="gpBookingId" placeholder="e.g. BK-1001" style="max-width:250px;"><button class="btn btn-primary" onclick="lookupBooking()">Look Up</button></div></div>
+      <div id="gpResult"></div>
+    </div></div>`;
+}
+window.lookupBooking = function() {
+  const bkId = document.getElementById('gpBookingId').value.trim();
+  if (!bkId) { toast('Enter a booking ID'); return; }
+  const b = bookings.find(x => x.bookingId === bkId);
+  if (!b) { document.getElementById('gpResult').innerHTML = '<p style="color:var(--danger);margin-top:1rem;">Booking not found. Please check your booking ID.</p>'; return; }
+  document.getElementById('gpResult').innerHTML = `
+    <div class="card" style="margin-top:1rem;"><div class="card-header"><h2>Booking ${b.bookingId}</h2></div><div class="card-body">
+      <p><strong>Guest:</strong> ${b.guestName}</p>
+      <p><strong>Room:</strong> ${b.roomNumber} (${b.roomType})</p>
+      <p><strong>Check-in:</strong> ${fmtDate(b.checkinDate)} at ${b.checkinTime||'14:00'}</p>
+      <p><strong>Check-out:</strong> ${fmtDate(b.checkoutDate)} at ${b.checkoutTime||'12:00'}</p>
+      <p><strong>Status:</strong> <span class="status status-${b.arrivalStatus==='Checked-in'?'checked-in':b.arrivalStatus==='Expected'?'pending':'checked-out'}">${b.arrivalStatus}</span></p>
+      <p><strong>Guests:</strong> ${b.numAdults} adult(s), ${b.numChildren||0} child(ren)</p>
+      ${b.specialRequests?'<p><strong>Special Requests:</strong> '+b.specialRequests+'</p>':''}
+      <h3 style="margin:1.5rem 0 0.75rem;font-size:0.95rem;">Ordered Services</h3>
+      <ul class="service-list">${(b.services||[]).length?(b.services||[]).map(s=>`<li class="service-item"><div class="service-left"><div class="service-icon">${s.icon||'🛎️'}</div><div><div class="service-name">${s.name} x${s.quantity||1}</div></div></div><div class="service-price">${fmt$((parseFloat(s.unitPrice)||0)*(parseInt(s.quantity)||1))}</div></li>`).join(''):'<li style="padding:0.75rem;text-align:center;color:var(--text-light);">No services ordered</li>'}</ul>
+      ${b.arrivalStatus==='Checked-in'?`<h3 style="margin:1.5rem 0 0.75rem;font-size:0.95rem;">Request a Service</h3>
+      <div class="form-row"><div class="form-group"><label>Service</label><select class="form-control" id="gpSvcSelect">${services.map(s=>`<option value="${s.id}">${s.icon} ${s.name} — ${fmt$(s.unitPrice)}</option>`).join('')}</select></div><div class="form-group"><label>Note</label><input type="text" class="form-control" id="gpSvcNote" placeholder="Optional note"></div></div>
+      <button class="btn btn-primary" onclick="gpOrderService('${b.id}')">Submit Service Request</button>`:''}
+    </div></div>`;
+};
+window.gpOrderService = function(bId) {
+  const b = bookings.find(x=>x.id===bId); if(!b) return;
+  const sId = document.getElementById('gpSvcSelect').value;
+  const svc = services.find(s=>s.id===sId); if(!svc) return;
+  if(!b.services) b.services = [];
+  b.services.push({name:svc.name,unitPrice:svc.unitPrice,quantity:1,icon:svc.icon,serviceCategory:svc.serviceCategory});
+  save('bookings', bookings);
+  logAudit('Created','Service Request',b.bookingId,'Guest requested '+svc.name);
+  toast(svc.name+' requested successfully');
+  lookupBooking();
+};
+
+// ===== DARK MODE =====
+window.toggleDarkMode = function() {
+  document.body.classList.toggle('dark-mode');
+  const isDark = document.body.classList.contains('dark-mode');
+  document.getElementById('darkToggle').textContent = isDark ? '☀️' : '🌙';
+  settings.darkMode = isDark;
+  save('settings', settings);
+  try { localStorage.setItem(DB_KEY + 'darkMode', isDark ? '1' : '0'); } catch(e) {}
+};
+
+// ===== ROLE-BASED ACCESS CONTROL =====
+window.changeRole = function(role) {
+  currentRole = role;
+  document.getElementById('userRoleLabel').textContent = role;
+  document.getElementById('userAvatar').textContent = role[0];
+  applyRBAC();
+};
+function applyRBAC() {
+  const allowedPages = {
+    'Admin': null,
+    'Receptionist': ['dashboard','rooms','bookings','guests','services','invoices'],
+    'Housekeeper': ['dashboard','housekeeping','maintenance'],
+  };
+  const allowed = allowedPages[currentRole];
+  const links = document.querySelectorAll('#sidebarNav a[data-page]');
+  links.forEach(link => {
+    const page = link.dataset.page;
+    link.style.display = (allowed === null || allowed.includes(page)) ? '' : 'none';
+  });
+  const sections = document.querySelectorAll('#sidebarNav .nav-section');
+  sections.forEach(sec => {
+    let next = sec.nextElementSibling;
+    let hasVisible = false;
+    while (next && !next.classList.contains('nav-section')) {
+      if (next.tagName === 'A' && next.style.display !== 'none') hasVisible = true;
+      next = next.nextElementSibling;
+    }
+    sec.style.display = hasVisible ? '' : 'none';
+  });
+  const activePage = document.querySelector('#sidebarNav a.active');
+  if (activePage && activePage.style.display === 'none') {
+    document.querySelector('#sidebarNav a[data-page="dashboard"]').click();
+  }
+}
+
+// ===== INIT =====
+if (settings.darkMode || (function(){ try { return localStorage.getItem(DB_KEY + 'darkMode') === '1'; } catch(e) { return false; } })()) {
+  document.body.classList.add('dark-mode');
+  document.getElementById('darkToggle').textContent = '☀️';
+}
 renderDashboard();
 updateBadges();
+applyRBAC();
 </script>
 </body>
 </html>
