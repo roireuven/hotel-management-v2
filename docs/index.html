@@ -1308,7 +1308,13 @@ window.addBooking = function() {
   }
   const bkId = nextBookingId();
   bookings.push({id:genId(),bookingId:bkId,guestId:g.id,guestName:guestName,roomId:r.id,roomNumber:r.roomNumber,roomType:r.roomType,checkinDate:checkinDate,checkinTime:document.getElementById('mBkInT').value||'14:00',checkoutDate:checkoutDate,checkoutTime:document.getElementById('mBkOutT').value||'12:00',numAdults:parseInt(document.getElementById('mBkAdults').value)||1,numChildren:parseInt(document.getElementById('mBkChildren').value)||0,bookingSource:document.getElementById('mBkSrc').value,cancellationPolicy:document.getElementById('mBkCancel').value,arrivalStatus:'Expected',specialRequests:document.getElementById('mBkReq').value,services:[],notes:document.getElementById('mBkNotes').value});
-  save('bookings',bookings); logAudit('Add','Booking','Created booking '+bkId+' for '+guestName); closeModal(); renderBookings(); toast('Booking '+bkId+' created');
+  save('bookings',bookings); logAudit('Add','Booking','Created booking '+bkId+' for '+guestName);
+  const nights = daysBetween(checkinDate, checkoutDate); const roomPrice = r ? r.price : 100;
+  const subtotal = roomPrice * nights; const taxRate = 7; const taxTotal = subtotal * taxRate / 100;
+  const invNum = nextInvoiceNumber();
+  invoices.push({id:genId(),invoiceNumber:invNum,bookingId:bkId,guestName:guestName,roomNumber:r.roomNumber,subtotal:subtotal,discountAmount:0,taxTotal:Math.round(taxTotal*100)/100,grandTotal:Math.round((subtotal+taxTotal)*100)/100,paymentStatus:'Unpaid',paymentTransactionId:'',currency:'USD',billingAddress:'',services:[],date:today()});
+  save('invoices',invoices); logAudit('Add','Invoice','Auto-created invoice '+invNum+' for booking '+bkId);
+  closeModal(); renderBookings(); toast('Booking '+bkId+' created. Invoice '+invNum+' generated.');
   if (newGuest) { setTimeout(function(){ showEditGuest(g.id); toast('New guest created — please fill in details'); }, 500); }
 };
 window.checkIn = function(id) {
@@ -1370,6 +1376,7 @@ window.showEditBooking = function(id) {
 };
 window.updateBooking = function(id) {
   const b = bookings.find(x=>x.id===id); if(!b) return;
+  const oldCheckout = b.checkoutDate;
   b.guestName = document.getElementById('eBkGuest').value||b.guestName;
   const rId = document.getElementById('eBkRoom').value; const r = rooms.find(x=>x.id===rId);
   if(r) { b.roomId = r.id; b.roomNumber = r.roomNumber; b.roomType = r.roomType; }
@@ -1384,7 +1391,19 @@ window.updateBooking = function(id) {
   b.arrivalStatus = document.getElementById('eBkStatus').value;
   b.specialRequests = document.getElementById('eBkReq').value;
   b.notes = document.getElementById('eBkNotes').value;
-  save('bookings',bookings); logAudit('Update','Booking','Updated booking '+b.bookingId); closeModal(); renderBookings(); toast('Booking '+b.bookingId+' updated');
+  save('bookings',bookings); logAudit('Update','Booking','Updated booking '+b.bookingId);
+  if (oldCheckout && b.checkoutDate && oldCheckout !== b.checkoutDate) {
+    const rm = rooms.find(x=>x.id===b.roomId); const roomPrice = rm ? rm.price : 100;
+    const nights = daysBetween(b.checkinDate, b.checkoutDate); const subtotal = roomPrice * nights;
+    const svcCharges = (b.services||[]).reduce((s,sv)=>s+(parseFloat(sv.unitPrice)||0)*(parseInt(sv.quantity)||1),0);
+    const taxRate = 7; const taxTotal = (subtotal + svcCharges) * taxRate / 100;
+    const invNum = nextInvoiceNumber();
+    invoices.push({id:genId(),invoiceNumber:invNum,bookingId:b.bookingId,guestName:b.guestName,roomNumber:b.roomNumber,subtotal:subtotal,discountAmount:0,taxTotal:Math.round(taxTotal*100)/100,grandTotal:Math.round((subtotal+svcCharges+taxTotal)*100)/100,paymentStatus:'Unpaid',paymentTransactionId:'',currency:'USD',billingAddress:'',services:b.services||[],date:today()});
+    save('invoices',invoices); logAudit('Add','Invoice','New invoice '+invNum+' for booking '+b.bookingId+' (checkout changed from '+oldCheckout+' to '+b.checkoutDate+')');
+    closeModal(); renderBookings(); toast('Booking updated. New invoice '+invNum+' generated (checkout date changed).');
+  } else {
+    closeModal(); renderBookings(); toast('Booking '+b.bookingId+' updated');
+  }
 };
 window.deleteBooking = function(id) {
   if(!confirm('Delete this booking?')) return;
