@@ -922,14 +922,18 @@ function renderDashboard() {
     </div>`;
   }
 
+  const defFrom = new Date(); defFrom.setDate(defFrom.getDate()-6);
+  const defTo = new Date();
+  const defFromStr = defFrom.toISOString().split('T')[0];
+  const defToStr = defTo.toISOString().split('T')[0];
+
   let bodyHtml = '';
   if (!isHK) {
-    bodyHtml += `<div class="dash-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
-      <div class="card"><div class="card-header"><h2>Revenue (Last 7 Days)</h2></div><div class="card-body">${renderBarChart([
-        {label:'Mon',v1:1200,v2:300},{label:'Tue',v1:1500,v2:450},{label:'Wed',v1:1800,v2:400},{label:'Thu',v1:1400,v2:500},{label:'Fri',v1:2100,v2:600},{label:'Sat',v1:2400,v2:700},{label:'Sun',v1:2000,v2:550}
-      ])}</div></div>
-      <div class="card"><div class="card-header"><h2>Recent Activity</h2></div><div class="card-body"><div class="table-wrap"><table><thead><tr><th>Guest</th><th>Room</th><th>Status</th></tr></thead><tbody>${recent.length?recent.map(b=>`<tr><td>${b.guestName}</td><td>${b.roomNumber}</td><td><span class="status status-${b.arrivalStatus==='Checked-in'?'checked-in':b.arrivalStatus==='Expected'?'pending':'checked-out'}">${b.arrivalStatus}</span></td></tr>`).join(''):'<tr><td colspan="3" style="text-align:center;color:var(--text-light);">No recent activity</td></tr>'}</tbody></table></div></div></div>
-    </div>
+    bodyHtml += `<div class="card"><div class="card-header"><h2>◆ Daily Overview</h2></div><div class="card-body">
+      <div class="form-row" style="margin-bottom:0.75rem;"><div class="form-group" style="margin-bottom:0;"><label>From Date</label><input type="date" class="form-control" id="dashFrom" value="${defFromStr}" onchange="updateDashChart()"></div><div class="form-group" style="margin-bottom:0;"><label>To Date</label><input type="date" class="form-control" id="dashTo" value="${defToStr}" onchange="updateDashChart()"></div></div>
+      <div id="dashChartArea"></div>
+    </div></div>
+    <div class="card"><div class="card-header"><h2>Recent Activity</h2></div><div class="card-body"><div class="table-wrap"><table><thead><tr><th>Guest</th><th>Room</th><th>Status</th></tr></thead><tbody>${recent.length?recent.map(b=>`<tr><td>${b.guestName}</td><td>${b.roomNumber}</td><td><span class="status status-${b.arrivalStatus==='Checked-in'?'checked-in':b.arrivalStatus==='Expected'?'pending':'checked-out'}">${b.arrivalStatus}</span></td></tr>`).join(''):'<tr><td colspan="3" style="text-align:center;color:var(--text-light);">No recent activity</td></tr>'}</tbody></table></div></div></div>
     <div class="card"><div class="card-header"><h2>📨 Communication Log</h2></div><div class="card-body">
       ${recentMsgs.length?recentMsgs.map(m=>`<div class="msg-item"><div class="msg-icon ${m.type.toLowerCase()}">${m.type==='Welcome'?'👋':m.type==='Invoice'?'🧾':'🔔'}</div><div class="msg-text"><strong>${m.guestName}</strong> — ${m.message}<div class="msg-meta">${m.type} · ${m.channel} · ${new Date(m.sentAt).toLocaleString()}</div></div></div>`).join(''):'<p style="text-align:center;color:var(--text-light);padding:1rem;">No messages yet</p>'}
     </div></div>`;
@@ -941,7 +945,58 @@ function renderDashboard() {
   }
 
   document.getElementById('page-dashboard').innerHTML = statsHtml + bodyHtml;
+  if (!isHK) setTimeout(updateDashChart, 50);
 }
+
+window.updateDashChart = function() {
+  const fromEl = document.getElementById('dashFrom');
+  const toEl = document.getElementById('dashTo');
+  const area = document.getElementById('dashChartArea');
+  if (!fromEl || !toEl || !area) return;
+  const from = fromEl.value; const to = toEl.value;
+  if (!from || !to || to < from) { area.innerHTML = '<p style="text-align:center;color:var(--text-light);padding:1rem;">Select a valid date range</p>'; return; }
+
+  const totalRooms = rooms.length;
+  const days = [];
+  const d = new Date(from + 'T00:00:00');
+  const end = new Date(to + 'T00:00:00');
+  while (d <= end) {
+    const ds = d.toISOString().split('T')[0];
+    let occupied = 0;
+    bookings.forEach(b => {
+      if (b.arrivalStatus === 'Checked-out' || b.arrivalStatus === 'No-show') return;
+      if (b.checkinDate <= ds && b.checkoutDate > ds) occupied++;
+    });
+    const vacant = totalRooms - occupied;
+    let invSum = 0;
+    invoices.forEach(inv => { if (inv.date === ds) invSum += parseFloat(inv.grandTotal) || 0; });
+    days.push({ date: ds, occupied, vacant, invSum });
+    d.setDate(d.getDate() + 1);
+  }
+
+  let chartHtml = '<div class="chart-container" style="height:auto;"><div class="bar-chart" style="height:180px;">';
+  const maxOcc = Math.max(...days.map(d => d.occupied + d.vacant), 1);
+  const maxInv = Math.max(...days.map(d => d.invSum), 1) || 1;
+  days.forEach(day => {
+    const label = new Date(day.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const occH = (day.occupied / maxOcc) * 140;
+    const vacH = (day.vacant / maxOcc) * 140;
+    chartHtml += `<div class="bar-group"><div class="bar-value" style="font-size:0.6rem;">${fmt$(day.invSum)}</div><div style="display:flex;flex-direction:column;width:100%;max-width:50px;"><div class="bar" style="height:${vacH}px;background:#42b72a;border-radius:6px 6px 0 0;"></div><div class="bar" style="height:${occH}px;background:#1a73e8;"></div></div><div class="bar-label">${label}</div></div>`;
+  });
+  chartHtml += '</div><div class="legend"><div class="legend-item"><div class="legend-dot" style="background:#1a73e8"></div> Occupied</div><div class="legend-item"><div class="legend-dot" style="background:#42b72a"></div> Vacant</div></div></div>';
+
+  chartHtml += '<div class="table-wrap" style="margin-top:1rem;"><table style="font-size:0.8rem;"><thead><tr><th>Date</th><th>Vacant</th><th>Occupied</th><th>Invoices</th></tr></thead><tbody>';
+  let totalInv = 0;
+  days.forEach(day => {
+    const label = new Date(day.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    totalInv += day.invSum;
+    chartHtml += `<tr><td>${label}</td><td style="color:#2e7d32;font-weight:600;">${day.vacant}</td><td style="color:#1565c0;font-weight:600;">${day.occupied}</td><td style="font-weight:600;">${fmt$(day.invSum)}</td></tr>`;
+  });
+  chartHtml += `<tr style="border-top:2px solid var(--text);font-weight:700;"><td>Total</td><td></td><td></td><td>${fmt$(totalInv)}</td></tr>`;
+  chartHtml += '</tbody></table></div>';
+
+  area.innerHTML = chartHtml;
+};
 
 // ===== ROOMS =====
 let roomFilter = 'all';
