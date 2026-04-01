@@ -611,15 +611,15 @@ class XGrid {
       let v = c.format ? strip(c.format(r[c.field], r)) : (r[c.field] ?? '');
       return '"' + String(v).replace(/"/g, '""') + '"';
     }).join(',')).join('\n');
-    const csv = hdr + '\n' + body;
-    try {
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href = url; a.download = 'export.csv'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
-    } catch(e) {
-      const w = window.open(''); if(w) { w.document.write('<pre>'+csv.replace(/</g,'&lt;')+'</pre>'); w.document.title='export.csv'; }
-    }
-    toast('CSV exported');
+    const csv = '\uFEFF' + hdr + '\n' + body;
+    const a = document.createElement('a');
+    a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+    a.download = 'export_' + new Date().toISOString().slice(0,10) + '.csv';
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => document.body.removeChild(a), 500);
+    toast('CSV download started');
   }
   render() {
     const paged = this.getPaged(); const filtered = this.getFiltered();

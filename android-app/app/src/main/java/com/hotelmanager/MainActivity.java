@@ -8,6 +8,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebResourceRequest;
+import android.webkit.DownloadListener;
 import android.webkit.ValueCallback;
 import android.net.Uri;
 import android.content.Intent;
@@ -81,6 +82,29 @@ public class MainActivity extends AppCompatActivity {
                     .setCancelable(false)
                     .show();
                 return true;
+            }
+        });
+
+        webView.setDownloadListener((url, userAgent, contentDisposition, mimetype, contentLength) -> {
+            if (url.startsWith("data:")) {
+                try {
+                    String[] parts = url.split(",", 2);
+                    String data = java.net.URLDecoder.decode(parts.length > 1 ? parts[1] : "", "UTF-8");
+                    String fileName = "export_" + new java.text.SimpleDateFormat("yyyy-MM-dd_HHmmss", java.util.Locale.US).format(new java.util.Date()) + ".csv";
+                    java.io.File dir = android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOWNLOADS);
+                    if (!dir.exists()) dir.mkdirs();
+                    java.io.File file = new java.io.File(dir, fileName);
+                    java.io.FileWriter writer = new java.io.FileWriter(file);
+                    if (data.startsWith("\uFEFF")) data = data.substring(1);
+                    writer.write(data);
+                    writer.close();
+                    android.widget.Toast.makeText(MainActivity.this, "CSV saved to Downloads/" + fileName, android.widget.Toast.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    android.widget.Toast.makeText(MainActivity.this, "Error saving CSV: " + e.getMessage(), android.widget.Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intent);
             }
         });
 
