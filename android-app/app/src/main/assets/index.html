@@ -981,7 +981,7 @@ window.updateDashChart = function() {
     const label = new Date(day.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     const occH = (day.occupied / maxOcc) * 140;
     const vacH = (day.vacant / maxOcc) * 140;
-    chartHtml += `<div class="bar-group"><div class="bar-value" style="font-size:0.6rem;">${fmt$(day.invSum)}</div><div style="display:flex;flex-direction:column;width:100%;max-width:50px;"><div class="bar" style="height:${vacH}px;background:#42b72a;border-radius:6px 6px 0 0;"></div><div class="bar" style="height:${occH}px;background:#1a73e8;"></div></div><div class="bar-label">${label}</div></div>`;
+    chartHtml += `<div class="bar-group" onclick="showDayDetail('${day.date}')" style="cursor:pointer;"><div class="bar-value" style="font-size:0.6rem;">${fmt$(day.invSum)}</div><div style="display:flex;flex-direction:column;width:100%;max-width:50px;"><div class="bar" style="height:${vacH}px;background:#42b72a;border-radius:6px 6px 0 0;"></div><div class="bar" style="height:${occH}px;background:#1a73e8;"></div></div><div class="bar-label">${label}</div></div>`;
   });
   chartHtml += '</div><div class="legend"><div class="legend-item"><div class="legend-dot" style="background:#1a73e8"></div> Occupied</div><div class="legend-item"><div class="legend-dot" style="background:#42b72a"></div> Vacant</div></div></div>';
 
@@ -990,12 +990,54 @@ window.updateDashChart = function() {
   days.forEach(day => {
     const label = new Date(day.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     totalInv += day.invSum;
-    chartHtml += `<tr><td>${label}</td><td style="color:#2e7d32;font-weight:600;">${day.vacant}</td><td style="color:#1565c0;font-weight:600;">${day.occupied}</td><td style="font-weight:600;">${fmt$(day.invSum)}</td></tr>`;
+    chartHtml += `<tr onclick="showDayDetail('${day.date}')" style="cursor:pointer;"><td>${label}</td><td style="color:#2e7d32;font-weight:600;">${day.vacant}</td><td style="color:#1565c0;font-weight:600;">${day.occupied}</td><td style="font-weight:600;">${fmt$(day.invSum)}</td></tr>`;
   });
   chartHtml += `<tr style="border-top:2px solid var(--text);font-weight:700;"><td>Total</td><td></td><td></td><td>${fmt$(totalInv)}</td></tr>`;
   chartHtml += '</tbody></table></div>';
 
+  chartHtml += '<div id="dashDayDetail"></div>';
   area.innerHTML = chartHtml;
+};
+
+window.showDayDetail = function(dateStr) {
+  const detail = document.getElementById('dashDayDetail');
+  if (!detail) return;
+  const label = new Date(dateStr + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+
+  const dayBookings = bookings.filter(b => {
+    if (b.arrivalStatus === 'Checked-out' || b.arrivalStatus === 'No-show') return false;
+    return b.checkinDate <= dateStr && b.checkoutDate > dateStr;
+  });
+  const dayInvoices = invoices.filter(inv => inv.date === dateStr);
+
+  let html = `<div style="margin-top:1.25rem;padding-top:1rem;border-top:2px solid var(--primary);">
+    <h3 style="font-size:1rem;font-weight:700;margin-bottom:0.75rem;color:var(--primary);">◆ ${label}</h3>`;
+
+  html += `<p style="font-size:0.85rem;font-weight:600;margin-bottom:0.5rem;">Bookings (${dayBookings.length})</p>`;
+  if (dayBookings.length) {
+    html += '<div class="table-wrap"><table style="font-size:0.8rem;"><thead><tr><th>Booking #</th><th>Guest</th><th>Room</th><th>Check-in</th><th>Check-out</th><th>Status</th></tr></thead><tbody>';
+    dayBookings.forEach(b => {
+      html += '<tr><td>'+b.bookingId+'</td><td>'+b.guestName+'</td><td>'+b.roomNumber+'</td><td>'+fmtDate(b.checkinDate)+'</td><td>'+fmtDate(b.checkoutDate)+'</td><td><span class="status status-'+(b.arrivalStatus==='Checked-in'?'checked-in':'pending')+'">'+b.arrivalStatus+'</span></td></tr>';
+    });
+    html += '</tbody></table></div>';
+  } else {
+    html += '<p style="color:var(--text-light);font-size:0.85rem;">No active bookings for this date</p>';
+  }
+
+  html += `<p style="font-size:0.85rem;font-weight:600;margin:0.75rem 0 0.5rem;">Invoices (${dayInvoices.length})</p>`;
+  if (dayInvoices.length) {
+    html += '<div class="table-wrap"><table style="font-size:0.8rem;"><thead><tr><th>Invoice #</th><th>Guest</th><th>Room</th><th>Subtotal</th><th>Tax</th><th>Total</th><th>Status</th></tr></thead><tbody>';
+    dayInvoices.forEach(inv => {
+      html += '<tr><td>'+inv.invoiceNumber+'</td><td>'+inv.guestName+'</td><td>'+inv.roomNumber+'</td><td>'+fmt$(inv.subtotal)+'</td><td>'+fmt$(inv.taxTotal)+'</td><td style="font-weight:700;">'+fmt$(inv.grandTotal)+'</td><td><span class="status status-'+(inv.paymentStatus==='Fully Paid'?'paid':inv.paymentStatus==='Partially Paid'?'pending':'maintenance')+'">'+inv.paymentStatus+'</span></td></tr>';
+    });
+    html += '</tbody></table></div>';
+  } else {
+    html += '<p style="color:var(--text-light);font-size:0.85rem;">No invoices for this date</p>';
+  }
+
+  html += '</div>';
+  detail.innerHTML = html;
+  detail.scrollIntoView({behavior:'smooth',block:'start'});
 };
 
 // ===== ROOMS =====
