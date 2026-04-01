@@ -974,13 +974,13 @@ window.updateDashChart = function() {
     d.setDate(d.getDate() + 1);
   }
 
-  let chartHtml = '<div style="width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;"><div class="chart-container" style="height:auto;width:1200px;min-width:1200px;"><div class="bar-chart" style="height:180px;">';
+  let chartHtml = '<div style="width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;"><div class="chart-container" style="height:auto;width:1200px;min-width:1200px;"><div class="bar-chart" style="height:600px;">';
   const maxOcc = Math.max(...days.map(d => d.occupied + d.vacant), 1);
   const maxInv = Math.max(...days.map(d => d.invSum), 1) || 1;
   days.forEach(day => {
     const label = new Date(day.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-    const occH = (day.occupied / maxOcc) * 140;
-    const vacH = (day.vacant / maxOcc) * 140;
+    const occH = (day.occupied / maxOcc) * 540;
+    const vacH = (day.vacant / maxOcc) * 540;
     chartHtml += `<div class="bar-group" onclick="showDayDetail('${day.date}')" style="cursor:pointer;"><div class="bar-value" style="font-size:0.6rem;">${fmt$(day.invSum)}</div><div style="display:flex;flex-direction:column;width:100%;max-width:50px;"><div class="bar" style="height:${vacH}px;background:#42b72a;border-radius:6px 6px 0 0;"></div><div class="bar" style="height:${occH}px;background:#1a73e8;"></div></div><div class="bar-label">${label}</div></div>`;
   });
   chartHtml += '</div><div class="legend"><div class="legend-item"><div class="legend-dot" style="background:#1a73e8"></div> Occupied</div><div class="legend-item"><div class="legend-dot" style="background:#42b72a"></div> Vacant</div></div></div></div>';
