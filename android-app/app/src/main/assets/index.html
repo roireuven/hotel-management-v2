@@ -1763,12 +1763,14 @@ window.showAddAccount = function() {
   openModal(`<div class="modal-header"><h2>Add User</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body"><div class="form-group"><label>Full Name</label><input type="text" class="form-control" id="mAName"></div>
     <div class="form-group"><label>Email</label><input type="email" class="form-control" id="mAEmail"></div>
+    <div class="form-group"><label>Password</label><input type="password" class="form-control" id="mAPass" placeholder="Set password"></div>
     <div class="form-group"><label>Role</label><select class="form-control" id="mARole"><option>Admin</option><option>Manager</option><option>Receptionist</option><option>Housekeeper</option></select></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addAccount()">Add User</button></div>`);
 };
 window.addAccount = function() {
   const name = document.getElementById('mAName').value.trim(); if(!name) { toast('Enter name'); return; }
-  accounts.push({id:genId(),name,email:document.getElementById('mAEmail').value,role:document.getElementById('mARole').value,status:'active'});
+  const pass = document.getElementById('mAPass').value; if(!pass) { toast('Set a password'); return; }
+  accounts.push({id:genId(),name,email:document.getElementById('mAEmail').value,password:pass,role:document.getElementById('mARole').value,status:'active'});
   save('accounts',accounts); logAudit('Add','Account','Added account '+name); closeModal(); renderAccounts(); toast(name+' added');
 };
 window.showEditAccount = function(id) {
@@ -1776,12 +1778,15 @@ window.showEditAccount = function(id) {
   openModal(`<div class="modal-header"><h2>Edit User</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body"><div class="form-group"><label>Full Name</label><input type="text" class="form-control" id="eAName" value="${a.name}"></div>
     <div class="form-group"><label>Email</label><input type="email" class="form-control" id="eAEmail" value="${a.email}"></div>
+    <div class="form-group"><label>Password</label><input type="password" class="form-control" id="eAPass" value="${a.password||''}" placeholder="Change password"></div>
     <div class="form-group"><label>Role</label><select class="form-control" id="eARole">${['Admin','Manager','Receptionist','Housekeeper'].map(r=>`<option ${r===a.role?'selected':''}>${r}</option>`).join('')}</select></div></div>
     <div class="modal-footer"><button class="btn btn-danger" onclick="deleteAccount('${a.id}')">Delete</button><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateAccount('${a.id}')">Save</button></div>`);
 };
 window.updateAccount = function(id) {
   const a = accounts.find(x=>x.id===id); if(!a) return;
-  a.name = document.getElementById('eAName').value||a.name; a.email = document.getElementById('eAEmail').value; a.role = document.getElementById('eARole').value;
+  a.name = document.getElementById('eAName').value||a.name; a.email = document.getElementById('eAEmail').value;
+  const newPass = document.getElementById('eAPass').value; if(newPass) a.password = newPass;
+  a.role = document.getElementById('eARole').value;
   save('accounts',accounts); logAudit('Update','Account','Updated account '+a.name); closeModal(); renderAccounts(); toast('Account updated');
 };
 window.toggleAccount = function(id) { const a = accounts.find(x=>x.id===id); if(a) { a.status = a.status==='active'?'inactive':'active'; save('accounts',accounts); logAudit('Toggle','Account',a.name+' '+(a.status==='active'?'activated':'deactivated')); renderAccounts(); toast(a.name+' '+(a.status==='active'?'activated':'deactivated')); } };
@@ -2223,7 +2228,7 @@ window.doLogin = function() {
   const account = accounts.find(a => a.email.toLowerCase() === username && a.status === 'active');
   if (!account) { errEl.textContent = 'Account not found or inactive'; return; }
   const setupPw = localStorage.getItem(DB_KEY + 'setupPassword') || (isAndroid ? (function(){ try { return HotelDB.getSetting('setupPassword'); } catch(e){ return null; } })() : null);
-  const validPw = password === '1234' || (setupPw && password === setupPw);
+  const validPw = password === '1234' || (setupPw && password === setupPw) || (account.password && password === account.password);
   if (!validPw) { errEl.textContent = 'Invalid password'; return; }
   currentUser = { id: account.id, name: account.name, email: account.email, role: account.role };
   currentRole = account.role;
