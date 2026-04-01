@@ -822,6 +822,7 @@ if (!settings.bedConfigs) { settings.bedConfigs = defaultSettings.bedConfigs; sa
 let tickets = load('tickets', null); if(!tickets) { tickets = defaultTickets; save('tickets', tickets); }
 let messages = load('messages', null); if(!messages) { messages = defaultMessages; save('messages', messages); }
 let inventory = load('inventory', null); if(!inventory) { inventory = defaultInventory; save('inventory', inventory); }
+let inventoryLog = load('inventoryLog', []);
 
 if(bookings.length === 0) {
   const seed = [
@@ -2074,10 +2075,15 @@ function inventoryStatus(item) {
   return 'In Stock';
 }
 let inventoryGrid;
+function logInv(action, itemName, field, oldVal, newVal) {
+  inventoryLog.push({id:genId(), timestamp:new Date().toISOString(), user:currentUser?currentUser.name:currentRole, action:action, itemName:itemName, field:field||'', oldValue:String(oldVal??''), newValue:String(newVal??'')});
+  save('inventoryLog', inventoryLog);
+}
 function renderInventory() {
   inventory.forEach(it => { it.status = inventoryStatus(it); });
   document.getElementById('page-inventory').innerHTML = `
-    <div class="card"><div class="card-header"><h2>📦 Inventory Management</h2></div><div class="card-body"><div id="inventoryGrid"></div></div></div>`;
+    <div class="card"><div class="card-header"><h2>◆ Inventory Management</h2></div><div class="card-body"><div id="inventoryGrid"></div></div></div>
+    <div class="card"><div class="card-header"><h2>◆ Inventory Change Log</h2></div><div class="card-body"><div id="invLogGrid"></div></div></div>`;
   inventoryGrid = new XGrid('inventoryGrid', {
     columns: [
       {field:'itemName',label:'Item Name',editable:true,filterable:true},
@@ -2091,21 +2097,35 @@ function renderInventory() {
     onAdd: () => showAddInventory(), addLabel: 'Add New Item',
     onEdit: (row, field, val) => {
       const it = inventory.find(x=>x.id===row.id); if(!it) return;
-      it[field] = val;
+      const oldVal = it[field]; it[field] = val;
       it.status = inventoryStatus(it);
+      logInv('Updated', it.itemName, field, oldVal, val);
       save('inventory',inventory); logAudit('Update','Inventory','Updated '+it.itemName); toast('Inventory updated'); renderInventory();
     },
     actions: [
-      {name:'plus',label:'+1',cls:'btn-success',handler:id=>{ const it=inventory.find(x=>x.id===id); if(it){it.quantity=(parseInt(it.quantity)||0)+1;it.status=inventoryStatus(it);save('inventory',inventory);renderInventory();} }},
-      {name:'minus',label:'-1',cls:'btn-warning',handler:id=>{ const it=inventory.find(x=>x.id===id); if(it){it.quantity=Math.max(0,(parseInt(it.quantity)||0)-1);it.status=inventoryStatus(it);save('inventory',inventory);renderInventory();} }},
+      {name:'plus',label:'+1',cls:'btn-success',handler:id=>{ const it=inventory.find(x=>x.id===id); if(it){const old=it.quantity;it.quantity=(parseInt(it.quantity)||0)+1;it.status=inventoryStatus(it);logInv('+1',it.itemName,'quantity',old,it.quantity);save('inventory',inventory);renderInventory();} }},
+      {name:'minus',label:'-1',cls:'btn-warning',handler:id=>{ const it=inventory.find(x=>x.id===id); if(it){const old=it.quantity;it.quantity=Math.max(0,(parseInt(it.quantity)||0)-1);it.status=inventoryStatus(it);logInv('-1',it.itemName,'quantity',old,it.quantity);save('inventory',inventory);renderInventory();} }},
       {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditInventory(id)},
       {name:'delete',label:'✕',cls:'btn-danger',handler:id=>{
         if(!confirm('Delete this item?')) return;
         const it = inventory.find(x=>x.id===id);
+        logInv('Deleted',it?it.itemName:'Unknown','','','');
         inventory = inventory.filter(x=>x.id!==id); save('inventory',inventory);
         logAudit('Delete','Inventory','Deleted '+(it?it.itemName:id)); renderInventory(); toast('Item deleted');
       }}
     ]
+  });
+  new XGrid('invLogGrid', {
+    columns: [
+      {field:'timestamp',label:'Date/Time',format:v=>{try{const d=new Date(v);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}catch(e){return v;}},filterable:true,width:'130px'},
+      {field:'user',label:'User',filterable:true,width:'80px'},
+      {field:'action',label:'Action',filterable:true,width:'70px'},
+      {field:'itemName',label:'Item',filterable:true},
+      {field:'field',label:'Field',filterable:true,width:'80px'},
+      {field:'oldValue',label:'Old',width:'60px'},
+      {field:'newValue',label:'New',width:'60px'},
+    ],
+    data: [...inventoryLog].reverse(),
   });
 }
 window.showAddInventory = function() {
@@ -2120,7 +2140,8 @@ window.addInventoryItem = function() {
   const name = document.getElementById('mInvName').value.trim(); if(!name) { toast('Enter item name'); return; }
   const it = {id:genId(),itemName:name,category:document.getElementById('mInvCat').value,quantity:parseInt(document.getElementById('mInvQty').value)||0,reorderLevel:parseInt(document.getElementById('mInvReorder').value)||10,lastOrdered:document.getElementById('mInvDate').value||today(),status:''};
   it.status = inventoryStatus(it);
-  inventory.push(it); save('inventory',inventory); logAudit('Add','Inventory','Added '+name); closeModal(); renderInventory(); toast(name+' added');
+  inventory.push(it); logInv('Added',name,'','',JSON.stringify({qty:it.quantity,cat:it.category}));
+  save('inventory',inventory); logAudit('Add','Inventory','Added '+name); closeModal(); renderInventory(); toast(name+' added');
 };
 window.showEditInventory = function(id) {
   const it = inventory.find(x=>x.id===id); if(!it) return;
@@ -2139,12 +2160,14 @@ window.updateInventoryItem = function(id) {
   it.reorderLevel = parseInt(document.getElementById('eInvReorder').value)||0;
   it.lastOrdered = document.getElementById('eInvDate').value;
   it.status = inventoryStatus(it);
+  logInv('Edited',it.itemName,'multiple','','qty:'+it.quantity+',cat:'+it.category);
   save('inventory',inventory); logAudit('Update','Inventory','Updated '+it.itemName); closeModal(); renderInventory(); toast(it.itemName+' updated');
 };
 window.deleteInventoryItem = function(id) {
   if(!confirm('Delete this item?')) return;
   const it = inventory.find(x=>x.id===id);
   inventory = inventory.filter(x=>x.id!==id); save('inventory',inventory);
+  logInv('Deleted',it?it.itemName:'Unknown','','','');
   logAudit('Delete','Inventory','Deleted '+(it?it.itemName:id)); closeModal(); renderInventory(); toast('Item deleted');
 };
 
