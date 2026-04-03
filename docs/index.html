@@ -744,11 +744,12 @@ function logAudit(action, tableName, recordId, details) {
   const userName = currentUser ? currentUser.name : (currentRole || 'Admin');
   const entry = {id:genId(), timestamp:new Date().toISOString(), module:tableName, user:userName, action:action, itemId:String(recordId), details:String(details||'')};
   auditLog.push(entry);
-  if (auditLog.length > 1000) auditLog = auditLog.slice(-1000);
+  if (auditLog.length > 2000) auditLog = auditLog.slice(-2000);
   if (isAndroid) {
     try { HotelDB.upsert('audit_log', JSON.stringify(entry)); } catch(e) {}
+  } else {
+    try { localStorage.setItem(DB_KEY + 'auditLog', JSON.stringify(auditLog)); } catch(e) {}
   }
-  save('auditLog', auditLog);
 }
 
 // ===== DEFAULT DATA =====
@@ -1135,8 +1136,13 @@ window.deleteRoom = function(id) {
 
 // ===== BOOKINGS =====
 function logBk(action, bookingId, guestName, details) {
-  bookingLog.push({id:genId(), timestamp:new Date().toISOString(), user:currentUser?currentUser.name:currentRole, action:action, bookingId:bookingId||'', guestName:guestName||'', details:details||''});
-  save('bookingLog', bookingLog);
+  const entry = {id:genId(), timestamp:new Date().toISOString(), user:currentUser?currentUser.name:currentRole, action:action, bookingId:bookingId||'', guestName:guestName||'', details:details||''};
+  bookingLog.push(entry);
+  if (isAndroid) {
+    try { HotelDB.upsert('booking_log', JSON.stringify(entry)); } catch(e) {}
+  } else {
+    try { localStorage.setItem(DB_KEY + 'bookingLog', JSON.stringify(bookingLog)); } catch(e) {}
+  }
   logAudit(action, 'Booking', bookingId||'', (guestName?guestName+': ':'')+(details||''));
 }
 let bookingGrid;
@@ -2424,8 +2430,13 @@ function inventoryStatus(item) {
 }
 let inventoryGrid;
 function logInv(action, itemName, field, oldVal, newVal) {
-  inventoryLog.push({id:genId(), timestamp:new Date().toISOString(), user:currentUser?currentUser.name:currentRole, action:action, itemName:itemName, field:field||'', oldValue:String(oldVal??''), newValue:String(newVal??'')});
-  save('inventoryLog', inventoryLog);
+  const entry = {id:genId(), timestamp:new Date().toISOString(), user:currentUser?currentUser.name:currentRole, action:action, itemName:itemName, field:field||'', oldValue:String(oldVal??''), newValue:String(newVal??'')};
+  inventoryLog.push(entry);
+  if (isAndroid) {
+    try { HotelDB.upsert('inventory_log', JSON.stringify(entry)); } catch(e) {}
+  } else {
+    try { localStorage.setItem(DB_KEY + 'inventoryLog', JSON.stringify(inventoryLog)); } catch(e) {}
+  }
   logAudit(action, 'Inventory', itemName||'', (field?field+': ':'')+(oldVal!==undefined&&oldVal!==''?oldVal+' → ':'')+(newVal??''));
 }
 function renderInventory() {
