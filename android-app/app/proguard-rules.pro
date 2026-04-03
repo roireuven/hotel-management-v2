@@ -1,0 +1,5 @@
+-keepattributes *Annotation*
+-keepattributes JavascriptInterface
+-keep class com.hotelmanager.JsBridge { *; }
+-keep class * { @android.webkit.JavascriptInterface <methods>; }
+-dontwarn android.webkit.**

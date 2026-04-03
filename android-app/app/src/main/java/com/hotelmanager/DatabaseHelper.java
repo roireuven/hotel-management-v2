@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "hotel_manager.db";
-    private static final int DB_VERSION = 2;
+    private static final int DB_VERSION = 3;
 
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -51,8 +51,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "id TEXT PRIMARY KEY, name TEXT, email TEXT, role TEXT, status TEXT)");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS audit_log (" +
-            "id TEXT PRIMARY KEY, timestamp TEXT, userId TEXT, userName TEXT, " +
-            "action TEXT, tableName TEXT, recordId TEXT, details TEXT)");
+            "id TEXT PRIMARY KEY, timestamp TEXT, module TEXT, " +
+            "user TEXT, action TEXT, itemId TEXT, details TEXT)");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS booking_log (" +
+            "id TEXT PRIMARY KEY, timestamp TEXT, user TEXT, action TEXT, " +
+            "bookingId TEXT, guestName TEXT, details TEXT)");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS inventory_log (" +
+            "id TEXT PRIMARY KEY, timestamp TEXT, user TEXT, action TEXT, " +
+            "itemName TEXT, field TEXT, oldValue TEXT, newValue TEXT)");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS settings (" +
             "key TEXT PRIMARY KEY, value TEXT)");
@@ -67,6 +75,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS invoices");
         db.execSQL("DROP TABLE IF EXISTS accounts");
         db.execSQL("DROP TABLE IF EXISTS audit_log");
+        db.execSQL("DROP TABLE IF EXISTS booking_log");
+        db.execSQL("DROP TABLE IF EXISTS inventory_log");
         db.execSQL("DROP TABLE IF EXISTS settings");
         onCreate(db);
     }

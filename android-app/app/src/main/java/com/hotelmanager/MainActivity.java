@@ -17,6 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int FILE_CHOOSER_REQUEST = 1001;
+    private ValueCallback<Uri[]> mFileCallback;
     private WebView webView;
 
     @Override
@@ -83,24 +85,54 @@ public class MainActivity extends AppCompatActivity {
                     .show();
                 return true;
             }
+
+            @Override
+            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
+                if (mFileCallback != null) mFileCallback.onReceiveValue(null);
+                mFileCallback = filePathCallback;
+                Intent intent = fileChooserParams.createIntent();
+                try {
+                    startActivityForResult(intent, FILE_CHOOSER_REQUEST);
+                } catch (Exception e) {
+                    mFileCallback = null;
+                    return false;
+                }
+                return true;
+            }
         });
 
         webView.setDownloadListener((url, userAgent, contentDisposition, mimetype, contentLength) -> {
             if (url.startsWith("data:")) {
                 try {
                     String[] parts = url.split(",", 2);
-                    String data = java.net.URLDecoder.decode(parts.length > 1 ? parts[1] : "", "UTF-8");
-                    String fileName = "export_" + new java.text.SimpleDateFormat("yyyy-MM-dd_HHmmss", java.util.Locale.US).format(new java.util.Date()) + ".csv";
+                    String header = parts[0];
+                    String payload = parts.length > 1 ? parts[1] : "";
+                    String ts = new java.text.SimpleDateFormat("yyyy-MM-dd_HHmmss", java.util.Locale.US).format(new java.util.Date());
                     java.io.File dir = android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOWNLOADS);
                     if (!dir.exists()) dir.mkdirs();
-                    java.io.File file = new java.io.File(dir, fileName);
-                    java.io.FileWriter writer = new java.io.FileWriter(file);
-                    if (data.startsWith("\uFEFF")) data = data.substring(1);
-                    writer.write(data);
-                    writer.close();
-                    android.widget.Toast.makeText(MainActivity.this, "CSV saved to Downloads/" + fileName, android.widget.Toast.LENGTH_LONG).show();
+
+                    if (header.contains("base64")) {
+                        String ext = header.contains("zip") ? ".zip" : header.contains("json") ? ".json" : ".bin";
+                        String fileName = "hotel_export_" + ts + ext;
+                        java.io.File file = new java.io.File(dir, fileName);
+                        byte[] decoded = android.util.Base64.decode(payload, android.util.Base64.DEFAULT);
+                        java.io.FileOutputStream fos = new java.io.FileOutputStream(file);
+                        fos.write(decoded);
+                        fos.close();
+                        android.widget.Toast.makeText(MainActivity.this, "Saved to Downloads/" + fileName, android.widget.Toast.LENGTH_LONG).show();
+                    } else {
+                        String data = java.net.URLDecoder.decode(payload, "UTF-8");
+                        String ext = header.contains("json") ? ".json" : ".csv";
+                        String fileName = "hotel_export_" + ts + ext;
+                        java.io.File file = new java.io.File(dir, fileName);
+                        java.io.FileWriter writer = new java.io.FileWriter(file);
+                        if (data.startsWith("\uFEFF")) data = data.substring(1);
+                        writer.write(data);
+                        writer.close();
+                        android.widget.Toast.makeText(MainActivity.this, "Saved to Downloads/" + fileName, android.widget.Toast.LENGTH_LONG).show();
+                    }
                 } catch (Exception e) {
-                    android.widget.Toast.makeText(MainActivity.this, "Error saving CSV: " + e.getMessage(), android.widget.Toast.LENGTH_SHORT).show();
+                    android.widget.Toast.makeText(MainActivity.this, "Error: " + e.getMessage(), android.widget.Toast.LENGTH_SHORT).show();
                 }
             } else {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
@@ -113,6 +145,24 @@ public class MainActivity extends AppCompatActivity {
         webView.addJavascriptInterface(bridge, "HotelDB");
 
         webView.loadUrl("file:///android_asset/index.html");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == FILE_CHOOSER_REQUEST) {
+            if (mFileCallback != null) {
+                Uri[] results = null;
+                if (resultCode == RESULT_OK && data != null) {
+                    String dataString = data.getDataString();
+                    if (dataString != null) {
+                        results = new Uri[]{Uri.parse(dataString)};
+                    }
+                }
+                mFileCallback.onReceiveValue(results);
+                mFileCallback = null;
+            }
+        }
     }
 
     @Override

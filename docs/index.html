@@ -458,6 +458,8 @@
 const DB_KEY = 'hotel_mgr_';
 const isAndroid = typeof HotelDB !== 'undefined';
 
+const dbTableMap = {auditLog:'audit_log',bookingLog:'booking_log',inventoryLog:'inventory_log'};
+function dbKey(key) { return dbTableMap[key] || key; }
 function load(key, def) {
   if (isAndroid) {
     try {
@@ -466,7 +468,7 @@ function load(key, def) {
         const obj = JSON.parse(raw || '{}');
         return Object.keys(obj).length > 0 ? obj : def;
       }
-      const raw = HotelDB.getAll(key);
+      const raw = HotelDB.getAll(dbKey(key));
       const arr = JSON.parse(raw || '[]');
       return arr.length > 0 ? arr.map(r => {
         if (r.services && typeof r.services === 'string') { try { r.services = JSON.parse(r.services); } catch(e) { r.services = []; } }
@@ -495,13 +497,13 @@ function save(key, data) {
         for (const [k, v] of Object.entries(obj)) { HotelDB.saveSetting(k, String(v)); }
         return;
       }
-      HotelDB.deleteAll(key);
+      HotelDB.deleteAll(dbKey(key));
       const toSave = data.map(r => {
         const copy = {...r};
         if (copy.services && Array.isArray(copy.services)) copy.services = JSON.stringify(copy.services);
         return copy;
       });
-      HotelDB.upsertAll(key, JSON.stringify(toSave));
+      HotelDB.upsertAll(dbKey(key), JSON.stringify(toSave));
     } catch(e) { console.error('DB save error', e); }
     return;
   }
@@ -513,7 +515,7 @@ function saveOne(key, row) {
     try {
       const copy = {...row};
       if (copy.services && Array.isArray(copy.services)) copy.services = JSON.stringify(copy.services);
-      HotelDB.upsert(key, JSON.stringify(copy));
+      HotelDB.upsert(dbKey(key), JSON.stringify(copy));
     } catch(e) { console.error('DB saveOne error', e); }
     return;
   }
@@ -521,7 +523,7 @@ function saveOne(key, row) {
 
 function deleteOne(key, id) {
   if (isAndroid) {
-    try { HotelDB.deleteRow(key, id); } catch(e) { console.error('DB deleteOne error', e); }
+    try { HotelDB.deleteRow(dbKey(key), id); } catch(e) { console.error('DB deleteOne error', e); }
   }
 }
 
@@ -740,8 +742,12 @@ function renderChangeLog(containerId, moduleName) {
 function logAudit(action, tableName, recordId, details) {
   if (details === undefined) { details = recordId; recordId = ''; }
   const userName = currentUser ? currentUser.name : (currentRole || 'Admin');
-  auditLog.push({id:genId(), timestamp:new Date().toISOString(), module:tableName, user:userName, action:action, itemId:String(recordId), details:String(details||'')});
+  const entry = {id:genId(), timestamp:new Date().toISOString(), module:tableName, user:userName, action:action, itemId:String(recordId), details:String(details||'')};
+  auditLog.push(entry);
   if (auditLog.length > 1000) auditLog = auditLog.slice(-1000);
+  if (isAndroid) {
+    try { HotelDB.upsert('audit_log', JSON.stringify(entry)); } catch(e) {}
+  }
   save('auditLog', auditLog);
 }
 
