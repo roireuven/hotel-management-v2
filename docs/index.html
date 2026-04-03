@@ -133,7 +133,7 @@
     body.dark-mode .modal-body .form-control { background: #1a2744; border-color: #2a3a5a; color: #e0e0e0; }
     body.dark-mode .modal-footer { background: #16213e; border-top-color: #2a3a5a; }
     .chart-container { width: 100%; height: 250px; display: flex; flex-direction: column; }
-    .bar-chart { display: flex; align-items: flex-end; gap: 0.75rem; height: 200px; padding: 0 0.5rem; border-bottom: 2px solid var(--border); }
+    .bar-chart { display: flex; align-items: flex-end; gap: 1.5rem; height: 200px; padding: 0 1rem; border-bottom: 2px solid var(--border); }
     .bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.3rem; }
     .bar { width: 100%; max-width: 50px; border-radius: 6px 6px 0 0; transition: height 0.6s ease; }
     .bar-label { font-size: 0.7rem; color: var(--text-light); margin-top: 0.3rem; }
@@ -724,11 +724,24 @@ function nextInvoiceNumber() {
 // ===== AUDIT LOG =====
 let currentRole = 'Admin';
 let currentUser = null;
+function renderChangeLog(containerId, moduleName) {
+  const filtered = auditLog.filter(a => (a.module||a.entity||'').toLowerCase() === moduleName.toLowerCase()).reverse();
+  new XGrid(containerId, {
+    columns: [
+      {field:'timestamp',label:'Timestamp',format:v=>{try{const d=new Date(v);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}catch(e){return v;}},filterable:true,width:'130px'},
+      {field:'user',label:'User',filterable:true,width:'80px'},
+      {field:'action',label:'Action',filterable:true,width:'80px'},
+      {field:'itemId',label:'Item ID',filterable:true,width:'100px'},
+      {field:'details',label:'Details',filterable:true},
+    ],
+    data: filtered,
+  });
+}
 function logAudit(action, tableName, recordId, details) {
   if (details === undefined) { details = recordId; recordId = ''; }
   const userName = currentUser ? currentUser.name : (currentRole || 'Admin');
-  auditLog.push({id:genId(), timestamp:new Date().toISOString(), action:action, entity:tableName, recordId:String(recordId), detail:details, user:userName});
-  if (auditLog.length > 500) auditLog = auditLog.slice(-500);
+  auditLog.push({id:genId(), timestamp:new Date().toISOString(), module:tableName, user:userName, action:action, itemId:String(recordId), details:String(details||'')});
+  if (auditLog.length > 1000) auditLog = auditLog.slice(-1000);
   save('auditLog', auditLog);
 }
 
@@ -907,14 +920,14 @@ function renderDashboard() {
 
   let statsHtml;
   if (isHK) {
-    statsHtml = `<div class="stats-grid">
+    statsHtml = `<div class="stats-grid" style="display:none;">
       <div class="stat-card"><div class="stat-icon blue">▣</div><div class="stat-info"><h3>${total}</h3><p>Total Rooms</p></div></div>
       <div class="stat-card"><div class="stat-icon red">●</div><div class="stat-info"><h3>${dirtyCnt}</h3><p>Dirty</p></div></div>
       <div class="stat-card"><div class="stat-icon green">●</div><div class="stat-info"><h3>${cleanCnt}</h3><p>Clean</p></div></div>
       <div class="stat-card"><div class="stat-icon orange">⚡</div><div class="stat-info"><h3>${oos}</h3><p>Out of Service</p></div></div>
     </div>`;
   } else {
-    statsHtml = `<div class="stats-grid">
+    statsHtml = `<div class="stats-grid" style="display:none;">
       <div class="stat-card"><div class="stat-icon blue">▣</div><div class="stat-info"><h3>${total}</h3><p>Total Rooms</p></div></div>
       <div class="stat-card"><div class="stat-icon green">◆</div><div class="stat-info"><h3>${vacant}</h3><p>Vacant</p></div></div>
       <div class="stat-card"><div class="stat-icon orange">▤</div><div class="stat-info"><h3>${occ}</h3><p>Occupied</p></div></div>
@@ -974,14 +987,15 @@ window.updateDashChart = function() {
     d.setDate(d.getDate() + 1);
   }
 
-  let chartHtml = '<div style="width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;"><div class="chart-container" style="height:auto;width:1200px;min-width:1200px;"><div class="bar-chart" style="height:600px;">';
+  const chartW = days.length * 30 + 200;
+  let chartHtml = '<div style="width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;"><div class="chart-container" style="height:auto;width:'+chartW+'px;min-width:'+chartW+'px;"><div class="bar-chart" style="height:600px;">';
   const maxOcc = Math.max(...days.map(d => d.occupied + d.vacant), 1);
   const maxInv = Math.max(...days.map(d => d.invSum), 1) || 1;
   days.forEach(day => {
     const label = new Date(day.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     const occH = (day.occupied / maxOcc) * 540;
     const vacH = (day.vacant / maxOcc) * 540;
-    chartHtml += `<div class="bar-group" onclick="showDayDetail('${day.date}')" style="cursor:pointer;"><div class="bar-value" style="font-size:0.6rem;">${fmt$(day.invSum)}</div><div style="display:flex;flex-direction:column;width:100%;max-width:50px;"><div class="bar" style="height:${vacH}px;background:#42b72a;border-radius:6px 6px 0 0;"></div><div class="bar" style="height:${occH}px;background:#1a73e8;"></div></div><div class="bar-label">${label}</div></div>`;
+    chartHtml += `<div class="bar-group" onclick="showDayDetail('${day.date}')" style="cursor:pointer;width:30px;min-width:30px;max-width:30px;"><div class="bar-value" style="font-size:0.55rem;">${fmt$(day.invSum)}</div><div style="display:flex;flex-direction:column;width:30px;"><div class="bar" style="height:${vacH}px;background:#42b72a;border-radius:3px 3px 0 0;"></div><div class="bar" style="height:${occH}px;background:#1a73e8;"></div></div><div class="bar-label" style="font-size:0.5rem;">${label}</div></div>`;
   });
   chartHtml += '</div><div class="legend"><div class="legend-item"><div class="legend-dot" style="background:#1a73e8"></div> Occupied</div><div class="legend-item"><div class="legend-dot" style="background:#42b72a"></div> Vacant</div></div></div></div>';
 
@@ -1117,6 +1131,7 @@ window.deleteRoom = function(id) {
 function logBk(action, bookingId, guestName, details) {
   bookingLog.push({id:genId(), timestamp:new Date().toISOString(), user:currentUser?currentUser.name:currentRole, action:action, bookingId:bookingId||'', guestName:guestName||'', details:details||''});
   save('bookingLog', bookingLog);
+  logAudit(action, 'Booking', bookingId||'', (guestName?guestName+': ':'')+(details||''));
 }
 let bookingGrid;
 function renderBookings() {
@@ -1177,17 +1192,33 @@ window.showAddBooking = function() {
   const avail = rooms.filter(r=>r.occupancyStatus==='Vacant' && r.housekeepingStatus!=='Out of Service');
   openModal(`<div class="modal-header"><h2>New Booking</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
+    <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:1rem;">Select stay dates first to see available rooms</p>
+    <div class="form-row"><div class="form-group"><label>Check-in Date</label><input type="date" class="form-control" id="mBkInD" value="${today()}" onchange="refreshAvailRooms();checkBkDates()"></div><div class="form-group"><label>Check-in Time</label><input type="time" class="form-control" id="mBkInT" value="14:00"></div></div>
+    <div class="form-row"><div class="form-group"><label>Check-out Date</label><input type="date" class="form-control" id="mBkOutD" onchange="refreshAvailRooms();checkBkDates()"></div><div class="form-group"><label>Check-out Time</label><input type="time" class="form-control" id="mBkOutT" value="12:00"></div></div>
+    <div id="mBkRestFields" style="display:none;">
+    <div style="border-top:1px solid var(--border);margin:1rem 0;padding-top:1rem;">
     <div class="form-group"><label>Guest Name</label><input type="text" class="form-control" id="mBkGuest" placeholder="Type name or select from list"></div>
     <div class="form-row"><div class="form-group"><label>Guest ID</label><input type="text" class="form-control" id="mBkGuestId" placeholder="Auto-generated" readonly style="background:#f0f4fb;color:#1a3a5c;font-weight:700;font-size:0.95rem;"></div><div class="form-group"><label>Passport / ID</label><input type="text" class="form-control" id="mBkPassport" placeholder="—" readonly style="background:#f0f4fb;color:#1a3a5c;font-weight:600;"></div></div>
     <div style="margin:-0.25rem 0 0.85rem;display:flex;gap:0.5rem;"><button class="btn btn-outline" style="flex:1;justify-content:center;padding:0.65rem;" onclick="openGuestPicker()">◉ SELECT GUEST</button><button class="btn btn-primary" style="flex:1;justify-content:center;padding:0.65rem;" onclick="addNewGuestFromBooking()">+ NEW GUEST</button></div>
-    <div class="form-row"><div class="form-group"><label>Check-in Date</label><input type="date" class="form-control" id="mBkInD" value="${today()}" onchange="refreshAvailRooms()"></div><div class="form-group"><label>Check-in Time</label><input type="time" class="form-control" id="mBkInT" value="14:00"></div></div>
-    <div class="form-row"><div class="form-group"><label>Check-out Date</label><input type="date" class="form-control" id="mBkOutD" onchange="refreshAvailRooms()"></div><div class="form-group"><label>Check-out Time</label><input type="time" class="form-control" id="mBkOutT" value="12:00"></div></div>
     <div class="form-group"><label>Room <span id="mBkRoomCount" style="font-size:0.75rem;color:var(--primary);"></span></label><select class="form-control" id="mBkRoom">${avail.length?avail.map(r=>`<option value="${r.id}">${r.roomNumber} - ${r.roomType} (${fmt$(r.price)}/night)</option>`).join(''):'<option disabled>No rooms available</option>'}</select></div>
     <div class="form-row"><div class="form-group"><label>Adults</label><input type="number" class="form-control" id="mBkAdults" value="1" min="1"></div><div class="form-group"><label>Children</label><input type="number" class="form-control" id="mBkChildren" value="0" min="0"></div></div>
     <div class="form-row"><div class="form-group"><label>Booking Source</label><select class="form-control" id="mBkSrc"><option>Direct</option><option>Booking.com</option><option>Expedia</option><option>Walk-in</option></select></div><div class="form-group"><label>Cancellation Policy</label><select class="form-control" id="mBkCancel"><option>Free cancellation</option><option>Non-refundable</option></select></div></div>
     <div class="form-group"><label>Special Requests</label><textarea class="form-control" id="mBkReq" rows="2" placeholder="Special requests..."></textarea></div>
-    <div class="form-group"><label>Notes</label><textarea class="form-control" id="mBkNotes" rows="2" placeholder="Internal notes..."></textarea></div></div>
+    <div class="form-group"><label>Notes</label><textarea class="form-control" id="mBkNotes" rows="2" placeholder="Internal notes..."></textarea></div>
+    </div></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addBooking()">Create Booking</button></div>`);
+};
+window.checkBkDates = function() {
+  const inD = document.getElementById('mBkInD')?.value;
+  const outD = document.getElementById('mBkOutD')?.value;
+  const rest = document.getElementById('mBkRestFields');
+  if (!rest) return;
+  if (inD && outD && outD > inD) {
+    rest.style.display = 'block';
+    rest.style.animation = 'cselSlide 0.3s ease';
+  } else {
+    rest.style.display = 'none';
+  }
 };
 window.refreshAvailRooms = function() {
   const inD = document.getElementById('mBkInD')?.value;
@@ -1246,17 +1277,19 @@ window.saveNewGuestFromBooking = function() {
     document.getElementById('mBkGuest').value = g.firstName + ' ' + g.lastName;
     document.getElementById('mBkGuestId').value = guestDisplayId(g);
     document.getElementById('mBkPassport').value = g.passportId || '—';
-    if(fd.room) document.getElementById('mBkRoom').value = fd.room;
     if(fd.inD) document.getElementById('mBkInD').value = fd.inD;
-    if(fd.inT) document.getElementById('mBkInT').value = fd.inT;
     if(fd.outD) document.getElementById('mBkOutD').value = fd.outD;
+    if(fd.inT) document.getElementById('mBkInT').value = fd.inT;
     if(fd.outT) document.getElementById('mBkOutT').value = fd.outT;
+    refreshAvailRooms();
+    if(fd.room) document.getElementById('mBkRoom').value = fd.room;
     if(fd.adults) document.getElementById('mBkAdults').value = fd.adults;
     if(fd.children) document.getElementById('mBkChildren').value = fd.children;
     if(fd.src) document.getElementById('mBkSrc').value = fd.src;
     if(fd.cancel) document.getElementById('mBkCancel').value = fd.cancel;
     if(fd.req) document.getElementById('mBkReq').value = fd.req;
     if(fd.notes) document.getElementById('mBkNotes').value = fd.notes;
+    checkBkDates();
   }, 100);
   toast('Guest added: ' + fn + ' ' + ln);
 };
@@ -1265,17 +1298,19 @@ window.cancelNewGuestFromBooking = function() {
   showAddBooking();
   setTimeout(()=>{
     if(fd.guest) document.getElementById('mBkGuest').value = fd.guest;
-    if(fd.room) document.getElementById('mBkRoom').value = fd.room;
     if(fd.inD) document.getElementById('mBkInD').value = fd.inD;
-    if(fd.inT) document.getElementById('mBkInT').value = fd.inT;
     if(fd.outD) document.getElementById('mBkOutD').value = fd.outD;
+    if(fd.inT) document.getElementById('mBkInT').value = fd.inT;
     if(fd.outT) document.getElementById('mBkOutT').value = fd.outT;
+    refreshAvailRooms();
+    if(fd.room) document.getElementById('mBkRoom').value = fd.room;
     if(fd.adults) document.getElementById('mBkAdults').value = fd.adults;
     if(fd.children) document.getElementById('mBkChildren').value = fd.children;
     if(fd.src) document.getElementById('mBkSrc').value = fd.src;
     if(fd.cancel) document.getElementById('mBkCancel').value = fd.cancel;
     if(fd.req) document.getElementById('mBkReq').value = fd.req;
     if(fd.notes) document.getElementById('mBkNotes').value = fd.notes;
+    checkBkDates();
   }, 100);
 };
 const _nationalities = ['Afghan','Albanian','Algerian','American','Andorran','Angolan','Argentine','Armenian','Australian','Austrian','Azerbaijani','Bahamian','Bahraini','Bangladeshi','Barbadian','Belarusian','Belgian','Belizean','Beninese','Bhutanese','Bolivian','Bosnian','Brazilian','British','Bruneian','Bulgarian','Burmese','Burundian','Cambodian','Cameroonian','Canadian','Cape Verdean','Central African','Chadian','Chilean','Chinese','Colombian','Comoran','Congolese','Costa Rican','Croatian','Cuban','Cypriot','Czech','Danish','Djiboutian','Dominican','Dutch','Ecuadorian','Egyptian','Emirati','English','Eritrean','Estonian','Ethiopian','Fijian','Filipino','Finnish','French','Gabonese','Gambian','Georgian','German','Ghanaian','Greek','Grenadian','Guatemalan','Guinean','Guyanese','Haitian','Honduran','Hungarian','Icelandic','Indian','Indonesian','Iranian','Iraqi','Irish','Israeli','Italian','Ivorian','Jamaican','Japanese','Jordanian','Kazakh','Kenyan','Korean','Kuwaiti','Kyrgyz','Laotian','Latvian','Lebanese','Liberian','Libyan','Lithuanian','Luxembourgish','Macedonian','Malagasy','Malawian','Malaysian','Maldivian','Malian','Maltese','Mexican','Moldovan','Monacan','Mongolian','Montenegrin','Moroccan','Mozambican','Namibian','Nepalese','New Zealander','Nicaraguan','Nigerian','Norwegian','Omani','Pakistani','Palestinian','Panamanian','Paraguayan','Peruvian','Polish','Portuguese','Qatari','Romanian','Russian','Rwandan','Saudi','Scottish','Senegalese','Serbian','Singaporean','Slovak','Slovenian','Somali','South African','Spanish','Sri Lankan','Sudanese','Surinamese','Swedish','Swiss','Syrian','Taiwanese','Tajik','Tanzanian','Thai','Togolese','Trinidadian','Tunisian','Turkish','Turkmen','Ugandan','Ukrainian','Uruguayan','Uzbek','Venezuelan','Vietnamese','Welsh','Yemeni','Zambian','Zimbabwean'];
@@ -1309,8 +1344,10 @@ let _natStandaloneBackup = null;
 window.openNatPickerStandalone = function(fieldId, mode) {
   _natStandaloneMode = mode;
   _natTargetField = fieldId;
+  const prevEditGuestId = _natStandaloneBackup ? _natStandaloneBackup._editGuestId : null;
   _natStandaloneBackup = {};
   document.querySelectorAll('.modal-body input,.modal-body select,.modal-body textarea').forEach(el => { if(el.id) _natStandaloneBackup[el.id] = el.value; });
+  if (prevEditGuestId) _natStandaloneBackup._editGuestId = prevEditGuestId;
   let filterVal = '';
   function renderNP() {
     const filtered = filterVal ? _nationalities.filter(n => n.toLowerCase().includes(filterVal.toLowerCase())) : _nationalities;
@@ -1396,17 +1433,19 @@ window.pickGuest = function(gId) {
     document.getElementById('mBkGuest').value = g.firstName + ' ' + g.lastName;
     document.getElementById('mBkGuestId').value = guestDisplayId(g);
     document.getElementById('mBkPassport').value = g.passportId || '—';
-    if(fd.room) document.getElementById('mBkRoom').value = fd.room;
     if(fd.inD) document.getElementById('mBkInD').value = fd.inD;
-    if(fd.inT) document.getElementById('mBkInT').value = fd.inT;
     if(fd.outD) document.getElementById('mBkOutD').value = fd.outD;
+    if(fd.inT) document.getElementById('mBkInT').value = fd.inT;
     if(fd.outT) document.getElementById('mBkOutT').value = fd.outT;
+    refreshAvailRooms();
+    if(fd.room) document.getElementById('mBkRoom').value = fd.room;
     if(fd.adults) document.getElementById('mBkAdults').value = fd.adults;
     if(fd.children) document.getElementById('mBkChildren').value = fd.children;
     if(fd.src) document.getElementById('mBkSrc').value = fd.src;
     if(fd.cancel) document.getElementById('mBkCancel').value = fd.cancel;
     if(fd.req) document.getElementById('mBkReq').value = fd.req;
     if(fd.notes) document.getElementById('mBkNotes').value = fd.notes;
+    checkBkDates();
   }, 100);
 };
 window.cancelGuestPicker = function() {
@@ -1416,17 +1455,19 @@ window.cancelGuestPicker = function() {
     if(fd.guest) document.getElementById('mBkGuest').value = fd.guest;
     if(fd.guestId) document.getElementById('mBkGuestId').value = fd.guestId;
     if(fd.passport) document.getElementById('mBkPassport').value = fd.passport;
-    if(fd.room) document.getElementById('mBkRoom').value = fd.room;
     if(fd.inD) document.getElementById('mBkInD').value = fd.inD;
-    if(fd.inT) document.getElementById('mBkInT').value = fd.inT;
     if(fd.outD) document.getElementById('mBkOutD').value = fd.outD;
+    if(fd.inT) document.getElementById('mBkInT').value = fd.inT;
     if(fd.outT) document.getElementById('mBkOutT').value = fd.outT;
+    refreshAvailRooms();
+    if(fd.room) document.getElementById('mBkRoom').value = fd.room;
     if(fd.adults) document.getElementById('mBkAdults').value = fd.adults;
     if(fd.children) document.getElementById('mBkChildren').value = fd.children;
     if(fd.src) document.getElementById('mBkSrc').value = fd.src;
     if(fd.cancel) document.getElementById('mBkCancel').value = fd.cancel;
     if(fd.req) document.getElementById('mBkReq').value = fd.req;
     if(fd.notes) document.getElementById('mBkNotes').value = fd.notes;
+    checkBkDates();
   }, 100);
 };
 window.addBooking = function() {
@@ -1581,7 +1622,8 @@ window.applyBookingDiscount = function(id) {
 let guestGrid;
 function renderGuests() {
   document.getElementById('page-guests').innerHTML = `
-    <div class="card"><div class="card-header"><h2>Guest Directory</h2></div><div class="card-body"><div id="guestGrid"></div></div></div>`;
+    <div class="card"><div class="card-header"><h2>Guest Directory</h2></div><div class="card-body"><div id="guestGrid"></div></div></div>
+    <div class="card"><div class="card-header"><h2>◆ Guests Change Log</h2></div><div class="card-body"><div id="guestLogGrid"></div></div></div>`;
   const guestActions = [{name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditGuest(id)}];
   if (currentRole !== 'Receptionist' && currentRole !== 'Housekeeper') {
     guestActions.push({name:'delete',label:'✕',cls:'btn-danger',handler:id=>deleteGuest(id)});
@@ -1604,6 +1646,7 @@ function renderGuests() {
     onEdit: (row, field, val) => { const g = guests.find(x=>x.id===row.id); if(g){if(field==='blacklist')val=parseInt(val)||0;g[field]=val;save('guests',guests);logAudit('Update','Guest','Updated '+g.firstName+' '+g.lastName);toast('Guest updated');} },
     actions: guestActions
   });
+  renderChangeLog('guestLogGrid', 'Guest');
 }
 window.showAddGuest = function() {
   openModal(`<div class="modal-header"><h2>Add Guest</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
@@ -1712,7 +1755,8 @@ window.deleteService = function(id) { if(!confirm('Delete?')) return; const s=se
 let invoiceGrid;
 function renderInvoices() {
   document.getElementById('page-invoices').innerHTML = `
-    <div class="card"><div class="card-header"><h2>Invoices</h2></div><div class="card-body"><div id="invoiceGrid"></div></div></div>`;
+    <div class="card"><div class="card-header"><h2>Invoices</h2></div><div class="card-body"><div id="invoiceGrid"></div></div></div>
+    <div class="card"><div class="card-header"><h2>◆ Invoice Change Log</h2></div><div class="card-body"><div id="invoiceLogGrid"></div></div></div>`;
   invoiceGrid = new XGrid('invoiceGrid', {
     columns: [
       {field:'invoiceNumber',label:'Invoice #',filterable:true,width:'100px'},
@@ -1744,6 +1788,7 @@ function renderInvoices() {
       {name:'delete',label:'✕',cls:'btn-danger',handler:id=>deleteInvoice(id)},
     ]
   });
+  renderChangeLog('invoiceLogGrid', 'Invoice');
 }
 window.payInvoice = function(id) { const inv = invoices.find(i=>i.id===id); if(inv) { inv.paymentStatus='Fully Paid'; save('invoices',invoices); logAudit('Payment','Invoice',inv.invoiceNumber+' marked as Fully Paid'); renderInvoices(); toast('Invoice marked as paid'); } };
 window.deleteInvoice = function(id) { if(!confirm('Delete this invoice?')) return; const inv=invoices.find(i=>i.id===id); invoices = invoices.filter(i=>i.id!==id); save('invoices',invoices); logAudit('Delete','Invoice','Deleted '+(inv?inv.invoiceNumber:id)); renderInvoices(); toast('Invoice deleted'); };
@@ -1847,8 +1892,8 @@ function renderReports() {
     <div class="card"><div class="card-header"><h2>Booking Summary</h2></div><div class="card-body"><div class="table-wrap"><table><thead><tr><th>Status</th><th>Count</th><th>Percentage</th></tr></thead><tbody>
       ${['Checked-in','Expected','Checked-out','No-show'].map(st=>{const c=bookings.filter(b=>b.arrivalStatus===st).length;return `<tr><td><span class="status status-${st==='Checked-in'?'checked-in':st==='Expected'?'pending':st==='Checked-out'?'checked-out':'maintenance'}">${st}</span></td><td>${c}</td><td>${bookings.length?Math.round(c/bookings.length*100):0}%</td></tr>`;}).join('')}
     </tbody></table></div></div></div>
-    <div class="card"><div class="card-header"><h2>Recent Audit Trail</h2></div><div class="card-body"><div class="table-wrap"><table><thead><tr><th>Time</th><th>Action</th><th>Entity</th><th>Detail</th><th>User</th></tr></thead><tbody>
-      ${recentAudit.length?recentAudit.map(a=>`<tr><td>${new Date(a.timestamp).toLocaleString()}</td><td>${a.action}</td><td>${a.entity}</td><td>${a.detail}</td><td>${a.user}</td></tr>`).join(''):'<tr><td colspan="5" style="text-align:center;color:var(--text-light);">No audit entries yet</td></tr>'}
+    <div class="card"><div class="card-header"><h2>Recent Audit Trail</h2></div><div class="card-body"><div class="table-wrap"><table><thead><tr><th>Time</th><th>Action</th><th>Module</th><th>Details</th><th>User</th></tr></thead><tbody>
+      ${recentAudit.length?recentAudit.map(a=>`<tr><td>${new Date(a.timestamp).toLocaleString()}</td><td>${a.action}</td><td>${a.module||a.entity||''}</td><td>${a.details||a.detail||''}</td><td>${a.user}</td></tr>`).join(''):'<tr><td colspan="5" style="text-align:center;color:var(--text-light);">No audit entries yet</td></tr>'}
     </tbody></table></div></div></div>`;
 }
 
@@ -1856,7 +1901,8 @@ function renderReports() {
 let accountGrid;
 function renderAccounts() {
   document.getElementById('page-accounts').innerHTML = `
-    <div class="card"><div class="card-header"><h2>User Accounts</h2></div><div class="card-body"><div id="accountGrid"></div></div></div>`;
+    <div class="card"><div class="card-header"><h2>User Accounts</h2></div><div class="card-body"><div id="accountGrid"></div></div></div>
+    <div class="card"><div class="card-header"><h2>◆ User Accounts Change Log</h2></div><div class="card-body"><div id="accountLogGrid"></div></div></div>`;
   accountGrid = new XGrid('accountGrid', {
     columns: [
       {field:'name',label:'User',editable:true,filterable:true},
@@ -1873,6 +1919,7 @@ function renderAccounts() {
       {name:'delete',label:'✕',cls:'btn-danger',handler:id=>{ deleteAccount(id); }},
     ]
   });
+  renderChangeLog('accountLogGrid', 'Account');
 }
 window.showAddAccount = function() {
   openModal(`<div class="modal-header"><h2>Add User</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
@@ -1909,12 +1956,19 @@ window.deleteAccount = function(id) { if(!confirm('Delete this account?')) retur
 
 // ===== AUDIT LOG =====
 function renderAuditLog() {
-  const sorted = [...auditLog].reverse();
   document.getElementById('page-auditlog').innerHTML = `
-    <div class="card"><div class="card-header"><h2>Audit Log</h2><button class="btn btn-danger btn-sm" onclick="clearAuditLog()">Clear Log</button></div><div class="card-body">
-    <div class="table-wrap"><table><thead><tr><th>Timestamp</th><th>Action</th><th>Entity</th><th>Detail</th><th>User</th></tr></thead><tbody>
-      ${sorted.length?sorted.map(a=>`<tr><td style="white-space:nowrap;">${new Date(a.timestamp).toLocaleString()}</td><td>${a.action}</td><td>${a.entity}</td><td>${a.detail}</td><td>${a.user}</td></tr>`).join(''):'<tr><td colspan="5" style="text-align:center;color:var(--text-light);">No audit entries</td></tr>'}
-    </tbody></table></div></div></div>`;
+    <div class="card"><div class="card-header"><h2>◆ Master Audit Log</h2><button class="btn btn-danger btn-sm" onclick="clearAuditLog()">Clear Log</button></div><div class="card-body"><div id="masterLogGrid"></div></div></div>`;
+  new XGrid('masterLogGrid', {
+    columns: [
+      {field:'timestamp',label:'Timestamp',format:v=>{try{const d=new Date(v);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});}catch(e){return v;}},filterable:true,width:'150px'},
+      {field:'module',label:'Module',filterable:true,width:'90px'},
+      {field:'user',label:'User',filterable:true,width:'80px'},
+      {field:'action',label:'Action',filterable:true,width:'80px'},
+      {field:'itemId',label:'Item ID',filterable:true,width:'100px'},
+      {field:'details',label:'Details',filterable:true},
+    ],
+    data: [...auditLog].reverse(),
+  });
 }
 window.clearAuditLog = function() {
   if(!confirm('Clear all audit log entries?')) return;
@@ -1958,7 +2012,8 @@ function renderSettings() {
     </div></div>
     <div class="card"><div class="card-header"><h2>🗄️ Database Management</h2></div><div class="card-body">
       <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
-        <button class="btn btn-primary" onclick="exportAllData()">📥 Export All Data (JSON)</button>
+        <button class="btn btn-primary" onclick="exportAllCSV()">📥 Export All (CSV ZIP)</button>
+        <button class="btn btn-outline" onclick="exportAllData()">📥 Export All (JSON)</button>
         <button class="btn btn-outline" onclick="document.getElementById('importFileInput').click()">📤 Import Data</button>
         <input type="file" id="importFileInput" accept=".json" style="display:none" onchange="importData(this)">
         <button class="btn btn-danger" onclick="clearAllData()">🗑️ Clear All Data</button>
@@ -2007,16 +2062,100 @@ window.saveSystemConfig = function() {
   settings.peakEnd = document.getElementById('sPeakEnd').value;
   save('settings',settings); logAudit('Update','Settings','System configuration updated'); toast('System configuration saved');
 };
+function tableToCsv(rows) {
+  if (!rows || !rows.length) return '';
+  const headers = Object.keys(rows[0]);
+  const esc = v => { if (v===null||v===undefined) return '""'; const s=String(v).replace(/"/g,'""'); return '"'+s+'"'; };
+  return '\uFEFF'+headers.join(',')+'\n'+rows.map(r=>headers.map(h=>esc(r[h])).join(',')).join('\n');
+}
+function buildZip(files) {
+  const entries = [];
+  let offset = 0;
+  const te = new TextEncoder();
+  const bufs = [];
+  files.forEach(f => {
+    const data = te.encode(f.content);
+    const nameBytes = te.encode(f.name);
+    const localHeader = new Uint8Array(30 + nameBytes.length);
+    const dv = new DataView(localHeader.buffer);
+    dv.setUint32(0, 0x04034b50, true);
+    dv.setUint16(4, 20, true);
+    dv.setUint16(8, 0, true);
+    dv.setUint32(18, data.length, true);
+    dv.setUint32(22, data.length, true);
+    dv.setUint16(26, nameBytes.length, true);
+    localHeader.set(nameBytes, 30);
+    entries.push({offset, nameBytes, dataLen: data.length});
+    bufs.push(localHeader, data);
+    offset += localHeader.length + data.length;
+  });
+  const centralStart = offset;
+  entries.forEach((e,i) => {
+    const ch = new Uint8Array(46 + e.nameBytes.length);
+    const dv = new DataView(ch.buffer);
+    dv.setUint32(0, 0x02014b50, true);
+    dv.setUint16(4, 20, true);
+    dv.setUint16(6, 20, true);
+    dv.setUint32(20, e.dataLen, true);
+    dv.setUint32(24, e.dataLen, true);
+    dv.setUint16(28, e.nameBytes.length, true);
+    dv.setUint32(42, e.offset, true);
+    ch.set(e.nameBytes, 46);
+    bufs.push(ch);
+    offset += ch.length;
+  });
+  const endRec = new Uint8Array(22);
+  const edv = new DataView(endRec.buffer);
+  edv.setUint32(0, 0x06054b50, true);
+  edv.setUint16(8, entries.length, true);
+  edv.setUint16(10, entries.length, true);
+  edv.setUint32(12, offset - centralStart, true);
+  edv.setUint32(16, centralStart, true);
+  bufs.push(endRec);
+  const total = bufs.reduce((s,b) => s+b.length, 0);
+  const result = new Uint8Array(total);
+  let pos = 0;
+  bufs.forEach(b => { result.set(b, pos); pos += b.length; });
+  return result;
+}
+window.exportAllCSV = function() {
+  const tables = [
+    {name:'rooms.csv', data:rooms},
+    {name:'guests.csv', data:guests},
+    {name:'bookings.csv', data:bookings.map(b=>({...b,services:JSON.stringify(b.services||[])}))},
+    {name:'services.csv', data:services},
+    {name:'invoices.csv', data:invoices.map(i=>({...i,services:JSON.stringify(i.services||[])}))},
+    {name:'accounts.csv', data:accounts.map(a=>{const c={...a};delete c.password;return c;})},
+    {name:'inventory.csv', data:inventory},
+    {name:'tickets.csv', data:tickets},
+    {name:'audit_log.csv', data:auditLog},
+    {name:'booking_log.csv', data:bookingLog},
+    {name:'inventory_log.csv', data:inventoryLog},
+  ];
+  const files = tables.filter(t=>t.data&&t.data.length).map(t=>({name:t.name, content:tableToCsv(t.data)}));
+  const zip = buildZip(files);
+  let binStr = '';
+  for (let i = 0; i < zip.length; i++) binStr += String.fromCharCode(zip[i]);
+  const b64 = btoa(binStr);
+  const a = document.createElement('a');
+  a.href = 'data:application/zip;base64,' + b64;
+  a.download = 'hotel_database_export_'+today()+'.zip';
+  a.style.display = 'none';
+  document.body.appendChild(a); a.click();
+  setTimeout(()=>document.body.removeChild(a),500);
+  logAudit('Export','System','Exported all data as CSV ZIP');
+  toast('CSV ZIP download started');
+};
 window.exportAllData = function() {
-  const data = {rooms,guests,bookings,services,invoices,accounts,auditLog,settings,tickets,messages,inventory};
+  const data = {rooms,guests,bookings,bookingLog,services,invoices,accounts,auditLog,settings,tickets,messages,inventory,inventoryLog};
   const json = JSON.stringify(data, null, 2);
-  try {
-    const blob = new Blob([json], {type:'application/json'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = 'hotel_backup_' + today() + '.json';
-    document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
-  } catch(e) { const w = window.open(''); if(w) { w.document.write('<pre>'+json.replace(/</g,'&lt;')+'</pre>'); } }
-  logAudit('Export','System','Exported all data'); toast('Data exported');
+  const a = document.createElement('a');
+  a.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(json);
+  a.download = 'hotel_backup_' + today() + '.json';
+  a.style.display = 'none';
+  document.body.appendChild(a); a.click();
+  setTimeout(()=>document.body.removeChild(a),500);
+  logAudit('Export','System','Exported all data'); toast('JSON download started');
 };
 window.importData = function(input) {
   const file = input.files[0]; if(!file) return;
@@ -2033,6 +2172,8 @@ window.importData = function(input) {
       if(data.tickets) { tickets = data.tickets; save('tickets',tickets); }
       if(data.messages) { messages = data.messages; save('messages',messages); }
       if(data.inventory) { inventory = data.inventory; save('inventory',inventory); }
+      if(data.inventoryLog) { inventoryLog = data.inventoryLog; save('inventoryLog',inventoryLog); }
+      if(data.bookingLog) { bookingLog = data.bookingLog; save('bookingLog',bookingLog); }
       if(data.settings) { settings = data.settings; save('settings',settings); }
       if(data.auditLog) { auditLog = data.auditLog; save('auditLog',auditLog); }
       logAudit('Import','System','Imported data from file');
@@ -2047,7 +2188,7 @@ window.clearAllData = function() {
   if(!confirm('This will permanently delete ALL data. Are you sure?')) return;
   if(!confirm('This cannot be undone. Proceed?')) return;
   if (isAndroid) {
-    ['rooms','guests','bookings','services','invoices','accounts','tickets','messages','inventory','settings'].forEach(t => { try { HotelDB.deleteAll(t); } catch(e){} });
+    ['rooms','guests','bookings','bookingLog','services','invoices','accounts','tickets','messages','inventory','inventoryLog','auditLog','settings'].forEach(t => { try { HotelDB.deleteAll(t); } catch(e){} });
   }
   Object.keys(localStorage).forEach(k => { if(k.startsWith(DB_KEY) && k !== DB_KEY+'currentUser') localStorage.removeItem(k); });
   logAudit('Clear','System','All data cleared');
@@ -2056,7 +2197,7 @@ window.clearAllData = function() {
 window.resetAll = function() {
   if(!confirm('Reset ALL data to defaults? This cannot be undone.')) return;
   if (isAndroid) {
-    ['rooms','guests','bookings','services','invoices','accounts','tickets','messages','inventory','settings'].forEach(t => { try { HotelDB.deleteAll(t); } catch(e){} });
+    ['rooms','guests','bookings','bookingLog','services','invoices','accounts','tickets','messages','inventory','inventoryLog','auditLog','settings'].forEach(t => { try { HotelDB.deleteAll(t); } catch(e){} });
   }
   Object.keys(localStorage).forEach(k => { if(k.startsWith(DB_KEY)) localStorage.removeItem(k); });
   location.reload();
@@ -2126,7 +2267,8 @@ window.cycleHousekeeping = function(id) {
 let ticketGrid;
 function renderMaintenance() {
   document.getElementById('page-maintenance').innerHTML = `
-    <div class="card"><div class="card-header"><h2>Maintenance Tickets</h2></div><div class="card-body"><div id="ticketGrid"></div></div></div>`;
+    <div class="card"><div class="card-header"><h2>Maintenance Tickets</h2></div><div class="card-body"><div id="ticketGrid"></div></div></div>
+    <div class="card"><div class="card-header"><h2>◆ Maintenance Tickets Change Log</h2></div><div class="card-body"><div id="maintLogGrid"></div></div></div>`;
   ticketGrid = new XGrid('ticketGrid', {
     columns: [
       {field:'roomNumber',label:'Room',editable:true,filterable:true,width:'70px'},
@@ -2170,6 +2312,7 @@ function renderMaintenance() {
       }},
     ]
   });
+  renderChangeLog('maintLogGrid', 'Ticket');
 }
 window.showAddTicket = function() {
   openModal(`<div class="modal-header"><h2>New Maintenance Ticket</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
@@ -2241,6 +2384,7 @@ let inventoryGrid;
 function logInv(action, itemName, field, oldVal, newVal) {
   inventoryLog.push({id:genId(), timestamp:new Date().toISOString(), user:currentUser?currentUser.name:currentRole, action:action, itemName:itemName, field:field||'', oldValue:String(oldVal??''), newValue:String(newVal??'')});
   save('inventoryLog', inventoryLog);
+  logAudit(action, 'Inventory', itemName||'', (field?field+': ':'')+(oldVal!==undefined&&oldVal!==''?oldVal+' → ':'')+(newVal??''));
 }
 function renderInventory() {
   inventory.forEach(it => { it.status = inventoryStatus(it); });
@@ -2398,8 +2542,8 @@ window.toggleDarkMode = function() {
 function applyRBAC() {
   const allowedPages = {
     'Admin': null,
-    'Manager': ['dashboard','rooms','bookings','guests','services','invoices','reports','inventory'],
-    'Receptionist': ['dashboard','rooms','bookings','guests','services','invoices'],
+    'Manager': ['dashboard','rooms','bookings','guests','housekeeping','maintenance','services','invoices','reports','inventory','guestportal'],
+    'Receptionist': ['dashboard','rooms','bookings','guests','services','invoices','guestportal'],
     'Housekeeper': ['dashboard','housekeeping','maintenance'],
   };
   const allowed = allowedPages[currentRole];
