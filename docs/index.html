@@ -265,7 +265,7 @@
     .login-card .login-error { color: #e74c3c; font-size: 0.85rem; margin-top: 0.5rem; min-height: 1.2em; }
     .login-card .btn-login { width: 100%; padding: 0.75rem; font-size: 1rem; margin-top: 0.5rem; }
     .login-card .login-hint { font-size: 0.78rem; color: #65676b; margin-top: 1.25rem; line-height: 1.5; }
-    .login-creds { margin-top: 1.5rem; text-align: left; border-top: 1px solid #e0e0e0; padding-top: 1rem; }
+    .login-creds { margin-top: 1.5rem; text-align: left; border-top: 1px solid #e0e0e0; padding-top: 1rem; margin-left: -20px; }
     .login-creds h3 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: #65676b; margin-bottom: 0.6rem; text-align: center; }
     .login-creds table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
     .login-creds th { background: #f5f6f8; padding: 0.4rem 0.5rem; text-align: left; font-size: 0.7rem; text-transform: uppercase; color: #65676b; border-bottom: 1px solid #e0e0e0; }
@@ -377,7 +377,7 @@
       <div class="login-logo" style="font-size:2.5rem;background:linear-gradient(135deg,#1a3a5c,#1a73e8);color:#fff;width:64px;height:64px;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 0.5rem;font-weight:700;">H</div>
       <h1>Hotel Manager</h1>
       <p class="login-sub">Management System — Please sign in</p>
-      <div class="form-group"><label>Username (Email)</label><input type="text" class="form-control" id="loginUsername" placeholder="e.g. admin@hotel.com"></div>
+      <div class="form-group"><label>Username (Email)</label><input type="text" class="form-control" id="loginUsername" placeholder="e.g. admin@hotel.com" style="text-transform:lowercase;" oninput="this.value=this.value.toLowerCase()"></div>
       <div class="form-group"><label>Password</label><input type="password" class="form-control" id="loginPassword" placeholder="Enter password" value="1234"></div>
       <button class="btn btn-primary btn-login" onclick="doLogin()">Sign In</button>
       <div class="login-error" id="loginError"></div>
@@ -415,7 +415,7 @@
       <div class="nav-section">Guest</div>
       <a data-page="guestportal"><span class="icon">◎</span> Guest Portal</a>
       <div class="nav-section">Admin</div>
-      <a data-page="reports"><span class="icon">◫</span> Reports</a>
+      <a data-page="dashboard"><span class="icon">◫</span> Reports</a>
       <a data-page="accounts"><span class="icon">◔</span> Accounts</a>
       <a data-page="auditlog"><span class="icon">◳</span> Audit Log</a>
       <a data-page="settings"><span class="icon">⊕</span> Settings</a>
@@ -2013,9 +2013,8 @@ function renderSettings() {
     <div class="card"><div class="card-header"><h2>🗄️ Database Management</h2></div><div class="card-body">
       <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
         <button class="btn btn-primary" onclick="exportAllCSV()">📥 Export All (CSV ZIP)</button>
-        <button class="btn btn-outline" onclick="exportAllData()">📥 Export All (JSON)</button>
         <button class="btn btn-outline" onclick="document.getElementById('importFileInput').click()">📤 Import Data</button>
-        <input type="file" id="importFileInput" accept=".json" style="display:none" onchange="importData(this)">
+        <input type="file" id="importFileInput" accept=".json,.zip" style="display:none" onchange="importData(this)">
         <button class="btn btn-danger" onclick="clearAllData()">🗑️ Clear All Data</button>
       </div>
     </div></div>
@@ -2133,6 +2132,8 @@ window.exportAllCSV = function() {
     {name:'inventory_log.csv', data:inventoryLog},
   ];
   const files = tables.filter(t=>t.data&&t.data.length).map(t=>({name:t.name, content:tableToCsv(t.data)}));
+  const backupData = {rooms,guests,bookings,services,invoices,accounts,auditLog,settings,tickets,messages,inventory,bookingLog,inventoryLog};
+  files.push({name:'_backup.json', content:JSON.stringify(backupData)});
   const zip = buildZip(files);
   let binStr = '';
   for (let i = 0; i < zip.length; i++) binStr += String.fromCharCode(zip[i]);
@@ -2157,31 +2158,66 @@ window.exportAllData = function() {
   setTimeout(()=>document.body.removeChild(a),500);
   logAudit('Export','System','Exported all data'); toast('JSON download started');
 };
+function restoreFromJson(data) {
+  if(data.rooms) { rooms = data.rooms; save('rooms',rooms); }
+  if(data.guests) { guests = data.guests; save('guests',guests); }
+  if(data.bookings) { bookings = data.bookings; save('bookings',bookings); }
+  if(data.services) { services = data.services; save('services',services); }
+  if(data.invoices) { invoices = data.invoices; save('invoices',invoices); }
+  if(data.accounts) { accounts = data.accounts; save('accounts',accounts); }
+  if(data.tickets) { tickets = data.tickets; save('tickets',tickets); }
+  if(data.messages) { messages = data.messages; save('messages',messages); }
+  if(data.inventory) { inventory = data.inventory; save('inventory',inventory); }
+  if(data.inventoryLog) { inventoryLog = data.inventoryLog; save('inventoryLog',inventoryLog); }
+  if(data.bookingLog) { bookingLog = data.bookingLog; save('bookingLog',bookingLog); }
+  if(data.settings) { settings = data.settings; save('settings',settings); }
+  if(data.auditLog) { auditLog = data.auditLog; save('auditLog',auditLog); }
+  logAudit('Import','System','Restored data from backup');
+  toast('Data restored successfully! Reloading...');
+  setTimeout(()=>location.reload(), 1000);
+}
+function extractJsonFromZip(arrayBuffer) {
+  const view = new DataView(arrayBuffer);
+  let offset = 0;
+  while (offset < arrayBuffer.byteLength - 4) {
+    if (view.getUint32(offset, true) !== 0x04034b50) break;
+    const nameLen = view.getUint16(offset + 26, true);
+    const extraLen = view.getUint16(offset + 28, true);
+    const dataLen = view.getUint32(offset + 18, true);
+    const nameBytes = new Uint8Array(arrayBuffer, offset + 30, nameLen);
+    const name = new TextDecoder().decode(nameBytes);
+    const dataStart = offset + 30 + nameLen + extraLen;
+    if (name === '_backup.json') {
+      const jsonBytes = new Uint8Array(arrayBuffer, dataStart, dataLen);
+      return new TextDecoder().decode(jsonBytes);
+    }
+    offset = dataStart + dataLen;
+  }
+  return null;
+}
 window.importData = function(input) {
   const file = input.files[0]; if(!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const data = JSON.parse(e.target.result);
-      if(data.rooms) { rooms = data.rooms; save('rooms',rooms); }
-      if(data.guests) { guests = data.guests; save('guests',guests); }
-      if(data.bookings) { bookings = data.bookings; save('bookings',bookings); }
-      if(data.services) { services = data.services; save('services',services); }
-      if(data.invoices) { invoices = data.invoices; save('invoices',invoices); }
-      if(data.accounts) { accounts = data.accounts; save('accounts',accounts); }
-      if(data.tickets) { tickets = data.tickets; save('tickets',tickets); }
-      if(data.messages) { messages = data.messages; save('messages',messages); }
-      if(data.inventory) { inventory = data.inventory; save('inventory',inventory); }
-      if(data.inventoryLog) { inventoryLog = data.inventoryLog; save('inventoryLog',inventoryLog); }
-      if(data.bookingLog) { bookingLog = data.bookingLog; save('bookingLog',bookingLog); }
-      if(data.settings) { settings = data.settings; save('settings',settings); }
-      if(data.auditLog) { auditLog = data.auditLog; save('auditLog',auditLog); }
-      logAudit('Import','System','Imported data from file');
-      toast('Data imported successfully');
-      renderSettings();
-    } catch(err) { toast('Invalid JSON file'); }
-  };
-  reader.readAsText(file);
+  if (file.name.endsWith('.zip')) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const jsonStr = extractJsonFromZip(e.target.result);
+        if (!jsonStr) { toast('ZIP file does not contain backup data'); return; }
+        const data = JSON.parse(jsonStr);
+        restoreFromJson(data);
+      } catch(err) { toast('Error reading ZIP: ' + err.message); }
+    };
+    reader.readAsArrayBuffer(file);
+  } else {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const data = JSON.parse(e.target.result);
+        restoreFromJson(data);
+      } catch(err) { toast('Invalid file format'); }
+    };
+    reader.readAsText(file);
+  }
   input.value = '';
 };
 window.clearAllData = function() {
