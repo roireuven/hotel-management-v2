@@ -755,25 +755,25 @@ function logAudit(action, tableName, recordId, details) {
 // ===== DEFAULT DATA =====
 const defaultRooms = [
   {id:genId(),roomNumber:'101',roomType:'Single',floorNumber:1,bedConfig:'Twin',housekeepingStatus:'Inspected',occupancyStatus:'Occupied',maxAdults:1,maxChildren:1,amenities:'TV, WiFi',maintenanceLogs:'',price:80},
-  {id:genId(),roomNumber:'102',roomType:'Double',floorNumber:1,bedConfig:'Queen+Single',housekeepingStatus:'Clean',occupancyStatus:'Vacant',maxAdults:2,maxChildren:1,amenities:'TV, WiFi, Mini-bar',maintenanceLogs:'',price:120},
+  {id:genId(),roomNumber:'102',roomType:'Double',floorNumber:1,bedConfig:'Queen+Single',housekeepingStatus:'Clean',occupancyStatus:'Available',maxAdults:2,maxChildren:1,amenities:'TV, WiFi, Mini-bar',maintenanceLogs:'',price:120},
   {id:genId(),roomNumber:'103',roomType:'Deluxe',floorNumber:1,bedConfig:'King',housekeepingStatus:'Clean',occupancyStatus:'Occupied',maxAdults:2,maxChildren:2,amenities:'Balcony, Sea View, Mini-bar',maintenanceLogs:'',price:200},
-  {id:genId(),roomNumber:'104',roomType:'Suite',floorNumber:1,bedConfig:'King',housekeepingStatus:'Clean',occupancyStatus:'Vacant',maxAdults:3,maxChildren:2,amenities:'Balcony, Sea View, Mini-bar, Jacuzzi',maintenanceLogs:'',price:350},
+  {id:genId(),roomNumber:'104',roomType:'Suite',floorNumber:1,bedConfig:'King',housekeepingStatus:'Clean',occupancyStatus:'Available',maxAdults:3,maxChildren:2,amenities:'Balcony, Sea View, Mini-bar, Jacuzzi',maintenanceLogs:'',price:350},
   {id:genId(),roomNumber:'105',roomType:'Single',floorNumber:1,bedConfig:'Twin',housekeepingStatus:'Clean',occupancyStatus:'Reserved',maxAdults:1,maxChildren:1,amenities:'TV, WiFi',maintenanceLogs:'',price:80},
   {id:genId(),roomNumber:'201',roomType:'Double',floorNumber:2,bedConfig:'Queen+Single',housekeepingStatus:'Dirty',occupancyStatus:'Occupied',maxAdults:2,maxChildren:1,amenities:'TV, WiFi, Mini-bar',maintenanceLogs:'',price:120},
-  {id:genId(),roomNumber:'202',roomType:'Deluxe',floorNumber:2,bedConfig:'King',housekeepingStatus:'Clean',occupancyStatus:'Vacant',maxAdults:2,maxChildren:2,amenities:'Balcony, Mini-bar',maintenanceLogs:'',price:200},
+  {id:genId(),roomNumber:'202',roomType:'Deluxe',floorNumber:2,bedConfig:'King',housekeepingStatus:'Clean',occupancyStatus:'Available',maxAdults:2,maxChildren:2,amenities:'Balcony, Mini-bar',maintenanceLogs:'',price:200},
   {id:genId(),roomNumber:'203',roomType:'Suite',floorNumber:2,bedConfig:'King',housekeepingStatus:'Clean',occupancyStatus:'Occupied',maxAdults:3,maxChildren:2,amenities:'Balcony, Sea View, Mini-bar, Jacuzzi',maintenanceLogs:'',price:350},
-  {id:genId(),roomNumber:'204',roomType:'Penthouse',floorNumber:2,bedConfig:'King',housekeepingStatus:'Clean',occupancyStatus:'Vacant',maxAdults:4,maxChildren:2,amenities:'Balcony, Sea View, Mini-bar, Jacuzzi, Private Pool',maintenanceLogs:'',price:600},
+  {id:genId(),roomNumber:'204',roomType:'Penthouse',floorNumber:2,bedConfig:'King',housekeepingStatus:'Clean',occupancyStatus:'Available',maxAdults:4,maxChildren:2,amenities:'Balcony, Sea View, Mini-bar, Jacuzzi, Private Pool',maintenanceLogs:'',price:600},
   {id:genId(),roomNumber:'205',roomType:'Single',floorNumber:2,bedConfig:'Twin',housekeepingStatus:'Clean',occupancyStatus:'Occupied',maxAdults:1,maxChildren:0,amenities:'TV, WiFi',maintenanceLogs:'',price:85},
-  {id:genId(),roomNumber:'301',roomType:'Double',floorNumber:3,bedConfig:'Queen+Single',housekeepingStatus:'Clean',occupancyStatus:'Vacant',maxAdults:2,maxChildren:1,amenities:'TV, WiFi, Mini-bar',maintenanceLogs:'',price:130},
+  {id:genId(),roomNumber:'301',roomType:'Double',floorNumber:3,bedConfig:'Queen+Single',housekeepingStatus:'Clean',occupancyStatus:'Available',maxAdults:2,maxChildren:1,amenities:'TV, WiFi, Mini-bar',maintenanceLogs:'',price:130},
   {id:genId(),roomNumber:'302',roomType:'Deluxe',floorNumber:3,bedConfig:'King',housekeepingStatus:'Clean',occupancyStatus:'Occupied',maxAdults:2,maxChildren:2,amenities:'Balcony, Sea View',maintenanceLogs:'',price:210},
-  {id:genId(),roomNumber:'303',roomType:'Single',floorNumber:3,bedConfig:'Twin',housekeepingStatus:'Out of Service',occupancyStatus:'Vacant',maxAdults:1,maxChildren:0,amenities:'TV, WiFi',maintenanceLogs:'Bathroom renovation in progress',price:85},
+  {id:genId(),roomNumber:'303',roomType:'Single',floorNumber:3,bedConfig:'Twin',housekeepingStatus:'Out of Service',occupancyStatus:'Available',maxAdults:1,maxChildren:0,amenities:'TV, WiFi',maintenanceLogs:'Bathroom renovation in progress',price:85},
   {id:genId(),roomNumber:'304',roomType:'Double',floorNumber:3,bedConfig:'Queen+Single',housekeepingStatus:'Clean',occupancyStatus:'Reserved',maxAdults:2,maxChildren:1,amenities:'TV, WiFi, Mini-bar',maintenanceLogs:'',price:130},
   {id:genId(),roomNumber:'305',roomType:'Suite',floorNumber:3,bedConfig:'King',housekeepingStatus:'Clean',occupancyStatus:'Occupied',maxAdults:3,maxChildren:2,amenities:'Balcony, Sea View, Mini-bar',maintenanceLogs:'',price:360},
-  {id:genId(),roomNumber:'401',roomType:'Deluxe',floorNumber:4,bedConfig:'King',housekeepingStatus:'Clean',occupancyStatus:'Vacant',maxAdults:2,maxChildren:2,amenities:'Balcony, Sea View, Mini-bar',maintenanceLogs:'',price:220},
+  {id:genId(),roomNumber:'401',roomType:'Deluxe',floorNumber:4,bedConfig:'King',housekeepingStatus:'Clean',occupancyStatus:'Available',maxAdults:2,maxChildren:2,amenities:'Balcony, Sea View, Mini-bar',maintenanceLogs:'',price:220},
   {id:genId(),roomNumber:'402',roomType:'Penthouse',floorNumber:4,bedConfig:'King',housekeepingStatus:'Clean',occupancyStatus:'Reserved',maxAdults:4,maxChildren:2,amenities:'Balcony, Sea View, Mini-bar, Jacuzzi, Private Pool',maintenanceLogs:'',price:650},
   {id:genId(),roomNumber:'403',roomType:'Double',floorNumber:4,bedConfig:'Queen+Single',housekeepingStatus:'Clean',occupancyStatus:'Occupied',maxAdults:2,maxChildren:1,amenities:'TV, WiFi, Mini-bar',maintenanceLogs:'',price:130},
-  {id:genId(),roomNumber:'404',roomType:'Suite',floorNumber:4,bedConfig:'King',housekeepingStatus:'Dirty',occupancyStatus:'Vacant',maxAdults:3,maxChildren:2,amenities:'Balcony, Sea View, Mini-bar, Jacuzzi',maintenanceLogs:'',price:370},
-  {id:genId(),roomNumber:'405',roomType:'Single',floorNumber:4,bedConfig:'Twin',housekeepingStatus:'Clean',occupancyStatus:'Vacant',maxAdults:1,maxChildren:0,amenities:'TV, WiFi',maintenanceLogs:'',price:85},
+  {id:genId(),roomNumber:'404',roomType:'Suite',floorNumber:4,bedConfig:'King',housekeepingStatus:'Dirty',occupancyStatus:'Available',maxAdults:3,maxChildren:2,amenities:'Balcony, Sea View, Mini-bar, Jacuzzi',maintenanceLogs:'',price:370},
+  {id:genId(),roomNumber:'405',roomType:'Single',floorNumber:4,bedConfig:'Twin',housekeepingStatus:'Clean',occupancyStatus:'Available',maxAdults:1,maxChildren:0,amenities:'TV, WiFi',maintenanceLogs:'',price:85},
 ];
 const defaultGuests = [
   {id:genId(),firstName:'John',lastName:'Smith',passportId:'US-98765432',nationality:'American',dob:'1985-06-15',email:'john.smith@email.com',phone:'+1 555-0123',paymentMethod:'Credit Card',guestNotes:'Prefers high floor',blacklist:0,visits:3},
@@ -915,7 +915,7 @@ function roomTileLabel(r) {
 // ===== DASHBOARD =====
 function renderDashboard() {
   const total = rooms.length;
-  const vacant = rooms.filter(r=>r.occupancyStatus==='Vacant' && r.housekeepingStatus!=='Out of Service').length;
+  const vacant = rooms.filter(r=>r.occupancyStatus==='Available' && r.housekeepingStatus!=='Out of Service').length;
   const occ = rooms.filter(r=>r.occupancyStatus==='Occupied').length;
   const oos = rooms.filter(r=>r.housekeepingStatus==='Out of Service').length;
   const isHK = currentRole === 'Housekeeper';
@@ -936,7 +936,7 @@ function renderDashboard() {
   } else {
     statsHtml = `<div class="stats-grid" style="display:none;">
       <div class="stat-card"><div class="stat-icon blue">▣</div><div class="stat-info"><h3>${total}</h3><p>Total Rooms</p></div></div>
-      <div class="stat-card"><div class="stat-icon green">◆</div><div class="stat-info"><h3>${vacant}</h3><p>Vacant</p></div></div>
+      <div class="stat-card"><div class="stat-icon green">◆</div><div class="stat-info"><h3>${vacant}</h3><p>Available</p></div></div>
       <div class="stat-card"><div class="stat-icon orange">▤</div><div class="stat-info"><h3>${occ}</h3><p>Occupied</p></div></div>
       <div class="stat-card"><div class="stat-icon red">⚡</div><div class="stat-info"><h3>${oos}</h3><p>Out of Service</p></div></div>
     </div>`;
@@ -1004,9 +1004,9 @@ window.updateDashChart = function() {
     const vacH = (day.vacant / maxOcc) * 540;
     chartHtml += `<div class="bar-group" onclick="showDayDetail('${day.date}')" style="cursor:pointer;width:30px;min-width:30px;max-width:30px;"><div class="bar-value" style="font-size:0.55rem;">${fmt$(day.invSum)}</div><div style="display:flex;flex-direction:column;width:30px;"><div class="bar" style="height:${vacH}px;background:#42b72a;border-radius:3px 3px 0 0;"></div><div class="bar" style="height:${occH}px;background:#1a73e8;"></div></div><div class="bar-label" style="font-size:0.5rem;">${label}</div></div>`;
   });
-  chartHtml += '</div><div class="legend"><div class="legend-item"><div class="legend-dot" style="background:#1a73e8"></div> Occupied</div><div class="legend-item"><div class="legend-dot" style="background:#42b72a"></div> Vacant</div></div></div></div>';
+  chartHtml += '</div><div class="legend"><div class="legend-item"><div class="legend-dot" style="background:#1a73e8"></div> Occupied</div><div class="legend-item"><div class="legend-dot" style="background:#42b72a"></div> Available</div></div></div></div>';
 
-  chartHtml += '<div class="table-wrap" style="margin-top:1rem;"><table style="font-size:0.8rem;"><thead><tr><th>Date</th><th>Vacant</th><th>Occupied</th><th>Invoices</th></tr></thead><tbody>';
+  chartHtml += '<div class="table-wrap" style="margin-top:1rem;"><table style="font-size:0.8rem;"><thead><tr><th>Date</th><th>Available</th><th>Occupied</th><th>Invoices</th></tr></thead><tbody>';
   let totalInv = 0;
   days.forEach(day => {
     const label = new Date(day.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
@@ -1066,7 +1066,7 @@ let roomFilter = 'all';
 function renderRooms() {
   const counts = {
     all: rooms.length,
-    Vacant: rooms.filter(r=>r.occupancyStatus==='Vacant' && r.housekeepingStatus!=='Out of Service').length,
+    Available: rooms.filter(r=>r.occupancyStatus==='Available' && r.housekeepingStatus!=='Out of Service').length,
     Occupied: rooms.filter(r=>r.occupancyStatus==='Occupied').length,
     Reserved: rooms.filter(r=>r.occupancyStatus==='Reserved').length,
     'Out of Service': rooms.filter(r=>r.housekeepingStatus==='Out of Service').length
@@ -1078,7 +1078,7 @@ function renderRooms() {
   const showPrice = currentRole !== 'Housekeeper';
   document.getElementById('page-rooms').innerHTML = `
     <div class="card"><div class="card-header"><h2>Room Overview</h2>${addRoomBtn}</div><div class="card-body">
-      <div style="display:flex;gap:0.75rem;margin-bottom:1.25rem;flex-wrap:wrap;">${['all','Vacant','Occupied','Reserved','Out of Service'].map(f=>`<button class="btn ${roomFilter===f?'btn-primary':'btn-outline'}" onclick="roomFilter='${f}';renderRooms()">${f==='all'?'All':f} (${counts[f]})</button>`).join('')}</div>
+      <div style="display:flex;gap:0.75rem;margin-bottom:1.25rem;flex-wrap:wrap;">${['all','Available','Occupied','Reserved','Out of Service'].map(f=>`<button class="btn ${roomFilter===f?'btn-primary':'btn-outline'}" onclick="roomFilter='${f}';renderRooms()">${f==='all'?'All':f} (${counts[f]})</button>`).join('')}</div>
       <div class="room-grid">${filtered.map(r=>`<div class="room-tile room-${roomTileClass(r)}" onclick="showRoomDetail('${r.id}')"><div class="room-number">${r.roomNumber}</div><div class="room-type">${r.roomType} · ${r.bedConfig}</div>${showPrice?`<div class="room-price">${fmt$(r.price)}/night</div>`:''}<div class="room-status">${roomTileLabel(r)}</div></div>`).join('')}</div>
     </div></div>`;
 }
@@ -1095,13 +1095,13 @@ window.showAddRoom = function() {
 window.addRoom = function() {
   const num = document.getElementById('mRoomNum').value.trim(); if(!num) { toast('Enter a room number'); return; }
   if(rooms.find(r=>String(r.roomNumber)===num)) { toast('Room number already exists'); return; }
-  const r = {id:genId(),roomNumber:num,roomType:document.getElementById('mRoomType').value,floorNumber:parseInt(document.getElementById('mRoomFloor').value)||1,bedConfig:document.getElementById('mRoomBed').value,housekeepingStatus:'Clean',occupancyStatus:'Vacant',maxAdults:parseInt(document.getElementById('mRoomMaxA').value)||2,maxChildren:parseInt(document.getElementById('mRoomMaxC').value)||0,amenities:document.getElementById('mRoomAmen').value,maintenanceLogs:'',price:parseFloat(document.getElementById('mRoomPrice').value)||100};
+  const r = {id:genId(),roomNumber:num,roomType:document.getElementById('mRoomType').value,floorNumber:parseInt(document.getElementById('mRoomFloor').value)||1,bedConfig:document.getElementById('mRoomBed').value,housekeepingStatus:'Clean',occupancyStatus:'Available',maxAdults:parseInt(document.getElementById('mRoomMaxA').value)||2,maxChildren:parseInt(document.getElementById('mRoomMaxC').value)||0,amenities:document.getElementById('mRoomAmen').value,maintenanceLogs:'',price:parseFloat(document.getElementById('mRoomPrice').value)||100};
   rooms.push(r); save('rooms',rooms); logAudit('Add','Room','Added room '+num); closeModal(); renderRooms(); renderDashboard(); toast('Room '+num+' added');
 };
 window.showRoomDetail = function(id) {
   const r = rooms.find(x=>x.id===id); if(!r) return;
   const hkStatuses = ['Clean','Dirty','Inspected','Out of Service'];
-  const occStatuses = ['Occupied','Vacant','Reserved'];
+  const occStatuses = ['Occupied','Available','Reserved'];
   openModal(`<div class="modal-header"><h2>Room ${r.roomNumber}</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <div class="form-row"><div class="form-group"><label>Room Number</label><input type="text" class="form-control" id="eRoomNum" value="${r.roomNumber}"></div><div class="form-group"><label>Floor Number</label><input type="number" class="form-control" id="eRoomFloor" value="${r.floorNumber}"></div></div>
@@ -1201,7 +1201,7 @@ function guestDisplayId(g) {
 }
 window.showAddBooking = function() {
   _selectedGuestId = null;
-  const avail = rooms.filter(r=>r.occupancyStatus==='Vacant' && r.housekeepingStatus!=='Out of Service');
+  const avail = rooms.filter(r=>r.occupancyStatus==='Available' && r.housekeepingStatus!=='Out of Service');
   openModal(`<div class="modal-header"><h2>New Booking</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:1rem;">Select stay dates first to see available rooms</p>
@@ -1250,7 +1250,7 @@ window.refreshAvailRooms = function() {
       return !overlapping;
     });
   } else {
-    avail = avail.filter(r => r.occupancyStatus === 'Vacant');
+    avail = avail.filter(r => r.occupancyStatus === 'Available');
   }
   sel.innerHTML = avail.length ? avail.map(r => `<option value="${r.id}">${r.roomNumber} - ${r.roomType} (${fmt$(r.price)}/night)</option>`).join('') : '<option disabled>No rooms available for these dates</option>';
   if (prev && avail.find(r => r.id === prev)) sel.value = prev;
@@ -1518,7 +1518,7 @@ window.checkIn = function(id) {
 };
 window.checkOut = function(id) {
   const b = bookings.find(x=>x.id===id); if(!b) return;
-  b.arrivalStatus = 'Checked-out'; const r = rooms.find(x=>x.id===b.roomId); if(r) { r.occupancyStatus = 'Vacant'; r.housekeepingStatus = 'Dirty'; save('rooms',rooms); }
+  b.arrivalStatus = 'Checked-out'; const r = rooms.find(x=>x.id===b.roomId); if(r) { r.occupancyStatus = 'Available'; r.housekeepingStatus = 'Dirty'; save('rooms',rooms); }
   const nights = daysBetween(b.checkinDate, b.checkoutDate); const roomPrice = r ? r.price : 100;
   const subtotal = roomPrice * nights;
   const svcCharges = (b.services||[]).reduce((s,sv)=>s+(parseFloat(sv.unitPrice)||0)*(parseInt(sv.quantity)||1),0);
@@ -1551,7 +1551,7 @@ window.orderService = function(bId) {
 };
 window.showEditBooking = function(id) {
   const b = bookings.find(x=>x.id===id); if(!b) return;
-  const avail = rooms.filter(r=>r.occupancyStatus==='Vacant'||r.id===b.roomId);
+  const avail = rooms.filter(r=>r.occupancyStatus==='Available'||r.id===b.roomId);
   openModal(`<div class="modal-header"><h2>Edit Booking ${b.bookingId}</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <div class="form-group"><label>Guest Name</label><input type="text" class="form-control" id="eBkGuest" value="${b.guestName}"></div>
@@ -1599,7 +1599,7 @@ window.updateBooking = function(id) {
 window.deleteBooking = function(id) {
   if(!confirm('Delete this booking?')) return;
   const b = bookings.find(x=>x.id===id);
-  if(b && (b.arrivalStatus==='Expected')) { const r = rooms.find(x=>x.id===b.roomId); if(r && r.occupancyStatus==='Reserved') { r.occupancyStatus='Vacant'; save('rooms',rooms); } }
+  if(b && (b.arrivalStatus==='Expected')) { const r = rooms.find(x=>x.id===b.roomId); if(r && r.occupancyStatus==='Reserved') { r.occupancyStatus='Available'; save('rooms',rooms); } }
   logBk('Deleted',b?b.bookingId:'',b?b.guestName:'','Room '+(b?b.roomNumber:''));
   bookings = bookings.filter(x=>x.id!==id); save('bookings',bookings); logAudit('Delete','Booking','Deleted booking '+(b?b.bookingId:id)); renderBookings(); toast('Booking deleted');
 };
