@@ -326,6 +326,37 @@
     body.dark-mode .setup-email-section { background: #1a2744; border-color: #2a3a5a; }
     body.dark-mode .setup-email-section h3 { color: #64b5f6; }
     body.dark-mode .setup-email-section p { color: #b0b0b0; }
+    /* POS Module */
+    .pos-top { background: var(--card-bg); border-radius: 12px; padding: 1rem; margin-bottom: 1rem; border: 1px solid var(--border); }
+    .pos-guest-info { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.75rem; font-size: 0.9rem; }
+    .pos-guest-info span { background: #e3f2fd; color: #1565c0; padding: 0.3rem 0.75rem; border-radius: 8px; font-weight: 600; }
+    body.dark-mode .pos-guest-info span { background: #1a3a5e; color: #64b5f6; }
+    .pos-item-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1rem; }
+    .pos-item-card { background: var(--card-bg); border: 2px solid var(--border); border-radius: 10px; padding: 0.85rem 0.6rem; text-align: center; cursor: pointer; transition: all 0.15s ease; -webkit-tap-highlight-color: rgba(0,0,0,0.1); touch-action: manipulation; }
+    .pos-item-card:hover, .pos-item-card:active { border-color: var(--primary); background: #e8f0fe; transform: translateY(-1px); box-shadow: 0 2px 8px rgba(26,115,232,0.15); }
+    body.dark-mode .pos-item-card:hover, body.dark-mode .pos-item-card:active { background: #1a3a5e; }
+    .pos-item-card .pos-item-icon { font-size: 1.5rem; margin-bottom: 0.25rem; }
+    .pos-item-card .pos-item-name { font-size: 0.8rem; font-weight: 600; line-height: 1.2; margin-bottom: 0.2rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .pos-item-card .pos-item-price { font-size: 0.85rem; color: var(--primary); font-weight: 700; }
+    .pos-item-card .pos-item-stock { font-size: 0.65rem; color: var(--text-light); margin-top: 0.15rem; }
+    .pos-cart { background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border); margin-bottom: 1rem; }
+    .pos-cart-header { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); font-weight: 700; font-size: 0.95rem; background: linear-gradient(135deg, #f8faff 0%, #eef3fb 100%); border-radius: 12px 12px 0 0; }
+    body.dark-mode .pos-cart-header { background: #1a2744; }
+    .pos-cart-items { max-height: 250px; overflow-y: auto; }
+    .pos-cart-row { display: flex; align-items: center; padding: 0.6rem 1rem; border-bottom: 1px solid var(--border); gap: 0.5rem; font-size: 0.85rem; }
+    .pos-cart-row .cart-name { flex: 1; font-weight: 500; }
+    .pos-cart-row .cart-qty-controls { display: flex; align-items: center; gap: 0.3rem; }
+    .pos-cart-row .cart-qty-controls button { width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--border); background: var(--card-bg); cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+    .pos-cart-row .cart-qty-controls button:active { background: var(--primary); color: #fff; }
+    .pos-cart-row .cart-qty { min-width: 24px; text-align: center; font-weight: 700; }
+    .pos-cart-row .cart-price { font-weight: 600; min-width: 60px; text-align: right; }
+    .pos-cart-row .cart-remove { color: var(--danger); cursor: pointer; font-size: 1rem; padding: 0 0.25rem; background: none; border: none; }
+    .pos-totals { padding: 0.75rem 1rem; border-top: 2px solid var(--border); }
+    .pos-totals .total-row { display: flex; justify-content: space-between; padding: 0.25rem 0; font-size: 0.9rem; }
+    .pos-totals .total-row.grand { font-size: 1.1rem; font-weight: 700; border-top: 2px solid var(--text); padding-top: 0.5rem; margin-top: 0.25rem; }
+    .pos-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; margin-bottom: 1.5rem; }
+    .pos-actions .btn { min-height: 48px; font-size: 0.9rem; }
+    @media (max-width: 480px) { .pos-item-grid { grid-template-columns: repeat(2, 1fr); } .pos-actions { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -412,6 +443,7 @@
       <a data-page="services"><span class="icon">◈</span> Services</a>
       <a data-page="invoices"><span class="icon">▥</span> Invoices</a>
       <a data-page="inventory"><span class="icon">⬡</span> Inventory</a>
+      <a data-page="pos"><span class="icon">◈</span> POS</a>
       <div class="nav-section">Guest</div>
       <a data-page="guestportal"><span class="icon">◎</span> Guest Portal</a>
       <div class="nav-section">Admin</div>
@@ -441,6 +473,7 @@
       <div class="page" id="page-guestportal"></div>
       <div class="page" id="page-settings"></div>
       <div class="page" id="page-inventory"></div>
+      <div class="page" id="page-pos"></div>
     </div>
   </div>
   <div class="modal-overlay" id="modalOverlay"><div class="modal" id="modalContent"></div></div>
@@ -458,7 +491,7 @@
 const DB_KEY = 'hotel_mgr_';
 const isAndroid = typeof HotelDB !== 'undefined';
 
-const dbTableMap = {auditLog:'audit_log',bookingLog:'booking_log',inventoryLog:'inventory_log'};
+const dbTableMap = {auditLog:'audit_log',bookingLog:'booking_log',inventoryLog:'inventory_log',posTransactions:'pos_transactions'};
 function dbKey(key) { return dbTableMap[key] || key; }
 function load(key, def) {
   if (isAndroid) {
@@ -844,6 +877,7 @@ let tickets = load('tickets', null); if(!tickets) { tickets = defaultTickets; sa
 let messages = load('messages', null); if(!messages) { messages = defaultMessages; save('messages', messages); }
 let inventory = load('inventory', null); if(!inventory) { inventory = defaultInventory; save('inventory', inventory); }
 let inventoryLog = load('inventoryLog', []);
+let posTransactions = load('posTransactions', []);
 
 if(bookings.length === 0) {
   const seed = [
@@ -864,7 +898,7 @@ if(bookings.length === 0) {
 }
 
 // ===== NAVIGATION =====
-const pageTitles = {dashboard:'Dashboard',rooms:'Room Management',bookings:'Bookings',guests:'Guest Directory',housekeeping:'Housekeeping',maintenance:'Maintenance Tickets',services:'Services',invoices:'Invoices',guestportal:'Guest Portal',reports:'Reports & Analytics',accounts:'User Accounts',auditlog:'Audit Log',settings:'Settings & Regulations',inventory:'Inventory Management'};
+const pageTitles = {dashboard:'Dashboard',rooms:'Room Management',bookings:'Bookings',guests:'Guest Directory',housekeeping:'Housekeeping',maintenance:'Maintenance Tickets',services:'Services',invoices:'Invoices',guestportal:'Guest Portal',reports:'Reports & Analytics',accounts:'User Accounts',auditlog:'Audit Log',settings:'Settings & Regulations',inventory:'Inventory Management',pos:'Point of Sale'};
 
 document.querySelectorAll('#sidebarNav a[data-page]').forEach(link => {
   link.addEventListener('click', () => {
@@ -887,7 +921,7 @@ function closeModal() { document.getElementById('modalOverlay').classList.remove
 document.getElementById('modalOverlay').addEventListener('click', e => { if(e.target === document.getElementById('modalOverlay')) closeModal(); });
 
 function renderPage(page) {
-  const fn = {dashboard:renderDashboard,rooms:renderRooms,bookings:renderBookings,guests:renderGuests,housekeeping:renderHousekeeping,maintenance:renderMaintenance,services:renderServices,invoices:renderInvoices,guestportal:renderGuestPortal,reports:renderReports,accounts:renderAccounts,auditlog:renderAuditLog,settings:renderSettings,inventory:renderInventory};
+  const fn = {dashboard:renderDashboard,rooms:renderRooms,bookings:renderBookings,guests:renderGuests,housekeeping:renderHousekeeping,maintenance:renderMaintenance,services:renderServices,invoices:renderInvoices,guestportal:renderGuestPortal,reports:renderReports,accounts:renderAccounts,auditlog:renderAuditLog,settings:renderSettings,inventory:renderInventory,pos:renderPOS};
   if(fn[page]) fn[page]();
   updateBadges();
 }
@@ -1989,7 +2023,7 @@ window.clearAuditLog = function() {
 
 // ===== SETTINGS =====
 function getDbCounts() {
-  const tables = ['rooms','guests','bookings','services','invoices','accounts','tickets','messages','inventory'];
+  const tables = ['rooms','guests','bookings','services','invoices','accounts','tickets','messages','inventory','posTransactions'];
   const counts = {};
   if (isAndroid) {
     tables.forEach(t => { try { counts[t] = HotelDB.count(t); } catch(e) { counts[t] = '?'; } });
@@ -1997,6 +2031,7 @@ function getDbCounts() {
     counts.rooms = rooms.length; counts.guests = guests.length; counts.bookings = bookings.length;
     counts.services = services.length; counts.invoices = invoices.length; counts.accounts = accounts.length;
     counts.tickets = tickets.length; counts.messages = messages.length; counts.inventory = inventory.length;
+    counts.posTransactions = posTransactions.length;
   }
   return counts;
 }
@@ -2044,6 +2079,7 @@ function renderSettings() {
           <tr><td><strong>tickets</strong></td><td>${counts.tickets}</td><td>Maintenance tickets (room, issue, priority, status)</td></tr>
           <tr><td><strong>messages</strong></td><td>${counts.messages}</td><td>Communication log (guest, type, message, channel)</td></tr>
           <tr><td><strong>inventory</strong></td><td>${inventory.length}</td><td>Inventory items (name, category, quantity, reorder level)</td></tr>
+          <tr><td><strong>posTransactions</strong></td><td>${counts.posTransactions}</td><td>POS sale records (items, totals, payment method, staff)</td></tr>
           <tr><td><strong>settings</strong></td><td>—</td><td>Hotel configuration (key/value pairs)</td></tr>
           <tr><td><strong>auditLog</strong></td><td>${auditLog.length}</td><td>Audit trail (action, entity, detail, timestamp)</td></tr>
         </tbody>
@@ -2142,9 +2178,10 @@ window.exportAllCSV = function() {
     {name:'audit_log.csv', data:auditLog},
     {name:'booking_log.csv', data:bookingLog},
     {name:'inventory_log.csv', data:inventoryLog},
+    {name:'pos_transactions.csv', data:posTransactions.map(p=>({...p,items:JSON.stringify(p.items||[])}))},
   ];
   const files = tables.filter(t=>t.data&&t.data.length).map(t=>({name:t.name, content:tableToCsv(t.data)}));
-  const backupData = {rooms,guests,bookings,services,invoices,accounts,auditLog,settings,tickets,messages,inventory,bookingLog,inventoryLog};
+  const backupData = {rooms,guests,bookings,services,invoices,accounts,auditLog,settings,tickets,messages,inventory,bookingLog,inventoryLog,posTransactions};
   files.push({name:'_backup.json', content:JSON.stringify(backupData)});
   const zip = buildZip(files);
   let binStr = '';
@@ -2160,7 +2197,7 @@ window.exportAllCSV = function() {
   toast('CSV ZIP download started');
 };
 window.exportAllData = function() {
-  const data = {rooms,guests,bookings,bookingLog,services,invoices,accounts,auditLog,settings,tickets,messages,inventory,inventoryLog};
+  const data = {rooms,guests,bookings,bookingLog,services,invoices,accounts,auditLog,settings,tickets,messages,inventory,inventoryLog,posTransactions};
   const json = JSON.stringify(data, null, 2);
   const a = document.createElement('a');
   a.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(json);
@@ -2182,6 +2219,7 @@ function restoreFromJson(data) {
   if(data.inventory) { inventory = data.inventory; save('inventory',inventory); }
   if(data.inventoryLog) { inventoryLog = data.inventoryLog; save('inventoryLog',inventoryLog); }
   if(data.bookingLog) { bookingLog = data.bookingLog; save('bookingLog',bookingLog); }
+  if(data.posTransactions) { posTransactions = data.posTransactions; save('posTransactions',posTransactions); }
   if(data.settings) { settings = data.settings; save('settings',settings); }
   if(data.auditLog) { auditLog = data.auditLog; save('auditLog',auditLog); }
   logAudit('Import','System','Restored data from backup');
@@ -2236,7 +2274,7 @@ window.clearAllData = function() {
   if(!confirm('This will permanently delete ALL data. Are you sure?')) return;
   if(!confirm('This cannot be undone. Proceed?')) return;
   if (isAndroid) {
-    ['rooms','guests','bookings','bookingLog','services','invoices','accounts','tickets','messages','inventory','inventoryLog','auditLog','settings'].forEach(t => { try { HotelDB.deleteAll(t); } catch(e){} });
+    ['rooms','guests','bookings','bookingLog','services','invoices','accounts','tickets','messages','inventory','inventoryLog','auditLog','settings','posTransactions'].forEach(t => { try { HotelDB.deleteAll(t); } catch(e){} });
   }
   Object.keys(localStorage).forEach(k => { if(k.startsWith(DB_KEY) && k !== DB_KEY+'currentUser') localStorage.removeItem(k); });
   logAudit('Clear','System','All data cleared');
@@ -2245,7 +2283,7 @@ window.clearAllData = function() {
 window.resetAll = function() {
   if(!confirm('Reset ALL data to defaults? This cannot be undone.')) return;
   if (isAndroid) {
-    ['rooms','guests','bookings','bookingLog','services','invoices','accounts','tickets','messages','inventory','inventoryLog','auditLog','settings'].forEach(t => { try { HotelDB.deleteAll(t); } catch(e){} });
+    ['rooms','guests','bookings','bookingLog','services','invoices','accounts','tickets','messages','inventory','inventoryLog','auditLog','settings','posTransactions'].forEach(t => { try { HotelDB.deleteAll(t); } catch(e){} });
   }
   Object.keys(localStorage).forEach(k => { if(k.startsWith(DB_KEY)) localStorage.removeItem(k); });
   location.reload();
@@ -2531,6 +2569,192 @@ window.deleteInventoryItem = function(id) {
   logAudit('Delete','Inventory','Deleted '+(it?it.itemName:id)); closeModal(); renderInventory(); toast('Item deleted');
 };
 
+// ===== POS (Point of Sale) =====
+let posCart = [];
+let posSelectedBooking = null;
+
+function getCategoryIcon(cat) {
+  const icons = {'Linen':'🛏️','Toiletries':'🧴','F&B':'🍽️','Supplies':'📦'};
+  return icons[cat] || '📦';
+}
+
+function renderPOS() {
+  const checkedIn = bookings.filter(b => b.arrivalStatus === 'Checked-in');
+  const availItems = inventory.filter(it => (parseInt(it.quantity) || 0) > 0);
+  const taxRate = parseFloat(settings.surcharge) || 7;
+
+  let selHtml = '<option value="">-- Select a room --</option>';
+  checkedIn.forEach(b => {
+    selHtml += '<option value="' + b.id + '">Room ' + b.roomNumber + ' - ' + b.guestName + '</option>';
+  });
+
+  let guestInfoHtml = '';
+  if (posSelectedBooking) {
+    const b = bookings.find(x => x.id === posSelectedBooking);
+    if (b) {
+      guestInfoHtml = '<div class="pos-guest-info"><span>👤 ' + b.guestName + '</span><span>🚪 Room ' + b.roomNumber + '</span><span>📋 ' + b.bookingId + '</span></div>';
+    }
+  }
+
+  let itemGridHtml = '';
+  availItems.forEach(it => {
+    const svc = services.find(s => s.name === it.itemName);
+    const price = svc ? svc.unitPrice : 0;
+    const icon = getCategoryIcon(it.category);
+    itemGridHtml += '<div class="pos-item-card" onclick="posAddToCart(\'' + it.id + '\')"><div class="pos-item-icon">' + icon + '</div><div class="pos-item-name">' + it.itemName + '</div><div class="pos-item-price">' + fmt$(price) + '</div><div class="pos-item-stock">Stock: ' + it.quantity + '</div></div>';
+  });
+  if (!itemGridHtml) itemGridHtml = '<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-light);">No items in stock</div>';
+
+  let cartHtml = '';
+  let subtotal = 0;
+  posCart.forEach((ci, idx) => {
+    const lineTotal = ci.unitPrice * ci.qty;
+    subtotal += lineTotal;
+    cartHtml += '<div class="pos-cart-row"><span class="cart-name">' + ci.name + '</span><div class="cart-qty-controls"><button onclick="posCartQty(' + idx + ',-1)">−</button><span class="cart-qty">' + ci.qty + '</span><button onclick="posCartQty(' + idx + ',1)">+</button></div><span class="cart-price">' + fmt$(lineTotal) + '</span><button class="cart-remove" onclick="posCartRemove(' + idx + ')">✕</button></div>';
+  });
+  if (!cartHtml) cartHtml = '<div style="padding:1.5rem;text-align:center;color:var(--text-light);font-size:0.85rem;">Cart is empty — tap items above to add</div>';
+
+  const tax = subtotal * taxRate / 100;
+  const grandTotal = subtotal + tax;
+
+  const canCheckout = posCart.length > 0;
+  const needsRoom = !posSelectedBooking;
+
+  let html = '<div class="pos-top"><div class="form-group" style="margin-bottom:0;"><label style="font-weight:700;font-size:0.85rem;">Active Room / Guest</label><select class="form-control" id="posRoomSelect" onchange="posSelectBooking(this.value)">' + selHtml + '</select></div>' + guestInfoHtml + '</div>';
+
+  html += '<div class="card"><div class="card-header"><h2>Items</h2><span style="font-size:0.78rem;color:var(--text-light);">' + availItems.length + ' items available</span></div><div class="card-body"><div class="pos-item-grid">' + itemGridHtml + '</div></div></div>';
+
+  html += '<div class="pos-cart"><div class="pos-cart-header">🛒 Cart (' + posCart.length + ' items)</div><div class="pos-cart-items">' + cartHtml + '</div>';
+  html += '<div class="pos-totals"><div class="total-row"><span>Subtotal</span><span>' + fmt$(subtotal) + '</span></div><div class="total-row"><span>Tax (' + taxRate + '%)</span><span>' + fmt$(tax) + '</span></div><div class="total-row grand"><span>Grand Total</span><span>' + fmt$(grandTotal) + '</span></div></div></div>';
+
+  html += '<div class="pos-actions"><button class="btn btn-primary" ' + (!canCheckout || needsRoom ? 'disabled style="opacity:0.5;"' : '') + ' onclick="posCheckout(\'Room Charge\')">🏨 Charge to Room</button><button class="btn btn-success" ' + (!canCheckout ? 'disabled style="opacity:0.5;"' : '') + ' onclick="posCheckout(\'Cash\')">💵 Cash Payment</button><button class="btn btn-warning" ' + (!canCheckout ? 'disabled style="opacity:0.5;"' : '') + ' onclick="posCheckout(\'Credit Card\')">💳 Credit Card</button></div>';
+
+  html += '<div class="card"><div class="card-header"><h2>POS Transaction Log</h2></div><div class="card-body"><div id="posTransGrid"></div></div></div>';
+
+  document.getElementById('page-pos').innerHTML = html;
+
+  if (posSelectedBooking) {
+    const selEl = document.getElementById('posRoomSelect');
+    if (selEl) selEl.value = posSelectedBooking;
+  }
+
+  new XGrid('posTransGrid', {
+    columns: [
+      {field:'timestamp',label:'Timestamp',format:v=>{try{const d=new Date(v);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}catch(e){return v;}},filterable:true,width:'130px'},
+      {field:'roomNumber',label:'Room',filterable:true,width:'65px'},
+      {field:'guestName',label:'Guest',filterable:true},
+      {field:'itemCount',label:'Items',width:'60px'},
+      {field:'subtotal',label:'Subtotal',format:v=>fmt$(v),width:'85px'},
+      {field:'tax',label:'Tax',format:v=>fmt$(v),width:'70px'},
+      {field:'grandTotal',label:'Total',format:v=>'<strong>'+fmt$(v)+'</strong>',width:'85px'},
+      {field:'paidBy',label:'Paid By',filterable:true,width:'100px'},
+      {field:'staffName',label:'Staff',filterable:true,width:'80px'},
+    ],
+    data: [...posTransactions].reverse(),
+  });
+}
+
+window.posSelectBooking = function(bookingId) {
+  posSelectedBooking = bookingId || null;
+  renderPOS();
+};
+
+window.posAddToCart = function(inventoryId) {
+  const it = inventory.find(x => x.id === inventoryId);
+  if (!it) return;
+  const svc = services.find(s => s.name === it.itemName);
+  const price = svc ? parseFloat(svc.unitPrice) || 0 : 0;
+  const existing = posCart.find(c => c.inventoryId === inventoryId);
+  if (existing) {
+    if (existing.qty >= (parseInt(it.quantity) || 0)) { toast('Not enough stock'); return; }
+    existing.qty++;
+  } else {
+    posCart.push({inventoryId: inventoryId, name: it.itemName, unitPrice: price, qty: 1, category: it.category});
+  }
+  renderPOS();
+};
+
+window.posCartQty = function(idx, delta) {
+  const ci = posCart[idx]; if (!ci) return;
+  const it = inventory.find(x => x.id === ci.inventoryId);
+  const newQty = ci.qty + delta;
+  if (newQty <= 0) { posCart.splice(idx, 1); }
+  else if (it && newQty > (parseInt(it.quantity) || 0)) { toast('Not enough stock'); return; }
+  else { ci.qty = newQty; }
+  renderPOS();
+};
+
+window.posCartRemove = function(idx) {
+  posCart.splice(idx, 1);
+  renderPOS();
+};
+
+window.posCheckout = function(paidBy) {
+  if (posCart.length === 0) { toast('Cart is empty'); return; }
+  if (paidBy === 'Room Charge' && !posSelectedBooking) { toast('Select a room first'); return; }
+
+  const taxRate = parseFloat(settings.surcharge) || 7;
+  const staffName = currentUser ? currentUser.name : currentRole;
+  let roomNumber = '';
+  let guestName = '';
+  let bookingId = '';
+
+  if (posSelectedBooking) {
+    const b = bookings.find(x => x.id === posSelectedBooking);
+    if (b) { roomNumber = b.roomNumber; guestName = b.guestName; bookingId = b.bookingId; }
+  }
+
+  const items = posCart.map(ci => ({name: ci.name, qty: ci.qty, unitPrice: ci.unitPrice, total: ci.unitPrice * ci.qty}));
+  const subtotal = items.reduce((s, i) => s + i.total, 0);
+  const tax = Math.round(subtotal * taxRate) / 100;
+  const grandTotal = Math.round((subtotal + tax) * 100) / 100;
+
+  const txn = {
+    id: genId(),
+    timestamp: new Date().toISOString(),
+    roomNumber: roomNumber,
+    guestName: guestName,
+    bookingId: bookingId,
+    items: items,
+    itemCount: items.reduce((s, i) => s + i.qty, 0),
+    subtotal: subtotal,
+    tax: tax,
+    grandTotal: grandTotal,
+    paidBy: paidBy,
+    staffName: staffName
+  };
+  posTransactions.push(txn);
+  save('posTransactions', posTransactions);
+
+  posCart.forEach(ci => {
+    const it = inventory.find(x => x.id === ci.inventoryId);
+    if (it) {
+      const oldQty = it.quantity;
+      it.quantity = Math.max(0, (parseInt(it.quantity) || 0) - ci.qty);
+      it.status = inventoryStatus(it);
+      logInv('POS Sale', it.itemName, 'quantity', oldQty, it.quantity);
+    }
+  });
+  save('inventory', inventory);
+
+  if (paidBy === 'Room Charge' && posSelectedBooking) {
+    const b = bookings.find(x => x.id === posSelectedBooking);
+    if (b) {
+      if (!b.services) b.services = [];
+      items.forEach(item => {
+        b.services.push({name: item.name, unitPrice: item.unitPrice, quantity: item.qty, icon: '◈', serviceCategory: 'POS'});
+      });
+      save('bookings', bookings);
+    }
+  }
+
+  logAudit('POS Sale', 'POS', txn.id, 'Sale ' + fmt$(grandTotal) + ' (' + paidBy + ')' + (guestName ? ' - ' + guestName + ' Room ' + roomNumber : ''));
+
+  toast('Sale completed - ' + fmt$(grandTotal));
+  posCart = [];
+  renderPOS();
+};
+
 // ===== LOGIN / LOGOUT =====
 window.doLogin = function() {
   const username = document.getElementById('loginUsername').value.trim().toLowerCase();
@@ -2595,8 +2819,8 @@ window.toggleDarkMode = function() {
 function applyRBAC() {
   const allowedPages = {
     'Admin': null,
-    'Manager': ['dashboard','rooms','bookings','guests','housekeeping','maintenance','services','invoices','reports','inventory','guestportal'],
-    'Receptionist': ['dashboard','rooms','bookings','guests','services','invoices','guestportal'],
+    'Manager': ['dashboard','rooms','bookings','guests','housekeeping','maintenance','services','invoices','reports','inventory','guestportal','pos'],
+    'Receptionist': ['dashboard','rooms','bookings','guests','services','invoices','guestportal','pos'],
     'Housekeeper': ['dashboard','housekeeping','maintenance'],
   };
   const allowed = allowedPages[currentRole];
