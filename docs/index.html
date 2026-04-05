@@ -536,11 +536,16 @@
       <div class="nav-section">F&amp;B</div>
       <a data-page="restaurant"><span class="icon">◈</span> Restaurant</a>
       <a data-page="minimart"><span class="icon">◈</span> Mini-Mart</a>
+      <a data-page="menuitems"><span class="icon">◈</span> Menu Items</a>
+      <a data-page="storeitems"><span class="icon">◈</span> Store Items</a>
+      <a data-page="orderhistory"><span class="icon">◈</span> Order History</a>
       <div class="nav-section">Guest</div>
       <a data-page="guestportal"><span class="icon">◎</span> Guest Portal</a>
       <div class="nav-section">Admin</div>
       <a data-page="dashboard"><span class="icon">◫</span> Reports</a>
       <a data-page="accounts"><span class="icon">◔</span> Accounts</a>
+      <a data-page="alltransactions"><span class="icon">◈</span> Transactions</a>
+      <a data-page="messagelog"><span class="icon">◈</span> Messages</a>
       <a data-page="auditlog"><span class="icon">◳</span> Audit Log</a>
       <a data-page="settings"><span class="icon">⊕</span> Settings</a>
     </nav>
@@ -568,6 +573,11 @@
       <div class="page" id="page-pos"></div>
       <div class="page" id="page-restaurant"></div>
       <div class="page" id="page-minimart"></div>
+      <div class="page" id="page-menuitems"></div>
+      <div class="page" id="page-storeitems"></div>
+      <div class="page" id="page-orderhistory"></div>
+      <div class="page" id="page-alltransactions"></div>
+      <div class="page" id="page-messagelog"></div>
     </div>
   </div>
   <div class="modal-overlay" id="modalOverlay"><div class="modal" id="modalContent"></div></div>
@@ -1051,7 +1061,7 @@ if(bookings.length === 0) {
 }
 
 // ===== NAVIGATION =====
-const pageTitles = {dashboard:'Dashboard',rooms:'Room Management',bookings:'Bookings',guests:'Guest Directory',housekeeping:'Housekeeping',maintenance:'Maintenance Tickets',services:'Services',invoices:'Invoices',guestportal:'Guest Portal',reports:'Reports & Analytics',accounts:'User Accounts',auditlog:'Audit Log',settings:'Settings & Regulations',inventory:'Inventory Management',pos:'Point of Sale',restaurant:'Restaurant',minimart:'Mini-Mart'};
+const pageTitles = {dashboard:'Dashboard',rooms:'Room Management',bookings:'Bookings',guests:'Guest Directory',housekeeping:'Housekeeping',maintenance:'Maintenance Tickets',services:'Services',invoices:'Invoices',guestportal:'Guest Portal',reports:'Reports & Analytics',accounts:'User Accounts',auditlog:'Audit Log',settings:'Settings & Regulations',inventory:'Inventory Management',pos:'Point of Sale',restaurant:'Restaurant',minimart:'Mini-Mart',menuitems:'Menu Items',storeitems:'Store Items',orderhistory:'Order History',alltransactions:'Transactions',messagelog:'Messages'};
 
 document.querySelectorAll('#sidebarNav a[data-page]').forEach(link => {
   link.addEventListener('click', () => {
@@ -1074,7 +1084,7 @@ function closeModal() { document.getElementById('modalOverlay').classList.remove
 document.getElementById('modalOverlay').addEventListener('click', e => { if(e.target === document.getElementById('modalOverlay')) closeModal(); });
 
 function renderPage(page) {
-  const fn = {dashboard:renderDashboard,rooms:renderRooms,bookings:renderBookings,guests:renderGuests,housekeeping:renderHousekeeping,maintenance:renderMaintenance,services:renderServices,invoices:renderInvoices,guestportal:renderGuestPortal,reports:renderReports,accounts:renderAccounts,auditlog:renderAuditLog,settings:renderSettings,inventory:renderInventory,pos:renderPOS,restaurant:renderRestaurant,minimart:renderMiniMart};
+  const fn = {dashboard:renderDashboard,rooms:renderRooms,bookings:renderBookings,guests:renderGuests,housekeeping:renderHousekeeping,maintenance:renderMaintenance,services:renderServices,invoices:renderInvoices,guestportal:renderGuestPortal,reports:renderReports,accounts:renderAccounts,auditlog:renderAuditLog,settings:renderSettings,inventory:renderInventory,pos:renderPOS,restaurant:renderRestaurant,minimart:renderMiniMart,menuitems:renderMenuItems,storeitems:renderStoreItems,orderhistory:renderOrderHistory,alltransactions:renderAllTransactions,messagelog:renderMessageLog};
   if(fn[page]) fn[page]();
   updateBadges();
 }
@@ -1909,7 +1919,8 @@ let serviceGrid;
 function renderServices() {
   document.getElementById('page-services').innerHTML = `
     <div class="card"><div class="card-header"><h2>Hotel Services</h2></div><div class="card-body"><div id="serviceGrid"></div></div></div>
-    <div class="card"><div class="card-header"><h2>◆ Service Requests</h2></div><div class="card-body"><div id="svcReqGrid"></div></div></div>`;
+    <div class="card"><div class="card-header"><h2>◆ Service Requests</h2></div><div class="card-body"><div id="svcReqGrid"></div></div></div>
+    <div class="card"><div class="card-header"><h2>◆ Services Change Log</h2></div><div class="card-body"><div id="serviceLogGrid"></div></div></div>`;
   const svcCols = [
     {field:'icon',label:'Icon',editable:true,width:'55px',filterable:false},
     {field:'name',label:'Service Name',editable:true,filterable:true},
@@ -1971,11 +1982,13 @@ function renderServices() {
       renderServices();
     },
     actions: [
+      {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditServiceRequest(id)},
       {name:'progress',label:'▶ Start',cls:'btn-warning',condition:r=>r.status==='Pending',handler:id=>{const sr=serviceRequests.find(x=>x.id===id);if(sr){sr.status='In Progress';sr.inProgressTime=new Date().toISOString();save('serviceRequests',serviceRequests);logAudit('Update','Service Request',sr.id,'Started: '+sr.serviceName);toast('Service request in progress');renderServices();}}},
       {name:'complete',label:'✓ Done',cls:'btn-success',condition:r=>r.status==='In Progress',handler:id=>{const sr=serviceRequests.find(x=>x.id===id);if(sr){sr.status='Completed';sr.completedTime=new Date().toISOString();const charge=parseFloat(sr.charge)||0;if(charge>0){const bk=sr.bookingId?bookings.find(x=>x.bookingId===sr.bookingId||x.id===sr.bookingId):null;processSale({source:'Service',paymentMethod:bk?'Room Charge':'Cash',roomNumber:sr.roomNumber||'',guestName:sr.guestName||'',bookingId:sr.bookingId||'',items:[{itemId:sr.id,name:sr.serviceName,qty:1,unitPrice:charge}],taxRate:parseFloat(settings.serviceTax||settings.taxRate)||7});}save('serviceRequests',serviceRequests);logAudit('Update','Service Request',sr.id,'Completed: '+sr.serviceName);toast('Service request completed');renderServices();}}},
       {name:'delete',label:'✕',cls:'btn-danger',handler:id=>{if(!confirm('Delete?'))return;serviceRequests=serviceRequests.filter(x=>x.id!==id);save('serviceRequests',serviceRequests);logAudit('Delete','Service Request',id,'Deleted');renderServices();toast('Request deleted');}},
     ]
   });
+  renderChangeLog('serviceLogGrid', 'Service');
 }
 window.showAddServiceRequest = function() {
   const checkedIn = bookings.filter(b => b.arrivalStatus === 'Checked-in');
@@ -2006,6 +2019,33 @@ window.addServiceRequest = function() {
   save('serviceRequests', serviceRequests);
   logAudit('Add', 'Service Request', sr.id, 'Request: ' + serviceName + ' for Room ' + b.roomNumber);
   closeModal(); renderServices(); toast('Service request created');
+};
+window.showEditServiceRequest = function(id) {
+  const sr = serviceRequests.find(x=>x.id===id); if(!sr) return;
+  const staffList = accounts.filter(a => a.status === 'active').map(a => a.name);
+  openModal(`<div class="modal-header"><h2>Edit Service Request</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body">
+    <div class="form-row"><div class="form-group"><label>Room</label><input type="text" class="form-control" value="${sr.roomNumber||''}" readonly style="background:#f0f4fb;"></div><div class="form-group"><label>Guest</label><input type="text" class="form-control" value="${sr.guestName||''}" readonly style="background:#f0f4fb;"></div></div>
+    <div class="form-group"><label>Service</label><input type="text" class="form-control" id="eSrService" value="${sr.serviceName||''}"></div>
+    <div class="form-row"><div class="form-group"><label>Assigned To</label><select class="form-control" id="eSrAssign"><option value="">Unassigned</option>${staffList.map(n=>'<option'+(n===sr.assignedTo?' selected':'')+'>'+n+'</option>').join('')}</select></div><div class="form-group"><label>Scheduled Time</label><input type="datetime-local" class="form-control" id="eSrTime" value="${sr.scheduledTime||''}"></div></div>
+    <div class="form-row"><div class="form-group"><label>Status</label><select class="form-control" id="eSrStatus">${['Pending','In Progress','Completed','Cancelled'].map(s=>'<option'+(s===sr.status?' selected':'')+'>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Charge ($)</label><input type="number" class="form-control" id="eSrCharge" step="0.01" value="${sr.charge||0}"></div></div>
+    <div class="form-group"><label>Notes</label><textarea class="form-control" id="eSrNotes" rows="2">${sr.notes||''}</textarea></div></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateServiceRequest('${sr.id}')">Save</button></div>`);
+};
+window.updateServiceRequest = function(id) {
+  const sr = serviceRequests.find(x=>x.id===id); if(!sr) return;
+  sr.serviceName = document.getElementById('eSrService').value||sr.serviceName;
+  sr.assignedTo = document.getElementById('eSrAssign').value;
+  sr.scheduledTime = document.getElementById('eSrTime').value;
+  const oldStatus = sr.status;
+  sr.status = document.getElementById('eSrStatus').value;
+  sr.charge = parseFloat(document.getElementById('eSrCharge').value)||0;
+  sr.notes = document.getElementById('eSrNotes').value;
+  if (sr.status === 'In Progress' && oldStatus !== 'In Progress') sr.inProgressTime = new Date().toISOString();
+  if (sr.status === 'Completed' && oldStatus !== 'Completed') sr.completedTime = new Date().toISOString();
+  save('serviceRequests',serviceRequests);
+  logAudit('Update','Service Request',sr.id,'Updated service request: '+sr.serviceName);
+  closeModal(); renderServices(); toast('Service request updated');
 };
 window.showAddService = function() {
   openModal(`<div class="modal-header"><h2>Add Service</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
@@ -3131,6 +3171,18 @@ function renderPOS() {
       {field:'staffName',label:'Staff',filterable:true,width:'80px'},
     ],
     data: [...posTransactions].reverse(),
+    showSearch: true,
+    emptyMessage: '◈ No POS transactions yet',
+    actions: [
+      {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditPosTxn(id)},
+      {name:'delete',label:'✕',cls:'btn-danger',handler:id=>{
+        if(!confirm('Delete this POS transaction?')) return;
+        const t=posTransactions.find(x=>x.id===id);
+        posTransactions=posTransactions.filter(x=>x.id!==id); save('posTransactions',posTransactions);
+        logAudit('Delete','POS Transaction',id,'Deleted POS transaction '+(t?t.transactionId:id));
+        renderPOS(); toast('POS transaction deleted');
+      }},
+    ]
   });
 }
 
@@ -3199,6 +3251,29 @@ window.posCheckout = function(paidBy) {
   toast('Sale completed - ' + fmt$(txn.grandTotal) + ' (' + txn.transactionId + ')');
   posCart = [];
   renderPOS();
+};
+
+window.showEditPosTxn = function(id) {
+  const t = posTransactions.find(x=>x.id===id); if(!t) return;
+  openModal(`<div class="modal-header"><h2>Edit POS Transaction</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body">
+    <div class="form-row"><div class="form-group"><label>Transaction ID</label><input type="text" class="form-control" value="${t.transactionId||''}" readonly style="background:#f0f4fb;"></div><div class="form-group"><label>Room Number</label><input type="text" class="form-control" id="ePtRoom" value="${t.roomNumber||''}"></div></div>
+    <div class="form-row"><div class="form-group"><label>Guest Name</label><input type="text" class="form-control" id="ePtGuest" value="${t.guestName||''}"></div><div class="form-group"><label>Paid By</label><select class="form-control" id="ePtPaid">${['Cash','Credit Card','Room Charge'].map(s=>'<option'+(s===t.paidBy?' selected':'')+'>'+s+'</option>').join('')}</select></div></div>
+    <div class="form-group"><label>Staff</label><input type="text" class="form-control" id="ePtStaff" value="${t.staffName||''}"></div>
+    <div style="margin-top:0.75rem;"><p style="font-weight:600;font-size:0.85rem;">Items (${t.itemCount||0}):</p>
+    ${(t.items||[]).map(i=>'<p style="font-size:0.85rem;">• '+i.name+' x'+i.qty+' — '+fmt$(i.unitPrice*i.qty)+'</p>').join('')}
+    <p style="font-weight:700;margin-top:0.5rem;">Grand Total: ${fmt$(t.grandTotal)}</p></div></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updatePosTxn('${t.id}')">Save</button></div>`);
+};
+window.updatePosTxn = function(id) {
+  const t = posTransactions.find(x=>x.id===id); if(!t) return;
+  t.roomNumber = document.getElementById('ePtRoom').value;
+  t.guestName = document.getElementById('ePtGuest').value;
+  t.paidBy = document.getElementById('ePtPaid').value;
+  t.staffName = document.getElementById('ePtStaff').value;
+  save('posTransactions',posTransactions);
+  logAudit('Update','POS Transaction',t.transactionId||id,'Updated POS transaction');
+  closeModal(); renderPOS(); toast('POS transaction updated');
 };
 
 // ===== RESTAURANT MODULE =====
@@ -3584,6 +3659,355 @@ window.martCheckout = function(paidBy) {
   renderMiniMart();
 };
 
+// ===== MENU ITEMS CRUD =====
+function renderMenuItems() {
+  document.getElementById('page-menuitems').innerHTML = `
+    <div class="card"><div class="card-header"><h2>Menu Items</h2></div><div class="card-body"><div id="menuItemsGrid"></div></div></div>
+    <div class="card"><div class="card-header"><h2>◆ Menu Items Change Log</h2></div><div class="card-body"><div id="menuItemsLogGrid"></div></div></div>`;
+  new XGrid('menuItemsGrid', {
+    columns: [
+      {field:'name',label:'Name',editable:true,filterable:true},
+      {field:'category',label:'Category',editable:true,editType:'select',editOptions:['Appetizer','Main Course','Dessert','Beverage','Side'],filterable:true},
+      {field:'price',label:'Price',format:v=>fmt$(v),editable:true,editType:'number',width:'80px'},
+      {field:'available',label:'Available',format:v=>v?'<span class="status status-active">Yes</span>':'<span class="status status-maintenance">No</span>',editable:true,editType:'select',editOptions:['true','false'],filterable:true,width:'90px'},
+      {field:'description',label:'Description',editable:true,filterable:true},
+    ],
+    data: menuItems,
+    showSearch: true,
+    emptyMessage: '🍽️ No menu items yet. Add your first menu item!',
+    onAdd: () => showAddMenuItem(), addLabel: 'Add Menu Item',
+    onEdit: (row, field, val) => {
+      const m = menuItems.find(x=>x.id===row.id); if(!m) return;
+      if(field==='available') val = val==='true'||val===true;
+      if(field==='price') val = parseFloat(val)||0;
+      m[field]=val; save('menuItems',menuItems);
+      logAudit('Update','Menu Item',m.id,'Updated '+field+' on '+m.name);
+      toast(m.name+' updated');
+    },
+    actions: [
+      {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditMenuItem(id)},
+      {name:'delete',label:'✕',cls:'btn-danger',handler:id=>{
+        if(!confirm('Delete this menu item?')) return;
+        const m=menuItems.find(x=>x.id===id);
+        menuItems=menuItems.filter(x=>x.id!==id); save('menuItems',menuItems);
+        logAudit('Delete','Menu Item',id,'Deleted '+(m?m.name:id));
+        renderMenuItems(); toast('Menu item deleted');
+      }},
+    ]
+  });
+  renderChangeLog('menuItemsLogGrid', 'Menu Item');
+}
+window.showAddMenuItem = function() {
+  openModal(`<div class="modal-header"><h2>Add Menu Item</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body">
+    <div class="form-group"><label>Name</label><input type="text" class="form-control" id="mMiName" placeholder="e.g. Pad Thai"></div>
+    <div class="form-row"><div class="form-group"><label>Category</label><select class="form-control" id="mMiCat"><option>Appetizer</option><option>Main Course</option><option>Dessert</option><option>Beverage</option><option>Side</option></select></div><div class="form-group"><label>Price ($)</label><input type="number" class="form-control" id="mMiPrice" step="0.01" placeholder="0.00"></div></div>
+    <div class="form-group"><label>Available</label><select class="form-control" id="mMiAvail"><option value="true">Yes</option><option value="false">No</option></select></div>
+    <div class="form-group"><label>Description</label><textarea class="form-control" id="mMiDesc" rows="2" placeholder="Item description..."></textarea></div></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addMenuItem()">Add Item</button></div>`);
+};
+window.addMenuItem = function() {
+  const name = document.getElementById('mMiName').value.trim(); if(!name) { toast('Enter item name'); return; }
+  const m = {id:genId(),name:name,category:document.getElementById('mMiCat').value,price:parseFloat(document.getElementById('mMiPrice').value)||0,available:document.getElementById('mMiAvail').value==='true',description:document.getElementById('mMiDesc').value};
+  menuItems.push(m); save('menuItems',menuItems);
+  logAudit('Add','Menu Item',m.id,'Added menu item: '+name);
+  closeModal(); renderMenuItems(); toast(name+' added');
+};
+window.showEditMenuItem = function(id) {
+  const m = menuItems.find(x=>x.id===id); if(!m) return;
+  openModal(`<div class="modal-header"><h2>Edit Menu Item</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body">
+    <div class="form-group"><label>Name</label><input type="text" class="form-control" id="eMiName" value="${m.name}"></div>
+    <div class="form-row"><div class="form-group"><label>Category</label><select class="form-control" id="eMiCat">${['Appetizer','Main Course','Dessert','Beverage','Side'].map(c=>'<option'+(c===m.category?' selected':'')+'>'+c+'</option>').join('')}</select></div><div class="form-group"><label>Price ($)</label><input type="number" class="form-control" id="eMiPrice" step="0.01" value="${m.price}"></div></div>
+    <div class="form-group"><label>Available</label><select class="form-control" id="eMiAvail"><option value="true" ${m.available?'selected':''}>Yes</option><option value="false" ${!m.available?'selected':''}>No</option></select></div>
+    <div class="form-group"><label>Description</label><textarea class="form-control" id="eMiDesc" rows="2">${m.description||''}</textarea></div></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateMenuItem('${m.id}')">Save</button></div>`);
+};
+window.updateMenuItem = function(id) {
+  const m = menuItems.find(x=>x.id===id); if(!m) return;
+  m.name = document.getElementById('eMiName').value||m.name;
+  m.category = document.getElementById('eMiCat').value;
+  m.price = parseFloat(document.getElementById('eMiPrice').value)||0;
+  m.available = document.getElementById('eMiAvail').value==='true';
+  m.description = document.getElementById('eMiDesc').value;
+  save('menuItems',menuItems); logAudit('Update','Menu Item',m.id,'Updated menu item: '+m.name);
+  closeModal(); renderMenuItems(); toast(m.name+' updated');
+};
+
+// ===== STORE ITEMS CRUD =====
+function renderStoreItems() {
+  document.getElementById('page-storeitems').innerHTML = `
+    <div class="card"><div class="card-header"><h2>Store Items</h2></div><div class="card-body"><div id="storeItemsGrid"></div></div></div>
+    <div class="card"><div class="card-header"><h2>◆ Store Items Change Log</h2></div><div class="card-body"><div id="storeItemsLogGrid"></div></div></div>`;
+  new XGrid('storeItemsGrid', {
+    columns: [
+      {field:'name',label:'Name',editable:true,filterable:true},
+      {field:'category',label:'Category',editable:true,editType:'select',editOptions:['Drinks','Snacks','Toiletries','Souvenirs','Sundries'],filterable:true},
+      {field:'price',label:'Price',format:v=>fmt$(v),editable:true,editType:'number',width:'80px'},
+      {field:'stock',label:'Stock',editable:true,editType:'number',width:'70px',filterable:true},
+      {field:'barcode',label:'Barcode',editable:true,filterable:true,width:'100px'},
+    ],
+    data: storeItems,
+    showSearch: true,
+    emptyMessage: '🛒 No store items yet. Add your first item!',
+    rowClass: function(row) {
+      if ((parseInt(row.stock)||0) <= 0) return 'row-danger';
+      if ((parseInt(row.stock)||0) <= 5) return 'row-warning';
+      return '';
+    },
+    onAdd: () => showAddStoreItem(), addLabel: 'Add Store Item',
+    onEdit: (row, field, val) => {
+      const s = storeItems.find(x=>x.id===row.id); if(!s) return;
+      if(field==='price') val = parseFloat(val)||0;
+      if(field==='stock') val = parseInt(val)||0;
+      s[field]=val; save('storeItems',storeItems);
+      logAudit('Update','Store Item',s.id,'Updated '+field+' on '+s.name);
+      toast(s.name+' updated');
+    },
+    actions: [
+      {name:'plus',label:'+1',cls:'btn-success',handler:id=>{ const s=storeItems.find(x=>x.id===id); if(s){s.stock=(parseInt(s.stock)||0)+1;save('storeItems',storeItems);logAudit('Update','Store Item',s.id,'+1 stock on '+s.name);renderStoreItems();} }},
+      {name:'minus',label:'-1',cls:'btn-warning',handler:id=>{ const s=storeItems.find(x=>x.id===id); if(s){s.stock=Math.max(0,(parseInt(s.stock)||0)-1);save('storeItems',storeItems);logAudit('Update','Store Item',s.id,'-1 stock on '+s.name);renderStoreItems();} }},
+      {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditStoreItem(id)},
+      {name:'delete',label:'✕',cls:'btn-danger',handler:id=>{
+        if(!confirm('Delete this store item?')) return;
+        const s=storeItems.find(x=>x.id===id);
+        storeItems=storeItems.filter(x=>x.id!==id); save('storeItems',storeItems);
+        logAudit('Delete','Store Item',id,'Deleted '+(s?s.name:id));
+        renderStoreItems(); toast('Store item deleted');
+      }},
+    ]
+  });
+  renderChangeLog('storeItemsLogGrid', 'Store Item');
+}
+window.showAddStoreItem = function() {
+  openModal(`<div class="modal-header"><h2>Add Store Item</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body">
+    <div class="form-group"><label>Name</label><input type="text" class="form-control" id="mSiName" placeholder="e.g. Water Bottle"></div>
+    <div class="form-row"><div class="form-group"><label>Category</label><select class="form-control" id="mSiCat"><option>Drinks</option><option>Snacks</option><option>Toiletries</option><option>Souvenirs</option><option>Sundries</option></select></div><div class="form-group"><label>Price ($)</label><input type="number" class="form-control" id="mSiPrice" step="0.01" placeholder="0.00"></div></div>
+    <div class="form-row"><div class="form-group"><label>Stock</label><input type="number" class="form-control" id="mSiStock" value="0" min="0"></div><div class="form-group"><label>Barcode</label><input type="text" class="form-control" id="mSiBarcode" placeholder="e.g. STR-016"></div></div></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addStoreItem()">Add Item</button></div>`);
+};
+window.addStoreItem = function() {
+  const name = document.getElementById('mSiName').value.trim(); if(!name) { toast('Enter item name'); return; }
+  const s = {id:genId(),name:name,category:document.getElementById('mSiCat').value,price:parseFloat(document.getElementById('mSiPrice').value)||0,stock:parseInt(document.getElementById('mSiStock').value)||0,barcode:document.getElementById('mSiBarcode').value,image:'📦'};
+  storeItems.push(s); save('storeItems',storeItems);
+  logAudit('Add','Store Item',s.id,'Added store item: '+name);
+  closeModal(); renderStoreItems(); toast(name+' added');
+};
+window.showEditStoreItem = function(id) {
+  const s = storeItems.find(x=>x.id===id); if(!s) return;
+  openModal(`<div class="modal-header"><h2>Edit Store Item</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body">
+    <div class="form-group"><label>Name</label><input type="text" class="form-control" id="eSiName" value="${s.name}"></div>
+    <div class="form-row"><div class="form-group"><label>Category</label><select class="form-control" id="eSiCat">${['Drinks','Snacks','Toiletries','Souvenirs','Sundries'].map(c=>'<option'+(c===s.category?' selected':'')+'>'+c+'</option>').join('')}</select></div><div class="form-group"><label>Price ($)</label><input type="number" class="form-control" id="eSiPrice" step="0.01" value="${s.price}"></div></div>
+    <div class="form-row"><div class="form-group"><label>Stock</label><input type="number" class="form-control" id="eSiStock" value="${s.stock}" min="0"></div><div class="form-group"><label>Barcode</label><input type="text" class="form-control" id="eSiBarcode" value="${s.barcode||''}"></div></div></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateStoreItem('${s.id}')">Save</button></div>`);
+};
+window.updateStoreItem = function(id) {
+  const s = storeItems.find(x=>x.id===id); if(!s) return;
+  s.name = document.getElementById('eSiName').value||s.name;
+  s.category = document.getElementById('eSiCat').value;
+  s.price = parseFloat(document.getElementById('eSiPrice').value)||0;
+  s.stock = parseInt(document.getElementById('eSiStock').value)||0;
+  s.barcode = document.getElementById('eSiBarcode').value;
+  save('storeItems',storeItems); logAudit('Update','Store Item',s.id,'Updated store item: '+s.name);
+  closeModal(); renderStoreItems(); toast(s.name+' updated');
+};
+
+// ===== ORDER HISTORY =====
+function renderOrderHistory() {
+  document.getElementById('page-orderhistory').innerHTML = `
+    <div class="card"><div class="card-header"><h2>Order History</h2></div><div class="card-body"><div id="orderHistoryGrid"></div></div></div>
+    <div class="card"><div class="card-header"><h2>◆ Order History Change Log</h2></div><div class="card-body"><div id="orderHistoryLogGrid"></div></div></div>`;
+  new XGrid('orderHistoryGrid', {
+    columns: [
+      {field:'orderNumber',label:'Order #',filterable:true,width:'95px'},
+      {field:'timestamp',label:'Time',format:v=>{try{const d=new Date(v);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}catch(e){return v;}},filterable:true,width:'130px'},
+      {field:'roomNumber',label:'Room',filterable:true,width:'65px'},
+      {field:'guestName',label:'Guest',filterable:true},
+      {field:'tableNumber',label:'Table/Room',filterable:true,width:'100px'},
+      {field:'items',label:'Items',format:(v)=>Array.isArray(v)?v.reduce((s,i)=>s+i.qty,0):'0',width:'60px'},
+      {field:'grandTotal',label:'Total',format:v=>'<strong>'+fmt$(v)+'</strong>',width:'85px'},
+      {field:'status',label:'Status',format:v=>{const cls=v==='Paid'?'active':v==='Served'?'ready':v==='New'?'new':v==='Preparing'?'preparing':'pending';return '<span class="status status-'+cls+'">'+v+'</span>';},editable:true,editType:'select',editOptions:['New','Preparing','Ready','Served','Paid'],filterable:true,width:'95px'},
+      {field:'paidBy',label:'Payment',editable:true,editType:'select',editOptions:['Pending','Cash','Credit Card','Room Charge'],filterable:true,width:'100px'},
+    ],
+    data: [...restaurantOrders].reverse(),
+    showSearch: true,
+    emptyMessage: '🍽️ No restaurant orders yet',
+    onEdit: (row, field, val) => {
+      const o = restaurantOrders.find(x=>x.id===row.id); if(!o) return;
+      o[field]=val; save('restaurantOrders',restaurantOrders);
+      logAudit('Update','Restaurant Order',o.orderNumber,'Updated '+field+' to '+val);
+      toast('Order '+o.orderNumber+' updated'); renderOrderHistory();
+    },
+    actions: [
+      {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditOrder(id)},
+      {name:'delete',label:'✕',cls:'btn-danger',handler:id=>{
+        if(!confirm('Delete this order?')) return;
+        const o=restaurantOrders.find(x=>x.id===id);
+        restaurantOrders=restaurantOrders.filter(x=>x.id!==id); save('restaurantOrders',restaurantOrders);
+        logAudit('Delete','Restaurant Order',id,'Deleted order '+(o?o.orderNumber:id));
+        renderOrderHistory(); toast('Order deleted');
+      }},
+    ]
+  });
+  renderChangeLog('orderHistoryLogGrid', 'Restaurant Order');
+}
+window.showEditOrder = function(id) {
+  const o = restaurantOrders.find(x=>x.id===id); if(!o) return;
+  openModal(`<div class="modal-header"><h2>Edit Order ${o.orderNumber}</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body">
+    <div class="form-row"><div class="form-group"><label>Order Number</label><input type="text" class="form-control" value="${o.orderNumber}" readonly style="background:#f0f4fb;"></div><div class="form-group"><label>Room Number</label><input type="text" class="form-control" id="eOrdRoom" value="${o.roomNumber||''}"></div></div>
+    <div class="form-row"><div class="form-group"><label>Guest Name</label><input type="text" class="form-control" id="eOrdGuest" value="${o.guestName||''}"></div><div class="form-group"><label>Table Number</label><input type="text" class="form-control" id="eOrdTable" value="${o.tableNumber||''}"></div></div>
+    <div class="form-row"><div class="form-group"><label>Status</label><select class="form-control" id="eOrdStatus">${['New','Preparing','Ready','Served','Paid'].map(s=>'<option'+(s===o.status?' selected':'')+'>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Payment</label><select class="form-control" id="eOrdPaid">${['Pending','Cash','Credit Card','Room Charge'].map(s=>'<option'+(s===o.paidBy?' selected':'')+'>'+s+'</option>').join('')}</select></div></div>
+    <div class="form-group"><label>Notes</label><textarea class="form-control" id="eOrdNotes" rows="2">${o.notes||''}</textarea></div>
+    <div style="margin-top:0.75rem;"><p style="font-weight:600;font-size:0.85rem;">Items:</p>
+    ${(o.items||[]).map(i=>'<p style="font-size:0.85rem;">• '+i.name+' x'+i.qty+' — '+fmt$(i.unitPrice*i.qty)+'</p>').join('')}
+    <p style="font-weight:700;margin-top:0.5rem;">Grand Total: ${fmt$(o.grandTotal)}</p></div></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateOrder('${o.id}')">Save</button></div>`);
+};
+window.updateOrder = function(id) {
+  const o = restaurantOrders.find(x=>x.id===id); if(!o) return;
+  o.roomNumber = document.getElementById('eOrdRoom').value;
+  o.guestName = document.getElementById('eOrdGuest').value;
+  o.tableNumber = document.getElementById('eOrdTable').value;
+  o.status = document.getElementById('eOrdStatus').value;
+  o.paidBy = document.getElementById('eOrdPaid').value;
+  o.notes = document.getElementById('eOrdNotes').value;
+  save('restaurantOrders',restaurantOrders);
+  logAudit('Update','Restaurant Order',o.orderNumber,'Updated order via edit form');
+  closeModal(); renderOrderHistory(); toast('Order '+o.orderNumber+' updated');
+};
+
+// ===== ALL TRANSACTIONS =====
+function renderAllTransactions() {
+  document.getElementById('page-alltransactions').innerHTML = `
+    <div class="card"><div class="card-header"><h2>All Transactions</h2></div><div class="card-body"><div id="allTxnGrid"></div></div></div>
+    <div class="card"><div class="card-header"><h2>◆ Transactions Change Log</h2></div><div class="card-body"><div id="allTxnLogGrid"></div></div></div>`;
+  new XGrid('allTxnGrid', {
+    columns: [
+      {field:'transactionId',label:'TXN ID',filterable:true,width:'100px'},
+      {field:'timestamp',label:'Timestamp',format:v=>{try{const d=new Date(v);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}catch(e){return v;}},filterable:true,width:'130px'},
+      {field:'source',label:'Source',filterable:true,width:'90px'},
+      {field:'roomNumber',label:'Room',filterable:true,width:'65px'},
+      {field:'guestName',label:'Guest',filterable:true},
+      {field:'items',label:'Items',format:(v)=>Array.isArray(v)?v.reduce((s,i)=>s+i.qty,0):'0',width:'60px'},
+      {field:'subtotal',label:'Subtotal',format:v=>fmt$(v),width:'85px'},
+      {field:'taxAmount',label:'Tax',format:v=>fmt$(v),width:'70px'},
+      {field:'grandTotal',label:'Total',format:v=>'<strong>'+fmt$(v)+'</strong>',width:'85px'},
+      {field:'paymentMethod',label:'Payment',filterable:true,width:'100px'},
+      {field:'status',label:'Status',format:v=>{const cls=v==='Completed'?'active':v==='Refunded'?'maintenance':'pending';return '<span class="status status-'+cls+'">'+v+'</span>';},filterable:true,width:'95px'},
+      {field:'staffName',label:'Staff',filterable:true,width:'80px'},
+      {field:'invoiceId',label:'Invoice #',filterable:true,width:'90px'},
+    ],
+    data: [...transactions].reverse(),
+    showSearch: true,
+    emptyMessage: '◈ No transactions yet',
+    rowClass: function(row) {
+      if (row.status === 'Completed') return 'row-status-success';
+      if (row.status === 'Refunded') return 'row-status-error';
+      return '';
+    },
+    actions: [
+      {name:'refund',label:'Refund',cls:'btn-danger',condition:r=>r.status==='Completed',handler:id=>{
+        const t=transactions.find(x=>x.id===id);
+        if(t) refundTransaction(t.transactionId);
+        renderAllTransactions();
+      }},
+      {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditTransaction(id)},
+      {name:'delete',label:'✕',cls:'btn-danger',handler:id=>{
+        if(!confirm('Delete this transaction?')) return;
+        const t=transactions.find(x=>x.id===id);
+        transactions=transactions.filter(x=>x.id!==id); save('transactions',transactions);
+        logAudit('Delete','Transaction',id,'Deleted transaction '+(t?t.transactionId:id));
+        renderAllTransactions(); toast('Transaction deleted');
+      }},
+    ]
+  });
+  renderChangeLog('allTxnLogGrid', 'Transaction');
+}
+window.showEditTransaction = function(id) {
+  const t = transactions.find(x=>x.id===id); if(!t) return;
+  openModal(`<div class="modal-header"><h2>Edit Transaction ${t.transactionId}</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body">
+    <div class="form-row"><div class="form-group"><label>Transaction ID</label><input type="text" class="form-control" value="${t.transactionId}" readonly style="background:#f0f4fb;"></div><div class="form-group"><label>Source</label><input type="text" class="form-control" value="${t.source||''}" readonly style="background:#f0f4fb;"></div></div>
+    <div class="form-row"><div class="form-group"><label>Room Number</label><input type="text" class="form-control" id="eTxnRoom" value="${t.roomNumber||''}"></div><div class="form-group"><label>Guest Name</label><input type="text" class="form-control" id="eTxnGuest" value="${t.guestName||''}"></div></div>
+    <div class="form-row"><div class="form-group"><label>Payment Method</label><select class="form-control" id="eTxnPay">${['Cash','Credit Card','Room Charge'].map(s=>'<option'+(s===t.paymentMethod?' selected':'')+'>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Status</label><select class="form-control" id="eTxnStatus">${['Completed','Refunded','Pending'].map(s=>'<option'+(s===t.status?' selected':'')+'>'+s+'</option>').join('')}</select></div></div>
+    <div style="margin-top:0.75rem;"><p style="font-weight:600;font-size:0.85rem;">Items:</p>
+    ${(t.items||[]).map(i=>'<p style="font-size:0.85rem;">• '+i.name+' x'+i.qty+' — '+fmt$(i.unitPrice*i.qty)+'</p>').join('')}
+    <p style="font-weight:700;margin-top:0.5rem;">Grand Total: ${fmt$(t.grandTotal)}</p></div></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateTransaction('${t.id}')">Save</button></div>`);
+};
+window.updateTransaction = function(id) {
+  const t = transactions.find(x=>x.id===id); if(!t) return;
+  t.roomNumber = document.getElementById('eTxnRoom').value;
+  t.guestName = document.getElementById('eTxnGuest').value;
+  t.paymentMethod = document.getElementById('eTxnPay').value;
+  t.status = document.getElementById('eTxnStatus').value;
+  save('transactions',transactions);
+  logAudit('Update','Transaction',t.transactionId,'Updated transaction via edit form');
+  closeModal(); renderAllTransactions(); toast('Transaction '+t.transactionId+' updated');
+};
+
+// ===== MESSAGE LOG =====
+function renderMessageLog() {
+  document.getElementById('page-messagelog').innerHTML = `
+    <div class="card"><div class="card-header"><h2>Messages</h2></div><div class="card-body"><div id="messageLogGrid"></div></div></div>
+    <div class="card"><div class="card-header"><h2>◆ Messages Change Log</h2></div><div class="card-body"><div id="messageLogChangeGrid"></div></div></div>`;
+  new XGrid('messageLogGrid', {
+    columns: [
+      {field:'sentAt',label:'Timestamp',format:v=>{try{const d=new Date(v);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}catch(e){return v;}},filterable:true,width:'130px'},
+      {field:'bookingId',label:'Booking #',filterable:true,width:'95px'},
+      {field:'guestName',label:'Guest',filterable:true},
+      {field:'type',label:'Type',filterable:true,width:'90px',format:v=>{const cls=v==='Welcome'?'active':v==='Invoice'?'info':'pending';return '<span class="status status-'+cls+'">'+v+'</span>';}},
+      {field:'message',label:'Message',filterable:true},
+      {field:'channel',label:'Channel',filterable:true,width:'85px'},
+    ],
+    data: [...messages].reverse(),
+    showSearch: true,
+    emptyMessage: '📨 No messages yet. Messages will appear here.',
+    onAdd: () => showAddMessage(), addLabel: 'Send Message',
+    actions: [
+      {name:'delete',label:'✕',cls:'btn-danger',handler:id=>{
+        if(!confirm('Delete this message?')) return;
+        const m=messages.find(x=>x.id===id);
+        messages=messages.filter(x=>x.id!==id); save('messages',messages);
+        logAudit('Delete','Message',id,'Deleted message to '+(m?m.guestName:''));
+        renderMessageLog(); toast('Message deleted');
+      }},
+    ]
+  });
+  renderChangeLog('messageLogChangeGrid', 'Message');
+}
+window.showAddMessage = function() {
+  const checkedIn = bookings.filter(b => b.arrivalStatus === 'Checked-in');
+  openModal(`<div class="modal-header"><h2>Send Message</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+    <div class="modal-body">
+    <div class="form-group"><label>Booking / Guest</label><select class="form-control" id="mMsgBooking"><option value="">-- Select --</option>${checkedIn.map(b=>'<option value="'+b.bookingId+'">'+b.guestName+' (Room '+b.roomNumber+' · '+b.bookingId+')</option>').join('')}<option value="custom">Custom Recipient</option></select></div>
+    <div class="form-row"><div class="form-group"><label>Guest Name</label><input type="text" class="form-control" id="mMsgGuest" placeholder="Guest name"></div><div class="form-group"><label>Type</label><select class="form-control" id="mMsgType"><option>Welcome</option><option>Invoice</option><option>Reminder</option><option>Notification</option></select></div></div>
+    <div class="form-group"><label>Channel</label><select class="form-control" id="mMsgChannel"><option>Email</option><option>SMS</option><option>WhatsApp</option><option>In-App</option></select></div>
+    <div class="form-group"><label>Message</label><textarea class="form-control" id="mMsgText" rows="3" placeholder="Enter message..."></textarea></div></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addMessage()">Send Message</button></div>`);
+  document.getElementById('mMsgBooking').addEventListener('change', function() {
+    const bkId = this.value;
+    if (bkId && bkId !== 'custom') {
+      const b = bookings.find(x => x.bookingId === bkId);
+      if (b) document.getElementById('mMsgGuest').value = b.guestName;
+    }
+  });
+};
+window.addMessage = function() {
+  const guestName = document.getElementById('mMsgGuest').value.trim();
+  const msg = document.getElementById('mMsgText').value.trim();
+  if (!msg) { toast('Enter a message'); return; }
+  if (!guestName) { toast('Enter guest name'); return; }
+  const bkId = document.getElementById('mMsgBooking').value;
+  const m = {id:genId(),bookingId:bkId!=='custom'?bkId:'',guestName:guestName,type:document.getElementById('mMsgType').value,message:msg,sentAt:new Date().toISOString(),channel:document.getElementById('mMsgChannel').value};
+  messages.push(m); save('messages',messages);
+  logAudit('Add','Message',m.id,'Sent '+m.type+' message to '+guestName+' via '+m.channel);
+  closeModal(); renderMessageLog(); toast('Message sent to '+guestName);
+};
+
 // ===== LOGIN / LOGOUT =====
 window.doLogin = function() {
   const username = document.getElementById('loginUsername').value.trim().toLowerCase();
@@ -3648,7 +4072,7 @@ window.toggleDarkMode = function() {
 function applyRBAC() {
   const allowedPages = {
     'Admin': null,
-    'Manager': ['dashboard','rooms','bookings','guests','housekeeping','maintenance','services','invoices','reports','inventory','guestportal','pos','restaurant','minimart'],
+    'Manager': ['dashboard','rooms','bookings','guests','housekeeping','maintenance','services','invoices','reports','inventory','guestportal','pos','restaurant','minimart','menuitems','storeitems','orderhistory'],
     'Receptionist': ['dashboard','rooms','bookings','guests','services','invoices','guestportal','pos','restaurant','minimart'],
     'Housekeeper': ['dashboard','housekeeping','maintenance'],
   };
@@ -3836,9 +4260,12 @@ const _fabPageMap = {
   invoices: function() { if(window.showAddInvoice) showAddInvoice(); },
   accounts: function() { if(window.showAddAccount) showAddAccount(); },
   maintenance: function() { if(window.showAddTicket) showAddTicket(); },
+  menuitems: function() { if(window.showAddMenuItem) showAddMenuItem(); },
+  storeitems: function() { if(window.showAddStoreItem) showAddStoreItem(); },
+  messagelog: function() { if(window.showAddMessage) showAddMessage(); },
   housekeeping: null,
 };
-const _fabHiddenPages = ['dashboard', 'settings', 'auditlog', 'reports', 'pos', 'restaurant', 'minimart', 'guestportal'];
+const _fabHiddenPages = ['dashboard', 'settings', 'auditlog', 'reports', 'pos', 'restaurant', 'minimart', 'guestportal', 'orderhistory', 'alltransactions'];
 
 function updateFAB(page) {
   const fab = document.getElementById('fabBtn');
