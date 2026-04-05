@@ -2343,7 +2343,7 @@ function renderSettings() {
       <h3 style="margin:1.5rem 0 1rem;font-size:1rem;">Regulations</h3>
       <div class="form-row"><div class="form-group"><label>Max Guests Per Room</label><input type="number" class="form-control" id="sMaxG" value="${s.maxGuests}"></div><div class="form-group"><label>Surcharge Rate (%)</label><input type="number" class="form-control" id="sSur" value="${s.surcharge}"></div></div>
       <div class="form-row"><div class="form-group"><label>Check-in Time</label><input type="time" class="form-control" id="sIn" value="${s.checkinTime}"></div><div class="form-group"><label>Check-out Time</label><input type="time" class="form-control" id="sOut" value="${s.checkoutTime}"></div></div>
-      <div style="margin-top:1rem;display:flex;gap:0.75rem;"><button class="btn btn-primary" onclick="saveSettings()">Save Settings</button><button class="btn btn-danger" onclick="resetAll()">Reset All Data</button></div>
+      <div style="margin-top:1rem;"><button class="btn btn-primary" style="width:100%;justify-content:center;padding:0.75rem;" onclick="saveSettings()">SAVE SETTINGS</button></div>
     </div></div>
     <div class="card"><div class="card-header"><h2>⚙️ System Configuration</h2></div><div class="card-body">
       <h3 style="margin-bottom:1rem;font-size:1rem;">Room Rates & Pricing</h3>
@@ -2352,12 +2352,27 @@ function renderSettings() {
       <div class="form-row"><div class="form-group"><label>Peak Season Start</label><input type="date" class="form-control" id="sPeakStart" value="${s.peakStart||'2026-06-01'}"></div><div class="form-group"><label>Peak Season End</label><input type="date" class="form-control" id="sPeakEnd" value="${s.peakEnd||'2026-08-31'}"></div></div>
       <div style="margin-top:1rem;"><button class="btn btn-primary" onclick="saveSystemConfig()">Save Configuration</button></div>
     </div></div>
-    <div class="card"><div class="card-header"><h2>🗄️ Database Management</h2></div><div class="card-body">
-      <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
-        <button class="btn btn-primary" onclick="exportAllCSV()">📥 Export All (CSV ZIP)</button>
-        <button class="btn btn-outline" onclick="document.getElementById('importFileInput').click()">📤 Import Data</button>
+    <div class="card"><div class="card-header"><h2>◆ Backup & Restore</h2></div><div class="card-body">
+      <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:1rem;">Export all data as a ZIP file containing CSV files for each table plus a full backup for restore.</p>
+      <div style="display:flex;flex-direction:column;gap:0.75rem;">
+        <button class="btn btn-primary" style="width:100%;justify-content:center;padding:0.75rem;" onclick="exportAllCSV()">◆ EXPORT ALL DATA (CSV ZIP)</button>
+        <button class="btn btn-outline" style="width:100%;justify-content:center;padding:0.75rem;" onclick="document.getElementById('importFileInput').click()">◆ IMPORT DATA (ZIP / JSON)</button>
         <input type="file" id="importFileInput" accept=".json,.zip" style="display:none" onchange="importData(this)">
-        <button class="btn btn-danger" onclick="clearAllData()">🗑️ Clear All Data</button>
+      </div>
+      <div style="border-top:1px solid var(--border);margin-top:1.25rem;padding-top:1.25rem;">
+        <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:0.75rem;">Export individual tables as CSV:</p>
+        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
+          ${[{k:'rooms',l:'Rooms'},{k:'guests',l:'Guests'},{k:'bookings',l:'Bookings'},{k:'services',l:'Services'},{k:'invoices',l:'Invoices'},{k:'inventory',l:'Inventory'},{k:'menuItems',l:'Menu'},{k:'storeItems',l:'Store'},{k:'tickets',l:'Tickets'},{k:'accounts',l:'Accounts'},{k:'transactions',l:'Transactions'},{k:'posTransactions',l:'POS Sales'},{k:'restaurantOrders',l:'Restaurant'},{k:'serviceRequests',l:'Svc Requests'},{k:'messages',l:'Messages'}].map(t=>
+            '<button class="btn btn-sm btn-outline" onclick="exportSingleCSV(\''+t.k+'\',\''+t.l+'\')">'+t.l+'</button>'
+          ).join('')}
+        </div>
+      </div>
+    </div></div>
+    <div class="card"><div class="card-header"><h2>◆ Danger Zone</h2></div><div class="card-body">
+      <p style="font-size:0.85rem;color:var(--danger);margin-bottom:0.75rem;">These actions cannot be undone.</p>
+      <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+        <button class="btn btn-danger" onclick="clearAllData()">CLEAR ALL DATA</button>
+        <button class="btn btn-danger" onclick="resetAll()">FACTORY RESET</button>
       </div>
     </div></div>
     <div class="card"><div class="card-header"><h2>📀 Database Info</h2></div><div class="card-body">
@@ -2465,6 +2480,27 @@ function buildZip(files) {
   bufs.forEach(b => { result.set(b, pos); pos += b.length; });
   return result;
 }
+window.exportSingleCSV = function(key, label) {
+  const dataMap = {rooms,guests,bookings,services,invoices,inventory,menuItems,storeItems,tickets,accounts,transactions,posTransactions,restaurantOrders,serviceRequests,messages};
+  const data = dataMap[key];
+  if (!data || !data.length) { toast('No data to export'); return; }
+  const rows = data.map(r => {
+    const copy = {...r};
+    if (copy.services && Array.isArray(copy.services)) copy.services = JSON.stringify(copy.services);
+    if (copy.items && Array.isArray(copy.items)) copy.items = JSON.stringify(copy.items);
+    if (copy.password) delete copy.password;
+    return copy;
+  });
+  const csv = tableToCsv(rows);
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = label.toLowerCase().replace(/\s+/g,'_') + '_' + today() + '.csv';
+  a.style.display = 'none';
+  document.body.appendChild(a); a.click();
+  setTimeout(()=>document.body.removeChild(a), 500);
+  logAudit('Export','Settings','Exported ' + label + ' CSV');
+  toast(label + ' CSV exported');
+};
 window.exportAllCSV = function() {
   const tables = [
     {name:'rooms.csv', data:rooms},
