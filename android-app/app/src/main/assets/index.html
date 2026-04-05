@@ -392,6 +392,60 @@
     .mart-card .mc-stock { font-size: 0.65rem; color: var(--text-light); margin-top: 0.15rem; }
     body.dark-mode .mart-card:hover, body.dark-mode .mart-card:active { background: #1a3a5e; }
     @media (max-width: 480px) { .mart-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    /* === Bottom Navigation Bar === */
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 56px; background: linear-gradient(135deg, #1a3a5c 0%, #1a73e8 100%); display: flex; z-index: 150; box-shadow: 0 -2px 10px rgba(0,0,0,0.15); }
+    .bottom-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: rgba(255,255,255,0.55); cursor: pointer; font-size: 0.68rem; gap: 2px; transition: color 0.15s ease; text-decoration: none; -webkit-tap-highlight-color: rgba(0,0,0,0.1); touch-action: manipulation; user-select: none; border: none; background: none; font-family: inherit; }
+    .bottom-nav-item:hover { color: rgba(255,255,255,0.85); }
+    .bottom-nav-item.active { color: #fff; }
+    .bottom-nav-item .bnav-icon { font-size: 1.25rem; line-height: 1; }
+    .bottom-nav-item .bnav-label { font-weight: 600; letter-spacing: 0.02em; }
+    body.dark-mode .bottom-nav { background: linear-gradient(135deg, #0a1628 0%, #16213e 100%); }
+
+    /* === Floating Action Button === */
+    .fab { position: fixed; bottom: 76px; right: 16px; width: 56px; height: 56px; border-radius: 28px; background: linear-gradient(135deg, #1a73e8 0%, #1557b0 100%); color: #fff; font-size: 1.5rem; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(26,115,232,0.4), 0 2px 4px rgba(0,0,0,0.15); z-index: 140; display: flex; align-items: center; justify-content: center; transition: transform 0.2s ease, box-shadow 0.2s ease; -webkit-tap-highlight-color: rgba(0,0,0,0.1); touch-action: manipulation; }
+    .fab:hover { transform: scale(1.08); box-shadow: 0 6px 16px rgba(26,115,232,0.5), 0 3px 6px rgba(0,0,0,0.2); }
+    .fab:active { transform: scale(0.95); }
+    .fab.hidden { display: none; }
+
+    /* === Low stock / status row classes === */
+    .row-danger { background: #fce4ec !important; }
+    .row-warning { background: #fff3e0 !important; }
+    body.dark-mode .row-danger { background: rgba(198, 40, 40, 0.15) !important; }
+    body.dark-mode .row-warning { background: rgba(230, 81, 0, 0.15) !important; }
+
+    /* === Status color system (Material Design 3) === */
+    .status-success, .status-paid, .status-available, .status-in-stock, .status-clean, .status-active, .status-checked-in, .status-completed { background: #e8f5e9; color: #2e7d32; }
+    .status-warn, .status-pending, .status-low, .status-reserved, .status-expected, .status-in-progress, .status-preparing { background: #fff3e0; color: #e65100; }
+    .status-error, .status-unpaid, .status-out-of-stock, .status-out-of-service, .status-dirty, .status-overdue, .status-maintenance { background: #fce4ec; color: #c62828; }
+    .status-info, .status-occupied, .status-checked-out, .status-ready, .status-new { background: #e3f2fd; color: #1565c0; }
+
+    /* === XGrid master search bar === */
+    .xgrid-search-bar { width: 100%; padding: 0.55rem 0.85rem; border: 1.5px solid var(--border); border-radius: 10px; font-size: 0.9rem; font-family: inherit; margin-bottom: 0.5rem; background: var(--card-bg); color: var(--text); transition: border-color 0.15s ease, box-shadow 0.15s ease; }
+    .xgrid-search-bar:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,115,232,0.15); }
+    .xgrid-search-bar::placeholder { color: var(--text-light); }
+    body.dark-mode .xgrid-search-bar { background: #1a1a2e; color: #e0e0e0; border-color: #2a2a4a; }
+    body.dark-mode .xgrid-search-bar:focus { border-color: var(--primary); background: #1e2a4a; }
+
+    /* === Card-style rows (mobile-friendly) === */
+    .xgrid tbody tr { transition: box-shadow 0.15s ease, transform 0.1s ease; }
+    .xgrid tbody tr:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .xgrid tbody tr td:first-child { border-left: 3px solid transparent; }
+    .xgrid tbody tr.row-status-success td:first-child { border-left-color: #2e7d32; }
+    .xgrid tbody tr.row-status-warning td:first-child { border-left-color: #e65100; }
+    .xgrid tbody tr.row-status-error td:first-child { border-left-color: #c62828; }
+    .xgrid tbody tr.row-status-info td:first-child { border-left-color: #1565c0; }
+
+    /* === Enhanced empty state === */
+    .xgrid-empty { text-align: center; padding: 2.5rem 1rem; }
+    .xgrid-empty .empty-icon { font-size: 2.5rem; margin-bottom: 0.5rem; display: block; opacity: 0.6; }
+    .xgrid-empty .empty-text { font-size: 0.95rem; color: var(--text-light); line-height: 1.5; }
+
+    /* Update content padding for bottom nav */
+    .content { padding-bottom: 66px; }
+
+    /* Update toast position for bottom nav */
+    .toast { bottom: 70px; }
   </style>
 </head>
 <body>
@@ -652,6 +706,10 @@ class XGrid {
     this.addLabel = opts.addLabel || 'Add Row';
     this.actions = opts.actions || [];
     this.hideExport = opts.hideExport || false;
+    this.rowClass = opts.rowClass || null;
+    this.emptyMessage = opts.emptyMessage || null;
+    this.showSearch = opts.showSearch || false;
+    this.masterSearch = '';
     this.sortCol = null; this.sortDir = 'asc';
     this.filters = {};
     this.pageSize = 15; this.page = 0;
@@ -662,6 +720,10 @@ class XGrid {
   setData(data) { this.data = data; this.page = 0; this.render(); }
   getFiltered() {
     let d = [...this.data];
+    if (this.masterSearch) {
+      const ms = this.masterSearch.toLowerCase();
+      d = d.filter(r => this.columns.some(col => !col.hidden && String(r[col.field] ?? '').toLowerCase().includes(ms)));
+    }
     for (const [col, val] of Object.entries(this.filters)) {
       if (val) { const v = val.toLowerCase(); d = d.filter(r => String(r[col] ?? '').toLowerCase().includes(v)); }
     }
@@ -696,12 +758,17 @@ class XGrid {
     setTimeout(() => document.body.removeChild(a), 500);
     toast('CSV download started');
   }
+  setMasterSearch(val) { this.masterSearch = val; this.page = 0; this.render(); }
   render() {
     const paged = this.getPaged(); const filtered = this.getFiltered();
     const totalPages = this.getTotalPages();
     const addBtn = this.onAdd ? `<button class="btn btn-sm btn-primary" onclick="window._xg_${this.container.id}.onAdd()">+ ${this.addLabel || 'Add Row'}</button>` : '';
     const exportBtn = this.hideExport ? '' : `<button class="btn btn-sm btn-outline" onclick="window._xg_${this.container.id}.exportCSV()">📥 Export CSV</button>`;
-    let html = `<div class="xgrid-toolbar">
+    let html = '';
+    if (this.showSearch) {
+      html += `<input type="text" class="xgrid-search-bar" placeholder="🔍 Search across all columns..." value="${this.masterSearch.replace(/"/g,'&quot;')}" oninput="window._xg_${this.container.id}.setMasterSearch(this.value)">`;
+    }
+    html += `<div class="xgrid-toolbar">
       ${addBtn}
       ${exportBtn}
       <span class="xg-info">${filtered.length} row${filtered.length !== 1 ? 's' : ''}</span>
@@ -719,12 +786,14 @@ class XGrid {
     html += `</tr></thead><tbody>`;
     if (paged.length === 0) {
       const colSpan = this.columns.filter(c => !c.hidden).length + (this.actions.length ? 1 : 0);
-      html += `<tr><td colspan="${colSpan}"><div class="empty-state"><div class="empty-icon">📄</div><p>No data</p></div></td></tr>`;
+      const emMsg = this.emptyMessage || '📄 No data';
+      html += `<tr><td colspan="${colSpan}"><div class="xgrid-empty"><span class="empty-icon">${emMsg.split(' ')[0]}</span><span class="empty-text">${emMsg.substring(emMsg.indexOf(' ') + 1)}</span></div></td></tr>`;
     } else {
       paged.forEach((row, ri) => {
         const globalIdx = this.page * this.pageSize + ri;
         const sel = this.selectedRow === globalIdx ? ' selected' : '';
-        html += `<tr class="${sel}" onclick="window._xg_${this.container.id}.selectRow(${globalIdx})">`;
+        const rc = this.rowClass ? (' ' + (this.rowClass(row) || '')) : '';
+        html += `<tr class="${sel}${rc}" onclick="window._xg_${this.container.id}.selectRow(${globalIdx})">`;
         this.columns.forEach((col, ci) => {
           if (col.hidden) return;
           const val = row[col.field] ?? '';
@@ -1295,6 +1364,15 @@ function renderBookings() {
       {field:'arrivalStatus',label:'Status',format:v=>{const cls=v==='Checked-in'?'checked-in':v==='Expected'?'pending':v==='Checked-out'?'checked-out':'maintenance';return `<span class="status status-${cls}">${v}</span>`;},editable:true,editType:'select',editOptions:['Expected','Checked-in','Checked-out','No-show'],filterable:true},
     ],
     data: sorted,
+    showSearch: true,
+    emptyMessage: '▤ No bookings yet. Create your first booking!',
+    rowClass: function(row) {
+      if (row.arrivalStatus === 'Checked-in') return 'row-status-success';
+      if (row.arrivalStatus === 'Expected') return 'row-status-warning';
+      if (row.arrivalStatus === 'Checked-out') return 'row-status-info';
+      if (row.arrivalStatus === 'No-show') return 'row-status-error';
+      return '';
+    },
     hideExport: currentRole === 'Receptionist' || currentRole === 'Housekeeper',
     onAdd: () => showAddBooking(), addLabel: 'Add New Booking',
     onEdit: (row, field, val) => { const b = bookings.find(x=>x.id===row.id); if(b){const old=b[field];b[field]=val;save('bookings',bookings);logBk('Edited',b.bookingId,b.guestName,field+': '+old+' → '+val);logAudit('Update','Booking','Updated '+field+' on '+b.bookingId);toast('Booking updated');} },
@@ -1771,6 +1849,8 @@ function renderGuests() {
       {field:'visits',label:'Visits',editable:true,editType:'number',width:'65px'},
     ],
     data: guests,
+    showSearch: true,
+    emptyMessage: '◉ No guests registered yet. Add your first guest!',
     hideExport: currentRole === 'Receptionist' || currentRole === 'Housekeeper',
     onAdd: () => showAddGuest(),
     onEdit: (row, field, val) => { const g = guests.find(x=>x.id===row.id); if(g){if(field==='blacklist')val=parseInt(val)||0;g[field]=val;save('guests',guests);logAudit('Update','Guest','Updated '+g.firstName+' '+g.lastName);toast('Guest updated');} },
@@ -1842,6 +1922,8 @@ function renderServices() {
   serviceGrid = new XGrid('serviceGrid', {
     columns: svcCols,
     data: services,
+    showSearch: true,
+    emptyMessage: '◈ No services configured yet',
     hideExport: currentRole === 'Receptionist' || currentRole === 'Housekeeper',
     onAdd: () => showAddService(),
     onEdit: (row, field, val) => { const s = services.find(x=>x.id===row.id); if(s){s[field]=val;save('services',services);logAudit('Update','Service','Updated '+s.name);toast(s.name+' updated');} },
@@ -1863,6 +1945,7 @@ function renderServices() {
       {field:'notes',label:'Notes',editable:true,filterable:true},
     ],
     data: [...serviceRequests].reverse(),
+    emptyMessage: '◈ No service requests yet',
     onAdd: () => showAddServiceRequest(), addLabel: 'Add Request',
     onEdit: (row, field, val, oldVal) => {
       const sr = serviceRequests.find(x=>x.id===row.id); if(!sr) return;
@@ -1975,6 +2058,14 @@ function renderInvoices() {
       {field:'currency',label:'Currency',editable:true,editType:'select',editOptions:['THB','USD','EUR'],width:'75px'},
     ],
     data: invoices,
+    showSearch: true,
+    emptyMessage: '▥ No invoices generated yet',
+    rowClass: function(row) {
+      if (row.paymentStatus === 'Fully Paid') return 'row-status-success';
+      if (row.paymentStatus === 'Partially Paid') return 'row-status-warning';
+      if (row.paymentStatus === 'Unpaid') return 'row-status-error';
+      return '';
+    },
     hideExport: currentRole === 'Receptionist' || currentRole === 'Housekeeper',
     onAdd: () => showAddInvoice(),
     onEdit: (row, field, val) => {
@@ -2115,6 +2206,8 @@ function renderAccounts() {
       {field:'status',label:'Status',format:v=>`<span class="status status-${v}">${v==='active'?'Active':'Inactive'}</span>`,editable:true,editType:'select',editOptions:['active','inactive'],filterable:true},
     ],
     data: accounts,
+    showSearch: true,
+    emptyMessage: '◔ No user accounts yet',
     onAdd: () => showAddAccount(),
     onEdit: (row, field, val) => { const a = accounts.find(x=>x.id===row.id); if(a){a[field]=val;save('accounts',accounts);logAudit('Update','Account','Updated account '+a.name);toast('Account updated');} },
     actions: [
@@ -2172,6 +2265,8 @@ function renderAuditLog() {
       {field:'details',label:'Details',filterable:true},
     ],
     data: [...auditLog].reverse(),
+    showSearch: true,
+    emptyMessage: '◳ No audit entries yet. Actions will be logged here.',
   });
 }
 window.clearAuditLog = function() {
@@ -2542,6 +2637,14 @@ function renderMaintenance() {
       {field:'notes',label:'Notes',editable:true,filterable:true},
     ],
     data: tickets,
+    showSearch: true,
+    emptyMessage: '⚡ No maintenance tickets. Everything is running smoothly!',
+    rowClass: function(row) {
+      if (row.status === 'Open') return 'row-status-error';
+      if (row.status === 'In Progress') return 'row-status-warning';
+      if (row.status === 'Resolved') return 'row-status-success';
+      return '';
+    },
     onAdd: () => showAddTicket(),
     onEdit: (row, field, val, oldVal) => {
       const t = tickets.find(x=>x.id===row.id); if(!t) return;
@@ -2667,6 +2770,13 @@ function renderInventory() {
       {field:'status',label:'Status',format:(v,r)=>{const st=inventoryStatus(r);const cls=st==='In Stock'?'active':st==='Low'?'pending':'maintenance';return `<span class="status status-${cls}">${st}</span>`;},filterable:true},
     ],
     data: inventory,
+    showSearch: true,
+    emptyMessage: '⬡ Your inventory is empty. Add your first item!',
+    rowClass: function(row) {
+      if ((parseInt(row.quantity) || 0) <= 0) return 'row-danger';
+      if ((parseInt(row.quantity) || 0) <= (parseInt(row.reorderLevel) || 0)) return 'row-warning';
+      return '';
+    },
     onAdd: () => showAddInventory(), addLabel: 'Add New Item',
     onEdit: (row, field, val) => {
       const it = inventory.find(x=>x.id===row.id); if(!it) return;
@@ -3001,6 +3111,8 @@ function renderPOS() {
       {field:'invoiceId',label:'Invoice #',filterable:true,width:'90px'},
     ],
     data: [...transactions].reverse(),
+    showSearch: true,
+    emptyMessage: '◈ No transactions yet',
     actions: [
       {name:'refund',label:'Refund',cls:'btn-danger',condition:r=>r.status==='Completed',handler:id=>refundTransaction(transactions.find(t=>t.id===id)?transactions.find(t=>t.id===id).transactionId:id)},
     ]
@@ -3176,6 +3288,7 @@ function renderRestaurant() {
       {field:'paidBy',label:'Payment',filterable:true,width:'95px'},
     ],
     data: [...activeOrders].reverse(),
+    emptyMessage: '🍽️ No active orders',
     actions: [
       {name:'preparing',label:'🔥 Prep',cls:'btn-warning',condition:r=>r.status==='New',handler:id=>restUpdateStatus(id,'Preparing')},
       {name:'ready',label:'✅ Ready',cls:'btn-success',condition:r=>r.status==='Preparing',handler:id=>restUpdateStatus(id,'Ready')},
@@ -3403,6 +3516,7 @@ function renderMiniMart() {
       {field:'staffName',label:'Staff',filterable:true,width:'80px'},
     ],
     data: [...martTxns].reverse(),
+    emptyMessage: '🛒 No mini-mart transactions yet',
   });
 }
 
@@ -3664,6 +3778,113 @@ function openCsel(sel) {
 document.addEventListener('mousedown', function(e) { const sel = e.target.closest('select.form-control'); if(sel){e.preventDefault();e.stopPropagation();openCsel(sel);} }, true);
 document.addEventListener('touchstart', function(e) { const sel = e.target.closest('select.form-control'); if(sel){e.preventDefault();e.stopPropagation();openCsel(sel);} }, {capture:true, passive:false});
 document.addEventListener('focus', function(e) { if(e.target && e.target.matches && e.target.matches('select.form-control')){e.target.blur();openCsel(e.target);} }, true);
+
+// ===== BOTTOM NAVIGATION BAR =====
+(function createBottomNav() {
+  const nav = document.createElement('div');
+  nav.className = 'bottom-nav';
+  nav.id = 'bottomNav';
+  nav.innerHTML = `
+    <button class="bottom-nav-item active" data-bnav="dashboard" onclick="bnav('dashboard')"><span class="bnav-icon">⊞</span><span class="bnav-label">Dashboard</span></button>
+    <button class="bottom-nav-item" data-bnav="pos" onclick="bnav('pos')"><span class="bnav-icon">◈</span><span class="bnav-label">POS</span></button>
+    <button class="bottom-nav-item" data-bnav="bookings" onclick="bnav('bookings')"><span class="bnav-icon">▤</span><span class="bnav-label">Bookings</span></button>
+    <button class="bottom-nav-item" data-bnav="menu" onclick="toggleSidebarFromNav()"><span class="bnav-icon">☰</span><span class="bnav-label">Menu</span></button>
+  `;
+  document.body.appendChild(nav);
+})();
+
+window.bnav = function(page) {
+  const link = document.querySelector('#sidebarNav a[data-page="' + page + '"]');
+  if (link) link.click();
+};
+
+window.toggleSidebarFromNav = function() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('open');
+};
+
+function updateBottomNavActive(page) {
+  const items = document.querySelectorAll('.bottom-nav-item');
+  items.forEach(item => {
+    const p = item.getAttribute('data-bnav');
+    item.classList.toggle('active', p === page);
+  });
+}
+
+function showBottomNav(show) {
+  const nav = document.getElementById('bottomNav');
+  if (nav) nav.style.display = show ? 'flex' : 'none';
+}
+
+// ===== FLOATING ACTION BUTTON =====
+(function createFAB() {
+  const fab = document.createElement('button');
+  fab.className = 'fab hidden';
+  fab.id = 'fabBtn';
+  fab.innerHTML = '+';
+  fab.onclick = function() { if (window._fabAction) window._fabAction(); };
+  document.body.appendChild(fab);
+})();
+
+window._fabAction = null;
+const _fabPageMap = {
+  rooms: function() { if(window.showAddRoom) showAddRoom(); },
+  bookings: function() { if(window.showAddBooking) showAddBooking(); },
+  guests: function() { if(window.showAddGuest) showAddGuest(); },
+  inventory: function() { if(window.showAddInventory) showAddInventory(); },
+  services: function() { if(window.showAddService) showAddService(); },
+  invoices: function() { if(window.showAddInvoice) showAddInvoice(); },
+  accounts: function() { if(window.showAddAccount) showAddAccount(); },
+  maintenance: function() { if(window.showAddTicket) showAddTicket(); },
+  housekeeping: null,
+};
+const _fabHiddenPages = ['dashboard', 'settings', 'auditlog', 'reports', 'pos', 'restaurant', 'minimart', 'guestportal'];
+
+function updateFAB(page) {
+  const fab = document.getElementById('fabBtn');
+  if (!fab) return;
+  if (_fabHiddenPages.includes(page) || !_fabPageMap[page]) {
+    fab.classList.add('hidden');
+    window._fabAction = null;
+  } else {
+    fab.classList.remove('hidden');
+    window._fabAction = _fabPageMap[page];
+  }
+}
+
+// ===== HOOK INTO PAGE NAVIGATION =====
+const _origSidebarLinks = document.querySelectorAll('#sidebarNav a[data-page]');
+_origSidebarLinks.forEach(link => {
+  link.addEventListener('click', function() {
+    const page = link.dataset.page;
+    updateBottomNavActive(page);
+    updateFAB(page);
+  });
+});
+
+// Hide bottom nav and FAB when login/setup overlay is visible
+const _loginObs = new MutationObserver(function() {
+  const loginVis = !document.getElementById('loginOverlay').classList.contains('hidden');
+  const setupVis = !document.getElementById('setupOverlay').classList.contains('hidden');
+  const hide = loginVis || setupVis;
+  showBottomNav(!hide);
+  const fab = document.getElementById('fabBtn');
+  if (fab && hide) fab.classList.add('hidden');
+});
+_loginObs.observe(document.getElementById('loginOverlay'), {attributes:true, attributeFilter:['class']});
+_loginObs.observe(document.getElementById('setupOverlay'), {attributes:true, attributeFilter:['class']});
+
+(function initBottomNavState() {
+  const loginVis = !document.getElementById('loginOverlay').classList.contains('hidden');
+  const setupVis = !document.getElementById('setupOverlay').classList.contains('hidden');
+  showBottomNav(!(loginVis || setupVis));
+  const activePage = document.querySelector('#sidebarNav a.active');
+  if (activePage) {
+    const page = activePage.dataset.page;
+    updateBottomNavActive(page);
+    updateFAB(page);
+  }
+})();
 </script>
 </body>
 </html>
