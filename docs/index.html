@@ -29,9 +29,9 @@
     .sidebar-header .logo { font-size: 2rem; }
     .sidebar-header h2 { font-size: 1.15rem; font-weight: 700; line-height: 1.3; }
     .sidebar-header span { font-size: 0.75rem; opacity: 0.6; display: block; }
-    .sidebar-nav { padding: 0.75rem 0; }
+    .sidebar-nav { padding: 0.75rem 0 5rem; }
     .sidebar-nav .nav-section { padding: 0.5rem 1.25rem 0.25rem; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.4; margin-top: 0.5rem; }
-    .sidebar-nav a { display: flex; align-items: center; gap: 0.75rem; padding: 0.85rem 1.25rem; color: #bdc3c7; text-decoration: none; font-size: 0.95rem; transition: all 0.15s ease; cursor: pointer; border-left: 3px solid transparent; }
+    .sidebar-nav a { display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem 1.25rem; color: #bdc3c7; text-decoration: none; font-size: 0.82rem; transition: all 0.15s ease; cursor: pointer; border-left: 3px solid transparent; }
     .sidebar-nav a:hover { background: rgba(255,255,255,0.08); color: #fff; border-left-color: rgba(255,255,255,0.3); }
     .sidebar-nav a.active { background: rgba(26,115,232,0.3); color: #fff; border-left-color: #fff; }
     .sidebar-nav a .icon { font-size: 1.1rem; width: 28px; text-align: center; opacity: 0.85; }
@@ -547,6 +547,7 @@
       <a data-page="alltransactions"><span class="icon">◈</span> Transactions</a>
       <a data-page="messagelog"><span class="icon">◈</span> Messages</a>
       <a data-page="auditlog"><span class="icon">◳</span> Audit Log</a>
+      <a data-page="dropdowns"><span class="icon">◈</span> Dropdowns</a>
       <a data-page="settings"><span class="icon">⊕</span> Settings</a>
     </nav>
   </aside>
@@ -578,6 +579,7 @@
       <div class="page" id="page-orderhistory"></div>
       <div class="page" id="page-alltransactions"></div>
       <div class="page" id="page-messagelog"></div>
+      <div class="page" id="page-dropdowns"></div>
     </div>
   </div>
   <div class="modal-overlay" id="modalOverlay"><div class="modal" id="modalContent"></div></div>
@@ -667,11 +669,27 @@ function deleteOne(key, id) {
 function genId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 5); }
 function getRoomTypes() { return (settings.roomTypes || 'Single,Double,Deluxe,Suite,Penthouse').split(',').map(s=>s.trim()).filter(Boolean); }
 function getBedConfigs() { return (settings.bedConfigs || 'King,Twin,Queen+Single').split(',').map(s=>s.trim()).filter(Boolean); }
+function getCurrencies() { return (settings.currencies || 'USD,EUR,GBP,THB').split(',').map(s=>s.trim()).filter(Boolean); }
+function getBookingSources() { return (settings.bookingSources || 'Direct,Booking.com,Expedia,Walk-in').split(',').map(s=>s.trim()).filter(Boolean); }
+function getArrivalStatuses() { return (settings.arrivalStatuses || 'Expected,Checked-in,Checked-out,No-show').split(',').map(s=>s.trim()).filter(Boolean); }
+function getPaymentMethods() { return (settings.paymentMethods || 'Credit Card,Cash,Bank Transfer,Room Charge').split(',').map(s=>s.trim()).filter(Boolean); }
+function getServiceCategories() { return (settings.serviceCategories || 'Room Service,Laundry,Airport Transfer,Mini-bar,Spa,Pool').split(',').map(s=>s.trim()).filter(Boolean); }
+function getInvoiceStatuses() { return (settings.invoiceStatuses || 'Unpaid,Partially Paid,Fully Paid').split(',').map(s=>s.trim()).filter(Boolean); }
+function getTicketPriorities() { return (settings.ticketPriorities || 'Low,Medium,High,Urgent').split(',').map(s=>s.trim()).filter(Boolean); }
+function getTicketStatuses() { return (settings.ticketStatuses || 'Open,In Progress,Resolved').split(',').map(s=>s.trim()).filter(Boolean); }
+function getInventoryCategories() { return (settings.inventoryCategories || 'Linen,Toiletries,F&B,Supplies').split(',').map(s=>s.trim()).filter(Boolean); }
+function getMenuCategories() { return (settings.menuCategories || 'Appetizer,Main Course,Dessert,Beverage,Side').split(',').map(s=>s.trim()).filter(Boolean); }
+function getStoreCategories() { return (settings.storeCategories || 'Drinks,Snacks,Toiletries,Souvenirs,Sundries').split(',').map(s=>s.trim()).filter(Boolean); }
+function getOrderStatuses() { return (settings.orderStatuses || 'New,Preparing,Ready,Served,Paid').split(',').map(s=>s.trim()).filter(Boolean); }
+function getPaymentTypes() { return (settings.paymentTypes || 'Pending,Cash,Credit Card,Room Charge').split(',').map(s=>s.trim()).filter(Boolean); }
+function getUserRoles() { return (settings.userRoles || 'Admin,Manager,Receptionist,Housekeeper').split(',').map(s=>s.trim()).filter(Boolean); }
+function getRequestStatuses() { return (settings.requestStatuses || 'Pending,In Progress,Completed,Cancelled').split(',').map(s=>s.trim()).filter(Boolean); }
 function selectOpts(arr, sel) { return arr.map(v=>`<option ${v===sel?'selected':''}>${v}</option>`).join(''); }
 function adminEditBtn(listName) { return currentRole==='Admin' ? ` <button class="btn btn-sm btn-outline" onclick="manageList('${listName}')" style="padding:0.2rem 0.5rem;font-size:0.7rem;min-height:auto;min-width:auto;">⊕</button>` : ''; }
 window.manageList = function(listName) {
-  const label = listName === 'roomTypes' ? 'Room Types' : 'Bed Configurations';
-  const defaults = listName === 'roomTypes' ? 'Single,Double,Deluxe,Suite,Penthouse' : 'King,Twin,Queen+Single,Double,King+Sofa';
+  const labelMap = {roomTypes:'Room Types',bedConfigs:'Bed Configurations',currencies:'Currencies',bookingSources:'Booking Sources',arrivalStatuses:'Arrival Statuses',paymentMethods:'Payment Methods',serviceCategories:'Service Categories',invoiceStatuses:'Invoice Statuses',ticketPriorities:'Ticket Priorities',ticketStatuses:'Ticket Statuses',inventoryCategories:'Inventory Categories',menuCategories:'Menu Categories',storeCategories:'Store Categories',orderStatuses:'Order Statuses',paymentTypes:'Payment Types',userRoles:'User Roles',requestStatuses:'Request Statuses'};
+  const label = labelMap[listName] || listName;
+  const defaults = defaultSettings[listName] || '';
   const items = (settings[listName] || defaults).split(',').map(s=>s.trim()).filter(Boolean);
   let html = `<div class="modal-header"><h2>Manage ${label}</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
@@ -696,7 +714,9 @@ window.saveList = function(listName) {
   save('settings', settings);
   logAudit('Update','Settings','Updated '+listName+': '+values.join(', '));
   closeModal();
-  toast((listName === 'roomTypes' ? 'Room Types' : 'Bed Configs') + ' updated');
+  const labelMap = {roomTypes:'Room Types',bedConfigs:'Bed Configurations',currencies:'Currencies',bookingSources:'Booking Sources',arrivalStatuses:'Arrival Statuses',paymentMethods:'Payment Methods',serviceCategories:'Service Categories',invoiceStatuses:'Invoice Statuses',ticketPriorities:'Ticket Priorities',ticketStatuses:'Ticket Statuses',inventoryCategories:'Inventory Categories',menuCategories:'Menu Categories',storeCategories:'Store Categories',orderStatuses:'Order Statuses',paymentTypes:'Payment Types',userRoles:'User Roles',requestStatuses:'Request Statuses'};
+  toast((labelMap[listName] || listName) + ' updated');
+  renderPage(document.querySelector('#sidebarNav a.active')?.dataset?.page || 'dashboard');
 };
 function fmt$(n) { return '$' + Number(n).toFixed(2); }
 function fmtDate(d) { if (!d) return ''; const dt = new Date(d + 'T00:00:00'); return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
@@ -713,6 +733,7 @@ class XGrid {
     this.onEdit = opts.onEdit || null;
     this.onDelete = opts.onDelete || null;
     this.onAdd = opts.onAdd || null;
+    this.onImport = opts.onImport || null;
     this.addLabel = opts.addLabel || 'Add Row';
     this.actions = opts.actions || [];
     this.hideExport = opts.hideExport || false;
@@ -768,12 +789,55 @@ class XGrid {
     setTimeout(() => document.body.removeChild(a), 500);
     toast('CSV download started');
   }
+  importCSV(input) {
+    const file = input.files[0]; if(!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        let text = e.target.result;
+        if (text.charCodeAt(0) === 0xFEFF) text = text.substring(1);
+        const lines = text.split('\n').filter(l => l.trim());
+        if (lines.length < 2) { toast('CSV file is empty'); return; }
+        const headers = this._parseCSVLine(lines[0]);
+        const rows = [];
+        for (let i = 1; i < lines.length; i++) {
+          const vals = this._parseCSVLine(lines[i]);
+          const obj = {};
+          headers.forEach((h, idx) => { obj[h] = vals[idx] || ''; });
+          if (!obj.id) obj.id = genId();
+          rows.push(obj);
+        }
+        if (this.onImport) this.onImport(rows);
+        toast(rows.length + ' rows imported');
+      } catch(err) { toast('Error reading CSV: ' + err.message); }
+    };
+    reader.readAsText(file);
+    input.value = '';
+  }
+  _parseCSVLine(line) {
+    const result = []; let current = ''; let inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (inQuotes) {
+        if (ch === '"' && line[i+1] === '"') { current += '"'; i++; }
+        else if (ch === '"') { inQuotes = false; }
+        else { current += ch; }
+      } else {
+        if (ch === '"') { inQuotes = true; }
+        else if (ch === ',') { result.push(current); current = ''; }
+        else { current += ch; }
+      }
+    }
+    result.push(current);
+    return result;
+  }
   setMasterSearch(val) { this.masterSearch = val; this.page = 0; this.render(); }
   render() {
     const paged = this.getPaged(); const filtered = this.getFiltered();
     const totalPages = this.getTotalPages();
     const addBtn = this.onAdd ? `<button class="btn btn-sm btn-primary" onclick="window._xg_${this.container.id}.onAdd()">+ ${this.addLabel || 'Add Row'}</button>` : '';
-    const exportBtn = this.hideExport ? '' : `<button class="btn btn-sm btn-outline" onclick="window._xg_${this.container.id}.exportCSV()">📥 Export CSV</button>`;
+    const exportBtn = this.hideExport ? '' : `<button class="btn btn-sm btn-outline" onclick="window._xg_${this.container.id}.exportCSV()">📥 EXPORT CSV</button>`;
+    const importBtn = (this.hideExport || !this.onImport) ? '' : `<button class="btn btn-sm btn-outline" onclick="document.getElementById('csvImp_${this.container.id}').click()">📤 IMPORT CSV</button><input type="file" id="csvImp_${this.container.id}" accept=".csv" style="display:none" onchange="window._xg_${this.container.id}.importCSV(this)">`;
     let html = '';
     if (this.showSearch) {
       html += `<input type="text" class="xgrid-search-bar" placeholder="🔍 Search across all columns..." value="${this.masterSearch.replace(/"/g,'&quot;')}" oninput="window._xg_${this.container.id}.setMasterSearch(this.value)">`;
@@ -781,6 +845,7 @@ class XGrid {
     html += `<div class="xgrid-toolbar">
       ${addBtn}
       ${exportBtn}
+      ${importBtn}
       <span class="xg-info">${filtered.length} row${filtered.length !== 1 ? 's' : ''}</span>
     </div>`;
     html += `<div class="xgrid-wrap"><table class="xgrid"><thead><tr>`;
@@ -963,7 +1028,7 @@ const defaultInvoices = [
   {id:genId(),invoiceNumber:'INV-2002',bookingId:'',guestName:'Akira Tanaka',roomNumber:'305',subtotal:720,discountAmount:50,taxTotal:46.90,grandTotal:716.90,paymentStatus:'Partially Paid',paymentTransactionId:'TXN-10002',currency:'USD',billingAddress:'456 Sakura Ave, Tokyo, Japan',services:[{name:'Thai Massage',unitPrice:80,quantity:1,icon:'◎'}],date:'2026-03-20'},
   {id:genId(),invoiceNumber:'INV-2003',bookingId:'',guestName:'Sophie Laurent',roomNumber:'103',subtotal:400,discountAmount:0,taxTotal:28,grandTotal:428,paymentStatus:'Unpaid',paymentTransactionId:'',currency:'EUR',billingAddress:'789 Rue de Paris, Paris, France',services:[],date:'2026-03-25'},
 ];
-const defaultSettings = {hotelName:'Grand Hotel Management',email:'info@grandhotel.com',phone:'+1 555-0100',currency:'USD ($)',address:'123 Hotel Street, City, Country',maxGuests:3,surcharge:25,checkinTime:'14:00',checkoutTime:'12:00',darkMode:false,roomTypes:'Single,Double,Deluxe,Suite,Penthouse',bedConfigs:'King,Twin,Queen+Single,Double,King+Sofa'};
+const defaultSettings = {hotelName:'Grand Hotel Management',email:'info@grandhotel.com',phone:'+1 555-0100',currency:'USD ($)',address:'123 Hotel Street, City, Country',maxGuests:3,surcharge:25,checkinTime:'14:00',checkoutTime:'12:00',darkMode:false,roomTypes:'Single,Double,Deluxe,Suite,Penthouse',bedConfigs:'King,Twin,Queen+Single,Double,King+Sofa',currencies:'USD,EUR,GBP,THB,ILS,JPY,CNY,AUD,CAD,CHF',bookingSources:'Direct,Booking.com,Expedia,Walk-in,Agoda,Airbnb',arrivalStatuses:'Expected,Checked-in,Checked-out,No-show',paymentMethods:'Credit Card,Cash,Bank Transfer,Room Charge',serviceCategories:'Room Service,Laundry,Airport Transfer,Mini-bar,Spa,Pool',invoiceStatuses:'Unpaid,Partially Paid,Fully Paid',ticketPriorities:'Low,Medium,High,Urgent',ticketStatuses:'Open,In Progress,Resolved',inventoryCategories:'Linen,Toiletries,F&B,Supplies',menuCategories:'Appetizer,Main Course,Dessert,Beverage,Side',storeCategories:'Drinks,Snacks,Toiletries,Souvenirs,Sundries',orderStatuses:'New,Preparing,Ready,Served,Paid',paymentTypes:'Pending,Cash,Credit Card,Room Charge',userRoles:'Admin,Manager,Receptionist,Housekeeper',requestStatuses:'Pending,In Progress,Completed,Cancelled'};
 const defaultTickets = [
   {id:genId(),roomNumber:'303',issue:'Bathroom renovation in progress',priority:'High',status:'Open',reportedBy:'Admin',reportedAt:'2026-03-28T10:00:00',resolvedAt:'',notes:'Major plumbing work required'},
   {id:genId(),roomNumber:'201',issue:'AC not cooling properly',priority:'Medium',status:'In Progress',reportedBy:'Receptionist',reportedAt:'2026-03-29T14:30:00',resolvedAt:'',notes:'Technician dispatched'},
@@ -1031,6 +1096,21 @@ let auditLog = load('auditLog', []);
 let settings = load('settings', defaultSettings);
 if (!settings.roomTypes) { settings.roomTypes = defaultSettings.roomTypes; save('settings', settings); }
 if (!settings.bedConfigs) { settings.bedConfigs = defaultSettings.bedConfigs; save('settings', settings); }
+if (!settings.currencies) { settings.currencies = defaultSettings.currencies; save('settings', settings); }
+if (!settings.bookingSources) { settings.bookingSources = defaultSettings.bookingSources; save('settings', settings); }
+if (!settings.arrivalStatuses) { settings.arrivalStatuses = defaultSettings.arrivalStatuses; save('settings', settings); }
+if (!settings.paymentMethods) { settings.paymentMethods = defaultSettings.paymentMethods; save('settings', settings); }
+if (!settings.serviceCategories) { settings.serviceCategories = defaultSettings.serviceCategories; save('settings', settings); }
+if (!settings.invoiceStatuses) { settings.invoiceStatuses = defaultSettings.invoiceStatuses; save('settings', settings); }
+if (!settings.ticketPriorities) { settings.ticketPriorities = defaultSettings.ticketPriorities; save('settings', settings); }
+if (!settings.ticketStatuses) { settings.ticketStatuses = defaultSettings.ticketStatuses; save('settings', settings); }
+if (!settings.inventoryCategories) { settings.inventoryCategories = defaultSettings.inventoryCategories; save('settings', settings); }
+if (!settings.menuCategories) { settings.menuCategories = defaultSettings.menuCategories; save('settings', settings); }
+if (!settings.storeCategories) { settings.storeCategories = defaultSettings.storeCategories; save('settings', settings); }
+if (!settings.orderStatuses) { settings.orderStatuses = defaultSettings.orderStatuses; save('settings', settings); }
+if (!settings.paymentTypes) { settings.paymentTypes = defaultSettings.paymentTypes; save('settings', settings); }
+if (!settings.userRoles) { settings.userRoles = defaultSettings.userRoles; save('settings', settings); }
+if (!settings.requestStatuses) { settings.requestStatuses = defaultSettings.requestStatuses; save('settings', settings); }
 let tickets = load('tickets', null); if(!tickets) { tickets = defaultTickets; save('tickets', tickets); }
 let messages = load('messages', null); if(!messages) { messages = defaultMessages; save('messages', messages); }
 let inventory = load('inventory', null); if(!inventory) { inventory = defaultInventory; save('inventory', inventory); }
@@ -1061,7 +1141,7 @@ if(bookings.length === 0) {
 }
 
 // ===== NAVIGATION =====
-const pageTitles = {dashboard:'Dashboard',rooms:'Room Management',bookings:'Bookings',guests:'Guest Directory',housekeeping:'Housekeeping',maintenance:'Maintenance Tickets',services:'Services',invoices:'Invoices',guestportal:'Guest Portal',reports:'Reports & Analytics',accounts:'User Accounts',auditlog:'Audit Log',settings:'Settings & Regulations',inventory:'Inventory Management',pos:'Point of Sale',restaurant:'Restaurant',minimart:'Mini-Mart',menuitems:'Menu Items',storeitems:'Store Items',orderhistory:'Order History',alltransactions:'Transactions',messagelog:'Messages'};
+const pageTitles = {dashboard:'Dashboard',rooms:'Room Management',bookings:'Bookings',guests:'Guest Directory',housekeeping:'Housekeeping',maintenance:'Maintenance Tickets',services:'Services',invoices:'Invoices',guestportal:'Guest Portal',reports:'Reports & Analytics',accounts:'User Accounts',auditlog:'Audit Log',settings:'Settings & Regulations',inventory:'Inventory Management',pos:'Point of Sale',restaurant:'Restaurant',minimart:'Mini-Mart',menuitems:'Menu Items',storeitems:'Store Items',orderhistory:'Order History',alltransactions:'Transactions',messagelog:'Messages',dropdowns:'Dropdown Lists'};
 
 document.querySelectorAll('#sidebarNav a[data-page]').forEach(link => {
   link.addEventListener('click', () => {
@@ -1084,7 +1164,7 @@ function closeModal() { document.getElementById('modalOverlay').classList.remove
 document.getElementById('modalOverlay').addEventListener('click', e => { if(e.target === document.getElementById('modalOverlay')) closeModal(); });
 
 function renderPage(page) {
-  const fn = {dashboard:renderDashboard,rooms:renderRooms,bookings:renderBookings,guests:renderGuests,housekeeping:renderHousekeeping,maintenance:renderMaintenance,services:renderServices,invoices:renderInvoices,guestportal:renderGuestPortal,reports:renderReports,accounts:renderAccounts,auditlog:renderAuditLog,settings:renderSettings,inventory:renderInventory,pos:renderPOS,restaurant:renderRestaurant,minimart:renderMiniMart,menuitems:renderMenuItems,storeitems:renderStoreItems,orderhistory:renderOrderHistory,alltransactions:renderAllTransactions,messagelog:renderMessageLog};
+  const fn = {dashboard:renderDashboard,rooms:renderRooms,bookings:renderBookings,guests:renderGuests,housekeeping:renderHousekeeping,maintenance:renderMaintenance,services:renderServices,invoices:renderInvoices,guestportal:renderGuestPortal,reports:renderReports,accounts:renderAccounts,auditlog:renderAuditLog,settings:renderSettings,inventory:renderInventory,pos:renderPOS,restaurant:renderRestaurant,minimart:renderMiniMart,menuitems:renderMenuItems,storeitems:renderStoreItems,orderhistory:renderOrderHistory,alltransactions:renderAllTransactions,messagelog:renderMessageLog,dropdowns:renderDropdowns};
   if(fn[page]) fn[page]();
   updateBadges();
 }
@@ -1370,8 +1450,8 @@ function renderBookings() {
       {field:'checkinDate',label:'Check In',format:v=>fmtDate(v),editable:true,editType:'date',filterable:true},
       {field:'checkoutDate',label:'Check Out',format:v=>fmtDate(v),editable:true,editType:'date',filterable:true},
       {field:'numAdults',label:'Adults',editable:true,editType:'number',width:'60px'},
-      {field:'bookingSource',label:'Source',editable:true,editType:'select',editOptions:['Direct','Booking.com','Expedia','Walk-in'],filterable:true},
-      {field:'arrivalStatus',label:'Status',format:v=>{const cls=v==='Checked-in'?'checked-in':v==='Expected'?'pending':v==='Checked-out'?'checked-out':'maintenance';return `<span class="status status-${cls}">${v}</span>`;},editable:true,editType:'select',editOptions:['Expected','Checked-in','Checked-out','No-show'],filterable:true},
+      {field:'bookingSource',label:'Source',editable:true,editType:'select',editOptions:getBookingSources(),filterable:true},
+      {field:'arrivalStatus',label:'Status',format:v=>{const cls=v==='Checked-in'?'checked-in':v==='Expected'?'pending':v==='Checked-out'?'checked-out':'maintenance';return `<span class="status status-${cls}">${v}</span>`;},editable:true,editType:'select',editOptions:getArrivalStatuses(),filterable:true},
     ],
     data: sorted,
     showSearch: true,
@@ -1385,6 +1465,7 @@ function renderBookings() {
     },
     hideExport: currentRole === 'Receptionist' || currentRole === 'Housekeeper',
     onAdd: () => showAddBooking(), addLabel: 'Add New Booking',
+    onImport: (rows) => { rows.forEach(r=>{if(!bookings.find(b=>b.id===r.id))bookings.push(r);}); save('bookings',bookings); logAudit('Import','Booking','Imported '+rows.length+' rows'); renderBookings(); },
     onEdit: (row, field, val) => { const b = bookings.find(x=>x.id===row.id); if(b){const old=b[field];b[field]=val;save('bookings',bookings);logBk('Edited',b.bookingId,b.guestName,field+': '+old+' → '+val);logAudit('Update','Booking','Updated '+field+' on '+b.bookingId);toast('Booking updated');} },
     actions: bkActions
   });
@@ -1420,7 +1501,7 @@ window.showAddBooking = function() {
     <div style="margin:-0.25rem 0 0.85rem;display:flex;gap:0.5rem;"><button class="btn btn-outline" style="flex:1;justify-content:center;padding:0.65rem;" onclick="openGuestPicker()">◉ SELECT GUEST</button><button class="btn btn-primary" style="flex:1;justify-content:center;padding:0.65rem;" onclick="addNewGuestFromBooking()">+ NEW GUEST</button></div>
     <div class="form-group"><label>Room <span id="mBkRoomCount" style="font-size:0.75rem;color:var(--primary);"></span></label><select class="form-control" id="mBkRoom">${avail.length?avail.map(r=>`<option value="${r.id}">${r.roomNumber} - ${r.roomType} (${fmt$(r.price)}/night)</option>`).join(''):'<option disabled>No rooms available</option>'}</select></div>
     <div class="form-row"><div class="form-group"><label>Adults</label><input type="number" class="form-control" id="mBkAdults" value="1" min="1"></div><div class="form-group"><label>Children</label><input type="number" class="form-control" id="mBkChildren" value="0" min="0"></div></div>
-    <div class="form-row"><div class="form-group"><label>Booking Source</label><select class="form-control" id="mBkSrc"><option>Direct</option><option>Booking.com</option><option>Expedia</option><option>Walk-in</option></select></div><div class="form-group"><label>Cancellation Policy</label><select class="form-control" id="mBkCancel"><option>Free cancellation</option><option>Non-refundable</option></select></div></div>
+    <div class="form-row"><div class="form-group"><label>Booking Source\${adminEditBtn('bookingSources')}</label><select class="form-control" id="mBkSrc">${getBookingSources().map(s=>'<option>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Cancellation Policy</label><select class="form-control" id="mBkCancel"><option>Free cancellation</option><option>Non-refundable</option></select></div></div>
     <div class="form-group"><label>Special Requests</label><textarea class="form-control" id="mBkReq" rows="2" placeholder="Special requests..."></textarea></div>
     <div class="form-group"><label>Notes</label><textarea class="form-control" id="mBkNotes" rows="2" placeholder="Internal notes..."></textarea></div>
     </div></div></div>
@@ -1476,7 +1557,7 @@ window.addNewGuestFromBooking = function() {
     <div class="modal-body">
     <div class="form-row"><div class="form-group"><label>First Name</label><input type="text" class="form-control" id="mNgFirst" placeholder="First name"></div><div class="form-group"><label>Last Name</label><input type="text" class="form-control" id="mNgLast" placeholder="Last name"></div></div>
     <div class="form-row"><div class="form-group"><label>Passport / ID</label><input type="text" class="form-control" id="mNgPassport" placeholder="e.g. US-12345678"></div><div class="form-group"><label>Nationality</label><input type="text" class="form-control" id="mNgNat" placeholder="Tap to select" readonly onclick="openNationalityPicker('mNgNat')" style="cursor:pointer;"></div></div>
-    <div class="form-row"><div class="form-group"><label>Date of Birth</label><input type="date" class="form-control" id="mNgDob"></div><div class="form-group"><label>Payment Method</label><select class="form-control" id="mNgPay"><option>Credit Card</option><option>Cash</option><option>Bank Transfer</option></select></div></div>
+    <div class="form-row"><div class="form-group"><label>Date of Birth</label><input type="date" class="form-control" id="mNgDob"></div><div class="form-group"><label>Payment Method</label><select class="form-control" id="mNgPay">${getPaymentMethods().map(s=>'<option>'+s+'</option>').join('')}</select></div></div>
     <div class="form-row"><div class="form-group"><label>Email</label><input type="email" class="form-control" id="mNgEmail" placeholder="email@example.com"></div><div class="form-group"><label>Phone</label><input type="tel" class="form-control" id="mNgPhone" placeholder="+1 555-0000"></div></div>
     <div class="form-group"><label>Guest Notes</label><textarea class="form-control" id="mNgNotes" rows="2" placeholder="Allergies, preferences..."></textarea></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="cancelNewGuestFromBooking()">Cancel</button><button class="btn btn-primary" onclick="saveNewGuestFromBooking()">Add Guest & Return</button></div>`);
@@ -1597,7 +1678,7 @@ function reopenNewGuestForm(backup) {
     <div class="modal-body">
     <div class="form-row"><div class="form-group"><label>First Name</label><input type="text" class="form-control" id="mNgFirst" placeholder="First name"></div><div class="form-group"><label>Last Name</label><input type="text" class="form-control" id="mNgLast" placeholder="Last name"></div></div>
     <div class="form-row"><div class="form-group"><label>Passport / ID</label><input type="text" class="form-control" id="mNgPassport" placeholder="e.g. US-12345678"></div><div class="form-group"><label>Nationality</label><input type="text" class="form-control" id="mNgNat" placeholder="Tap to select" readonly onclick="openNationalityPicker('mNgNat')" style="cursor:pointer;"></div></div>
-    <div class="form-row"><div class="form-group"><label>Date of Birth</label><input type="date" class="form-control" id="mNgDob"></div><div class="form-group"><label>Payment Method</label><select class="form-control" id="mNgPay"><option>Credit Card</option><option>Cash</option><option>Bank Transfer</option></select></div></div>
+    <div class="form-row"><div class="form-group"><label>Date of Birth</label><input type="date" class="form-control" id="mNgDob"></div><div class="form-group"><label>Payment Method</label><select class="form-control" id="mNgPay">${getPaymentMethods().map(s=>'<option>'+s+'</option>').join('')}</select></div></div>
     <div class="form-row"><div class="form-group"><label>Email</label><input type="email" class="form-control" id="mNgEmail" placeholder="email@example.com"></div><div class="form-group"><label>Phone</label><input type="tel" class="form-control" id="mNgPhone" placeholder="+1 555-0000"></div></div>
     <div class="form-group"><label>Guest Notes</label><textarea class="form-control" id="mNgNotes" rows="2" placeholder="Allergies, preferences..."></textarea></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="cancelNewGuestFromBooking()">Cancel</button><button class="btn btn-primary" onclick="saveNewGuestFromBooking()">Add Guest & Return</button></div>`);
@@ -1765,8 +1846,8 @@ window.showEditBooking = function(id) {
     <div class="form-row"><div class="form-group"><label>Check-in Date</label><input type="date" class="form-control" id="eBkInD" value="${b.checkinDate}"></div><div class="form-group"><label>Check-in Time</label><input type="time" class="form-control" id="eBkInT" value="${b.checkinTime||'14:00'}"></div></div>
     <div class="form-row"><div class="form-group"><label>Check-out Date</label><input type="date" class="form-control" id="eBkOutD" value="${b.checkoutDate}"></div><div class="form-group"><label>Check-out Time</label><input type="time" class="form-control" id="eBkOutT" value="${b.checkoutTime||'12:00'}"></div></div>
     <div class="form-row"><div class="form-group"><label>Adults</label><input type="number" class="form-control" id="eBkAdults" value="${b.numAdults||1}" min="1"></div><div class="form-group"><label>Children</label><input type="number" class="form-control" id="eBkChildren" value="${b.numChildren||0}" min="0"></div></div>
-    <div class="form-row"><div class="form-group"><label>Booking Source</label><select class="form-control" id="eBkSrc">${['Direct','Booking.com','Expedia','Walk-in'].map(s=>`<option ${s===b.bookingSource?'selected':''}>${s}</option>`).join('')}</select></div><div class="form-group"><label>Cancellation Policy</label><select class="form-control" id="eBkCancel">${['Free cancellation','Non-refundable'].map(s=>`<option ${s===b.cancellationPolicy?'selected':''}>${s}</option>`).join('')}</select></div></div>
-    <div class="form-group"><label>Arrival Status</label><select class="form-control" id="eBkStatus">${['Expected','Checked-in','Checked-out','No-show'].map(s=>`<option ${s===b.arrivalStatus?'selected':''}>${s}</option>`).join('')}</select></div>
+    <div class="form-row"><div class="form-group"><label>Booking Source\${adminEditBtn('bookingSources')}</label><select class="form-control" id="eBkSrc">${getBookingSources().map(s=>`<option ${s===b.bookingSource?'selected':''}>${s}</option>`).join('')}</select></div><div class="form-group"><label>Cancellation Policy</label><select class="form-control" id="eBkCancel">${['Free cancellation','Non-refundable'].map(s=>`<option ${s===b.cancellationPolicy?'selected':''}>${s}</option>`).join('')}</select></div></div>
+    <div class="form-group"><label>Arrival Status\${adminEditBtn('arrivalStatuses')}</label><select class="form-control" id="eBkStatus">${getArrivalStatuses().map(s=>`<option ${s===b.arrivalStatus?'selected':''}>${s}</option>`).join('')}</select></div>
     <div class="form-group"><label>Special Requests</label><textarea class="form-control" id="eBkReq" rows="2">${b.specialRequests||''}</textarea></div>
     <div class="form-group"><label>Notes</label><textarea class="form-control" id="eBkNotes" rows="2">${b.notes||''}</textarea></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateBooking('${b.id}')">Save</button></div>`);
@@ -1854,7 +1935,7 @@ function renderGuests() {
       {field:'nationality',label:'Nationality',editable:true,filterable:true},
       {field:'email',label:'Email',editable:true,filterable:true},
       {field:'phone',label:'Phone',editable:true,filterable:true},
-      {field:'paymentMethod',label:'Payment',editable:true,editType:'select',editOptions:['Credit Card','Cash','Bank Transfer'],filterable:true},
+      {field:'paymentMethod',label:'Payment',editable:true,editType:'select',editOptions:getPaymentMethods(),filterable:true},
       {field:'blacklist',label:'Blacklist',format:v=>v?'<span class="status status-maintenance">Yes</span>':'<span class="status status-active">No</span>',editable:true,editType:'select',editOptions:['0','1'],width:'80px'},
       {field:'visits',label:'Visits',editable:true,editType:'number',width:'65px'},
     ],
@@ -1863,6 +1944,7 @@ function renderGuests() {
     emptyMessage: '◉ No guests registered yet. Add your first guest!',
     hideExport: currentRole === 'Receptionist' || currentRole === 'Housekeeper',
     onAdd: () => showAddGuest(),
+    onImport: (rows) => { rows.forEach(r=>{if(!guests.find(g=>g.id===r.id))guests.push(r);}); save('guests',guests); logAudit('Import','Guest','Imported '+rows.length+' rows'); renderGuests(); },
     onEdit: (row, field, val) => { const g = guests.find(x=>x.id===row.id); if(g){if(field==='blacklist')val=parseInt(val)||0;g[field]=val;save('guests',guests);logAudit('Update','Guest','Updated '+g.firstName+' '+g.lastName);toast('Guest updated');} },
     actions: guestActions
   });
@@ -1875,7 +1957,7 @@ window.showAddGuest = function() {
     <div class="form-row"><div class="form-group"><label>Passport / ID</label><input type="text" class="form-control" id="mGPassport" placeholder="e.g. US-12345678"></div><div class="form-group"><label>Nationality</label><input type="text" class="form-control" id="mGNat" placeholder="Tap to select" readonly onclick="openNatPickerStandalone('mGNat','add')" style="cursor:pointer;"></div></div>
     <div class="form-row"><div class="form-group"><label>Date of Birth</label><input type="date" class="form-control" id="mGDob"></div><div class="form-group"><label>Phone</label><input type="tel" class="form-control" id="mGPhone" placeholder="+1 555-0000"></div></div>
     <div class="form-group"><label>Email</label><input type="email" class="form-control" id="mGEmail" placeholder="email@example.com"></div>
-    <div class="form-row"><div class="form-group"><label>Payment Method</label><select class="form-control" id="mGPay"><option>Credit Card</option><option>Cash</option><option>Bank Transfer</option></select></div><div class="form-group"><label>Blacklist</label><select class="form-control" id="mGBL"><option value="0">No</option><option value="1">Yes</option></select></div></div>
+    <div class="form-row"><div class="form-group"><label>Payment Method\${adminEditBtn('paymentMethods')}</label><select class="form-control" id="mGPay">${getPaymentMethods().map(s=>'<option>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Blacklist</label><select class="form-control" id="mGBL"><option value="0">No</option><option value="1">Yes</option></select></div></div>
     <div class="form-group"><label>Guest Notes</label><textarea class="form-control" id="mGNotes" rows="2" placeholder="Allergies, preferences..."></textarea></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addGuest()">Add Guest</button></div>`);
 };
@@ -1893,7 +1975,7 @@ window.showEditGuest = function(id) {
     <div class="form-row"><div class="form-group"><label>Passport/ID</label><input type="text" class="form-control" id="eGPassport" value="${g.passportId||''}"></div><div class="form-group"><label>Nationality</label><input type="text" class="form-control" id="eGNat" value="${g.nationality||''}" placeholder="Tap to select" readonly onclick="_natStandaloneBackup={};document.querySelectorAll('.modal-body input,.modal-body select,.modal-body textarea').forEach(function(el){if(el.id)_natStandaloneBackup[el.id]=el.value;});_natStandaloneBackup._editGuestId='${g.id}';openNatPickerStandalone('eGNat','edit');" style="cursor:pointer;"></div></div>
     <div class="form-row"><div class="form-group"><label>Date of Birth</label><input type="date" class="form-control" id="eGDob" value="${g.dob||''}"></div><div class="form-group"><label>Phone</label><input type="tel" class="form-control" id="eGPhone" value="${g.phone||''}"></div></div>
     <div class="form-group"><label>Email</label><input type="email" class="form-control" id="eGEmail" value="${g.email||''}"></div>
-    <div class="form-group"><label>Payment Method</label><select class="form-control" id="eGPay">${['Credit Card','Cash','Bank Transfer'].map(p=>`<option ${p===g.paymentMethod?'selected':''}>${p}</option>`).join('')}</select></div>
+    <div class="form-group"><label>Payment Method\${adminEditBtn('paymentMethods')}</label><select class="form-control" id="eGPay">${getPaymentMethods().map(p=>`<option ${p===g.paymentMethod?'selected':''}>${p}</option>`).join('')}</select></div>
     <div class="form-group"><label>Blacklist</label><select class="form-control" id="eGBL"><option value="0" ${!g.blacklist?'selected':''}>No</option><option value="1" ${g.blacklist?'selected':''}>Yes</option></select></div>
     <div class="form-group"><label>Guest Notes</label><textarea class="form-control" id="eGNotes" rows="2">${g.guestNotes||''}</textarea></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateGuest('${g.id}')">Save</button></div>`);
@@ -1924,7 +2006,7 @@ function renderServices() {
   const svcCols = [
     {field:'icon',label:'Icon',editable:true,width:'55px',filterable:false},
     {field:'name',label:'Service Name',editable:true,filterable:true},
-    {field:'serviceCategory',label:'Category',editable:true,editType:'select',editOptions:['Room Service','Laundry','Airport Transfer','Mini-bar','Spa','Pool'],filterable:true},
+    {field:'serviceCategory',label:'Category',editable:true,editType:'select',editOptions:getServiceCategories(),filterable:true},
     {field:'unitPrice',label:'Unit Price',format:v=>fmt$(v),editable:true,editType:'number',filterable:true},
     {field:'taxRate',label:'Tax %',editable:true,editType:'number',width:'65px'},
     {field:'quantity',label:'Default Qty',editable:true,editType:'number',width:'80px'},
@@ -1937,6 +2019,7 @@ function renderServices() {
     emptyMessage: '◈ No services configured yet',
     hideExport: currentRole === 'Receptionist' || currentRole === 'Housekeeper',
     onAdd: () => showAddService(),
+    onImport: (rows) => { rows.forEach(r=>{if(!services.find(s=>s.id===r.id))services.push(r);}); save('services',services); logAudit('Import','Service','Imported '+rows.length+' rows'); renderServices(); },
     onEdit: (row, field, val) => { const s = services.find(x=>x.id===row.id); if(s){s[field]=val;save('services',services);logAudit('Update','Service','Updated '+s.name);toast(s.name+' updated');} },
     actions: [
       {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditService(id)},
@@ -1951,7 +2034,7 @@ function renderServices() {
       {field:'serviceName',label:'Service',filterable:true},
       {field:'assignedTo',label:'Assigned',editable:true,filterable:true,width:'90px'},
       {field:'scheduledTime',label:'Scheduled',format:v=>v||'—',editable:true,editType:'text',width:'90px'},
-      {field:'status',label:'Status',format:v=>{const cls=v==='Pending'?'pending':v==='In Progress'?'preparing':v==='Completed'?'active':'maintenance';return '<span class="status status-'+cls+'">'+v+'</span>';},editable:true,editType:'select',editOptions:['Pending','In Progress','Completed','Cancelled'],filterable:true,width:'100px'},
+      {field:'status',label:'Status',format:v=>{const cls=v==='Pending'?'pending':v==='In Progress'?'preparing':v==='Completed'?'active':'maintenance';return '<span class="status status-'+cls+'">'+v+'</span>';},editable:true,editType:'select',editOptions:getRequestStatuses(),filterable:true,width:'100px'},
       {field:'charge',label:'Charge',format:v=>v>0?fmt$(v):'—',editable:true,editType:'number',width:'75px'},
       {field:'notes',label:'Notes',editable:true,filterable:true},
     ],
@@ -2028,7 +2111,7 @@ window.showEditServiceRequest = function(id) {
     <div class="form-row"><div class="form-group"><label>Room</label><input type="text" class="form-control" value="${sr.roomNumber||''}" readonly style="background:#f0f4fb;"></div><div class="form-group"><label>Guest</label><input type="text" class="form-control" value="${sr.guestName||''}" readonly style="background:#f0f4fb;"></div></div>
     <div class="form-group"><label>Service</label><input type="text" class="form-control" id="eSrService" value="${sr.serviceName||''}"></div>
     <div class="form-row"><div class="form-group"><label>Assigned To</label><select class="form-control" id="eSrAssign"><option value="">Unassigned</option>${staffList.map(n=>'<option'+(n===sr.assignedTo?' selected':'')+'>'+n+'</option>').join('')}</select></div><div class="form-group"><label>Scheduled Time</label><input type="datetime-local" class="form-control" id="eSrTime" value="${sr.scheduledTime||''}"></div></div>
-    <div class="form-row"><div class="form-group"><label>Status</label><select class="form-control" id="eSrStatus">${['Pending','In Progress','Completed','Cancelled'].map(s=>'<option'+(s===sr.status?' selected':'')+'>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Charge ($)</label><input type="number" class="form-control" id="eSrCharge" step="0.01" value="${sr.charge||0}"></div></div>
+    <div class="form-row"><div class="form-group"><label>Status</label><select class="form-control" id="eSrStatus">${getRequestStatuses().map(s=>'<option'+(s===sr.status?' selected':'')+'>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Charge ($)</label><input type="number" class="form-control" id="eSrCharge" step="0.01" value="${sr.charge||0}"></div></div>
     <div class="form-group"><label>Notes</label><textarea class="form-control" id="eSrNotes" rows="2">${sr.notes||''}</textarea></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateServiceRequest('${sr.id}')">Save</button></div>`);
 };
@@ -2051,7 +2134,7 @@ window.showAddService = function() {
   openModal(`<div class="modal-header"><h2>Add Service</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <div class="form-row"><div class="form-group"><label>Icon (emoji)</label><input type="text" class="form-control" id="mSIcon" value="◈" maxlength="4"></div><div class="form-group"><label>Service Name</label><input type="text" class="form-control" id="mSName"></div></div>
-    <div class="form-row"><div class="form-group"><label>Category</label><select class="form-control" id="mSCat"><option>Room Service</option><option>Laundry</option><option>Airport Transfer</option><option>Mini-bar</option><option>Spa</option><option>Pool</option></select></div><div class="form-group"><label>Unit Price ($)</label><input type="number" class="form-control" id="mSPrice" step="0.01"></div></div>
+    <div class="form-row"><div class="form-group"><label>Category\${adminEditBtn('serviceCategories')}</label><select class="form-control" id="mSCat">${getServiceCategories().map(s=>'<option>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Unit Price ($)</label><input type="number" class="form-control" id="mSPrice" step="0.01"></div></div>
     <div class="form-row"><div class="form-group"><label>Tax Rate (%)</label><input type="number" class="form-control" id="mSTax" value="7" step="0.1"></div><div class="form-group"><label>Default Quantity</label><input type="number" class="form-control" id="mSQty" value="1" min="1"></div></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addService()">Add Service</button></div>`);
 };
@@ -2065,7 +2148,7 @@ window.showEditService = function(id) {
   openModal(`<div class="modal-header"><h2>Edit Service</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <div class="form-row"><div class="form-group"><label>Icon</label><input type="text" class="form-control" id="eSIcon" value="${s.icon}" maxlength="4"></div><div class="form-group"><label>Service Name</label><input type="text" class="form-control" id="eSName" value="${s.name}"></div></div>
-    <div class="form-row"><div class="form-group"><label>Category</label><select class="form-control" id="eSCat">${['Room Service','Laundry','Airport Transfer','Mini-bar','Spa','Pool'].map(c=>`<option ${c===s.serviceCategory?'selected':''}>${c}</option>`).join('')}</select></div><div class="form-group"><label>Unit Price ($)</label><input type="number" class="form-control" id="eSPrice" value="${s.unitPrice}" step="0.01"></div></div>
+    <div class="form-row"><div class="form-group"><label>Category\${adminEditBtn('serviceCategories')}</label><select class="form-control" id="eSCat">${getServiceCategories().map(c=>`<option ${c===s.serviceCategory?'selected':''}>${c}</option>`).join('')}</select></div><div class="form-group"><label>Unit Price ($)</label><input type="number" class="form-control" id="eSPrice" value="${s.unitPrice}" step="0.01"></div></div>
     <div class="form-row"><div class="form-group"><label>Tax Rate (%)</label><input type="number" class="form-control" id="eSTax" value="${s.taxRate}" step="0.1"></div><div class="form-group"><label>Default Quantity</label><input type="number" class="form-control" id="eSQty" value="${s.quantity||1}" min="1"></div></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateService('${s.id}')">Save</button></div>`);
 };
@@ -2094,8 +2177,8 @@ function renderInvoices() {
       {field:'discountAmount',label:'Discount',format:v=>fmt$(v),editable:true,editType:'number'},
       {field:'taxTotal',label:'Tax',format:v=>fmt$(v),editable:true,editType:'number'},
       {field:'grandTotal',label:'Grand Total',format:v=>'<strong>'+fmt$(v)+'</strong>'},
-      {field:'paymentStatus',label:'Status',format:v=>{const cls=v==='Fully Paid'?'paid':v==='Partially Paid'?'pending':'maintenance';return `<span class="status status-${cls}">${v}</span>`;},editable:true,editType:'select',editOptions:['Unpaid','Partially Paid','Fully Paid'],filterable:true},
-      {field:'currency',label:'Currency',editable:true,editType:'select',editOptions:['THB','USD','EUR'],width:'75px'},
+      {field:'paymentStatus',label:'Status',format:v=>{const cls=v==='Fully Paid'?'paid':v==='Partially Paid'?'pending':'maintenance';return `<span class="status status-${cls}">${v}</span>`;},editable:true,editType:'select',editOptions:getInvoiceStatuses(),filterable:true},
+      {field:'currency',label:'Currency',editable:true,editType:'select',editOptions:getCurrencies(),width:'75px'},
     ],
     data: invoices,
     showSearch: true,
@@ -2108,6 +2191,7 @@ function renderInvoices() {
     },
     hideExport: currentRole === 'Receptionist' || currentRole === 'Housekeeper',
     onAdd: () => showAddInvoice(),
+    onImport: (rows) => { rows.forEach(r=>{if(!invoices.find(i=>i.id===r.id))invoices.push(r);}); save('invoices',invoices); logAudit('Import','Invoice','Imported '+rows.length+' rows'); renderInvoices(); },
     onEdit: (row, field, val) => {
       const inv = invoices.find(x=>x.id===row.id); if(!inv) return;
       inv[field]=val;
@@ -2132,9 +2216,9 @@ window.showAddInvoice = function() {
   openModal(`<div class="modal-header"><h2>Add Invoice (${invNum})</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <div class="form-row"><div class="form-group"><label>Guest Name</label><input type="text" class="form-control" id="mInvGuest" placeholder="Enter guest name"></div><div class="form-group"><label>Room Number</label><input type="text" class="form-control" id="mInvRoom" placeholder="e.g. 201"></div></div>
-    <div class="form-row"><div class="form-group"><label>Date</label><input type="date" class="form-control" id="mInvDate" value="${today()}"></div><div class="form-group"><label>Currency</label><select class="form-control" id="mInvCur"><option>USD</option><option>THB</option><option>EUR</option></select></div></div>
+    <div class="form-row"><div class="form-group"><label>Date</label><input type="date" class="form-control" id="mInvDate" value="${today()}"></div><div class="form-group"><label>Currency\${adminEditBtn('currencies')}</label><select class="form-control" id="mInvCur">${getCurrencies().map(s=>'<option>'+s+'</option>').join('')}</select></div></div>
     <div class="form-row"><div class="form-group"><label>Subtotal</label><input type="number" class="form-control" id="mInvSub" step="0.01" placeholder="0.00"></div><div class="form-group"><label>Discount</label><input type="number" class="form-control" id="mInvDisc" step="0.01" value="0"></div></div>
-    <div class="form-row"><div class="form-group"><label>Tax Total</label><input type="number" class="form-control" id="mInvTax" step="0.01" value="0"></div><div class="form-group"><label>Payment Status</label><select class="form-control" id="mInvStatus"><option>Unpaid</option><option>Partially Paid</option><option>Fully Paid</option></select></div></div>
+    <div class="form-row"><div class="form-group"><label>Tax Total</label><input type="number" class="form-control" id="mInvTax" step="0.01" value="0"></div><div class="form-group"><label>Payment Status\${adminEditBtn('invoiceStatuses')}</label><select class="form-control" id="mInvStatus">${getInvoiceStatuses().map(s=>'<option>'+s+'</option>').join('')}</select></div></div>
     <div class="form-group"><label>Transaction ID</label><input type="text" class="form-control" id="mInvTxn" placeholder="Optional"></div>
     <div class="form-group"><label>Billing Address</label><input type="text" class="form-control" id="mInvAddr" placeholder="Optional"></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addInvoice()">Add Invoice</button></div>`);
@@ -2155,9 +2239,9 @@ window.showEditInvoice = function(id) {
   openModal(`<div class="modal-header"><h2>Edit ${inv.invoiceNumber}</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <div class="form-row"><div class="form-group"><label>Guest Name</label><input type="text" class="form-control" id="eInvGuest" value="${inv.guestName}"></div><div class="form-group"><label>Room Number</label><input type="text" class="form-control" id="eInvRoom" value="${inv.roomNumber}"></div></div>
-    <div class="form-row"><div class="form-group"><label>Date</label><input type="date" class="form-control" id="eInvDate" value="${inv.date}"></div><div class="form-group"><label>Currency</label><select class="form-control" id="eInvCur">${['THB','USD','EUR'].map(c=>`<option ${c===inv.currency?'selected':''}>${c}</option>`).join('')}</select></div></div>
+    <div class="form-row"><div class="form-group"><label>Date</label><input type="date" class="form-control" id="eInvDate" value="${inv.date}"></div><div class="form-group"><label>Currency\${adminEditBtn('currencies')}</label><select class="form-control" id="eInvCur">${getCurrencies().map(c=>`<option ${c===inv.currency?'selected':''}>${c}</option>`).join('')}</select></div></div>
     <div class="form-row"><div class="form-group"><label>Subtotal</label><input type="number" class="form-control" id="eInvSub" step="0.01" value="${inv.subtotal}"></div><div class="form-group"><label>Discount</label><input type="number" class="form-control" id="eInvDisc" step="0.01" value="${inv.discountAmount}"></div></div>
-    <div class="form-row"><div class="form-group"><label>Tax Total</label><input type="number" class="form-control" id="eInvTax" step="0.01" value="${inv.taxTotal}"></div><div class="form-group"><label>Payment Status</label><select class="form-control" id="eInvStatus">${['Unpaid','Partially Paid','Fully Paid'].map(s=>`<option ${s===inv.paymentStatus?'selected':''}>${s}</option>`).join('')}</select></div></div>
+    <div class="form-row"><div class="form-group"><label>Tax Total</label><input type="number" class="form-control" id="eInvTax" step="0.01" value="${inv.taxTotal}"></div><div class="form-group"><label>Payment Status\${adminEditBtn('invoiceStatuses')}</label><select class="form-control" id="eInvStatus">${getInvoiceStatuses().map(s=>`<option ${s===inv.paymentStatus?'selected':''}>${s}</option>`).join('')}</select></div></div>
     <div class="form-group"><label>Transaction ID</label><input type="text" class="form-control" id="eInvTxn" value="${inv.paymentTransactionId||''}"></div>
     <div class="form-group"><label>Billing Address</label><input type="text" class="form-control" id="eInvAddr" value="${inv.billingAddress||''}"></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateInvoice('${inv.id}')">Save</button></div>`);
@@ -2242,13 +2326,14 @@ function renderAccounts() {
     columns: [
       {field:'name',label:'User',editable:true,filterable:true},
       {field:'email',label:'Email',editable:true,filterable:true},
-      {field:'role',label:'Role',editable:true,editType:'select',editOptions:['Admin','Receptionist','Housekeeper','Manager'],filterable:true},
+      {field:'role',label:'Role',editable:true,editType:'select',editOptions:getUserRoles(),filterable:true},
       {field:'status',label:'Status',format:v=>`<span class="status status-${v}">${v==='active'?'Active':'Inactive'}</span>`,editable:true,editType:'select',editOptions:['active','inactive'],filterable:true},
     ],
     data: accounts,
     showSearch: true,
     emptyMessage: '◔ No user accounts yet',
     onAdd: () => showAddAccount(),
+    onImport: (rows) => { rows.forEach(r=>{if(!accounts.find(a=>a.id===r.id))accounts.push(r);}); save('accounts',accounts); logAudit('Import','Account','Imported '+rows.length+' rows'); renderAccounts(); },
     onEdit: (row, field, val) => { const a = accounts.find(x=>x.id===row.id); if(a){a[field]=val;save('accounts',accounts);logAudit('Update','Account','Updated account '+a.name);toast('Account updated');} },
     actions: [
       {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditAccount(id)},
@@ -2263,7 +2348,7 @@ window.showAddAccount = function() {
     <div class="modal-body"><div class="form-group"><label>Full Name</label><input type="text" class="form-control" id="mAName"></div>
     <div class="form-group"><label>Email</label><input type="email" class="form-control" id="mAEmail"></div>
     <div class="form-group"><label>Password</label><input type="password" class="form-control" id="mAPass" placeholder="Set password"></div>
-    <div class="form-group"><label>Role</label><select class="form-control" id="mARole"><option>Admin</option><option>Manager</option><option>Receptionist</option><option>Housekeeper</option></select></div></div>
+    <div class="form-group"><label>Role\${adminEditBtn('userRoles')}</label><select class="form-control" id="mARole">${getUserRoles().map(s=>'<option>'+s+'</option>').join('')}</select></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addAccount()">Add User</button></div>`);
 };
 window.addAccount = function() {
@@ -2278,7 +2363,7 @@ window.showEditAccount = function(id) {
     <div class="modal-body"><div class="form-group"><label>Full Name</label><input type="text" class="form-control" id="eAName" value="${a.name}"></div>
     <div class="form-group"><label>Email</label><input type="email" class="form-control" id="eAEmail" value="${a.email}"></div>
     <div class="form-group"><label>Password</label><input type="password" class="form-control" id="eAPass" value="${a.password||''}" placeholder="Change password"></div>
-    <div class="form-group"><label>Role</label><select class="form-control" id="eARole">${['Admin','Manager','Receptionist','Housekeeper'].map(r=>`<option ${r===a.role?'selected':''}>${r}</option>`).join('')}</select></div></div>
+    <div class="form-group"><label>Role\${adminEditBtn('userRoles')}</label><select class="form-control" id="eARole">${getUserRoles().map(r=>`<option ${r===a.role?'selected':''}>${r}</option>`).join('')}</select></div></div>
     <div class="modal-footer"><button class="btn btn-danger" onclick="deleteAccount('${a.id}')">Delete</button><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateAccount('${a.id}')">Save</button></div>`);
 };
 window.updateAccount = function(id) {
@@ -2671,7 +2756,7 @@ window.showReportIssue = function() {
     <div class="modal-body">
     <div class="form-group"><label>Room</label><select class="form-control" id="mRptRoom">${rooms.map(r=>`<option value="${r.roomNumber}">${r.roomNumber} - ${r.roomType}</option>`).join('')}</select></div>
     <div class="form-group"><label>Issue Description</label><textarea class="form-control" id="mRptIssue" rows="3" placeholder="Describe the issue..." style="min-height:60px;"></textarea></div>
-    <div class="form-group"><label>Priority</label><select class="form-control" id="mRptPri"><option>Low</option><option selected>Medium</option><option>High</option><option>Urgent</option></select></div></div>
+    <div class="form-group"><label>Priority\${adminEditBtn('ticketPriorities')}</label><select class="form-control" id="mRptPri">${getTicketPriorities().map(s=>'<option'+(s==='Medium'?' selected':'')+'>'+s+'</option>').join('')}</select></div></div>
     <div class="modal-footer"><button class="btn btn-outline hk-large-btn" onclick="closeModal()">Cancel</button><button class="btn btn-primary hk-large-btn" onclick="submitReportIssue()">Submit Ticket</button></div>`);
 };
 window.submitReportIssue = function() {
@@ -2705,8 +2790,8 @@ function renderMaintenance() {
     columns: [
       {field:'roomNumber',label:'Room',editable:true,filterable:true,width:'70px'},
       {field:'issue',label:'Issue',editable:true,filterable:true},
-      {field:'priority',label:'Priority',format:v=>{const c=v==='Urgent'||v==='High'?'maintenance':v==='Medium'?'pending':'active';return `<span class="status status-${c}">${v}</span>`;},editable:true,editType:'select',editOptions:['Low','Medium','High','Urgent'],filterable:true},
-      {field:'status',label:'Status',format:v=>{const c=v==='Open'?'maintenance':v==='In Progress'?'pending':'active';return `<span class="status status-${c}">${v}</span>`;},editable:true,editType:'select',editOptions:['Open','In Progress','Resolved'],filterable:true},
+      {field:'priority',label:'Priority',format:v=>{const c=v==='Urgent'||v==='High'?'maintenance':v==='Medium'?'pending':'active';return `<span class="status status-${c}">${v}</span>`;},editable:true,editType:'select',editOptions:getTicketPriorities(),filterable:true},
+      {field:'status',label:'Status',format:v=>{const c=v==='Open'?'maintenance':v==='In Progress'?'pending':'active';return `<span class="status status-${c}">${v}</span>`;},editable:true,editType:'select',editOptions:getTicketStatuses(),filterable:true},
       {field:'reportedBy',label:'Reported By',editable:true,filterable:true},
       {field:'reportedAt',label:'Reported',format:v=>v?new Date(v).toLocaleString():'',filterable:true},
       {field:'resolvedAt',label:'Resolved',format:v=>v?new Date(v).toLocaleString():'—'},
@@ -2722,6 +2807,7 @@ function renderMaintenance() {
       return '';
     },
     onAdd: () => showAddTicket(),
+    onImport: (rows) => { rows.forEach(r=>{if(!tickets.find(t=>t.id===r.id))tickets.push(r);}); save('tickets',tickets); logAudit('Import','Ticket','Imported '+rows.length+' rows'); renderMaintenance(); },
     onEdit: (row, field, val, oldVal) => {
       const t = tickets.find(x=>x.id===row.id); if(!t) return;
       t[field] = val;
@@ -2757,7 +2843,7 @@ function renderMaintenance() {
 window.showAddTicket = function() {
   openModal(`<div class="modal-header"><h2>New Maintenance Ticket</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
-    <div class="form-row"><div class="form-group"><label>Room Number</label><select class="form-control" id="mTkRoom">${rooms.map(r=>`<option value="${r.roomNumber}">${r.roomNumber} - ${r.roomType}</option>`).join('')}</select></div><div class="form-group"><label>Priority</label><select class="form-control" id="mTkPri"><option>Low</option><option>Medium</option><option selected>High</option><option>Urgent</option></select></div></div>
+    <div class="form-row"><div class="form-group"><label>Room Number</label><select class="form-control" id="mTkRoom">${rooms.map(r=>`<option value="${r.roomNumber}">${r.roomNumber} - ${r.roomType}</option>`).join('')}</select></div><div class="form-group"><label>Priority\${adminEditBtn('ticketPriorities')}</label><select class="form-control" id="mTkPri">${getTicketPriorities().map(s=>'<option'+(s==='High'?' selected':'')+'>'+s+'</option>').join('')}</select></div></div>
     <div class="form-group"><label>Issue Description</label><textarea class="form-control" id="mTkIssue" rows="3" placeholder="Describe the issue..."></textarea></div>
     <div class="form-group"><label>Notes</label><textarea class="form-control" id="mTkNotes" rows="2" placeholder="Additional notes..."></textarea></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addTicket()">Create Ticket</button></div>`);
@@ -2839,7 +2925,7 @@ function renderInventory() {
   inventoryGrid = new XGrid('inventoryGrid', {
     columns: [
       {field:'itemName',label:'Item Name',editable:true,filterable:true},
-      {field:'category',label:'Category',editable:true,editType:'select',editOptions:['Linen','Toiletries','F&B','Supplies'],filterable:true},
+      {field:'category',label:'Category',editable:true,editType:'select',editOptions:getInventoryCategories(),filterable:true},
       {field:'quantity',label:'Quantity',editable:true,editType:'number',width:'80px',filterable:true},
       {field:'reorderLevel',label:'Reorder Level',editable:true,editType:'number',width:'100px'},
       {field:'lastOrdered',label:'Last Ordered',format:v=>fmtDate(v),editable:true,editType:'date',filterable:true},
@@ -2854,6 +2940,7 @@ function renderInventory() {
       return '';
     },
     onAdd: () => showAddInventory(), addLabel: 'Add New Item',
+    onImport: (rows) => { rows.forEach(r=>{if(!inventory.find(i=>i.id===r.id))inventory.push(r);}); save('inventory',inventory); logAudit('Import','Inventory','Imported '+rows.length+' rows'); renderInventory(); },
     onEdit: (row, field, val) => {
       const it = inventory.find(x=>x.id===row.id); if(!it) return;
       const oldVal = it[field]; it[field] = val;
@@ -2891,7 +2978,7 @@ window.showAddInventory = function() {
   openModal(`<div class="modal-header"><h2>Add Inventory Item</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <div class="form-group"><label>Item Name</label><input type="text" class="form-control" id="mInvName" placeholder="e.g. Bath Towels"></div>
-    <div class="form-row"><div class="form-group"><label>Category</label><select class="form-control" id="mInvCat"><option>Linen</option><option>Toiletries</option><option>F&B</option><option>Supplies</option></select></div><div class="form-group"><label>Quantity</label><input type="number" class="form-control" id="mInvQty" value="0" min="0"></div></div>
+    <div class="form-row"><div class="form-group"><label>Category\${adminEditBtn('inventoryCategories')}</label><select class="form-control" id="mInvCat">${getInventoryCategories().map(s=>'<option>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Quantity</label><input type="number" class="form-control" id="mInvQty" value="0" min="0"></div></div>
     <div class="form-row"><div class="form-group"><label>Reorder Level</label><input type="number" class="form-control" id="mInvReorder" value="10" min="0"></div><div class="form-group"><label>Last Ordered</label><input type="date" class="form-control" id="mInvDate" value="${today()}"></div></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addInventoryItem()">Add Item</button></div>`);
 };
@@ -2907,7 +2994,7 @@ window.showEditInventory = function(id) {
   openModal(`<div class="modal-header"><h2>Edit Inventory Item</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <div class="form-group"><label>Item Name</label><input type="text" class="form-control" id="eInvName" value="${it.itemName}"></div>
-    <div class="form-row"><div class="form-group"><label>Category</label><select class="form-control" id="eInvCat">${['Linen','Toiletries','F&B','Supplies'].map(c=>`<option ${c===it.category?'selected':''}>${c}</option>`).join('')}</select></div><div class="form-group"><label>Quantity</label><input type="number" class="form-control" id="eInvQty" value="${it.quantity}" min="0"></div></div>
+    <div class="form-row"><div class="form-group"><label>Category\${adminEditBtn('inventoryCategories')}</label><select class="form-control" id="eInvCat">${getInventoryCategories().map(c=>`<option ${c===it.category?'selected':''}>${c}</option>`).join('')}</select></div><div class="form-group"><label>Quantity</label><input type="number" class="form-control" id="eInvQty" value="${it.quantity}" min="0"></div></div>
     <div class="form-row"><div class="form-group"><label>Reorder Level</label><input type="number" class="form-control" id="eInvReorder" value="${it.reorderLevel}" min="0"></div><div class="form-group"><label>Last Ordered</label><input type="date" class="form-control" id="eInvDate" value="${it.lastOrdered||''}"></div></div></div>
     <div class="modal-footer"><button class="btn btn-danger" onclick="deleteInventoryItem('${it.id}')">Delete</button><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateInventoryItem('${it.id}')">Save</button></div>`);
 };
@@ -3294,7 +3381,7 @@ window.showEditPosTxn = function(id) {
   openModal(`<div class="modal-header"><h2>Edit POS Transaction</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <div class="form-row"><div class="form-group"><label>Transaction ID</label><input type="text" class="form-control" value="${t.transactionId||''}" readonly style="background:#f0f4fb;"></div><div class="form-group"><label>Room Number</label><input type="text" class="form-control" id="ePtRoom" value="${t.roomNumber||''}"></div></div>
-    <div class="form-row"><div class="form-group"><label>Guest Name</label><input type="text" class="form-control" id="ePtGuest" value="${t.guestName||''}"></div><div class="form-group"><label>Paid By</label><select class="form-control" id="ePtPaid">${['Cash','Credit Card','Room Charge'].map(s=>'<option'+(s===t.paidBy?' selected':'')+'>'+s+'</option>').join('')}</select></div></div>
+    <div class="form-row"><div class="form-group"><label>Guest Name</label><input type="text" class="form-control" id="ePtGuest" value="${t.guestName||''}"></div><div class="form-group"><label>Paid By</label><select class="form-control" id="ePtPaid">${getPaymentMethods().map(s=>'<option'+(s===t.paidBy?' selected':'')+'>'+s+'</option>').join('')}</select></div></div>
     <div class="form-group"><label>Staff</label><input type="text" class="form-control" id="ePtStaff" value="${t.staffName||''}"></div>
     <div style="margin-top:0.75rem;"><p style="font-weight:600;font-size:0.85rem;">Items (${t.itemCount||0}):</p>
     ${(t.items||[]).map(i=>'<p style="font-size:0.85rem;">• '+i.name+' x'+i.qty+' — '+fmt$(i.unitPrice*i.qty)+'</p>').join('')}
@@ -3338,7 +3425,7 @@ function renderRestaurant() {
     selHtml += '</select></div>';
   }
 
-  const categories = ['All', 'Appetizer', 'Main Course', 'Dessert', 'Beverage', 'Side'];
+  const categories = ['All'].concat(getMenuCategories());
   let tabsHtml = '<div class="rest-menu-tabs">' + categories.map(c => '<button class="btn btn-sm ' + (restMenuFilter === c ? 'btn-primary' : 'btn-outline') + '" onclick="restMenuFilter=\'' + c + '\';renderRestaurant()">' + c + '</button>').join('') + '</div>';
 
   const filtered = restMenuFilter === 'All' ? menuItems : menuItems.filter(m => m.category === restMenuFilter);
@@ -3703,7 +3790,7 @@ function renderMenuItems() {
   new XGrid('menuItemsGrid', {
     columns: [
       {field:'name',label:'Name',editable:true,filterable:true},
-      {field:'category',label:'Category',editable:true,editType:'select',editOptions:['Appetizer','Main Course','Dessert','Beverage','Side'],filterable:true},
+      {field:'category',label:'Category',editable:true,editType:'select',editOptions:getMenuCategories(),filterable:true},
       {field:'price',label:'Price',format:v=>fmt$(v),editable:true,editType:'number',width:'80px'},
       {field:'available',label:'Available',format:v=>v?'<span class="status status-active">Yes</span>':'<span class="status status-maintenance">No</span>',editable:true,editType:'select',editOptions:['true','false'],filterable:true,width:'90px'},
       {field:'description',label:'Description',editable:true,filterable:true},
@@ -3712,6 +3799,7 @@ function renderMenuItems() {
     showSearch: true,
     emptyMessage: '🍽️ No menu items yet. Add your first menu item!',
     onAdd: () => showAddMenuItem(), addLabel: 'Add Menu Item',
+    onImport: (rows) => { rows.forEach(r=>{if(!menuItems.find(m=>m.id===r.id))menuItems.push(r);}); save('menuItems',menuItems); logAudit('Import','MenuItem','Imported '+rows.length+' rows'); renderMenuItems(); },
     onEdit: (row, field, val) => {
       const m = menuItems.find(x=>x.id===row.id); if(!m) return;
       if(field==='available') val = val==='true'||val===true;
@@ -3737,7 +3825,7 @@ window.showAddMenuItem = function() {
   openModal(`<div class="modal-header"><h2>Add Menu Item</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <div class="form-group"><label>Name</label><input type="text" class="form-control" id="mMiName" placeholder="e.g. Pad Thai"></div>
-    <div class="form-row"><div class="form-group"><label>Category</label><select class="form-control" id="mMiCat"><option>Appetizer</option><option>Main Course</option><option>Dessert</option><option>Beverage</option><option>Side</option></select></div><div class="form-group"><label>Price ($)</label><input type="number" class="form-control" id="mMiPrice" step="0.01" placeholder="0.00"></div></div>
+    <div class="form-row"><div class="form-group"><label>Category\${adminEditBtn('menuCategories')}</label><select class="form-control" id="mMiCat">${getMenuCategories().map(s=>'<option>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Price ($)</label><input type="number" class="form-control" id="mMiPrice" step="0.01" placeholder="0.00"></div></div>
     <div class="form-group"><label>Available</label><select class="form-control" id="mMiAvail"><option value="true">Yes</option><option value="false">No</option></select></div>
     <div class="form-group"><label>Description</label><textarea class="form-control" id="mMiDesc" rows="2" placeholder="Item description..."></textarea></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addMenuItem()">Add Item</button></div>`);
@@ -3754,7 +3842,7 @@ window.showEditMenuItem = function(id) {
   openModal(`<div class="modal-header"><h2>Edit Menu Item</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <div class="form-group"><label>Name</label><input type="text" class="form-control" id="eMiName" value="${m.name}"></div>
-    <div class="form-row"><div class="form-group"><label>Category</label><select class="form-control" id="eMiCat">${['Appetizer','Main Course','Dessert','Beverage','Side'].map(c=>'<option'+(c===m.category?' selected':'')+'>'+c+'</option>').join('')}</select></div><div class="form-group"><label>Price ($)</label><input type="number" class="form-control" id="eMiPrice" step="0.01" value="${m.price}"></div></div>
+    <div class="form-row"><div class="form-group"><label>Category\${adminEditBtn('menuCategories')}</label><select class="form-control" id="eMiCat">${getMenuCategories().map(c=>'<option'+(c===m.category?' selected':'')+'>'+c+'</option>').join('')}</select></div><div class="form-group"><label>Price ($)</label><input type="number" class="form-control" id="eMiPrice" step="0.01" value="${m.price}"></div></div>
     <div class="form-group"><label>Available</label><select class="form-control" id="eMiAvail"><option value="true" ${m.available?'selected':''}>Yes</option><option value="false" ${!m.available?'selected':''}>No</option></select></div>
     <div class="form-group"><label>Description</label><textarea class="form-control" id="eMiDesc" rows="2">${m.description||''}</textarea></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateMenuItem('${m.id}')">Save</button></div>`);
@@ -3778,7 +3866,7 @@ function renderStoreItems() {
   new XGrid('storeItemsGrid', {
     columns: [
       {field:'name',label:'Name',editable:true,filterable:true},
-      {field:'category',label:'Category',editable:true,editType:'select',editOptions:['Drinks','Snacks','Toiletries','Souvenirs','Sundries'],filterable:true},
+      {field:'category',label:'Category',editable:true,editType:'select',editOptions:getStoreCategories(),filterable:true},
       {field:'price',label:'Price',format:v=>fmt$(v),editable:true,editType:'number',width:'80px'},
       {field:'stock',label:'Stock',editable:true,editType:'number',width:'70px',filterable:true},
       {field:'barcode',label:'Barcode',editable:true,filterable:true,width:'100px'},
@@ -3792,6 +3880,7 @@ function renderStoreItems() {
       return '';
     },
     onAdd: () => showAddStoreItem(), addLabel: 'Add Store Item',
+    onImport: (rows) => { rows.forEach(r=>{if(!storeItems.find(s=>s.id===r.id))storeItems.push(r);}); save('storeItems',storeItems); logAudit('Import','StoreItem','Imported '+rows.length+' rows'); renderStoreItems(); },
     onEdit: (row, field, val) => {
       const s = storeItems.find(x=>x.id===row.id); if(!s) return;
       if(field==='price') val = parseFloat(val)||0;
@@ -3819,7 +3908,7 @@ window.showAddStoreItem = function() {
   openModal(`<div class="modal-header"><h2>Add Store Item</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <div class="form-group"><label>Name</label><input type="text" class="form-control" id="mSiName" placeholder="e.g. Water Bottle"></div>
-    <div class="form-row"><div class="form-group"><label>Category</label><select class="form-control" id="mSiCat"><option>Drinks</option><option>Snacks</option><option>Toiletries</option><option>Souvenirs</option><option>Sundries</option></select></div><div class="form-group"><label>Price ($)</label><input type="number" class="form-control" id="mSiPrice" step="0.01" placeholder="0.00"></div></div>
+    <div class="form-row"><div class="form-group"><label>Category\${adminEditBtn('storeCategories')}</label><select class="form-control" id="mSiCat">${getStoreCategories().map(s=>'<option>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Price ($)</label><input type="number" class="form-control" id="mSiPrice" step="0.01" placeholder="0.00"></div></div>
     <div class="form-row"><div class="form-group"><label>Stock</label><input type="number" class="form-control" id="mSiStock" value="0" min="0"></div><div class="form-group"><label>Barcode</label><input type="text" class="form-control" id="mSiBarcode" placeholder="e.g. STR-016"></div></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addStoreItem()">Add Item</button></div>`);
 };
@@ -3835,7 +3924,7 @@ window.showEditStoreItem = function(id) {
   openModal(`<div class="modal-header"><h2>Edit Store Item</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <div class="form-group"><label>Name</label><input type="text" class="form-control" id="eSiName" value="${s.name}"></div>
-    <div class="form-row"><div class="form-group"><label>Category</label><select class="form-control" id="eSiCat">${['Drinks','Snacks','Toiletries','Souvenirs','Sundries'].map(c=>'<option'+(c===s.category?' selected':'')+'>'+c+'</option>').join('')}</select></div><div class="form-group"><label>Price ($)</label><input type="number" class="form-control" id="eSiPrice" step="0.01" value="${s.price}"></div></div>
+    <div class="form-row"><div class="form-group"><label>Category\${adminEditBtn('storeCategories')}</label><select class="form-control" id="eSiCat">${getStoreCategories().map(c=>'<option'+(c===s.category?' selected':'')+'>'+c+'</option>').join('')}</select></div><div class="form-group"><label>Price ($)</label><input type="number" class="form-control" id="eSiPrice" step="0.01" value="${s.price}"></div></div>
     <div class="form-row"><div class="form-group"><label>Stock</label><input type="number" class="form-control" id="eSiStock" value="${s.stock}" min="0"></div><div class="form-group"><label>Barcode</label><input type="text" class="form-control" id="eSiBarcode" value="${s.barcode||''}"></div></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateStoreItem('${s.id}')">Save</button></div>`);
 };
@@ -3864,8 +3953,8 @@ function renderOrderHistory() {
       {field:'tableNumber',label:'Table/Room',filterable:true,width:'100px'},
       {field:'items',label:'Items',format:(v)=>Array.isArray(v)?v.reduce((s,i)=>s+i.qty,0):'0',width:'60px'},
       {field:'grandTotal',label:'Total',format:v=>'<strong>'+fmt$(v)+'</strong>',width:'85px'},
-      {field:'status',label:'Status',format:v=>{const cls=v==='Paid'?'active':v==='Served'?'ready':v==='New'?'new':v==='Preparing'?'preparing':'pending';return '<span class="status status-'+cls+'">'+v+'</span>';},editable:true,editType:'select',editOptions:['New','Preparing','Ready','Served','Paid'],filterable:true,width:'95px'},
-      {field:'paidBy',label:'Payment',editable:true,editType:'select',editOptions:['Pending','Cash','Credit Card','Room Charge'],filterable:true,width:'100px'},
+      {field:'status',label:'Status',format:v=>{const cls=v==='Paid'?'active':v==='Served'?'ready':v==='New'?'new':v==='Preparing'?'preparing':'pending';return '<span class="status status-'+cls+'">'+v+'</span>';},editable:true,editType:'select',editOptions:getOrderStatuses(),filterable:true,width:'95px'},
+      {field:'paidBy',label:'Payment',editable:true,editType:'select',editOptions:getPaymentTypes(),filterable:true,width:'100px'},
     ],
     data: [...restaurantOrders].reverse(),
     showSearch: true,
@@ -3895,7 +3984,7 @@ window.showEditOrder = function(id) {
     <div class="modal-body">
     <div class="form-row"><div class="form-group"><label>Order Number</label><input type="text" class="form-control" value="${o.orderNumber}" readonly style="background:#f0f4fb;"></div><div class="form-group"><label>Room Number</label><input type="text" class="form-control" id="eOrdRoom" value="${o.roomNumber||''}"></div></div>
     <div class="form-row"><div class="form-group"><label>Guest Name</label><input type="text" class="form-control" id="eOrdGuest" value="${o.guestName||''}"></div><div class="form-group"><label>Table Number</label><input type="text" class="form-control" id="eOrdTable" value="${o.tableNumber||''}"></div></div>
-    <div class="form-row"><div class="form-group"><label>Status</label><select class="form-control" id="eOrdStatus">${['New','Preparing','Ready','Served','Paid'].map(s=>'<option'+(s===o.status?' selected':'')+'>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Payment</label><select class="form-control" id="eOrdPaid">${['Pending','Cash','Credit Card','Room Charge'].map(s=>'<option'+(s===o.paidBy?' selected':'')+'>'+s+'</option>').join('')}</select></div></div>
+    <div class="form-row"><div class="form-group"><label>Status</label><select class="form-control" id="eOrdStatus">${getOrderStatuses().map(s=>'<option'+(s===o.status?' selected':'')+'>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Payment</label><select class="form-control" id="eOrdPaid">${getPaymentTypes().map(s=>'<option'+(s===o.paidBy?' selected':'')+'>'+s+'</option>').join('')}</select></div></div>
     <div class="form-group"><label>Notes</label><textarea class="form-control" id="eOrdNotes" rows="2">${o.notes||''}</textarea></div>
     <div style="margin-top:0.75rem;"><p style="font-weight:600;font-size:0.85rem;">Items:</p>
     ${(o.items||[]).map(i=>'<p style="font-size:0.85rem;">• '+i.name+' x'+i.qty+' — '+fmt$(i.unitPrice*i.qty)+'</p>').join('')}
@@ -3968,7 +4057,7 @@ window.showEditTransaction = function(id) {
     <div class="modal-body">
     <div class="form-row"><div class="form-group"><label>Transaction ID</label><input type="text" class="form-control" value="${t.transactionId}" readonly style="background:#f0f4fb;"></div><div class="form-group"><label>Source</label><input type="text" class="form-control" value="${t.source||''}" readonly style="background:#f0f4fb;"></div></div>
     <div class="form-row"><div class="form-group"><label>Room Number</label><input type="text" class="form-control" id="eTxnRoom" value="${t.roomNumber||''}"></div><div class="form-group"><label>Guest Name</label><input type="text" class="form-control" id="eTxnGuest" value="${t.guestName||''}"></div></div>
-    <div class="form-row"><div class="form-group"><label>Payment Method</label><select class="form-control" id="eTxnPay">${['Cash','Credit Card','Room Charge'].map(s=>'<option'+(s===t.paymentMethod?' selected':'')+'>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Status</label><select class="form-control" id="eTxnStatus">${['Completed','Refunded','Pending'].map(s=>'<option'+(s===t.status?' selected':'')+'>'+s+'</option>').join('')}</select></div></div>
+    <div class="form-row"><div class="form-group"><label>Payment Method</label><select class="form-control" id="eTxnPay">${getPaymentMethods().map(s=>'<option'+(s===t.paymentMethod?' selected':'')+'>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Status</label><select class="form-control" id="eTxnStatus">${['Completed','Refunded','Pending'].map(s=>'<option'+(s===t.status?' selected':'')+'>'+s+'</option>').join('')}</select></div></div>
     <div style="margin-top:0.75rem;"><p style="font-weight:600;font-size:0.85rem;">Items:</p>
     ${(t.items||[]).map(i=>'<p style="font-size:0.85rem;">• '+i.name+' x'+i.qty+' — '+fmt$(i.unitPrice*i.qty)+'</p>').join('')}
     <p style="font-weight:700;margin-top:0.5rem;">Grand Total: ${fmt$(t.grandTotal)}</p></div></div>
@@ -4043,6 +4132,43 @@ window.addMessage = function() {
   logAudit('Add','Message',m.id,'Sent '+m.type+' message to '+guestName+' via '+m.channel);
   closeModal(); renderMessageLog(); toast('Message sent to '+guestName);
 };
+
+
+// ===== DROPDOWN LISTS MANAGEMENT =====
+function renderDropdowns() {
+  const lists = [
+    {key:'roomTypes', label:'Room Types', icon:'▣'},
+    {key:'bedConfigs', label:'Bed Configurations', icon:'🛏️'},
+    {key:'currencies', label:'Currencies', icon:'💰'},
+    {key:'bookingSources', label:'Booking Sources', icon:'▤'},
+    {key:'arrivalStatuses', label:'Arrival Statuses', icon:'📋'},
+    {key:'paymentMethods', label:'Payment Methods', icon:'💳'},
+    {key:'serviceCategories', label:'Service Categories', icon:'◈'},
+    {key:'invoiceStatuses', label:'Invoice Statuses', icon:'▥'},
+    {key:'ticketPriorities', label:'Ticket Priorities', icon:'⚡'},
+    {key:'ticketStatuses', label:'Ticket Statuses', icon:'🔧'},
+    {key:'inventoryCategories', label:'Inventory Categories', icon:'⬡'},
+    {key:'menuCategories', label:'Menu Categories', icon:'🍽️'},
+    {key:'storeCategories', label:'Store Categories', icon:'🛒'},
+    {key:'orderStatuses', label:'Order Statuses', icon:'📦'},
+    {key:'paymentTypes', label:'Payment Types', icon:'💵'},
+    {key:'userRoles', label:'User Roles', icon:'◔'},
+    {key:'requestStatuses', label:'Request Statuses', icon:'📝'},
+  ];
+  let html = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;">';
+  lists.forEach(l => {
+    const vals = (settings[l.key] || defaultSettings[l.key] || '').split(',').map(s=>s.trim()).filter(Boolean);
+    html += '<div class="card" style="margin-bottom:0;"><div class="card-header"><h2 style="font-size:0.9rem;">' + l.icon + ' ' + l.label + '</h2><button class="btn btn-sm btn-primary" onclick="manageList(\'' + l.key + '\')">⊕ Edit</button></div><div class="card-body" style="padding:0.6rem 0.85rem;">';
+    html += '<div style="display:flex;flex-wrap:wrap;gap:0.35rem;">';
+    vals.forEach(v => {
+      html += '<span style="display:inline-block;padding:0.25rem 0.6rem;background:#e8f0fe;color:#1a3a5c;border-radius:8px;font-size:0.8rem;font-weight:500;">' + v + '</span>';
+    });
+    html += '</div><div style="margin-top:0.5rem;font-size:0.72rem;color:var(--text-light);">' + vals.length + ' values</div>';
+    html += '</div></div>';
+  });
+  html += '</div>';
+  document.getElementById('page-dropdowns').innerHTML = html;
+}
 
 // ===== LOGIN / LOGOUT =====
 window.doLogin = function() {
@@ -4301,7 +4427,7 @@ const _fabPageMap = {
   messagelog: function() { if(window.showAddMessage) showAddMessage(); },
   housekeeping: null,
 };
-const _fabHiddenPages = ['dashboard', 'settings', 'auditlog', 'reports', 'pos', 'restaurant', 'minimart', 'guestportal', 'orderhistory', 'alltransactions'];
+const _fabHiddenPages = ['dashboard', 'settings', 'auditlog', 'reports', 'pos', 'restaurant', 'minimart', 'guestportal', 'orderhistory', 'alltransactions', 'dropdowns'];
 
 function updateFAB(page) {
   const fab = document.getElementById('fabBtn');
