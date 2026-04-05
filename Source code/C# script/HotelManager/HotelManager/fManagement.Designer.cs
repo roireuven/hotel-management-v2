@@ -67,7 +67,9 @@
             // panelRight
             // 
             this.panelRight.BackColor = System.Drawing.Color.White;
+            this.tileSettings = new MetroFramework.Controls.MetroTile();
             this.panelRight.Controls.Add(this.bunifuSeparator1);
+            this.panelRight.Controls.Add(this.tileSettings);
             this.panelRight.Controls.Add(this.metroTile17);
             this.panelRight.Controls.Add(this.metroTile16);
             this.panelRight.Controls.Add(this.metroTile13);
@@ -155,6 +157,23 @@
             this.metroTile13.UseStyleColors = true;
             this.metroTile13.UseTileImage = true;
             this.metroTile13.Click += new System.EventHandler(this.metroTile13_Click);
+            // 
+            // tileSettings
+            // 
+            this.tileSettings.ActiveControl = null;
+            this.tileSettings.BackColor = System.Drawing.Color.SeaGreen;
+            this.tileSettings.ForeColor = System.Drawing.Color.White;
+            this.tileSettings.Location = new System.Drawing.Point(29, 540);
+            this.tileSettings.Name = "tileSettings";
+            this.tileSettings.Size = new System.Drawing.Size(879, 35);
+            this.tileSettings.TabIndex = 55;
+            this.tileSettings.Text = "Settings";
+            this.tileSettings.TileImageAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.tileSettings.UseCustomBackColor = true;
+            this.tileSettings.UseCustomForeColor = true;
+            this.tileSettings.UseSelectable = true;
+            this.tileSettings.UseStyleColors = true;
+            this.tileSettings.Click += new System.EventHandler(this.btnSettings_Click);
             // 
             // title
             // 
@@ -319,7 +338,9 @@
             // 
             this.panelLeft.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panelLeft.BackgroundImage")));
             this.panelLeft.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnSettings = new Bunifu.Framework.UI.BunifuFlatButton();
             this.panelLeft.Controls.Add(this.btnNavigationPanel);
+            this.panelLeft.Controls.Add(this.btnSettings);
             this.panelLeft.Controls.Add(this.btnAccountProfile);
             this.panelLeft.Controls.Add(this.btnLogOut);
             this.panelLeft.Controls.Add(this.btnHelp);
@@ -369,6 +390,42 @@
             this.btnNavigationPanel.Textcolor = System.Drawing.Color.White;
             this.btnNavigationPanel.TextFont = new System.Drawing.Font("Segoe UI", 9.75F);
             this.btnNavigationPanel.Click += new System.EventHandler(this.btnNavigationPanel_Click_1);
+            // 
+            // btnSettings
+            // 
+            this.btnSettings.Activecolor = System.Drawing.Color.SeaGreen;
+            this.btnSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnSettings.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(139)))), ((int)(((byte)(87)))));
+            this.btnSettings.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnSettings.BorderRadius = 0;
+            this.btnSettings.ButtonText = "    Settings";
+            this.btnSettings.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSettings.DisabledColor = System.Drawing.Color.Gray;
+            this.btnSettings.Iconcolor = System.Drawing.Color.Transparent;
+            this.btnSettings.Iconimage = ((System.Drawing.Image)(resources.GetObject("btnNavigationPanel.Iconimage")));
+            this.btnSettings.Iconimage_right = null;
+            this.btnSettings.Iconimage_right_Selected = null;
+            this.btnSettings.Iconimage_Selected = null;
+            this.btnSettings.IconMarginLeft = 0;
+            this.btnSettings.IconMarginRight = 0;
+            this.btnSettings.IconRightVisible = true;
+            this.btnSettings.IconRightZoom = 0D;
+            this.btnSettings.IconVisible = true;
+            this.btnSettings.IconZoom = 50D;
+            this.btnSettings.IsTab = false;
+            this.btnSettings.Location = new System.Drawing.Point(0, 359);
+            this.btnSettings.Name = "btnSettings";
+            this.btnSettings.Normalcolor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(139)))), ((int)(((byte)(87)))));
+            this.btnSettings.OnHovercolor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(129)))), ((int)(((byte)(77)))));
+            this.btnSettings.OnHoverTextColor = System.Drawing.Color.White;
+            this.btnSettings.selected = false;
+            this.btnSettings.Size = new System.Drawing.Size(177, 40);
+            this.btnSettings.TabIndex = 7;
+            this.btnSettings.Text = "    Settings";
+            this.btnSettings.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSettings.Textcolor = System.Drawing.Color.White;
+            this.btnSettings.TextFont = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
             // 
             // btnAccountProfile
             // 
@@ -586,12 +643,14 @@
         private MetroFramework.Controls.MetroTile metroTile16;
         private MetroFramework.Controls.MetroTile metroTile13;
         private MetroFramework.Controls.MetroTile metroTile17;
+        private MetroFramework.Controls.MetroTile tileSettings;
         private Bunifu.Framework.UI.BunifuFlatButton bunifuFlatButton1;
         private Bunifu.Framework.UI.BunifuFlatButton btnAccountProfile;
         private Bunifu.Framework.UI.BunifuFlatButton btnLogOut;
         private Bunifu.Framework.UI.BunifuFlatButton btnHelp;
         private Bunifu.Framework.UI.BunifuFlatButton btnIntroduce;
         private Bunifu.Framework.UI.BunifuFlatButton btnNavigationPanel;
+        private Bunifu.Framework.UI.BunifuFlatButton btnSettings;
         private Bunifu.Framework.UI.BunifuSeparator bunifuSeparator1;
     }
 }
