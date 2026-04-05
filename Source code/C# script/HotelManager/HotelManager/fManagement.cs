@@ -225,6 +225,19 @@ namespace HotelManager
                 MessageBox.Show( "Bạn không quyền truy cập.", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
+            if (CheckAccess("fSettings"))
+            {
+                this.Hide();
+                fSettings settings = new fSettings();
+                settings.ShowDialog();
+                this.Show();
+            }
+            else
+                MessageBox.Show("Bạn không quyền truy cập.", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
         private void panelRight_Paint(object sender, PaintEventArgs e)
         {
 
