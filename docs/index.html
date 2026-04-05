@@ -531,7 +531,7 @@
 const DB_KEY = 'hotel_mgr_';
 const isAndroid = typeof HotelDB !== 'undefined';
 
-const dbTableMap = {auditLog:'audit_log',bookingLog:'booking_log',inventoryLog:'inventory_log',posTransactions:'pos_transactions',menuItems:'menu_items',restaurantOrders:'restaurant_orders',storeItems:'store_items',serviceRequests:'service_requests'};
+const dbTableMap = {auditLog:'audit_log',bookingLog:'booking_log',inventoryLog:'inventory_log',posTransactions:'pos_transactions',menuItems:'menu_items',restaurantOrders:'restaurant_orders',storeItems:'store_items',serviceRequests:'service_requests',transactions:'transactions'};
 function dbKey(key) { return dbTableMap[key] || key; }
 function load(key, def) {
   if (isAndroid) {
@@ -799,6 +799,10 @@ function nextInvoiceNumber() {
   const nums = invoices.map(i => parseInt((i.invoiceNumber||'').replace('INV-',''))).filter(n=>!isNaN(n));
   return 'INV-' + (Math.max(2000, ...nums) + 1);
 }
+function nextTransactionId() {
+  const nums = transactions.map(t => parseInt((t.transactionId||'').replace('TXN-',''))).filter(n=>!isNaN(n));
+  return 'TXN-' + (Math.max(10000, ...nums) + 1);
+}
 
 // ===== AUDIT LOG =====
 let currentRole = 'Admin';
@@ -957,6 +961,7 @@ let menuItems = load('menuItems', null); if(!menuItems) { menuItems = defaultMen
 let restaurantOrders = load('restaurantOrders', []);
 let storeItems = load('storeItems', null); if(!storeItems) { storeItems = defaultStoreItems; save('storeItems', storeItems); }
 let serviceRequests = load('serviceRequests', []);
+let transactions = load('transactions', []);
 
 if(bookings.length === 0) {
   const seed = [
@@ -1866,9 +1871,15 @@ function renderServices() {
       if (field === 'status' && val === 'Completed' && oldVal !== 'Completed') {
         sr.completedTime = new Date().toISOString();
         const charge = parseFloat(sr.charge) || 0;
-        if (charge > 0 && sr.bookingId) {
-          const b = bookings.find(x => x.bookingId === sr.bookingId || x.id === sr.bookingId);
-          if (b) { if (!b.services) b.services = []; b.services.push({name: sr.serviceName, unitPrice: charge, quantity: 1, icon: '◈', serviceCategory: 'Service Request'}); save('bookings', bookings); }
+        if (charge > 0) {
+          const bk = sr.bookingId ? bookings.find(x => x.bookingId === sr.bookingId || x.id === sr.bookingId) : null;
+          processSale({
+            source: 'Service', paymentMethod: bk ? 'Room Charge' : 'Cash',
+            roomNumber: sr.roomNumber || '', guestName: sr.guestName || '',
+            bookingId: sr.bookingId || '',
+            items: [{itemId: sr.id, name: sr.serviceName, qty: 1, unitPrice: charge}],
+            taxRate: parseFloat(settings.serviceTax || settings.taxRate) || 7
+          });
         }
       }
       save('serviceRequests', serviceRequests);
@@ -1878,7 +1889,7 @@ function renderServices() {
     },
     actions: [
       {name:'progress',label:'▶ Start',cls:'btn-warning',condition:r=>r.status==='Pending',handler:id=>{const sr=serviceRequests.find(x=>x.id===id);if(sr){sr.status='In Progress';sr.inProgressTime=new Date().toISOString();save('serviceRequests',serviceRequests);logAudit('Update','Service Request',sr.id,'Started: '+sr.serviceName);toast('Service request in progress');renderServices();}}},
-      {name:'complete',label:'✓ Done',cls:'btn-success',condition:r=>r.status==='In Progress',handler:id=>{const sr=serviceRequests.find(x=>x.id===id);if(sr){sr.status='Completed';sr.completedTime=new Date().toISOString();const charge=parseFloat(sr.charge)||0;if(charge>0&&sr.bookingId){const b=bookings.find(x=>x.bookingId===sr.bookingId||x.id===sr.bookingId);if(b){if(!b.services)b.services=[];b.services.push({name:sr.serviceName,unitPrice:charge,quantity:1,icon:'◈',serviceCategory:'Service Request'});save('bookings',bookings);}}save('serviceRequests',serviceRequests);logAudit('Update','Service Request',sr.id,'Completed: '+sr.serviceName);toast('Service request completed');renderServices();}}},
+      {name:'complete',label:'✓ Done',cls:'btn-success',condition:r=>r.status==='In Progress',handler:id=>{const sr=serviceRequests.find(x=>x.id===id);if(sr){sr.status='Completed';sr.completedTime=new Date().toISOString();const charge=parseFloat(sr.charge)||0;if(charge>0){const bk=sr.bookingId?bookings.find(x=>x.bookingId===sr.bookingId||x.id===sr.bookingId):null;processSale({source:'Service',paymentMethod:bk?'Room Charge':'Cash',roomNumber:sr.roomNumber||'',guestName:sr.guestName||'',bookingId:sr.bookingId||'',items:[{itemId:sr.id,name:sr.serviceName,qty:1,unitPrice:charge}],taxRate:parseFloat(settings.serviceTax||settings.taxRate)||7});}save('serviceRequests',serviceRequests);logAudit('Update','Service Request',sr.id,'Completed: '+sr.serviceName);toast('Service request completed');renderServices();}}},
       {name:'delete',label:'✕',cls:'btn-danger',handler:id=>{if(!confirm('Delete?'))return;serviceRequests=serviceRequests.filter(x=>x.id!==id);save('serviceRequests',serviceRequests);logAudit('Delete','Service Request',id,'Deleted');renderServices();toast('Request deleted');}},
     ]
   });
@@ -2170,7 +2181,7 @@ window.clearAuditLog = function() {
 
 // ===== SETTINGS =====
 function getDbCounts() {
-  const tables = ['rooms','guests','bookings','services','invoices','accounts','tickets','messages','inventory','posTransactions','menuItems','restaurantOrders','storeItems','serviceRequests'];
+  const tables = ['rooms','guests','bookings','services','invoices','accounts','tickets','messages','inventory','posTransactions','menuItems','restaurantOrders','storeItems','serviceRequests','transactions'];
   const counts = {};
   if (isAndroid) {
     tables.forEach(t => { try { counts[t] = HotelDB.count(t); } catch(e) { counts[t] = '?'; } });
@@ -2180,7 +2191,7 @@ function getDbCounts() {
     counts.tickets = tickets.length; counts.messages = messages.length; counts.inventory = inventory.length;
     counts.posTransactions = posTransactions.length; counts.menuItems = menuItems.length;
     counts.restaurantOrders = restaurantOrders.length; counts.storeItems = storeItems.length;
-    counts.serviceRequests = serviceRequests.length;
+    counts.serviceRequests = serviceRequests.length; counts.transactions = transactions.length;
   }
   return counts;
 }
@@ -2233,6 +2244,7 @@ function renderSettings() {
           <tr><td><strong>restaurantOrders</strong></td><td>${counts.restaurantOrders}</td><td>Restaurant orders (items, status, payment, table/room)</td></tr>
           <tr><td><strong>storeItems</strong></td><td>${counts.storeItems}</td><td>Mini-Mart items (name, category, price, stock, barcode)</td></tr>
           <tr><td><strong>serviceRequests</strong></td><td>${counts.serviceRequests}</td><td>Service requests (room, service, status, staff, schedule)</td></tr>
+          <tr><td><strong>transactions</strong></td><td>${counts.transactions}</td><td>Unified transactions (POS, Restaurant, Mini-Mart, Services)</td></tr>
           <tr><td><strong>settings</strong></td><td>—</td><td>Hotel configuration (key/value pairs)</td></tr>
           <tr><td><strong>auditLog</strong></td><td>${auditLog.length}</td><td>Audit trail (action, entity, detail, timestamp)</td></tr>
         </tbody>
@@ -2336,9 +2348,10 @@ window.exportAllCSV = function() {
     {name:'restaurant_orders.csv', data:restaurantOrders.map(o=>({...o,items:JSON.stringify(o.items||[])}))},
     {name:'store_items.csv', data:storeItems},
     {name:'service_requests.csv', data:serviceRequests},
+    {name:'transactions.csv', data:transactions.map(t=>({...t,items:JSON.stringify(t.items||[])}))},
   ];
   const files = tables.filter(t=>t.data&&t.data.length).map(t=>({name:t.name, content:tableToCsv(t.data)}));
-  const backupData = {rooms,guests,bookings,services,invoices,accounts,auditLog,settings,tickets,messages,inventory,bookingLog,inventoryLog,posTransactions,menuItems,restaurantOrders,storeItems,serviceRequests};
+  const backupData = {rooms,guests,bookings,services,invoices,accounts,auditLog,settings,tickets,messages,inventory,bookingLog,inventoryLog,posTransactions,menuItems,restaurantOrders,storeItems,serviceRequests,transactions};
   files.push({name:'_backup.json', content:JSON.stringify(backupData)});
   const zip = buildZip(files);
   let binStr = '';
@@ -2354,7 +2367,7 @@ window.exportAllCSV = function() {
   toast('CSV ZIP download started');
 };
 window.exportAllData = function() {
-  const data = {rooms,guests,bookings,bookingLog,services,invoices,accounts,auditLog,settings,tickets,messages,inventory,inventoryLog,posTransactions,menuItems,restaurantOrders,storeItems,serviceRequests};
+  const data = {rooms,guests,bookings,bookingLog,services,invoices,accounts,auditLog,settings,tickets,messages,inventory,inventoryLog,posTransactions,menuItems,restaurantOrders,storeItems,serviceRequests,transactions};
   const json = JSON.stringify(data, null, 2);
   const a = document.createElement('a');
   a.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(json);
@@ -2381,6 +2394,7 @@ function restoreFromJson(data) {
   if(data.restaurantOrders) { restaurantOrders = data.restaurantOrders; save('restaurantOrders',restaurantOrders); }
   if(data.storeItems) { storeItems = data.storeItems; save('storeItems',storeItems); }
   if(data.serviceRequests) { serviceRequests = data.serviceRequests; save('serviceRequests',serviceRequests); }
+  if(data.transactions) { transactions = data.transactions; save('transactions',transactions); }
   if(data.settings) { settings = data.settings; save('settings',settings); }
   if(data.auditLog) { auditLog = data.auditLog; save('auditLog',auditLog); }
   logAudit('Import','System','Restored data from backup');
@@ -2435,7 +2449,7 @@ window.clearAllData = function() {
   if(!confirm('This will permanently delete ALL data. Are you sure?')) return;
   if(!confirm('This cannot be undone. Proceed?')) return;
   if (isAndroid) {
-    ['rooms','guests','bookings','bookingLog','services','invoices','accounts','tickets','messages','inventory','inventoryLog','auditLog','settings','posTransactions','menuItems','restaurantOrders','storeItems','serviceRequests'].forEach(t => { try { HotelDB.deleteAll(t); } catch(e){} });
+    ['rooms','guests','bookings','bookingLog','services','invoices','accounts','tickets','messages','inventory','inventoryLog','auditLog','settings','posTransactions','menuItems','restaurantOrders','storeItems','serviceRequests','transactions'].forEach(t => { try { HotelDB.deleteAll(t); } catch(e){} });
   }
   Object.keys(localStorage).forEach(k => { if(k.startsWith(DB_KEY) && k !== DB_KEY+'currentUser') localStorage.removeItem(k); });
   logAudit('Clear','System','All data cleared');
@@ -2444,7 +2458,7 @@ window.clearAllData = function() {
 window.resetAll = function() {
   if(!confirm('Reset ALL data to defaults? This cannot be undone.')) return;
   if (isAndroid) {
-    ['rooms','guests','bookings','bookingLog','services','invoices','accounts','tickets','messages','inventory','inventoryLog','auditLog','settings','posTransactions','menuItems','restaurantOrders','storeItems','serviceRequests'].forEach(t => { try { HotelDB.deleteAll(t); } catch(e){} });
+    ['rooms','guests','bookings','bookingLog','services','invoices','accounts','tickets','messages','inventory','inventoryLog','auditLog','settings','posTransactions','menuItems','restaurantOrders','storeItems','serviceRequests','transactions'].forEach(t => { try { HotelDB.deleteAll(t); } catch(e){} });
   }
   Object.keys(localStorage).forEach(k => { if(k.startsWith(DB_KEY)) localStorage.removeItem(k); });
   location.reload();
@@ -2628,15 +2642,15 @@ function inventoryStatus(item) {
   return 'In Stock';
 }
 let inventoryGrid;
-function logInv(action, itemName, field, oldVal, newVal) {
-  const entry = {id:genId(), timestamp:new Date().toISOString(), user:currentUser?currentUser.name:currentRole, action:action, itemName:itemName, field:field||'', oldValue:String(oldVal??''), newValue:String(newVal??'')};
+function logInv(action, itemName, field, oldVal, newVal, details) {
+  const entry = {id:genId(), timestamp:new Date().toISOString(), user:currentUser?currentUser.name:currentRole, action:action, itemName:itemName, field:field||'', oldValue:String(oldVal??''), newValue:String(newVal??''), details:details||''};
   inventoryLog.push(entry);
   if (isAndroid) {
     try { HotelDB.upsert('inventory_log', JSON.stringify(entry)); } catch(e) {}
   } else {
     try { localStorage.setItem(DB_KEY + 'inventoryLog', JSON.stringify(inventoryLog)); } catch(e) {}
   }
-  logAudit(action, 'Inventory', itemName||'', (field?field+': ':'')+(oldVal!==undefined&&oldVal!==''?oldVal+' → ':'')+(newVal??''));
+  logAudit(action, 'Inventory', itemName||'', (details?details+' | ':'')+(field?field+': ':'')+(oldVal!==undefined&&oldVal!==''?oldVal+' → ':'')+(newVal??''));
 }
 function renderInventory() {
   inventory.forEach(it => { it.status = inventoryStatus(it); });
@@ -2730,6 +2744,178 @@ window.deleteInventoryItem = function(id) {
   logAudit('Delete','Inventory','Deleted '+(it?it.itemName:id)); closeModal(); renderInventory(); toast('Item deleted');
 };
 
+// ===== UNIFIED TRANSACTION SYSTEM =====
+function processSale(saleData) {
+  const txnId = nextTransactionId();
+  const staffName = saleData.staffName || (currentUser ? currentUser.name : currentRole);
+  const taxRate = saleData.taxRate || parseFloat(settings.surcharge) || 7;
+  const items = (saleData.items || []).map(item => ({
+    itemId: item.itemId || '', name: item.name, qty: item.qty,
+    unitPrice: item.unitPrice, total: item.unitPrice * item.qty,
+    inventoryDeducted: false
+  }));
+  const subtotal = items.reduce((s, i) => s + i.total, 0);
+  const taxAmount = Math.round(subtotal * taxRate) / 100;
+  const grandTotal = Math.round((subtotal + taxAmount) * 100) / 100;
+
+  const txn = {
+    id: genId(), transactionId: txnId, timestamp: new Date().toISOString(),
+    source: saleData.source || 'POS',
+    orderId: saleData.orderId || '',
+    roomNumber: saleData.roomNumber || '',
+    guestName: saleData.guestName || '',
+    bookingId: saleData.bookingId || '',
+    items: items,
+    subtotal: subtotal, taxRate: taxRate, taxAmount: taxAmount, grandTotal: grandTotal,
+    status: 'Completed',
+    paymentMethod: saleData.paymentMethod || 'Cash',
+    invoiceId: '',
+    staffName: staffName
+  };
+
+  transactions.push(txn);
+
+  items.forEach(item => {
+    let deducted = false;
+    if (saleData.source === 'Mini-Mart') {
+      const si = storeItems.find(x => x.name === item.name);
+      if (si) {
+        if (si.stock < item.qty) {
+          toast('Low stock warning: ' + item.name + ' (have ' + si.stock + ', need ' + item.qty + ')');
+        }
+        const oldStock = si.stock;
+        si.stock = Math.max(0, si.stock - item.qty);
+        deducted = true;
+        logInv('Sale', item.name, 'stock', oldStock, si.stock, txnId);
+      }
+    } else {
+      const invItem = inventory.find(x => x.itemName === item.name);
+      if (invItem) {
+        if (invItem.quantity < item.qty) {
+          toast('Low stock warning: ' + item.name + ' (have ' + invItem.quantity + ', need ' + item.qty + ')');
+        }
+        const oldQty = invItem.quantity;
+        invItem.quantity = Math.max(0, (parseInt(invItem.quantity) || 0) - item.qty);
+        invItem.status = inventoryStatus(invItem);
+        deducted = true;
+        logInv('Sale', item.name, 'quantity', oldQty, invItem.quantity, txnId);
+      }
+      const si = storeItems.find(x => x.name === item.name);
+      if (si && !deducted) {
+        if (si.stock < item.qty) {
+          toast('Low stock warning: ' + item.name + ' (have ' + si.stock + ', need ' + item.qty + ')');
+        }
+        const oldStock = si.stock;
+        si.stock = Math.max(0, si.stock - item.qty);
+        deducted = true;
+        logInv('Sale', item.name, 'stock', oldStock, si.stock, txnId);
+      }
+    }
+    item.inventoryDeducted = deducted;
+  });
+
+  if (saleData.source === 'Mini-Mart') {
+    save('storeItems', storeItems);
+  } else {
+    save('inventory', inventory);
+    save('storeItems', storeItems);
+  }
+
+  if (saleData.paymentMethod === 'Room Charge' && saleData.bookingId) {
+    const b = bookings.find(x => x.bookingId === saleData.bookingId || x.id === saleData.bookingId);
+    if (b) {
+      if (!b.services) b.services = [];
+      const prefix = saleData.source === 'Restaurant' ? 'Restaurant: ' : saleData.source === 'Mini-Mart' ? 'Mini-Mart: ' : saleData.source === 'Service' ? 'Service: ' : '';
+      const icon = saleData.source === 'Restaurant' ? '🍽️' : saleData.source === 'Mini-Mart' ? '🛒' : '◈';
+      items.forEach(item => {
+        b.services.push({name: prefix + item.name, unitPrice: item.unitPrice, quantity: item.qty, icon: icon, serviceCategory: saleData.source, status: 'Pending'});
+      });
+      save('bookings', bookings);
+    }
+    const invNum = nextInvoiceNumber();
+    const inv = {
+      id: genId(), invoiceNumber: invNum, bookingId: saleData.bookingId,
+      guestName: saleData.guestName || '', roomNumber: saleData.roomNumber || '',
+      subtotal: subtotal, discountAmount: 0, taxTotal: taxAmount,
+      grandTotal: grandTotal, paymentStatus: 'Unpaid',
+      paymentTransactionId: txnId, currency: 'USD', billingAddress: '',
+      services: items.map(i => ({name: i.name, unitPrice: i.unitPrice, quantity: i.qty, icon: '◈'})),
+      date: today(), transactionId: txnId
+    };
+    invoices.push(inv);
+    save('invoices', invoices);
+    txn.invoiceId = invNum;
+  } else {
+    const invNum = nextInvoiceNumber();
+    const inv = {
+      id: genId(), invoiceNumber: invNum, bookingId: saleData.bookingId || '',
+      guestName: saleData.guestName || '', roomNumber: saleData.roomNumber || '',
+      subtotal: subtotal, discountAmount: 0, taxTotal: taxAmount,
+      grandTotal: grandTotal, paymentStatus: 'Fully Paid',
+      paymentTransactionId: txnId, currency: 'USD', billingAddress: '',
+      services: items.map(i => ({name: i.name, unitPrice: i.unitPrice, quantity: i.qty, icon: '◈'})),
+      date: today(), transactionId: txnId
+    };
+    invoices.push(inv);
+    save('invoices', invoices);
+    txn.invoiceId = invNum;
+  }
+
+  logAudit('Sale', saleData.source || 'POS', txnId,
+    'Sale ' + fmt$(grandTotal) + ' (' + saleData.paymentMethod + ')' +
+    (saleData.guestName ? ' - ' + saleData.guestName : '') +
+    (saleData.roomNumber ? ' Room ' + saleData.roomNumber : ''));
+
+  save('transactions', transactions);
+
+  return txn;
+}
+
+function refundTransaction(txnId) {
+  const txn = transactions.find(t => t.transactionId === txnId || t.id === txnId);
+  if (!txn) { toast('Transaction not found'); return; }
+  if (txn.status === 'Refunded') { toast('Already refunded'); return; }
+  if (!confirm('Refund transaction ' + txn.transactionId + ' for ' + fmt$(txn.grandTotal) + '?')) return;
+
+  txn.status = 'Refunded';
+
+  (txn.items || []).forEach(item => {
+    if (txn.source === 'Mini-Mart') {
+      const si = storeItems.find(x => x.name === item.name);
+      if (si) {
+        const oldStock = si.stock;
+        si.stock = (si.stock || 0) + item.qty;
+        logInv('Refund', item.name, 'stock', oldStock, si.stock, txn.transactionId);
+      }
+    } else {
+      const invItem = inventory.find(x => x.itemName === item.name);
+      if (invItem) {
+        const oldQty = invItem.quantity;
+        invItem.quantity = (parseInt(invItem.quantity) || 0) + item.qty;
+        invItem.status = inventoryStatus(invItem);
+        logInv('Refund', item.name, 'quantity', oldQty, invItem.quantity, txn.transactionId);
+      }
+      const si = storeItems.find(x => x.name === item.name);
+      if (si) {
+        const oldStock = si.stock;
+        si.stock = (si.stock || 0) + item.qty;
+        logInv('Refund', item.name, 'stock', oldStock, si.stock, txn.transactionId);
+      }
+    }
+  });
+
+  save('inventory', inventory);
+  save('storeItems', storeItems);
+
+  const inv = invoices.find(i => i.paymentTransactionId === txn.transactionId || i.transactionId === txn.transactionId);
+  if (inv) { inv.paymentStatus = 'Refunded'; save('invoices', invoices); }
+
+  save('transactions', transactions);
+  logAudit('Refund', txn.source || 'POS', txn.transactionId, 'Refunded ' + fmt$(txn.grandTotal));
+  toast('Transaction ' + txn.transactionId + ' refunded');
+  renderPOS();
+}
+
 // ===== POS (Point of Sale) =====
 let posCart = [];
 let posSelectedBooking = null;
@@ -2790,6 +2976,8 @@ function renderPOS() {
 
   html += '<div class="pos-actions"><button class="btn btn-primary" ' + (!canCheckout || needsRoom ? 'disabled style="opacity:0.5;"' : '') + ' onclick="posCheckout(\'Room Charge\')">🏨 Charge to Room</button><button class="btn btn-success" ' + (!canCheckout ? 'disabled style="opacity:0.5;"' : '') + ' onclick="posCheckout(\'Cash\')">💵 Cash Payment</button><button class="btn btn-warning" ' + (!canCheckout ? 'disabled style="opacity:0.5;"' : '') + ' onclick="posCheckout(\'Credit Card\')">💳 Credit Card</button></div>';
 
+  html += '<div class="card"><div class="card-header"><h2>Transaction History (All Sources)</h2></div><div class="card-body"><div id="txnHistoryGrid"></div></div></div>';
+
   html += '<div class="card"><div class="card-header"><h2>POS Transaction Log</h2></div><div class="card-body"><div id="posTransGrid"></div></div></div>';
 
   document.getElementById('page-pos').innerHTML = html;
@@ -2798,6 +2986,25 @@ function renderPOS() {
     const selEl = document.getElementById('posRoomSelect');
     if (selEl) selEl.value = posSelectedBooking;
   }
+
+  new XGrid('txnHistoryGrid', {
+    columns: [
+      {field:'transactionId',label:'TXN ID',filterable:true,width:'100px'},
+      {field:'timestamp',label:'Timestamp',format:v=>{try{const d=new Date(v);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}catch(e){return v;}},filterable:true,width:'130px'},
+      {field:'source',label:'Source',filterable:true,width:'90px'},
+      {field:'roomNumber',label:'Room',filterable:true,width:'65px'},
+      {field:'guestName',label:'Guest',filterable:true},
+      {field:'items',label:'Items',format:(v)=>Array.isArray(v)?v.reduce((s,i)=>s+i.qty,0):'0',width:'60px'},
+      {field:'grandTotal',label:'Total',format:v=>'<strong>'+fmt$(v)+'</strong>',width:'85px'},
+      {field:'paymentMethod',label:'Payment',filterable:true,width:'100px'},
+      {field:'status',label:'Status',format:v=>{const cls=v==='Completed'?'active':v==='Refunded'?'maintenance':'pending';return '<span class="status status-'+cls+'">'+v+'</span>';},filterable:true,width:'95px'},
+      {field:'invoiceId',label:'Invoice #',filterable:true,width:'90px'},
+    ],
+    data: [...transactions].reverse(),
+    actions: [
+      {name:'refund',label:'Refund',cls:'btn-danger',condition:r=>r.status==='Completed',handler:id=>refundTransaction(transactions.find(t=>t.id===id)?transactions.find(t=>t.id===id).transactionId:id)},
+    ]
+  });
 
   new XGrid('posTransGrid', {
     columns: [
@@ -2854,64 +3061,30 @@ window.posCheckout = function(paidBy) {
   if (posCart.length === 0) { toast('Cart is empty'); return; }
   if (paidBy === 'Room Charge' && !posSelectedBooking) { toast('Select a room first'); return; }
 
-  const taxRate = parseFloat(settings.surcharge) || 7;
-  const staffName = currentUser ? currentUser.name : currentRole;
-  let roomNumber = '';
-  let guestName = '';
-  let bookingId = '';
-
+  let roomNumber = '', guestName = '', bookingId = '';
   if (posSelectedBooking) {
     const b = bookings.find(x => x.id === posSelectedBooking);
     if (b) { roomNumber = b.roomNumber; guestName = b.guestName; bookingId = b.bookingId; }
   }
 
-  const items = posCart.map(ci => ({name: ci.name, qty: ci.qty, unitPrice: ci.unitPrice, total: ci.unitPrice * ci.qty}));
-  const subtotal = items.reduce((s, i) => s + i.total, 0);
-  const tax = Math.round(subtotal * taxRate) / 100;
-  const grandTotal = Math.round((subtotal + tax) * 100) / 100;
+  const saleItems = posCart.map(ci => ({itemId: ci.inventoryId, name: ci.name, qty: ci.qty, unitPrice: ci.unitPrice}));
 
-  const txn = {
-    id: genId(),
-    timestamp: new Date().toISOString(),
-    roomNumber: roomNumber,
-    guestName: guestName,
-    bookingId: bookingId,
-    items: items,
-    itemCount: items.reduce((s, i) => s + i.qty, 0),
-    subtotal: subtotal,
-    tax: tax,
-    grandTotal: grandTotal,
-    paidBy: paidBy,
-    staffName: staffName
+  const txn = processSale({
+    source: 'POS', paymentMethod: paidBy,
+    roomNumber: roomNumber, guestName: guestName, bookingId: bookingId,
+    items: saleItems, taxRate: parseFloat(settings.surcharge) || 7
+  });
+
+  const posTxn = {
+    id: txn.id, timestamp: txn.timestamp, roomNumber: roomNumber, guestName: guestName,
+    bookingId: bookingId, items: txn.items, itemCount: txn.items.reduce((s, i) => s + i.qty, 0),
+    subtotal: txn.subtotal, tax: txn.taxAmount, grandTotal: txn.grandTotal,
+    paidBy: paidBy, staffName: txn.staffName, transactionId: txn.transactionId
   };
-  posTransactions.push(txn);
+  posTransactions.push(posTxn);
   save('posTransactions', posTransactions);
 
-  posCart.forEach(ci => {
-    const it = inventory.find(x => x.id === ci.inventoryId);
-    if (it) {
-      const oldQty = it.quantity;
-      it.quantity = Math.max(0, (parseInt(it.quantity) || 0) - ci.qty);
-      it.status = inventoryStatus(it);
-      logInv('POS Sale', it.itemName, 'quantity', oldQty, it.quantity);
-    }
-  });
-  save('inventory', inventory);
-
-  if (paidBy === 'Room Charge' && posSelectedBooking) {
-    const b = bookings.find(x => x.id === posSelectedBooking);
-    if (b) {
-      if (!b.services) b.services = [];
-      items.forEach(item => {
-        b.services.push({name: item.name, unitPrice: item.unitPrice, quantity: item.qty, icon: '◈', serviceCategory: 'POS'});
-      });
-      save('bookings', bookings);
-    }
-  }
-
-  logAudit('POS Sale', 'POS', txn.id, 'Sale ' + fmt$(grandTotal) + ' (' + paidBy + ')' + (guestName ? ' - ' + guestName + ' Room ' + roomNumber : ''));
-
-  toast('Sale completed - ' + fmt$(grandTotal));
+  toast('Sale completed - ' + fmt$(txn.grandTotal) + ' (' + txn.transactionId + ')');
   posCart = [];
   renderPOS();
 };
@@ -3095,10 +3268,7 @@ window.restCheckout = function(paidBy) {
   if (restCart.length === 0) { toast('Cart is empty'); return; }
   if (paidBy === 'Room Charge' && !restSelectedBooking) { toast('Select a room first'); return; }
 
-  const taxRate = parseFloat(settings.serviceTax || settings.taxRate) || 7;
-  const staffName = currentUser ? currentUser.name : currentRole;
   let roomNumber = '', guestName = '', bookingId = '', tableNumber = '';
-
   if (restOrderType === 'Room Service' && restSelectedBooking) {
     const b = bookings.find(x => x.id === restSelectedBooking);
     if (b) { roomNumber = b.roomNumber; guestName = b.guestName; bookingId = b.bookingId; tableNumber = 'Room Service'; }
@@ -3106,34 +3276,27 @@ window.restCheckout = function(paidBy) {
     tableNumber = restTableNumber || 'Table 1';
   }
 
-  const items = restCart.map(ci => ({name: ci.name, qty: ci.qty, unitPrice: ci.unitPrice, total: ci.unitPrice * ci.qty}));
-  const subtotal = items.reduce((s, i) => s + i.total, 0);
-  const tax = Math.round(subtotal * taxRate) / 100;
-  const grandTotal = Math.round((subtotal + tax) * 100) / 100;
   const notes = document.getElementById('restOrderNotes') ? document.getElementById('restOrderNotes').value : '';
+  const orderNum = nextOrderNumber();
+  const saleItems = restCart.map(ci => ({itemId: ci.menuItemId, name: ci.name, qty: ci.qty, unitPrice: ci.unitPrice}));
+
+  const txn = processSale({
+    source: 'Restaurant', paymentMethod: paidBy,
+    roomNumber: roomNumber, guestName: guestName, bookingId: bookingId,
+    orderId: orderNum, items: saleItems,
+    taxRate: parseFloat(settings.serviceTax || settings.taxRate) || 7
+  });
 
   const order = {
-    id: genId(), timestamp: new Date().toISOString(), orderNumber: nextOrderNumber(),
+    id: genId(), timestamp: txn.timestamp, orderNumber: orderNum,
     roomNumber: roomNumber, guestName: guestName, bookingId: bookingId, tableNumber: tableNumber,
-    items: items, subtotal: subtotal, tax: tax, grandTotal: grandTotal,
-    status: 'Paid', paidBy: paidBy, staffName: staffName, notes: notes
+    items: txn.items, subtotal: txn.subtotal, tax: txn.taxAmount, grandTotal: txn.grandTotal,
+    status: 'Paid', paidBy: paidBy, staffName: txn.staffName, notes: notes, transactionId: txn.transactionId
   };
   restaurantOrders.push(order);
   save('restaurantOrders', restaurantOrders);
 
-  if (paidBy === 'Room Charge' && restSelectedBooking) {
-    const b = bookings.find(x => x.id === restSelectedBooking);
-    if (b) {
-      if (!b.services) b.services = [];
-      items.forEach(item => {
-        b.services.push({name: 'Restaurant: ' + item.name, unitPrice: item.unitPrice, quantity: item.qty, icon: '🍽️', serviceCategory: 'Restaurant'});
-      });
-      save('bookings', bookings);
-    }
-  }
-
-  logAudit('Order Completed', 'Restaurant', order.orderNumber, 'Sale ' + fmt$(grandTotal) + ' (' + paidBy + ')' + (guestName ? ' - ' + guestName : ''));
-  toast('Order completed - ' + fmt$(grandTotal));
+  toast('Order completed - ' + fmt$(txn.grandTotal) + ' (' + txn.transactionId + ')');
   restCart = [];
   renderRestaurant();
 };
@@ -3149,23 +3312,22 @@ window.restUpdateStatus = function(orderId, newStatus) {
 
 window.restPayOrder = function(orderId, paidBy) {
   const o = restaurantOrders.find(x => x.id === orderId); if (!o) return;
+
+  const saleItems = (o.items || []).map(item => ({itemId: '', name: item.name, qty: item.qty, unitPrice: item.unitPrice}));
+
+  const txn = processSale({
+    source: 'Restaurant', paymentMethod: paidBy,
+    roomNumber: o.roomNumber || '', guestName: o.guestName || '', bookingId: o.bookingId || '',
+    orderId: o.orderNumber, items: saleItems,
+    taxRate: parseFloat(settings.serviceTax || settings.taxRate) || 7
+  });
+
   o.status = 'Paid';
   o.paidBy = paidBy;
+  o.transactionId = txn.transactionId;
   save('restaurantOrders', restaurantOrders);
 
-  if (paidBy === 'Room Charge' && o.bookingId) {
-    const b = bookings.find(x => x.bookingId === o.bookingId);
-    if (b) {
-      if (!b.services) b.services = [];
-      (o.items || []).forEach(item => {
-        b.services.push({name: 'Restaurant: ' + item.name, unitPrice: item.unitPrice, quantity: item.qty, icon: '🍽️', serviceCategory: 'Restaurant'});
-      });
-      save('bookings', bookings);
-    }
-  }
-
-  logAudit('Payment', 'Restaurant', o.orderNumber, 'Paid ' + fmt$(o.grandTotal) + ' by ' + paidBy);
-  toast(o.orderNumber + ' paid by ' + paidBy);
+  toast(o.orderNumber + ' paid by ' + paidBy + ' (' + txn.transactionId + ')');
   renderRestaurant();
 };
 
@@ -3279,49 +3441,31 @@ window.martCheckout = function(paidBy) {
   if (martCart.length === 0) { toast('Cart is empty'); return; }
   if (paidBy === 'Room Charge' && (!martSelectedBooking || martIsWalkin)) { toast('Select a room first'); return; }
 
-  const taxRate = parseFloat(settings.surcharge) || 7;
-  const staffName = currentUser ? currentUser.name : currentRole;
   let roomNumber = '', guestName = '', bookingId = '';
-
   if (martSelectedBooking && !martIsWalkin) {
     const b = bookings.find(x => x.id === martSelectedBooking);
     if (b) { roomNumber = b.roomNumber; guestName = b.guestName; bookingId = b.bookingId; }
   }
 
-  const items = martCart.map(ci => ({name: ci.name, qty: ci.qty, unitPrice: ci.unitPrice, total: ci.unitPrice * ci.qty}));
-  const subtotal = items.reduce((s, i) => s + i.total, 0);
-  const tax = Math.round(subtotal * taxRate) / 100;
-  const grandTotal = Math.round((subtotal + tax) * 100) / 100;
+  const saleItems = martCart.map(ci => ({itemId: ci.storeItemId, name: ci.name, qty: ci.qty, unitPrice: ci.unitPrice}));
 
-  const txn = {
-    id: genId(), timestamp: new Date().toISOString(), source: 'Mini-Mart',
+  const txn = processSale({
+    source: 'Mini-Mart', paymentMethod: paidBy,
     roomNumber: roomNumber, guestName: guestName, bookingId: bookingId,
-    items: items, itemCount: items.reduce((s, i) => s + i.qty, 0),
-    subtotal: subtotal, tax: tax, grandTotal: grandTotal,
-    paidBy: paidBy, staffName: staffName
+    items: saleItems, taxRate: parseFloat(settings.surcharge) || 7
+  });
+
+  const posTxn = {
+    id: txn.id, timestamp: txn.timestamp, source: 'Mini-Mart',
+    roomNumber: roomNumber, guestName: guestName, bookingId: bookingId,
+    items: txn.items, itemCount: txn.items.reduce((s, i) => s + i.qty, 0),
+    subtotal: txn.subtotal, tax: txn.taxAmount, grandTotal: txn.grandTotal,
+    paidBy: paidBy, staffName: txn.staffName, transactionId: txn.transactionId
   };
-  posTransactions.push(txn);
+  posTransactions.push(posTxn);
   save('posTransactions', posTransactions);
 
-  martCart.forEach(ci => {
-    const it = storeItems.find(x => x.id === ci.storeItemId);
-    if (it) { it.stock = Math.max(0, it.stock - ci.qty); }
-  });
-  save('storeItems', storeItems);
-
-  if (paidBy === 'Room Charge' && martSelectedBooking) {
-    const b = bookings.find(x => x.id === martSelectedBooking);
-    if (b) {
-      if (!b.services) b.services = [];
-      items.forEach(item => {
-        b.services.push({name: 'Mini-Mart: ' + item.name, unitPrice: item.unitPrice, quantity: item.qty, icon: '🛒', serviceCategory: 'Mini-Mart'});
-      });
-      save('bookings', bookings);
-    }
-  }
-
-  logAudit('Sale', 'Mini-Mart', txn.id, 'Sale ' + fmt$(grandTotal) + ' (' + paidBy + ')' + (guestName ? ' - ' + guestName + ' Room ' + roomNumber : ''));
-  toast('Sale completed - ' + fmt$(grandTotal));
+  toast('Sale completed - ' + fmt$(txn.grandTotal) + ' (' + txn.transactionId + ')');
   martCart = [];
   renderMiniMart();
 };
