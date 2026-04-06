@@ -1010,12 +1010,36 @@ const defaultRooms = [
   {id:genId(),roomNumber:'405',roomType:'Single',floorNumber:4,bedConfig:'Twin',housekeepingStatus:'Clean',occupancyStatus:'Available',maxAdults:1,maxChildren:0,amenities:'TV, WiFi',maintenanceLogs:'',price:85},
 ];
 const defaultGuests = [
-  {id:genId(),firstName:'John',lastName:'Smith',passportId:'US-98765432',nationality:'American',dob:'1985-06-15',email:'john.smith@email.com',phone:'+1 555-0123',paymentMethod:'Credit Card',guestNotes:'Prefers high floor',blacklist:0,visits:3},
-  {id:genId(),firstName:'Maria',lastName:'Garcia',passportId:'ES-12345678',nationality:'Spanish',dob:'1990-03-22',email:'m.garcia@email.com',phone:'+34 612-3456',paymentMethod:'Cash',guestNotes:'',blacklist:0,visits:1},
-  {id:genId(),firstName:'Akira',lastName:'Tanaka',passportId:'JP-55667788',nationality:'Japanese',dob:'1978-11-03',email:'a.tanaka@email.com',phone:'+81 90-1234',paymentMethod:'Credit Card',guestNotes:'Allergic to shellfish',blacklist:0,visits:5},
-  {id:genId(),firstName:'Sophie',lastName:'Laurent',passportId:'FR-33445566',nationality:'French',dob:'1992-08-10',email:'s.laurent@email.com',phone:'+33 6-7890',paymentMethod:'Bank Transfer',guestNotes:'',blacklist:0,visits:2},
-  {id:genId(),firstName:'James',lastName:'Wilson',passportId:'UK-11223344',nationality:'British',dob:'1988-01-28',email:'j.wilson@email.com',phone:'+44 20-7890',paymentMethod:'Credit Card',guestNotes:'VIP guest',blacklist:0,visits:1},
+  {id:genId(),firstName:'John',lastName:'Smith',passportId:'US-98765432',nationality:'American',dob:'1985-06-15',email:'john.smith@email.com',phone:'+1 555-0123',paymentMethod:'Credit Card',guestNotes:'Prefers high floor',blacklist:0,visits:5},
+  {id:genId(),firstName:'James',lastName:'Wilson',passportId:'GB-11223344',nationality:'British',dob:'1988-01-28',email:'j.wilson@email.com',phone:'+44 20-7890',paymentMethod:'Credit Card',guestNotes:'VIP guest',blacklist:0,visits:8},
+  {id:genId(),firstName:'Akira',lastName:'Tanaka',passportId:'JP-55667788',nationality:'Japanese',dob:'1978-11-03',email:'a.tanaka@email.com',phone:'+81 90-1234',paymentMethod:'Credit Card',guestNotes:'Allergic to shellfish',blacklist:0,visits:6},
+  {id:genId(),firstName:'Siriporn',lastName:'Chaiyasit',passportId:'TH-44556677',nationality:'Thai',dob:'1993-07-19',email:'s.chaiyasit@email.com',phone:'+66 81-234-5678',paymentMethod:'Cash',guestNotes:'',blacklist:0,visits:2},
+  {id:genId(),firstName:'Sophie',lastName:'Laurent',passportId:'FR-33445566',nationality:'French',dob:'1992-08-10',email:'s.laurent@email.com',phone:'+33 6-7890',paymentMethod:'Bank Transfer',guestNotes:'Vegetarian meals only',blacklist:0,visits:3},
+  {id:genId(),firstName:'Klaus',lastName:'Hoffmann',passportId:'DE-22334455',nationality:'German',dob:'1975-04-02',email:'k.hoffmann@email.com',phone:'+49 170-1234567',paymentMethod:'Credit Card',guestNotes:'',blacklist:0,visits:4},
+  {id:genId(),firstName:'Emma',lastName:'Richardson',passportId:'AU-66778899',nationality:'Australian',dob:'1990-12-25',email:'e.richardson@email.com',phone:'+61 4-1234-5678',paymentMethod:'Credit Card',guestNotes:'Needs extra pillows',blacklist:0,visits:1},
   {id:genId(),firstName:'Lin',lastName:'Wei',passportId:'CN-99887766',nationality:'Chinese',dob:'1995-12-05',email:'l.wei@email.com',phone:'+86 138-0000',paymentMethod:'Cash',guestNotes:'',blacklist:0,visits:4},
+  {id:genId(),firstName:'Min-jun',lastName:'Park',passportId:'KR-77889900',nationality:'Korean',dob:'1987-09-14',email:'m.park@email.com',phone:'+82 10-9876-5432',paymentMethod:'Credit Card',guestNotes:'Late check-in preferred',blacklist:0,visits:2},
+  {id:genId(),firstName:'Priya',lastName:'Sharma',passportId:'IN-11224433',nationality:'Indian',dob:'1991-03-08',email:'p.sharma@email.com',phone:'+91 98765-43210',paymentMethod:'Bank Transfer',guestNotes:'Allergic to nuts',blacklist:0,visits:3},
+  {id:genId(),firstName:'Noam',lastName:'Levi',passportId:'IL-55664477',nationality:'Israeli',dob:'1983-11-22',email:'n.levi@email.com',phone:'+972 50-123-4567',paymentMethod:'Credit Card',guestNotes:'',blacklist:0,visits:1},
+  {id:genId(),firstName:'Lucas',lastName:'Santos',passportId:'BR-88990011',nationality:'Brazilian',dob:'1989-02-14',email:'l.santos@email.com',phone:'+55 11-98765-4321',paymentMethod:'Cash',guestNotes:'',blacklist:0,visits:2},
+  {id:genId(),firstName:'Anastasia',lastName:'Petrova',passportId:'RU-33221100',nationality:'Russian',dob:'1994-06-30',email:'a.petrova@email.com',phone:'+7 916-123-4567',paymentMethod:'Credit Card',guestNotes:'Requires hypoallergenic bedding',blacklist:0,visits:1},
+  {id:genId(),firstName:'Maria',lastName:'Garcia',passportId:'ES-12345678',nationality:'Spanish',dob:'1990-03-22',email:'m.garcia@email.com',phone:'+34 612-3456',paymentMethod:'Cash',guestNotes:'',blacklist:0,visits:3},
+  {id:genId(),firstName:'Marco',lastName:'Rossi',passportId:'IT-44557788',nationality:'Italian',dob:'1982-10-17',email:'m.rossi@email.com',phone:'+39 333-1234567',paymentMethod:'Credit Card',guestNotes:'Wine enthusiast - recommend local selection',blacklist:0,visits:5},
+  {id:genId(),firstName:'Sarah',lastName:'Thompson',passportId:'CA-66554433',nationality:'Canadian',dob:'1996-01-05',email:'s.thompson@email.com',phone:'+1 604-555-0199',paymentMethod:'Credit Card',guestNotes:'',blacklist:0,visits:0},
+  {id:genId(),firstName:'Pieter',lastName:'de Vries',passportId:'NL-99001122',nationality:'Dutch',dob:'1979-08-28',email:'p.devries@email.com',phone:'+31 6-12345678',paymentMethod:'Bank Transfer',guestNotes:'',blacklist:0,visits:2},
+  {id:genId(),firstName:'Erik',lastName:'Lindqvist',passportId:'SE-22110033',nationality:'Swedish',dob:'1986-05-11',email:'e.lindqvist@email.com',phone:'+46 70-1234567',paymentMethod:'Credit Card',guestNotes:'Gluten-free diet',blacklist:0,visits:1},
+  {id:genId(),firstName:'Carlos',lastName:'Hernandez',passportId:'MX-55443322',nationality:'Mexican',dob:'1988-12-03',email:'c.hernandez@email.com',phone:'+52 55-1234-5678',paymentMethod:'Cash',guestNotes:'',blacklist:0,visits:3},
+  {id:genId(),firstName:'Thabo',lastName:'Molefe',passportId:'ZA-77665544',nationality:'South African',dob:'1992-04-20',email:'t.molefe@email.com',phone:'+27 82-123-4567',paymentMethod:'Credit Card',guestNotes:'',blacklist:0,visits:0},
+  {id:genId(),firstName:'David',lastName:'Miller',passportId:'US-43218765',nationality:'American',dob:'1980-07-04',email:'d.miller@email.com',phone:'+1 212-555-0177',paymentMethod:'Credit Card',guestNotes:'Business traveler - needs desk setup',blacklist:0,visits:7},
+  {id:genId(),firstName:'Charlotte',lastName:'Brown',passportId:'GB-99001234',nationality:'British',dob:'1997-09-15',email:'c.brown@email.com',phone:'+44 77-1234-5678',paymentMethod:'Cash',guestNotes:'',blacklist:0,visits:1},
+  {id:genId(),firstName:'Yuki',lastName:'Yamamoto',passportId:'JP-33446655',nationality:'Japanese',dob:'1985-03-29',email:'y.yamamoto@email.com',phone:'+81 80-5678-1234',paymentMethod:'Credit Card',guestNotes:'',blacklist:0,visits:2},
+  {id:genId(),firstName:'François',lastName:'Dubois',passportId:'FR-77881122',nationality:'French',dob:'1974-11-08',email:'f.dubois@email.com',phone:'+33 7-8901-2345',paymentMethod:'Bank Transfer',guestNotes:'Prefers ground floor',blacklist:0,visits:4},
+  {id:genId(),firstName:'Raj',lastName:'Patel',passportId:'IN-88776655',nationality:'Indian',dob:'1993-01-17',email:'r.patel@email.com',phone:'+91 98712-34567',paymentMethod:'Credit Card',guestNotes:'',blacklist:0,visits:1},
+  {id:genId(),firstName:'Viktor',lastName:'Kozlov',passportId:'RU-11009988',nationality:'Russian',dob:'1970-06-22',email:'v.kozlov@email.com',phone:'+7 903-456-7890',paymentMethod:'Cash',guestNotes:'',blacklist:1,visits:2},
+  {id:genId(),firstName:'Javier',lastName:'Morales',passportId:'MX-22113344',nationality:'Mexican',dob:'1984-08-13',email:'j.morales@email.com',phone:'+52 33-8765-4321',paymentMethod:'Credit Card',guestNotes:'',blacklist:0,visits:0},
+  {id:genId(),firstName:'Chen',lastName:'Xiaoming',passportId:'CN-44332211',nationality:'Chinese',dob:'1991-10-01',email:'c.xiaoming@email.com',phone:'+86 139-8765-4321',paymentMethod:'Credit Card',guestNotes:'Mandarin speaker - assign bilingual staff',blacklist:0,visits:3},
+  {id:genId(),firstName:'Robert',lastName:'van der Berg',passportId:'NL-55667700',nationality:'Dutch',dob:'1976-02-19',email:'r.vanderberg@email.com',phone:'+31 6-98765432',paymentMethod:'Bank Transfer',guestNotes:'',blacklist:1,visits:4},
+  {id:genId(),firstName:'Isabella',lastName:'Costa',passportId:'BR-66778800',nationality:'Brazilian',dob:'1998-05-27',email:'i.costa@email.com',phone:'+55 21-97654-3210',paymentMethod:'Cash',guestNotes:'',blacklist:0,visits:0},
 ];
 const defaultServices = [
   {id:genId(),serviceCategory:'Room Service',name:'Breakfast Buffet',unitPrice:25,quantity:1,taxRate:7,serviceDateTime:'',staffId:'',icon:'◈'},
@@ -1033,21 +1057,79 @@ const defaultAccounts = [
   {id:genId(),name:'Tom Williams',email:'tom@hotel.com',role:'Housekeeper',status:'inactive'},
 ];
 const defaultInvoices = [
-  {id:genId(),invoiceNumber:'INV-2001',bookingId:'',guestName:'John Smith',roomNumber:'201',subtotal:240,discountAmount:0,taxTotal:16.80,grandTotal:256.80,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10001',currency:'USD',billingAddress:'123 Main St, New York, USA',services:[],date:'2026-03-15'},
-  {id:genId(),invoiceNumber:'INV-2002',bookingId:'',guestName:'Akira Tanaka',roomNumber:'305',subtotal:720,discountAmount:50,taxTotal:46.90,grandTotal:716.90,paymentStatus:'Partially Paid',paymentTransactionId:'TXN-10002',currency:'USD',billingAddress:'456 Sakura Ave, Tokyo, Japan',services:[{name:'Thai Massage',unitPrice:80,quantity:1,icon:'◎'}],date:'2026-03-20'},
-  {id:genId(),invoiceNumber:'INV-2003',bookingId:'',guestName:'Sophie Laurent',roomNumber:'103',subtotal:400,discountAmount:0,taxTotal:28,grandTotal:428,paymentStatus:'Unpaid',paymentTransactionId:'',currency:'EUR',billingAddress:'789 Rue de Paris, Paris, France',services:[],date:'2026-03-25'},
+  {id:genId(),invoiceNumber:'INV-2001',bookingId:'BK-1001',guestName:'John Smith',roomNumber:'101',subtotal:160,discountAmount:0,taxTotal:11.20,grandTotal:171.20,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10001',currency:'USD',billingAddress:'123 Main St, New York, USA',services:[],date:'2026-01-04'},
+  {id:genId(),invoiceNumber:'INV-2002',bookingId:'BK-1002',guestName:'James Wilson',roomNumber:'202',subtotal:600,discountAmount:0,taxTotal:42.00,grandTotal:642.00,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10002',currency:'USD',billingAddress:'14 Baker St, London, UK',services:[],date:'2026-01-08'},
+  {id:genId(),invoiceNumber:'INV-2003',bookingId:'BK-1003',guestName:'Akira Tanaka',roomNumber:'305',subtotal:1080,discountAmount:50,taxTotal:72.10,grandTotal:1102.10,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10003',currency:'USD',billingAddress:'456 Sakura Ave, Tokyo, Japan',services:[{name:'Thai Massage',unitPrice:80,quantity:1,icon:'◎'}],date:'2026-01-12'},
+  {id:genId(),invoiceNumber:'INV-2004',bookingId:'BK-1004',guestName:'Sophie Laurent',roomNumber:'103',subtotal:400,discountAmount:0,taxTotal:28.00,grandTotal:428.00,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10004',currency:'EUR',billingAddress:'789 Rue de Paris, Paris, France',services:[],date:'2026-01-17'},
+  {id:genId(),invoiceNumber:'INV-2005',bookingId:'BK-1005',guestName:'Klaus Hoffmann',roomNumber:'201',subtotal:360,discountAmount:20,taxTotal:23.80,grandTotal:363.80,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10005',currency:'EUR',billingAddress:'12 Berliner Str, Munich, Germany',services:[],date:'2026-01-22'},
+  {id:genId(),invoiceNumber:'INV-2006',bookingId:'BK-1007',guestName:'Siriporn Chaiyasit',roomNumber:'104',subtotal:700,discountAmount:0,taxTotal:49.00,grandTotal:749.00,paymentStatus:'Unpaid',paymentTransactionId:'',currency:'THB',billingAddress:'88 Sukhumvit Rd, Bangkok, Thailand',services:[],date:'2026-01-28'},
+  {id:genId(),invoiceNumber:'INV-2007',bookingId:'BK-1009',guestName:'Emma Richardson',roomNumber:'401',subtotal:440,discountAmount:0,taxTotal:30.80,grandTotal:470.80,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10007',currency:'USD',billingAddress:'22 Harbour Rd, Sydney, Australia',services:[],date:'2026-02-02'},
+  {id:genId(),invoiceNumber:'INV-2008',bookingId:'BK-1010',guestName:'Lin Wei',roomNumber:'302',subtotal:630,discountAmount:30,taxTotal:42.00,grandTotal:642.00,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10008',currency:'USD',billingAddress:'99 Nanjing Rd, Shanghai, China',services:[{name:'Breakfast Buffet',unitPrice:25,quantity:2,icon:'◈'}],date:'2026-02-06'},
+  {id:genId(),invoiceNumber:'INV-2009',bookingId:'BK-1011',guestName:'Min-jun Park',roomNumber:'203',subtotal:700,discountAmount:0,taxTotal:49.00,grandTotal:749.00,paymentStatus:'Partially Paid',paymentTransactionId:'TXN-10009',currency:'USD',billingAddress:'56 Gangnam Blvd, Seoul, Korea',services:[],date:'2026-02-10'},
+  {id:genId(),invoiceNumber:'INV-2010',bookingId:'BK-1012',guestName:'Priya Sharma',roomNumber:'105',subtotal:240,discountAmount:0,taxTotal:16.80,grandTotal:256.80,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10010',currency:'USD',billingAddress:'45 MG Road, Mumbai, India',services:[],date:'2026-02-14'},
+  {id:genId(),invoiceNumber:'INV-2011',bookingId:'BK-1013',guestName:'Lucas Santos',roomNumber:'204',subtotal:1800,discountAmount:100,taxTotal:119.00,grandTotal:1819.00,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10011',currency:'USD',billingAddress:'300 Copacabana Ave, Rio de Janeiro, Brazil',services:[{name:'Pool Day Pass',unitPrice:10,quantity:3,icon:'●'}],date:'2026-02-18'},
+  {id:genId(),invoiceNumber:'INV-2012',bookingId:'BK-1014',guestName:'Noam Levi',roomNumber:'301',subtotal:260,discountAmount:0,taxTotal:18.20,grandTotal:278.20,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10012',currency:'USD',billingAddress:'12 Rothschild Blvd, Tel Aviv, Israel',services:[],date:'2026-02-22'},
+  {id:genId(),invoiceNumber:'INV-2013',bookingId:'BK-1016',guestName:'Marco Rossi',roomNumber:'104',subtotal:1050,discountAmount:50,taxTotal:70.00,grandTotal:1070.00,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10013',currency:'EUR',billingAddress:'Via Roma 15, Milan, Italy',services:[{name:'Airport Pickup',unitPrice:45,quantity:1,icon:'▷'}],date:'2026-02-28'},
+  {id:genId(),invoiceNumber:'INV-2014',bookingId:'BK-1017',guestName:'Sarah Thompson',roomNumber:'102',subtotal:240,discountAmount:0,taxTotal:16.80,grandTotal:256.80,paymentStatus:'Unpaid',paymentTransactionId:'',currency:'USD',billingAddress:'88 Maple St, Vancouver, Canada',services:[],date:'2026-03-03'},
+  {id:genId(),invoiceNumber:'INV-2015',bookingId:'BK-1018',guestName:'Pieter de Vries',roomNumber:'403',subtotal:390,discountAmount:0,taxTotal:27.30,grandTotal:417.30,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10015',currency:'USD',billingAddress:'Keizersgracht 100, Amsterdam, Netherlands',services:[],date:'2026-03-06'},
+  {id:genId(),invoiceNumber:'INV-2016',bookingId:'BK-1019',guestName:'Erik Lindqvist',roomNumber:'205',subtotal:170,discountAmount:0,taxTotal:11.90,grandTotal:181.90,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10016',currency:'USD',billingAddress:'Storgatan 5, Stockholm, Sweden',services:[],date:'2026-03-09'},
+  {id:genId(),invoiceNumber:'INV-2017',bookingId:'BK-1020',guestName:'Carlos Hernandez',roomNumber:'304',subtotal:390,discountAmount:0,taxTotal:27.30,grandTotal:417.30,paymentStatus:'Partially Paid',paymentTransactionId:'TXN-10017',currency:'USD',billingAddress:'Reforma 222, Mexico City, Mexico',services:[],date:'2026-03-12'},
+  {id:genId(),invoiceNumber:'INV-2018',bookingId:'BK-1021',guestName:'Thabo Molefe',roomNumber:'401',subtotal:660,discountAmount:0,taxTotal:46.20,grandTotal:706.20,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10018',currency:'USD',billingAddress:'15 Long St, Cape Town, South Africa',services:[],date:'2026-03-16'},
+  {id:genId(),invoiceNumber:'INV-2019',bookingId:'BK-1022',guestName:'David Miller',roomNumber:'305',subtotal:1440,discountAmount:0,taxTotal:100.80,grandTotal:1540.80,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10019',currency:'USD',billingAddress:'500 Park Ave, New York, USA',services:[{name:'Dinner Set Menu',unitPrice:40,quantity:2,icon:'🍽️'}],date:'2026-03-19'},
+  {id:genId(),invoiceNumber:'INV-2020',bookingId:'BK-1023',guestName:'Charlotte Brown',roomNumber:'101',subtotal:160,discountAmount:0,taxTotal:11.20,grandTotal:171.20,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10020',currency:'USD',billingAddress:'7 King\'s Rd, Brighton, UK',services:[],date:'2026-03-22'},
+  {id:genId(),invoiceNumber:'INV-2021',bookingId:'BK-1024',guestName:'Yuki Yamamoto',roomNumber:'402',subtotal:1950,discountAmount:100,taxTotal:129.50,grandTotal:1979.50,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10021',currency:'USD',billingAddress:'3-1 Shibuya, Tokyo, Japan',services:[{name:'Thai Massage',unitPrice:80,quantity:2,icon:'◎'}],date:'2026-03-25'},
+  {id:genId(),invoiceNumber:'INV-2022',bookingId:'BK-1025',guestName:'François Dubois',roomNumber:'203',subtotal:700,discountAmount:0,taxTotal:49.00,grandTotal:749.00,paymentStatus:'Unpaid',paymentTransactionId:'',currency:'EUR',billingAddress:'25 Ave Montaigne, Paris, France',services:[],date:'2026-03-28'},
+  {id:genId(),invoiceNumber:'INV-2023',bookingId:'BK-1026',guestName:'Raj Patel',roomNumber:'301',subtotal:390,discountAmount:0,taxTotal:27.30,grandTotal:417.30,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10023',currency:'USD',billingAddress:'12 Connaught Place, New Delhi, India',services:[],date:'2026-03-31'},
+  {id:genId(),invoiceNumber:'INV-2024',bookingId:'BK-1028',guestName:'Maria Garcia',roomNumber:'103',subtotal:600,discountAmount:0,taxTotal:42.00,grandTotal:642.00,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10024',currency:'USD',billingAddress:'Calle Mayor 8, Madrid, Spain',services:[],date:'2026-04-02'},
+  {id:genId(),invoiceNumber:'INV-2025',bookingId:'BK-1029',guestName:'Anastasia Petrova',roomNumber:'204',subtotal:1200,discountAmount:0,taxTotal:84.00,grandTotal:1284.00,paymentStatus:'Partially Paid',paymentTransactionId:'TXN-10025',currency:'USD',billingAddress:'Nevsky Prospect 50, St Petersburg, Russia',services:[],date:'2026-04-03'},
+  {id:genId(),invoiceNumber:'INV-2026',bookingId:'BK-1030',guestName:'Chen Xiaoming',roomNumber:'302',subtotal:420,discountAmount:0,taxTotal:29.40,grandTotal:449.40,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10026',currency:'USD',billingAddress:'168 Huaihai Rd, Shanghai, China',services:[],date:'2026-04-03'},
+  {id:genId(),invoiceNumber:'INV-2027',bookingId:'BK-1031',guestName:'John Smith',roomNumber:'201',subtotal:480,discountAmount:0,taxTotal:33.60,grandTotal:513.60,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10027',currency:'USD',billingAddress:'123 Main St, New York, USA',services:[{name:'Standard Wash & Iron',unitPrice:15,quantity:2,icon:'◇'}],date:'2026-04-04'},
+  {id:genId(),invoiceNumber:'INV-2028',bookingId:'BK-1033',guestName:'Klaus Hoffmann',roomNumber:'305',subtotal:1080,discountAmount:50,taxTotal:72.10,grandTotal:1102.10,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10028',currency:'EUR',billingAddress:'12 Berliner Str, Munich, Germany',services:[],date:'2026-04-04'},
+  {id:genId(),invoiceNumber:'INV-2029',bookingId:'BK-1034',guestName:'Isabella Costa',roomNumber:'105',subtotal:240,discountAmount:0,taxTotal:16.80,grandTotal:256.80,paymentStatus:'Unpaid',paymentTransactionId:'',currency:'USD',billingAddress:'Rua das Flores 42, Rio de Janeiro, Brazil',services:[],date:'2026-04-05'},
+  {id:genId(),invoiceNumber:'INV-2030',bookingId:'BK-1035',guestName:'Emma Richardson',roomNumber:'401',subtotal:660,discountAmount:0,taxTotal:46.20,grandTotal:706.20,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10030',currency:'USD',billingAddress:'22 Harbour Rd, Sydney, Australia',services:[],date:'2026-04-05'},
+  {id:genId(),invoiceNumber:'INV-2031',bookingId:'BK-1036',guestName:'Pieter de Vries',roomNumber:'102',subtotal:360,discountAmount:0,taxTotal:25.20,grandTotal:385.20,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10031',currency:'USD',billingAddress:'Keizersgracht 100, Amsterdam, Netherlands',services:[],date:'2026-04-05'},
+  {id:genId(),invoiceNumber:'INV-2032',bookingId:'BK-1038',guestName:'Marco Rossi',roomNumber:'203',subtotal:1000,discountAmount:0,taxTotal:70.00,grandTotal:1070.00,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10032',currency:'USD',billingAddress:'Via Roma 15, Milan, Italy',services:[{name:'Mini-bar Replenishment',unitPrice:35,quantity:2,icon:'◆'}],date:'2026-04-05'},
+  {id:genId(),invoiceNumber:'INV-2033',bookingId:'BK-1039',guestName:'Javier Morales',roomNumber:'405',subtotal:255,discountAmount:0,taxTotal:17.85,grandTotal:272.85,paymentStatus:'Unpaid',paymentTransactionId:'',currency:'USD',billingAddress:'Paseo de la Reforma, Mexico City, Mexico',services:[],date:'2026-04-05'},
+  {id:genId(),invoiceNumber:'INV-2034',bookingId:'BK-1040',guestName:'Siriporn Chaiyasit',roomNumber:'304',subtotal:260,discountAmount:0,taxTotal:18.20,grandTotal:278.20,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10034',currency:'THB',billingAddress:'88 Sukhumvit Rd, Bangkok, Thailand',services:[],date:'2026-04-05'},
+  {id:genId(),invoiceNumber:'INV-2035',bookingId:'BK-1042',guestName:'Priya Sharma',roomNumber:'103',subtotal:400,discountAmount:0,taxTotal:28.00,grandTotal:428.00,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10035',currency:'USD',billingAddress:'45 MG Road, Mumbai, India',services:[],date:'2026-04-05'},
+  {id:genId(),invoiceNumber:'INV-2036',bookingId:'BK-1044',guestName:'David Miller',roomNumber:'104',subtotal:1050,discountAmount:50,taxTotal:70.00,grandTotal:1070.00,paymentStatus:'Partially Paid',paymentTransactionId:'TXN-10036',currency:'USD',billingAddress:'500 Park Ave, New York, USA',services:[],date:'2026-04-05'},
+  {id:genId(),invoiceNumber:'INV-2037',bookingId:'BK-1046',guestName:'Lin Wei',roomNumber:'403',subtotal:520,discountAmount:0,taxTotal:36.40,grandTotal:556.40,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10037',currency:'USD',billingAddress:'99 Nanjing Rd, Shanghai, China',services:[],date:'2026-04-05'},
+  {id:genId(),invoiceNumber:'INV-2038',bookingId:'BK-1048',guestName:'Sophie Laurent',roomNumber:'302',subtotal:630,discountAmount:0,taxTotal:44.10,grandTotal:674.10,paymentStatus:'Unpaid',paymentTransactionId:'',currency:'EUR',billingAddress:'789 Rue de Paris, Paris, France',services:[],date:'2026-04-06'},
+  {id:genId(),invoiceNumber:'INV-2039',bookingId:'BK-1050',guestName:'Akira Tanaka',roomNumber:'402',subtotal:1950,discountAmount:0,taxTotal:136.50,grandTotal:2086.50,paymentStatus:'Unpaid',paymentTransactionId:'',currency:'THB',billingAddress:'456 Sakura Ave, Tokyo, Japan',services:[{name:'Thai Massage',unitPrice:80,quantity:1,icon:'◎'},{name:'Pool Day Pass',unitPrice:10,quantity:2,icon:'●'}],date:'2026-04-06'},
+  {id:genId(),invoiceNumber:'INV-2040',bookingId:'BK-1052',guestName:'Lucas Santos',roomNumber:'204',subtotal:1800,discountAmount:0,taxTotal:126.00,grandTotal:1926.00,paymentStatus:'Unpaid',paymentTransactionId:'',currency:'USD',billingAddress:'300 Copacabana Ave, Rio de Janeiro, Brazil',services:[],date:'2026-04-06'},
 ];
 const defaultSettings = {hotelName:'Grand Hotel Management',email:'info@grandhotel.com',phone:'+1 555-0100',currency:'USD ($)',address:'123 Hotel Street, City, Country',maxGuests:3,surcharge:25,checkinTime:'14:00',checkoutTime:'12:00',darkMode:false,roomTypes:'Single,Double,Deluxe,Suite,Penthouse',bedConfigs:'King,Twin,Queen+Single,Double,King+Sofa',currencies:'USD,EUR,GBP,THB,ILS,JPY,CNY,AUD,CAD,CHF',currencyLabels:'USD ($),EUR (€),GBP (£),THB (฿)',bookingSources:'Direct,Booking.com,Expedia,Walk-in,Agoda,Airbnb',arrivalStatuses:'Expected,Checked-in,Checked-out,No-show',paymentMethods:'Credit Card,Cash,Bank Transfer,Room Charge',serviceCategories:'Room Service,Laundry,Airport Transfer,Mini-bar,Spa,Pool',invoiceStatuses:'Unpaid,Partially Paid,Fully Paid',ticketPriorities:'Low,Medium,High,Urgent',ticketStatuses:'Open,In Progress,Resolved',inventoryCategories:'Linen,Toiletries,F&B,Supplies',menuCategories:'Appetizer,Main Course,Dessert,Beverage,Side',storeCategories:'Drinks,Snacks,Toiletries,Souvenirs,Sundries',orderStatuses:'New,Preparing,Ready,Served,Paid',paymentTypes:'Pending,Cash,Credit Card,Room Charge',userRoles:'Admin,Manager,Receptionist,Housekeeper',requestStatuses:'Pending,In Progress,Completed,Cancelled',housekeepingStatuses:'Clean,Dirty,Inspected,Out of Service',occupancyStatuses:'Available,Occupied,Reserved',cancellationPolicies:'Free cancellation,Non-refundable',messageTypes:'Welcome,Invoice,Reminder,Notification',messageChannels:'Email,SMS,WhatsApp,In-App',transactionStatuses:'Completed,Refunded,Pending'};
 const defaultTickets = [
-  {id:genId(),roomNumber:'303',issue:'Bathroom renovation in progress',priority:'High',status:'Open',reportedBy:'Admin',reportedAt:'2026-03-28T10:00:00',resolvedAt:'',notes:'Major plumbing work required'},
-  {id:genId(),roomNumber:'201',issue:'AC not cooling properly',priority:'Medium',status:'In Progress',reportedBy:'Receptionist',reportedAt:'2026-03-29T14:30:00',resolvedAt:'',notes:'Technician dispatched'},
+  {id:genId(),roomNumber:'201',issue:'AC not cooling properly',priority:'High',status:'In Progress',reportedBy:'Receptionist',reportedAt:'2026-04-03T14:30:00',resolvedAt:'',notes:'Technician dispatched, waiting for replacement compressor'},
+  {id:genId(),roomNumber:'302',issue:'Leaky faucet in bathroom',priority:'Medium',status:'Open',reportedBy:'Housekeeper',reportedAt:'2026-04-04T09:15:00',resolvedAt:'',notes:'Constant drip from hot water tap'},
   {id:genId(),roomNumber:'405',issue:'TV remote not working',priority:'Low',status:'Resolved',reportedBy:'Receptionist',reportedAt:'2026-03-27T09:00:00',resolvedAt:'2026-03-27T11:00:00',notes:'Batteries replaced'},
+  {id:genId(),roomNumber:'103',issue:'WiFi connectivity issues',priority:'High',status:'Open',reportedBy:'Admin',reportedAt:'2026-04-05T16:45:00',resolvedAt:'',notes:'Guest reports intermittent WiFi drops, router may need reset'},
+  {id:genId(),roomNumber:'305',issue:'Bathroom drain clogged',priority:'Medium',status:'In Progress',reportedBy:'Receptionist',reportedAt:'2026-04-04T11:20:00',resolvedAt:'',notes:'Plumber scheduled for tomorrow morning'},
+  {id:genId(),roomNumber:'104',issue:'Door lock malfunction',priority:'Urgent',status:'Open',reportedBy:'Admin',reportedAt:'2026-04-06T08:00:00',resolvedAt:'',notes:'Electronic lock not reading key cards, manual override in use'},
+  {id:genId(),roomNumber:'203',issue:'Minibar not cooling',priority:'Medium',status:'Resolved',reportedBy:'Housekeeper',reportedAt:'2026-03-30T10:30:00',resolvedAt:'2026-04-01T14:00:00',notes:'Thermostat replaced and unit tested'},
+  {id:genId(),roomNumber:'401',issue:'Light bulb replacement needed',priority:'Low',status:'Resolved',reportedBy:'Receptionist',reportedAt:'2026-04-02T15:00:00',resolvedAt:'2026-04-02T16:30:00',notes:'Replaced bedside lamp and bathroom ceiling light'},
 ];
 const defaultMessages = [
-  {id:genId(),bookingId:'BK-1001',guestName:'John Smith',type:'Welcome',message:'Welcome to Grand Hotel Management! Your room 101 is ready. We hope you enjoy your stay.',sentAt:'2026-03-28T14:00:00',channel:'Email'},
-  {id:genId(),bookingId:'BK-1002',guestName:'Maria Garcia',type:'Welcome',message:'Welcome to Grand Hotel Management! Your room 103 is ready. We hope you enjoy your stay.',sentAt:'2026-03-29T14:00:00',channel:'Email'},
-  {id:genId(),bookingId:'BK-1003',guestName:'Akira Tanaka',type:'Welcome',message:'Welcome to Grand Hotel Management! Your room 201 is ready. We hope you enjoy your stay.',sentAt:'2026-03-30T14:00:00',channel:'Email'},
-  {id:genId(),bookingId:'BK-1006',guestName:'Lin Wei',type:'Welcome',message:'Welcome to Grand Hotel Management! Your room 305 is ready. We hope you enjoy your stay.',sentAt:'2026-03-27T14:00:00',channel:'Email'},
+  {id:genId(),bookingId:'BK-1001',guestName:'John Smith',type:'Welcome',message:'Welcome to Grand Hotel Management! Your room 101 is ready. We hope you enjoy your stay.',sentAt:'2026-01-02T14:00:00',channel:'Email'},
+  {id:genId(),bookingId:'BK-1002',guestName:'James Wilson',type:'Welcome',message:'Welcome to Grand Hotel Management! Your room 202 is ready. We hope you enjoy your stay.',sentAt:'2026-01-05T14:00:00',channel:'SMS'},
+  {id:genId(),bookingId:'BK-1003',guestName:'Akira Tanaka',type:'Invoice',message:'Thank you for your stay. Your invoice INV-2003 for $1,102.10 has been generated. We look forward to welcoming you again.',sentAt:'2026-01-12T12:00:00',channel:'Email'},
+  {id:genId(),bookingId:'BK-1010',guestName:'Lin Wei',type:'Welcome',message:'Welcome to Grand Hotel Management! Your room 302 is ready. We hope you enjoy your stay.',sentAt:'2026-02-03T14:00:00',channel:'WhatsApp'},
+  {id:genId(),bookingId:'BK-1013',guestName:'Lucas Santos',type:'Welcome',message:'Welcome to Grand Hotel Management! Your room 204 is ready. Enjoy your penthouse suite!',sentAt:'2026-02-15T14:00:00',channel:'Email'},
+  {id:genId(),bookingId:'BK-1016',guestName:'Marco Rossi',type:'Invoice',message:'Thank you for your stay. Your invoice INV-2013 for €1,070.00 has been generated.',sentAt:'2026-02-28T12:00:00',channel:'Email'},
+  {id:genId(),bookingId:'BK-1019',guestName:'Erik Lindqvist',type:'Welcome',message:'Welcome to Grand Hotel Management! Your room 205 is ready. We hope you enjoy your stay.',sentAt:'2026-03-07T14:00:00',channel:'Email'},
+  {id:genId(),bookingId:'BK-1022',guestName:'David Miller',type:'Welcome',message:'Welcome back, Mr. Miller! Your suite 305 is ready with your preferred desk setup.',sentAt:'2026-03-15T14:00:00',channel:'Email'},
+  {id:genId(),bookingId:'BK-1024',guestName:'Yuki Yamamoto',type:'Invoice',message:'Thank you for your stay. Your invoice INV-2021 for $1,979.50 has been generated.',sentAt:'2026-03-25T12:00:00',channel:'Email'},
+  {id:genId(),bookingId:'BK-1028',guestName:'Maria Garcia',type:'Welcome',message:'Welcome to Grand Hotel Management! Your room 103 is ready. We hope you enjoy your stay.',sentAt:'2026-03-30T14:00:00',channel:'SMS'},
+  {id:genId(),bookingId:'BK-1031',guestName:'John Smith',type:'Reminder',message:'Reminder: Your checkout is scheduled for tomorrow at 12:00 PM. Please contact reception for late checkout.',sentAt:'2026-04-03T09:00:00',channel:'In-App'},
+  {id:genId(),bookingId:'BK-1033',guestName:'Klaus Hoffmann',type:'Welcome',message:'Willkommen! Your suite 305 is ready. We hope you enjoy your stay at Grand Hotel.',sentAt:'2026-04-01T14:00:00',channel:'Email'},
+  {id:genId(),bookingId:'BK-1038',guestName:'Marco Rossi',type:'Welcome',message:'Welcome back, Mr. Rossi! Your deluxe room 203 is ready.',sentAt:'2026-04-01T14:00:00',channel:'WhatsApp'},
+  {id:genId(),bookingId:'BK-1041',guestName:'Min-jun Park',type:'Reminder',message:'Reminder: Your checkout is scheduled for April 8. Please contact the front desk if you need to extend your stay.',sentAt:'2026-04-06T09:00:00',channel:'In-App'},
+  {id:genId(),bookingId:'BK-1044',guestName:'David Miller',type:'Welcome',message:'Welcome back, Mr. Miller! Your suite 104 is ready with your preferred business setup.',sentAt:'2026-04-03T14:00:00',channel:'Email'},
+  {id:genId(),bookingId:'BK-1048',guestName:'Sophie Laurent',type:'Welcome',message:'Bienvenue! Your room 302 is ready. Enjoy your stay at Grand Hotel Management.',sentAt:'2026-04-04T14:00:00',channel:'Email'},
+  {id:genId(),bookingId:'BK-1053',guestName:'Charlotte Brown',type:'Notification',message:'Your requested extra pillows have been delivered to room 101. Please call reception if you need anything else.',sentAt:'2026-04-15T16:00:00',channel:'In-App'},
+  {id:genId(),bookingId:'BK-1055',guestName:'Carlos Hernandez',type:'Welcome',message:'Welcome to Grand Hotel Management! Your room 301 is ready. We hope you enjoy your stay.',sentAt:'2026-05-01T14:00:00',channel:'Email'},
+  {id:genId(),bookingId:'BK-1058',guestName:'Priya Sharma',type:'Reminder',message:'Your reservation for June 15 is confirmed. We look forward to welcoming you!',sentAt:'2026-06-10T10:00:00',channel:'Email'},
+  {id:genId(),bookingId:'BK-1060',guestName:'Thabo Molefe',type:'Welcome',message:'Welcome to Grand Hotel Management! Your penthouse 402 is ready. Enjoy the private pool!',sentAt:'2026-06-25T14:00:00',channel:'Email'},
 ];
 const defaultMenuItems = [
   {id:genId(),name:'Pad Thai',category:'Main Course',price:14,available:true,description:'Stir-fried rice noodles with shrimp, tofu, peanuts'},
@@ -1093,6 +1175,50 @@ const defaultInventory = [
   {id:genId(),itemName:'Hand Sanitizer',category:'Supplies',quantity:45,reorderLevel:20,lastOrdered:'2026-03-22'},
 ];
 
+const defaultRestaurantOrders = [
+  {id:genId(),timestamp:'2026-01-03T19:30:00',orderNumber:'RO-1001',roomNumber:'101',guestName:'John Smith',bookingId:'BK-1001',tableNumber:'Room 101',items:[{name:'Pad Thai',qty:1,unitPrice:14},{name:'Thai Iced Tea',qty:1,unitPrice:5}],subtotal:19,tax:1.33,grandTotal:20.33,status:'Paid',paidBy:'Room Charge',staffName:'Jane Smith',notes:''},
+  {id:genId(),timestamp:'2026-01-06T20:00:00',orderNumber:'RO-1002',roomNumber:'202',guestName:'James Wilson',bookingId:'BK-1002',tableNumber:'Table 3',items:[{name:'Grilled Fish',qty:1,unitPrice:22},{name:'Caesar Salad',qty:1,unitPrice:9},{name:'Wine',qty:2,unitPrice:15}],subtotal:61,tax:4.27,grandTotal:65.27,status:'Paid',paidBy:'Credit Card',staffName:'Mike Johnson',notes:''},
+  {id:genId(),timestamp:'2026-01-10T12:30:00',orderNumber:'RO-1003',roomNumber:'305',guestName:'Akira Tanaka',bookingId:'BK-1003',tableNumber:'Room 305',items:[{name:'Green Curry',qty:2,unitPrice:16},{name:'Fried Rice',qty:1,unitPrice:12}],subtotal:44,tax:3.08,grandTotal:47.08,status:'Paid',paidBy:'Room Charge',staffName:'Jane Smith',notes:'No shellfish'},
+  {id:genId(),timestamp:'2026-02-04T19:00:00',orderNumber:'RO-1004',roomNumber:'302',guestName:'Lin Wei',bookingId:'BK-1010',tableNumber:'Table 1',items:[{name:'Tom Yum Soup',qty:1,unitPrice:10},{name:'Pad Thai',qty:1,unitPrice:14},{name:'Mango Sticky Rice',qty:1,unitPrice:8}],subtotal:32,tax:2.24,grandTotal:34.24,status:'Paid',paidBy:'Cash',staffName:'Jane Smith',notes:''},
+  {id:genId(),timestamp:'2026-02-15T20:30:00',orderNumber:'RO-1005',roomNumber:'204',guestName:'Lucas Santos',bookingId:'BK-1013',tableNumber:'Table 5',items:[{name:'Grilled Fish',qty:2,unitPrice:22},{name:'Fresh Juice',qty:2,unitPrice:6}],subtotal:56,tax:3.92,grandTotal:59.92,status:'Paid',paidBy:'Credit Card',staffName:'Mike Johnson',notes:'Anniversary dinner'},
+  {id:genId(),timestamp:'2026-03-16T18:45:00',orderNumber:'RO-1006',roomNumber:'305',guestName:'David Miller',bookingId:'BK-1022',tableNumber:'Room 305',items:[{name:'Club Sandwich',qty:1,unitPrice:13},{name:'Coffee',qty:2,unitPrice:4}],subtotal:21,tax:1.47,grandTotal:22.47,status:'Paid',paidBy:'Room Charge',staffName:'Jane Smith',notes:''},
+  {id:genId(),timestamp:'2026-03-23T20:00:00',orderNumber:'RO-1007',roomNumber:'402',guestName:'Yuki Yamamoto',bookingId:'BK-1024',tableNumber:'Table 2',items:[{name:'Green Curry',qty:1,unitPrice:16},{name:'Spring Rolls',qty:2,unitPrice:7},{name:'Thai Iced Tea',qty:2,unitPrice:5}],subtotal:40,tax:2.80,grandTotal:42.80,status:'Paid',paidBy:'Cash',staffName:'Jane Smith',notes:''},
+  {id:genId(),timestamp:'2026-04-01T19:15:00',orderNumber:'RO-1008',roomNumber:'305',guestName:'Klaus Hoffmann',bookingId:'BK-1033',tableNumber:'Room 305',items:[{name:'Grilled Fish',qty:1,unitPrice:22},{name:'Caesar Salad',qty:1,unitPrice:9}],subtotal:31,tax:2.17,grandTotal:33.17,status:'Paid',paidBy:'Room Charge',staffName:'Jane Smith',notes:''},
+  {id:genId(),timestamp:'2026-04-02T20:30:00',orderNumber:'RO-1009',roomNumber:'203',guestName:'Marco Rossi',bookingId:'BK-1038',tableNumber:'Table 4',items:[{name:'Tom Yum Soup',qty:1,unitPrice:10},{name:'Pad Thai',qty:1,unitPrice:14},{name:'Wine',qty:1,unitPrice:15}],subtotal:39,tax:2.73,grandTotal:41.73,status:'Paid',paidBy:'Credit Card',staffName:'Mike Johnson',notes:''},
+  {id:genId(),timestamp:'2026-04-04T12:00:00',orderNumber:'RO-1010',roomNumber:'302',guestName:'Sophie Laurent',bookingId:'BK-1048',tableNumber:'Room 302',items:[{name:'Caesar Salad',qty:1,unitPrice:9},{name:'Fresh Juice',qty:1,unitPrice:6}],subtotal:15,tax:1.05,grandTotal:16.05,status:'Served',paidBy:'Pending',staffName:'Jane Smith',notes:'Vegetarian'},
+  {id:genId(),timestamp:'2026-04-05T19:00:00',orderNumber:'RO-1011',roomNumber:'402',guestName:'Akira Tanaka',bookingId:'BK-1050',tableNumber:'Table 1',items:[{name:'Green Curry',qty:1,unitPrice:16},{name:'Fried Rice',qty:1,unitPrice:12},{name:'Thai Iced Tea',qty:1,unitPrice:5}],subtotal:33,tax:2.31,grandTotal:35.31,status:'Served',paidBy:'Pending',staffName:'Jane Smith',notes:'No shellfish'},
+  {id:genId(),timestamp:'2026-04-05T20:15:00',orderNumber:'RO-1012',roomNumber:'104',guestName:'David Miller',bookingId:'BK-1044',tableNumber:'Room 104',items:[{name:'Club Sandwich',qty:1,unitPrice:13},{name:'Coffee',qty:1,unitPrice:4}],subtotal:17,tax:1.19,grandTotal:18.19,status:'Paid',paidBy:'Room Charge',staffName:'Jane Smith',notes:''},
+  {id:genId(),timestamp:'2026-04-06T12:30:00',orderNumber:'RO-1013',roomNumber:'301',guestName:'Noam Levi',bookingId:'BK-1045',tableNumber:'Table 3',items:[{name:'Spring Rolls',qty:1,unitPrice:7},{name:'Pad Thai',qty:1,unitPrice:14}],subtotal:21,tax:1.47,grandTotal:22.47,status:'New',paidBy:'Pending',staffName:'Mike Johnson',notes:''},
+  {id:genId(),timestamp:'2026-04-06T13:00:00',orderNumber:'RO-1014',roomNumber:'205',guestName:'Erik Lindqvist',bookingId:'BK-1051',tableNumber:'Room 205',items:[{name:'Fried Rice',qty:1,unitPrice:12},{name:'Fresh Juice',qty:1,unitPrice:6}],subtotal:18,tax:1.26,grandTotal:19.26,status:'New',paidBy:'Pending',staffName:'Jane Smith',notes:'Gluten-free'},
+  {id:genId(),timestamp:'2026-04-06T13:15:00',orderNumber:'RO-1015',roomNumber:'204',guestName:'Lucas Santos',bookingId:'BK-1052',tableNumber:'Table 2',items:[{name:'Tom Yum Soup',qty:1,unitPrice:10},{name:'Green Curry',qty:1,unitPrice:16},{name:'Mango Sticky Rice',qty:2,unitPrice:8},{name:'Thai Iced Tea',qty:2,unitPrice:5}],subtotal:52,tax:3.64,grandTotal:55.64,status:'New',paidBy:'Pending',staffName:'Mike Johnson',notes:''},
+];
+const defaultPosTransactions = [
+  {id:genId(),timestamp:'2026-01-05T10:30:00',roomNumber:'101',guestName:'John Smith',bookingId:'BK-1001',items:[{name:'Water Bottle',qty:2,unitPrice:2,total:4},{name:'Chips',qty:1,unitPrice:4,total:4}],itemCount:3,subtotal:8,tax:0.56,grandTotal:8.56,paidBy:'Room Charge',staffName:'Jane Smith',transactionId:'TXN-10101'},
+  {id:genId(),timestamp:'2026-01-11T15:00:00',roomNumber:'305',guestName:'Akira Tanaka',bookingId:'BK-1003',items:[{name:'Beer',qty:2,unitPrice:6,total:12},{name:'Chocolate Bar',qty:1,unitPrice:3.5,total:3.5}],itemCount:3,subtotal:15.5,tax:1.09,grandTotal:16.59,paidBy:'Cash',staffName:'Mike Johnson',transactionId:'TXN-10102'},
+  {id:genId(),timestamp:'2026-02-05T09:15:00',roomNumber:'302',guestName:'Lin Wei',bookingId:'BK-1010',items:[{name:'Water Bottle',qty:3,unitPrice:2,total:6},{name:'Instant Noodles',qty:2,unitPrice:3,total:6}],itemCount:5,subtotal:12,tax:0.84,grandTotal:12.84,paidBy:'Room Charge',staffName:'Jane Smith',transactionId:'TXN-10103'},
+  {id:genId(),timestamp:'2026-02-16T11:00:00',roomNumber:'204',guestName:'Lucas Santos',bookingId:'BK-1013',items:[{name:'Sunscreen',qty:1,unitPrice:12,total:12},{name:'Postcard',qty:5,unitPrice:2,total:10}],itemCount:6,subtotal:22,tax:1.54,grandTotal:23.54,paidBy:'Credit Card',staffName:'Jane Smith',transactionId:'TXN-10104'},
+  {id:genId(),timestamp:'2026-03-08T14:30:00',roomNumber:'205',guestName:'Erik Lindqvist',bookingId:'BK-1019',items:[{name:'Wine',qty:1,unitPrice:15,total:15}],itemCount:1,subtotal:15,tax:1.05,grandTotal:16.05,paidBy:'Credit Card',staffName:'Mike Johnson',transactionId:'TXN-10105'},
+  {id:genId(),timestamp:'2026-03-16T16:00:00',roomNumber:'305',guestName:'David Miller',bookingId:'BK-1022',items:[{name:'Aspirin',qty:1,unitPrice:6,total:6},{name:'Water Bottle',qty:2,unitPrice:2,total:4}],itemCount:3,subtotal:10,tax:0.70,grandTotal:10.70,paidBy:'Room Charge',staffName:'Jane Smith',transactionId:'TXN-10106'},
+  {id:genId(),timestamp:'2026-04-02T10:00:00',roomNumber:'203',guestName:'Marco Rossi',bookingId:'BK-1038',items:[{name:'Wine',qty:2,unitPrice:15,total:30},{name:'Chocolate Bar',qty:2,unitPrice:3.5,total:7}],itemCount:4,subtotal:37,tax:2.59,grandTotal:39.59,paidBy:'Cash',staffName:'Mike Johnson',transactionId:'TXN-10107'},
+  {id:genId(),timestamp:'2026-04-04T11:30:00',roomNumber:'302',guestName:'Sophie Laurent',bookingId:'BK-1048',items:[{name:'Water Bottle',qty:2,unitPrice:2,total:4},{name:'Toothbrush',qty:1,unitPrice:5,total:5}],itemCount:3,subtotal:9,tax:0.63,grandTotal:9.63,paidBy:'Room Charge',staffName:'Jane Smith',transactionId:'TXN-10108'},
+  {id:genId(),timestamp:'2026-04-05T16:00:00',roomNumber:'104',guestName:'David Miller',bookingId:'BK-1044',items:[{name:'Coffee',qty:3,unitPrice:4,total:12},{name:'Ice Cream',qty:1,unitPrice:5,total:5}],itemCount:4,subtotal:17,tax:1.19,grandTotal:18.19,paidBy:'Credit Card',staffName:'Jane Smith',transactionId:'TXN-10109'},
+  {id:genId(),timestamp:'2026-04-06T09:00:00',roomNumber:'402',guestName:'Akira Tanaka',bookingId:'BK-1050',items:[{name:'Phone Charger',qty:1,unitPrice:15,total:15},{name:'Coca-Cola',qty:2,unitPrice:3,total:6}],itemCount:3,subtotal:21,tax:1.47,grandTotal:22.47,paidBy:'Cash',staffName:'Mike Johnson',transactionId:'TXN-10110'},
+];
+const defaultServiceRequests = [
+  {id:genId(),timestamp:'2026-01-03T15:00:00',bookingId:'BK-1001',roomNumber:'101',guestName:'John Smith',serviceName:'Breakfast Buffet',status:'Completed',assignedTo:'Jane Smith',scheduledTime:'2026-01-04T07:00:00',completedTime:'2026-01-04T07:30:00',notes:'Delivered to room',charge:25},
+  {id:genId(),timestamp:'2026-01-10T09:00:00',bookingId:'BK-1003',roomNumber:'305',guestName:'Akira Tanaka',serviceName:'Airport Pickup',status:'Completed',assignedTo:'Mike Johnson',scheduledTime:'2026-01-09T11:00:00',completedTime:'2026-01-09T12:30:00',notes:'Picked up from international terminal',charge:45},
+  {id:genId(),timestamp:'2026-02-05T10:00:00',bookingId:'BK-1010',roomNumber:'302',guestName:'Lin Wei',serviceName:'Standard Wash & Iron',status:'Completed',assignedTo:'Tom Williams',scheduledTime:'2026-02-05T14:00:00',completedTime:'2026-02-05T17:00:00',notes:'3 shirts and 2 pants',charge:30},
+  {id:genId(),timestamp:'2026-02-15T16:00:00',bookingId:'BK-1013',roomNumber:'204',guestName:'Lucas Santos',serviceName:'Thai Massage (60 min)',status:'Completed',assignedTo:'Jane Smith',scheduledTime:'2026-02-15T18:00:00',completedTime:'2026-02-15T19:00:00',notes:'Couples massage',charge:160},
+  {id:genId(),timestamp:'2026-03-16T08:00:00',bookingId:'BK-1022',roomNumber:'305',guestName:'David Miller',serviceName:'Breakfast Buffet',status:'Completed',assignedTo:'Jane Smith',scheduledTime:'2026-03-16T07:30:00',completedTime:'2026-03-16T08:00:00',notes:'',charge:25},
+  {id:genId(),timestamp:'2026-03-26T14:00:00',bookingId:'BK-1025',roomNumber:'203',guestName:'François Dubois',serviceName:'Mini-bar Replenishment',status:'Completed',assignedTo:'Tom Williams',scheduledTime:'2026-03-26T15:00:00',completedTime:'2026-03-26T15:30:00',notes:'Extra wine and water',charge:35},
+  {id:genId(),timestamp:'2026-04-02T09:00:00',bookingId:'BK-1038',roomNumber:'203',guestName:'Marco Rossi',serviceName:'Standard Wash & Iron',status:'Completed',assignedTo:'Tom Williams',scheduledTime:'2026-04-02T12:00:00',completedTime:'2026-04-02T16:00:00',notes:'Express service requested',charge:30},
+  {id:genId(),timestamp:'2026-04-04T10:00:00',bookingId:'BK-1044',roomNumber:'104',guestName:'David Miller',serviceName:'Breakfast Buffet',status:'Completed',assignedTo:'Jane Smith',scheduledTime:'2026-04-04T07:00:00',completedTime:'2026-04-04T07:30:00',notes:'',charge:25},
+  {id:genId(),timestamp:'2026-04-05T11:00:00',bookingId:'BK-1048',roomNumber:'302',guestName:'Sophie Laurent',serviceName:'Pool Day Pass',status:'Completed',assignedTo:'Mike Johnson',scheduledTime:'2026-04-05T12:00:00',completedTime:'2026-04-05T12:10:00',notes:'2 passes for couple',charge:20},
+  {id:genId(),timestamp:'2026-04-06T08:30:00',bookingId:'BK-1050',roomNumber:'402',guestName:'Akira Tanaka',serviceName:'Thai Massage (60 min)',status:'In Progress',assignedTo:'Jane Smith',scheduledTime:'2026-04-06T10:00:00',completedTime:'',inProgressTime:'2026-04-06T10:00:00',notes:'Requested deep tissue',charge:80},
+  {id:genId(),timestamp:'2026-04-06T09:00:00',bookingId:'BK-1052',roomNumber:'204',guestName:'Lucas Santos',serviceName:'Airport Pickup',status:'Pending',assignedTo:'Mike Johnson',scheduledTime:'2026-04-07T09:00:00',completedTime:'',notes:'International terminal, flight LH-472',charge:45},
+  {id:genId(),timestamp:'2026-04-06T09:30:00',bookingId:'BK-1045',roomNumber:'301',guestName:'Noam Levi',serviceName:'Mini-bar Replenishment',status:'Pending',assignedTo:'',scheduledTime:'',completedTime:'',notes:'Requested kosher snacks',charge:35},
+];
+
 // ===== LOAD DATA =====
 let rooms = load('rooms', null); if(!rooms) { rooms = defaultRooms; save('rooms', rooms); }
 let guests = load('guests', null); if(!guests) { guests = defaultGuests; save('guests', guests); }
@@ -1131,26 +1257,80 @@ let tickets = load('tickets', null); if(!tickets) { tickets = defaultTickets; sa
 let messages = load('messages', null); if(!messages) { messages = defaultMessages; save('messages', messages); }
 let inventory = load('inventory', null); if(!inventory) { inventory = defaultInventory; save('inventory', inventory); }
 let inventoryLog = load('inventoryLog', []);
-let posTransactions = load('posTransactions', []);
+let posTransactions = load('posTransactions', null); if(!posTransactions) { posTransactions = defaultPosTransactions; save('posTransactions', posTransactions); }
 let menuItems = load('menuItems', null); if(!menuItems) { menuItems = defaultMenuItems; save('menuItems', menuItems); }
-let restaurantOrders = load('restaurantOrders', []);
+let restaurantOrders = load('restaurantOrders', null); if(!restaurantOrders) { restaurantOrders = defaultRestaurantOrders; save('restaurantOrders', restaurantOrders); }
 let storeItems = load('storeItems', null); if(!storeItems) { storeItems = defaultStoreItems; save('storeItems', storeItems); }
-let serviceRequests = load('serviceRequests', []);
+let serviceRequests = load('serviceRequests', null); if(!serviceRequests) { serviceRequests = defaultServiceRequests; save('serviceRequests', serviceRequests); }
 let transactions = load('transactions', []);
 
 if(bookings.length === 0) {
   const seed = [
-    {guest:'John Smith',roomNum:'101',inD:'2026-03-28',outD:'2026-03-31',status:'Checked-in',src:'Direct'},
-    {guest:'Maria Garcia',roomNum:'103',inD:'2026-03-29',outD:'2026-04-02',status:'Checked-in',src:'Booking.com'},
-    {guest:'Akira Tanaka',roomNum:'201',inD:'2026-03-30',outD:'2026-04-01',status:'Checked-in',src:'Expedia'},
-    {guest:'Sophie Laurent',roomNum:'105',inD:'2026-04-01',outD:'2026-04-04',status:'Expected',src:'Direct'},
-    {guest:'James Wilson',roomNum:'304',inD:'2026-04-02',outD:'2026-04-05',status:'Expected',src:'Walk-in'},
-    {guest:'Lin Wei',roomNum:'305',inD:'2026-03-27',outD:'2026-03-31',status:'Checked-in',src:'Booking.com'},
+    {guest:'John Smith',roomNum:'101',inD:'2026-01-02',outD:'2026-01-04',status:'Checked-out',src:'Direct',adults:1,children:0,req:''},
+    {guest:'James Wilson',roomNum:'202',inD:'2026-01-05',outD:'2026-01-08',status:'Checked-out',src:'Booking.com',adults:2,children:0,req:'Late check-in'},
+    {guest:'Akira Tanaka',roomNum:'305',inD:'2026-01-09',outD:'2026-01-12',status:'Checked-out',src:'Expedia',adults:2,children:1,req:'Extra futon for child'},
+    {guest:'Sophie Laurent',roomNum:'103',inD:'2026-01-15',outD:'2026-01-17',status:'Checked-out',src:'Direct',adults:2,children:0,req:'Vegetarian breakfast'},
+    {guest:'Klaus Hoffmann',roomNum:'201',inD:'2026-01-18',outD:'2026-01-21',status:'Checked-out',src:'Booking.com',adults:2,children:1,req:''},
+    {guest:'David Miller',roomNum:'104',inD:'2026-01-20',outD:'2026-01-23',status:'Checked-out',src:'Direct',adults:1,children:0,req:'Business desk setup'},
+    {guest:'Siriporn Chaiyasit',roomNum:'104',inD:'2026-01-25',outD:'2026-01-27',status:'Checked-out',src:'Walk-in',adults:2,children:0,req:''},
+    {guest:'Marco Rossi',roomNum:'402',inD:'2026-01-26',outD:'2026-01-30',status:'Checked-out',src:'Agoda',adults:2,children:2,req:'Crib needed'},
+    {guest:'Emma Richardson',roomNum:'401',inD:'2026-01-28',outD:'2026-02-01',status:'Checked-out',src:'Booking.com',adults:2,children:0,req:'Extra pillows'},
+    {guest:'Lin Wei',roomNum:'302',inD:'2026-02-03',outD:'2026-02-06',status:'Checked-out',src:'Agoda',adults:1,children:0,req:''},
+    {guest:'Min-jun Park',roomNum:'203',inD:'2026-02-05',outD:'2026-02-09',status:'Checked-out',src:'Expedia',adults:2,children:0,req:'Korean newspaper'},
+    {guest:'Priya Sharma',roomNum:'105',inD:'2026-02-10',outD:'2026-02-13',status:'Checked-out',src:'Booking.com',adults:1,children:0,req:'Nut-free room'},
+    {guest:'Lucas Santos',roomNum:'204',inD:'2026-02-14',outD:'2026-02-17',status:'Checked-out',src:'Airbnb',adults:2,children:0,req:'Anniversary package'},
+    {guest:'Noam Levi',roomNum:'301',inD:'2026-02-18',outD:'2026-02-20',status:'Checked-out',src:'Direct',adults:1,children:0,req:''},
+    {guest:'Anastasia Petrova',roomNum:'403',inD:'2026-02-20',outD:'2026-02-24',status:'Checked-out',src:'Booking.com',adults:1,children:0,req:'Hypoallergenic bedding'},
+    {guest:'Marco Rossi',roomNum:'104',inD:'2026-02-25',outD:'2026-02-28',status:'Checked-out',src:'Direct',adults:2,children:0,req:'Airport pickup'},
+    {guest:'Sarah Thompson',roomNum:'102',inD:'2026-03-01',outD:'2026-03-03',status:'Checked-out',src:'Expedia',adults:1,children:0,req:''},
+    {guest:'Pieter de Vries',roomNum:'403',inD:'2026-03-03',outD:'2026-03-06',status:'Checked-out',src:'Booking.com',adults:2,children:1,req:''},
+    {guest:'Erik Lindqvist',roomNum:'205',inD:'2026-03-07',outD:'2026-03-09',status:'Checked-out',src:'Agoda',adults:1,children:0,req:'Gluten-free breakfast'},
+    {guest:'Carlos Hernandez',roomNum:'304',inD:'2026-03-09',outD:'2026-03-12',status:'Checked-out',src:'Walk-in',adults:2,children:1,req:''},
+    {guest:'Thabo Molefe',roomNum:'401',inD:'2026-03-13',outD:'2026-03-16',status:'Checked-out',src:'Booking.com',adults:2,children:0,req:''},
+    {guest:'David Miller',roomNum:'305',inD:'2026-03-15',outD:'2026-03-19',status:'Checked-out',src:'Direct',adults:1,children:0,req:'Same room as last stay'},
+    {guest:'Charlotte Brown',roomNum:'101',inD:'2026-03-20',outD:'2026-03-22',status:'Checked-out',src:'Expedia',adults:1,children:0,req:''},
+    {guest:'Yuki Yamamoto',roomNum:'402',inD:'2026-03-22',outD:'2026-03-25',status:'Checked-out',src:'Agoda',adults:2,children:0,req:'Spa package'},
+    {guest:'François Dubois',roomNum:'203',inD:'2026-03-25',outD:'2026-03-28',status:'Checked-out',src:'Direct',adults:2,children:1,req:'Ground floor preferred'},
+    {guest:'Raj Patel',roomNum:'301',inD:'2026-03-28',outD:'2026-03-31',status:'Checked-out',src:'Booking.com',adults:1,children:0,req:''},
+    {guest:'Javier Morales',roomNum:'105',inD:'2026-03-28',outD:'2026-03-31',status:'Checked-out',src:'Agoda',adults:2,children:0,req:''},
+    {guest:'Maria Garcia',roomNum:'103',inD:'2026-03-30',outD:'2026-04-02',status:'Checked-out',src:'Expedia',adults:2,children:1,req:''},
+    {guest:'Anastasia Petrova',roomNum:'204',inD:'2026-03-31',outD:'2026-04-02',status:'Checked-out',src:'Booking.com',adults:1,children:0,req:'Hypoallergenic bedding'},
+    {guest:'Chen Xiaoming',roomNum:'302',inD:'2026-03-31',outD:'2026-04-02',status:'Checked-out',src:'Direct',adults:2,children:0,req:'Mandarin-speaking staff'},
+    {guest:'John Smith',roomNum:'201',inD:'2026-04-01',outD:'2026-04-05',status:'Checked-out',src:'Direct',adults:1,children:0,req:'High floor'},
+    {guest:'James Wilson',roomNum:'101',inD:'2026-04-01',outD:'2026-04-03',status:'Checked-out',src:'Booking.com',adults:1,children:0,req:''},
+    {guest:'Klaus Hoffmann',roomNum:'305',inD:'2026-04-01',outD:'2026-04-04',status:'Checked-out',src:'Agoda',adults:2,children:1,req:''},
+    {guest:'Isabella Costa',roomNum:'105',inD:'2026-04-02',outD:'2026-04-05',status:'Checked-out',src:'Walk-in',adults:1,children:0,req:''},
+    {guest:'Emma Richardson',roomNum:'401',inD:'2026-04-02',outD:'2026-04-05',status:'Checked-out',src:'Booking.com',adults:2,children:0,req:'Extra pillows'},
+    {guest:'Pieter de Vries',roomNum:'102',inD:'2026-04-02',outD:'2026-04-05',status:'Checked-out',src:'Direct',adults:2,children:1,req:''},
+    {guest:'Priya Sharma',roomNum:'304',inD:'2026-04-02',outD:'2026-04-04',status:'Checked-out',src:'Expedia',adults:1,children:0,req:''},
+    {guest:'Marco Rossi',roomNum:'203',inD:'2026-04-01',outD:'2026-04-06',status:'Checked-out',src:'Direct',adults:2,children:0,req:'Wine recommendation'},
+    {guest:'Javier Morales',roomNum:'405',inD:'2026-04-02',outD:'2026-04-05',status:'Checked-out',src:'Agoda',adults:1,children:0,req:''},
+    {guest:'Siriporn Chaiyasit',roomNum:'304',inD:'2026-04-04',outD:'2026-04-06',status:'Checked-out',src:'Walk-in',adults:2,children:0,req:''},
+    {guest:'Min-jun Park',roomNum:'203',inD:'2026-04-05',outD:'2026-04-08',status:'Checked-in',src:'Booking.com',adults:2,children:0,req:'Late check-in'},
+    {guest:'Priya Sharma',roomNum:'103',inD:'2026-04-04',outD:'2026-04-06',status:'Checked-out',src:'Direct',adults:1,children:0,req:''},
+    {guest:'Lin Wei',roomNum:'403',inD:'2026-04-03',outD:'2026-04-07',status:'Checked-in',src:'Agoda',adults:2,children:1,req:''},
+    {guest:'David Miller',roomNum:'104',inD:'2026-04-03',outD:'2026-04-06',status:'Checked-in',src:'Direct',adults:1,children:0,req:'Business desk setup'},
+    {guest:'Noam Levi',roomNum:'301',inD:'2026-04-04',outD:'2026-04-07',status:'Checked-in',src:'Booking.com',adults:1,children:0,req:''},
+    {guest:'Robert van der Berg',roomNum:'403',inD:'2026-04-04',outD:'2026-04-07',status:'Checked-in',src:'Direct',adults:2,children:0,req:''},
+    {guest:'Sophie Laurent',roomNum:'302',inD:'2026-04-04',outD:'2026-04-07',status:'Checked-in',src:'Direct',adults:2,children:0,req:'Vegetarian meals'},
+    {guest:'Charlotte Brown',roomNum:'101',inD:'2026-04-05',outD:'2026-04-08',status:'Checked-in',src:'Expedia',adults:1,children:0,req:''},
+    {guest:'Akira Tanaka',roomNum:'402',inD:'2026-04-04',outD:'2026-04-07',status:'Checked-in',src:'Booking.com',adults:2,children:1,req:''},
+    {guest:'Erik Lindqvist',roomNum:'205',inD:'2026-04-05',outD:'2026-04-08',status:'Checked-in',src:'Agoda',adults:1,children:0,req:'Gluten-free breakfast'},
+    {guest:'Lucas Santos',roomNum:'204',inD:'2026-04-04',outD:'2026-04-07',status:'Checked-in',src:'Airbnb',adults:2,children:0,req:''},
+    {guest:'Carlos Hernandez',roomNum:'305',inD:'2026-04-05',outD:'2026-04-09',status:'Checked-in',src:'Walk-in',adults:2,children:1,req:''},
+    {guest:'Charlotte Brown',roomNum:'101',inD:'2026-04-12',outD:'2026-04-15',status:'Expected',src:'Expedia',adults:1,children:0,req:''},
+    {guest:'Sarah Thompson',roomNum:'102',inD:'2026-04-14',outD:'2026-04-17',status:'Expected',src:'Booking.com',adults:1,children:0,req:''},
+    {guest:'Carlos Hernandez',roomNum:'301',inD:'2026-05-01',outD:'2026-05-04',status:'Reserved',src:'Direct',adults:2,children:1,req:''},
+    {guest:'Raj Patel',roomNum:'202',inD:'2026-05-10',outD:'2026-05-14',status:'Reserved',src:'Agoda',adults:2,children:0,req:''},
+    {guest:'Chen Xiaoming',roomNum:'403',inD:'2026-05-20',outD:'2026-05-23',status:'Reserved',src:'Booking.com',adults:2,children:0,req:''},
+    {guest:'Priya Sharma',roomNum:'103',inD:'2026-06-15',outD:'2026-06-18',status:'Reserved',src:'Expedia',adults:1,children:0,req:''},
+    {guest:'François Dubois',roomNum:'203',inD:'2026-06-20',outD:'2026-06-24',status:'Reserved',src:'Direct',adults:2,children:1,req:'Ground floor preferred'},
+    {guest:'Thabo Molefe',roomNum:'402',inD:'2026-06-25',outD:'2026-06-28',status:'Reserved',src:'Airbnb',adults:2,children:0,req:''},
   ];
   seed.forEach((s,i) => {
     const room = rooms.find(x => String(x.roomNumber) === s.roomNum);
     if(room) {
-      bookings.push({id:genId(),bookingId:'BK-'+(1001+i),guestName:s.guest,roomId:room.id,roomNumber:room.roomNumber,roomType:room.roomType,checkinDate:s.inD,checkinTime:'14:00',checkoutDate:s.outD,checkoutTime:'12:00',numAdults:1,numChildren:0,bookingSource:s.src,cancellationPolicy:'Free cancellation',arrivalStatus:s.status,specialRequests:'',services:[],notes:''});
+      bookings.push({id:genId(),bookingId:'BK-'+(1001+i),guestName:s.guest,roomId:room.id,roomNumber:room.roomNumber,roomType:room.roomType,checkinDate:s.inD,checkinTime:'14:00',checkoutDate:s.outD,checkoutTime:'12:00',numAdults:s.adults||1,numChildren:s.children||0,bookingSource:s.src,cancellationPolicy:'Free cancellation',arrivalStatus:s.status,specialRequests:s.req||'',services:[],notes:''});
     }
   });
   save('bookings', bookings);
@@ -1515,7 +1695,7 @@ window.showAddBooking = function() {
     <div style="margin:-0.25rem 0 0.85rem;display:flex;gap:0.5rem;"><button class="btn btn-outline" style="flex:1;justify-content:center;padding:0.65rem;" onclick="openGuestPicker()">◉ SELECT GUEST</button><button class="btn btn-primary" style="flex:1;justify-content:center;padding:0.65rem;" onclick="addNewGuestFromBooking()">+ NEW GUEST</button></div>
     <div class="form-group"><label>Room <span id="mBkRoomCount" style="font-size:0.75rem;color:var(--primary);"></span></label><select class="form-control" id="mBkRoom">${avail.length?avail.map(r=>`<option value="${r.id}">${r.roomNumber} - ${r.roomType} (${fmt$(r.price)}/night)</option>`).join(''):'<option disabled>No rooms available</option>'}</select></div>
     <div class="form-row"><div class="form-group"><label>Adults</label><input type="number" class="form-control" id="mBkAdults" value="1" min="1"></div><div class="form-group"><label>Children</label><input type="number" class="form-control" id="mBkChildren" value="0" min="0"></div></div>
-    <div class="form-row"><div class="form-group"><label>Booking Source\${adminEditBtn('bookingSources')}</label><select class="form-control" id="mBkSrc">${getBookingSources().map(s=>'<option>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Cancellation Policy\${adminEditBtn('cancellationPolicies')}</label><select class="form-control" id="mBkCancel">${getCancellationPolicies().map(s=>'<option>'+s+'</option>').join('')}</select></div></div>
+    <div class="form-row"><div class="form-group"><label>Booking Source${adminEditBtn('bookingSources')}</label><select class="form-control" id="mBkSrc">${getBookingSources().map(s=>'<option>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Cancellation Policy${adminEditBtn('cancellationPolicies')}</label><select class="form-control" id="mBkCancel">${getCancellationPolicies().map(s=>'<option>'+s+'</option>').join('')}</select></div></div>
     <div class="form-group"><label>Special Requests</label><textarea class="form-control" id="mBkReq" rows="2" placeholder="Special requests..."></textarea></div>
     <div class="form-group"><label>Notes</label><textarea class="form-control" id="mBkNotes" rows="2" placeholder="Internal notes..."></textarea></div>
     </div></div></div>
@@ -1571,7 +1751,7 @@ window.addNewGuestFromBooking = function() {
     <div class="modal-body">
     <div class="form-row"><div class="form-group"><label>First Name</label><input type="text" class="form-control" id="mNgFirst" placeholder="First name"></div><div class="form-group"><label>Last Name</label><input type="text" class="form-control" id="mNgLast" placeholder="Last name"></div></div>
     <div class="form-row"><div class="form-group"><label>Passport / ID</label><input type="text" class="form-control" id="mNgPassport" placeholder="e.g. US-12345678"></div><div class="form-group"><label>Nationality</label><input type="text" class="form-control" id="mNgNat" placeholder="Tap to select" readonly onclick="openNationalityPicker('mNgNat')" style="cursor:pointer;"></div></div>
-    <div class="form-row"><div class="form-group"><label>Date of Birth</label><input type="date" class="form-control" id="mNgDob"></div><div class="form-group"><label>Payment Method\${adminEditBtn('paymentMethods')}</label><select class="form-control" id="mNgPay">${getPaymentMethods().map(s=>'<option>'+s+'</option>').join('')}</select></div></div>
+    <div class="form-row"><div class="form-group"><label>Date of Birth</label><input type="date" class="form-control" id="mNgDob"></div><div class="form-group"><label>Payment Method${adminEditBtn('paymentMethods')}</label><select class="form-control" id="mNgPay">${getPaymentMethods().map(s=>'<option>'+s+'</option>').join('')}</select></div></div>
     <div class="form-row"><div class="form-group"><label>Email</label><input type="email" class="form-control" id="mNgEmail" placeholder="email@example.com"></div><div class="form-group"><label>Phone</label><input type="tel" class="form-control" id="mNgPhone" placeholder="+1 555-0000"></div></div>
     <div class="form-group"><label>Guest Notes</label><textarea class="form-control" id="mNgNotes" rows="2" placeholder="Allergies, preferences..."></textarea></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="cancelNewGuestFromBooking()">Cancel</button><button class="btn btn-primary" onclick="saveNewGuestFromBooking()">Add Guest & Return</button></div>`);
@@ -1692,7 +1872,7 @@ function reopenNewGuestForm(backup) {
     <div class="modal-body">
     <div class="form-row"><div class="form-group"><label>First Name</label><input type="text" class="form-control" id="mNgFirst" placeholder="First name"></div><div class="form-group"><label>Last Name</label><input type="text" class="form-control" id="mNgLast" placeholder="Last name"></div></div>
     <div class="form-row"><div class="form-group"><label>Passport / ID</label><input type="text" class="form-control" id="mNgPassport" placeholder="e.g. US-12345678"></div><div class="form-group"><label>Nationality</label><input type="text" class="form-control" id="mNgNat" placeholder="Tap to select" readonly onclick="openNationalityPicker('mNgNat')" style="cursor:pointer;"></div></div>
-    <div class="form-row"><div class="form-group"><label>Date of Birth</label><input type="date" class="form-control" id="mNgDob"></div><div class="form-group"><label>Payment Method\${adminEditBtn('paymentMethods')}</label><select class="form-control" id="mNgPay">${getPaymentMethods().map(s=>'<option>'+s+'</option>').join('')}</select></div></div>
+    <div class="form-row"><div class="form-group"><label>Date of Birth</label><input type="date" class="form-control" id="mNgDob"></div><div class="form-group"><label>Payment Method${adminEditBtn('paymentMethods')}</label><select class="form-control" id="mNgPay">${getPaymentMethods().map(s=>'<option>'+s+'</option>').join('')}</select></div></div>
     <div class="form-row"><div class="form-group"><label>Email</label><input type="email" class="form-control" id="mNgEmail" placeholder="email@example.com"></div><div class="form-group"><label>Phone</label><input type="tel" class="form-control" id="mNgPhone" placeholder="+1 555-0000"></div></div>
     <div class="form-group"><label>Guest Notes</label><textarea class="form-control" id="mNgNotes" rows="2" placeholder="Allergies, preferences..."></textarea></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="cancelNewGuestFromBooking()">Cancel</button><button class="btn btn-primary" onclick="saveNewGuestFromBooking()">Add Guest & Return</button></div>`);
@@ -1860,8 +2040,8 @@ window.showEditBooking = function(id) {
     <div class="form-row"><div class="form-group"><label>Check-in Date</label><input type="date" class="form-control" id="eBkInD" value="${b.checkinDate}"></div><div class="form-group"><label>Check-in Time</label><input type="time" class="form-control" id="eBkInT" value="${b.checkinTime||'14:00'}"></div></div>
     <div class="form-row"><div class="form-group"><label>Check-out Date</label><input type="date" class="form-control" id="eBkOutD" value="${b.checkoutDate}"></div><div class="form-group"><label>Check-out Time</label><input type="time" class="form-control" id="eBkOutT" value="${b.checkoutTime||'12:00'}"></div></div>
     <div class="form-row"><div class="form-group"><label>Adults</label><input type="number" class="form-control" id="eBkAdults" value="${b.numAdults||1}" min="1"></div><div class="form-group"><label>Children</label><input type="number" class="form-control" id="eBkChildren" value="${b.numChildren||0}" min="0"></div></div>
-    <div class="form-row"><div class="form-group"><label>Booking Source\${adminEditBtn('bookingSources')}</label><select class="form-control" id="eBkSrc">${getBookingSources().map(s=>`<option ${s===b.bookingSource?'selected':''}>${s}</option>`).join('')}</select></div><div class="form-group"><label>Cancellation Policy\${adminEditBtn('cancellationPolicies')}</label><select class="form-control" id="eBkCancel">${getCancellationPolicies().map(s=>`<option ${s===b.cancellationPolicy?'selected':''}>${s}</option>`).join('')}</select></div></div>
-    <div class="form-group"><label>Arrival Status\${adminEditBtn('arrivalStatuses')}</label><select class="form-control" id="eBkStatus">${getArrivalStatuses().map(s=>`<option ${s===b.arrivalStatus?'selected':''}>${s}</option>`).join('')}</select></div>
+    <div class="form-row"><div class="form-group"><label>Booking Source${adminEditBtn('bookingSources')}</label><select class="form-control" id="eBkSrc">${getBookingSources().map(s=>`<option ${s===b.bookingSource?'selected':''}>${s}</option>`).join('')}</select></div><div class="form-group"><label>Cancellation Policy${adminEditBtn('cancellationPolicies')}</label><select class="form-control" id="eBkCancel">${getCancellationPolicies().map(s=>`<option ${s===b.cancellationPolicy?'selected':''}>${s}</option>`).join('')}</select></div></div>
+    <div class="form-group"><label>Arrival Status${adminEditBtn('arrivalStatuses')}</label><select class="form-control" id="eBkStatus">${getArrivalStatuses().map(s=>`<option ${s===b.arrivalStatus?'selected':''}>${s}</option>`).join('')}</select></div>
     <div class="form-group"><label>Special Requests</label><textarea class="form-control" id="eBkReq" rows="2">${b.specialRequests||''}</textarea></div>
     <div class="form-group"><label>Notes</label><textarea class="form-control" id="eBkNotes" rows="2">${b.notes||''}</textarea></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateBooking('${b.id}')">Save</button></div>`);
@@ -1971,7 +2151,7 @@ window.showAddGuest = function() {
     <div class="form-row"><div class="form-group"><label>Passport / ID</label><input type="text" class="form-control" id="mGPassport" placeholder="e.g. US-12345678"></div><div class="form-group"><label>Nationality</label><input type="text" class="form-control" id="mGNat" placeholder="Tap to select" readonly onclick="openNatPickerStandalone('mGNat','add')" style="cursor:pointer;"></div></div>
     <div class="form-row"><div class="form-group"><label>Date of Birth</label><input type="date" class="form-control" id="mGDob"></div><div class="form-group"><label>Phone</label><input type="tel" class="form-control" id="mGPhone" placeholder="+1 555-0000"></div></div>
     <div class="form-group"><label>Email</label><input type="email" class="form-control" id="mGEmail" placeholder="email@example.com"></div>
-    <div class="form-row"><div class="form-group"><label>Payment Method\${adminEditBtn('paymentMethods')}</label><select class="form-control" id="mGPay">${getPaymentMethods().map(s=>'<option>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Blacklist</label><select class="form-control" id="mGBL"><option value="0">No</option><option value="1">Yes</option></select></div></div>
+    <div class="form-row"><div class="form-group"><label>Payment Method${adminEditBtn('paymentMethods')}</label><select class="form-control" id="mGPay">${getPaymentMethods().map(s=>'<option>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Blacklist</label><select class="form-control" id="mGBL"><option value="0">No</option><option value="1">Yes</option></select></div></div>
     <div class="form-group"><label>Guest Notes</label><textarea class="form-control" id="mGNotes" rows="2" placeholder="Allergies, preferences..."></textarea></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addGuest()">Add Guest</button></div>`);
 };
@@ -1989,7 +2169,7 @@ window.showEditGuest = function(id) {
     <div class="form-row"><div class="form-group"><label>Passport/ID</label><input type="text" class="form-control" id="eGPassport" value="${g.passportId||''}"></div><div class="form-group"><label>Nationality</label><input type="text" class="form-control" id="eGNat" value="${g.nationality||''}" placeholder="Tap to select" readonly onclick="_natStandaloneBackup={};document.querySelectorAll('.modal-body input,.modal-body select,.modal-body textarea').forEach(function(el){if(el.id)_natStandaloneBackup[el.id]=el.value;});_natStandaloneBackup._editGuestId='${g.id}';openNatPickerStandalone('eGNat','edit');" style="cursor:pointer;"></div></div>
     <div class="form-row"><div class="form-group"><label>Date of Birth</label><input type="date" class="form-control" id="eGDob" value="${g.dob||''}"></div><div class="form-group"><label>Phone</label><input type="tel" class="form-control" id="eGPhone" value="${g.phone||''}"></div></div>
     <div class="form-group"><label>Email</label><input type="email" class="form-control" id="eGEmail" value="${g.email||''}"></div>
-    <div class="form-group"><label>Payment Method\${adminEditBtn('paymentMethods')}</label><select class="form-control" id="eGPay">${getPaymentMethods().map(p=>`<option ${p===g.paymentMethod?'selected':''}>${p}</option>`).join('')}</select></div>
+    <div class="form-group"><label>Payment Method${adminEditBtn('paymentMethods')}</label><select class="form-control" id="eGPay">${getPaymentMethods().map(p=>`<option ${p===g.paymentMethod?'selected':''}>${p}</option>`).join('')}</select></div>
     <div class="form-group"><label>Blacklist</label><select class="form-control" id="eGBL"><option value="0" ${!g.blacklist?'selected':''}>No</option><option value="1" ${g.blacklist?'selected':''}>Yes</option></select></div>
     <div class="form-group"><label>Guest Notes</label><textarea class="form-control" id="eGNotes" rows="2">${g.guestNotes||''}</textarea></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateGuest('${g.id}')">Save</button></div>`);
@@ -2125,7 +2305,7 @@ window.showEditServiceRequest = function(id) {
     <div class="form-row"><div class="form-group"><label>Room</label><input type="text" class="form-control" value="${sr.roomNumber||''}" readonly style="background:#f0f4fb;"></div><div class="form-group"><label>Guest</label><input type="text" class="form-control" value="${sr.guestName||''}" readonly style="background:#f0f4fb;"></div></div>
     <div class="form-group"><label>Service</label><input type="text" class="form-control" id="eSrService" value="${sr.serviceName||''}"></div>
     <div class="form-row"><div class="form-group"><label>Assigned To</label><select class="form-control" id="eSrAssign"><option value="">Unassigned</option>${staffList.map(n=>'<option'+(n===sr.assignedTo?' selected':'')+'>'+n+'</option>').join('')}</select></div><div class="form-group"><label>Scheduled Time</label><input type="datetime-local" class="form-control" id="eSrTime" value="${sr.scheduledTime||''}"></div></div>
-    <div class="form-row"><div class="form-group"><label>Status\${adminEditBtn('requestStatuses')}</label><select class="form-control" id="eSrStatus">${getRequestStatuses().map(s=>'<option'+(s===sr.status?' selected':'')+'>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Charge ($)</label><input type="number" class="form-control" id="eSrCharge" step="0.01" value="${sr.charge||0}"></div></div>
+    <div class="form-row"><div class="form-group"><label>Status${adminEditBtn('requestStatuses')}</label><select class="form-control" id="eSrStatus">${getRequestStatuses().map(s=>'<option'+(s===sr.status?' selected':'')+'>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Charge ($)</label><input type="number" class="form-control" id="eSrCharge" step="0.01" value="${sr.charge||0}"></div></div>
     <div class="form-group"><label>Notes</label><textarea class="form-control" id="eSrNotes" rows="2">${sr.notes||''}</textarea></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateServiceRequest('${sr.id}')">Save</button></div>`);
 };
@@ -2148,7 +2328,7 @@ window.showAddService = function() {
   openModal(`<div class="modal-header"><h2>Add Service</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <div class="form-row"><div class="form-group"><label>Icon (emoji)</label><input type="text" class="form-control" id="mSIcon" value="◈" maxlength="4"></div><div class="form-group"><label>Service Name</label><input type="text" class="form-control" id="mSName"></div></div>
-    <div class="form-row"><div class="form-group"><label>Category\${adminEditBtn('serviceCategories')}</label><select class="form-control" id="mSCat">${getServiceCategories().map(s=>'<option>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Unit Price ($)</label><input type="number" class="form-control" id="mSPrice" step="0.01"></div></div>
+    <div class="form-row"><div class="form-group"><label>Category${adminEditBtn('serviceCategories')}</label><select class="form-control" id="mSCat">${getServiceCategories().map(s=>'<option>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Unit Price ($)</label><input type="number" class="form-control" id="mSPrice" step="0.01"></div></div>
     <div class="form-row"><div class="form-group"><label>Tax Rate (%)</label><input type="number" class="form-control" id="mSTax" value="7" step="0.1"></div><div class="form-group"><label>Default Quantity</label><input type="number" class="form-control" id="mSQty" value="1" min="1"></div></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addService()">Add Service</button></div>`);
 };
@@ -2162,7 +2342,7 @@ window.showEditService = function(id) {
   openModal(`<div class="modal-header"><h2>Edit Service</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <div class="form-row"><div class="form-group"><label>Icon</label><input type="text" class="form-control" id="eSIcon" value="${s.icon}" maxlength="4"></div><div class="form-group"><label>Service Name</label><input type="text" class="form-control" id="eSName" value="${s.name}"></div></div>
-    <div class="form-row"><div class="form-group"><label>Category\${adminEditBtn('serviceCategories')}</label><select class="form-control" id="eSCat">${getServiceCategories().map(c=>`<option ${c===s.serviceCategory?'selected':''}>${c}</option>`).join('')}</select></div><div class="form-group"><label>Unit Price ($)</label><input type="number" class="form-control" id="eSPrice" value="${s.unitPrice}" step="0.01"></div></div>
+    <div class="form-row"><div class="form-group"><label>Category${adminEditBtn('serviceCategories')}</label><select class="form-control" id="eSCat">${getServiceCategories().map(c=>`<option ${c===s.serviceCategory?'selected':''}>${c}</option>`).join('')}</select></div><div class="form-group"><label>Unit Price ($)</label><input type="number" class="form-control" id="eSPrice" value="${s.unitPrice}" step="0.01"></div></div>
     <div class="form-row"><div class="form-group"><label>Tax Rate (%)</label><input type="number" class="form-control" id="eSTax" value="${s.taxRate}" step="0.1"></div><div class="form-group"><label>Default Quantity</label><input type="number" class="form-control" id="eSQty" value="${s.quantity||1}" min="1"></div></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateService('${s.id}')">Save</button></div>`);
 };
@@ -2230,9 +2410,9 @@ window.showAddInvoice = function() {
   openModal(`<div class="modal-header"><h2>Add Invoice (${invNum})</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <div class="form-row"><div class="form-group"><label>Guest Name</label><input type="text" class="form-control" id="mInvGuest" placeholder="Enter guest name"></div><div class="form-group"><label>Room Number</label><input type="text" class="form-control" id="mInvRoom" placeholder="e.g. 201"></div></div>
-    <div class="form-row"><div class="form-group"><label>Date</label><input type="date" class="form-control" id="mInvDate" value="${today()}"></div><div class="form-group"><label>Currency\${adminEditBtn('currencies')}</label><select class="form-control" id="mInvCur">${getCurrencies().map(s=>'<option>'+s+'</option>').join('')}</select></div></div>
+    <div class="form-row"><div class="form-group"><label>Date</label><input type="date" class="form-control" id="mInvDate" value="${today()}"></div><div class="form-group"><label>Currency${adminEditBtn('currencies')}</label><select class="form-control" id="mInvCur">${getCurrencies().map(s=>'<option>'+s+'</option>').join('')}</select></div></div>
     <div class="form-row"><div class="form-group"><label>Subtotal</label><input type="number" class="form-control" id="mInvSub" step="0.01" placeholder="0.00"></div><div class="form-group"><label>Discount</label><input type="number" class="form-control" id="mInvDisc" step="0.01" value="0"></div></div>
-    <div class="form-row"><div class="form-group"><label>Tax Total</label><input type="number" class="form-control" id="mInvTax" step="0.01" value="0"></div><div class="form-group"><label>Payment Status\${adminEditBtn('invoiceStatuses')}</label><select class="form-control" id="mInvStatus">${getInvoiceStatuses().map(s=>'<option>'+s+'</option>').join('')}</select></div></div>
+    <div class="form-row"><div class="form-group"><label>Tax Total</label><input type="number" class="form-control" id="mInvTax" step="0.01" value="0"></div><div class="form-group"><label>Payment Status${adminEditBtn('invoiceStatuses')}</label><select class="form-control" id="mInvStatus">${getInvoiceStatuses().map(s=>'<option>'+s+'</option>').join('')}</select></div></div>
     <div class="form-group"><label>Transaction ID</label><input type="text" class="form-control" id="mInvTxn" placeholder="Optional"></div>
     <div class="form-group"><label>Billing Address</label><input type="text" class="form-control" id="mInvAddr" placeholder="Optional"></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addInvoice()">Add Invoice</button></div>`);
@@ -2253,9 +2433,9 @@ window.showEditInvoice = function(id) {
   openModal(`<div class="modal-header"><h2>Edit ${inv.invoiceNumber}</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <div class="form-row"><div class="form-group"><label>Guest Name</label><input type="text" class="form-control" id="eInvGuest" value="${inv.guestName}"></div><div class="form-group"><label>Room Number</label><input type="text" class="form-control" id="eInvRoom" value="${inv.roomNumber}"></div></div>
-    <div class="form-row"><div class="form-group"><label>Date</label><input type="date" class="form-control" id="eInvDate" value="${inv.date}"></div><div class="form-group"><label>Currency\${adminEditBtn('currencies')}</label><select class="form-control" id="eInvCur">${getCurrencies().map(c=>`<option ${c===inv.currency?'selected':''}>${c}</option>`).join('')}</select></div></div>
+    <div class="form-row"><div class="form-group"><label>Date</label><input type="date" class="form-control" id="eInvDate" value="${inv.date}"></div><div class="form-group"><label>Currency${adminEditBtn('currencies')}</label><select class="form-control" id="eInvCur">${getCurrencies().map(c=>`<option ${c===inv.currency?'selected':''}>${c}</option>`).join('')}</select></div></div>
     <div class="form-row"><div class="form-group"><label>Subtotal</label><input type="number" class="form-control" id="eInvSub" step="0.01" value="${inv.subtotal}"></div><div class="form-group"><label>Discount</label><input type="number" class="form-control" id="eInvDisc" step="0.01" value="${inv.discountAmount}"></div></div>
-    <div class="form-row"><div class="form-group"><label>Tax Total</label><input type="number" class="form-control" id="eInvTax" step="0.01" value="${inv.taxTotal}"></div><div class="form-group"><label>Payment Status\${adminEditBtn('invoiceStatuses')}</label><select class="form-control" id="eInvStatus">${getInvoiceStatuses().map(s=>`<option ${s===inv.paymentStatus?'selected':''}>${s}</option>`).join('')}</select></div></div>
+    <div class="form-row"><div class="form-group"><label>Tax Total</label><input type="number" class="form-control" id="eInvTax" step="0.01" value="${inv.taxTotal}"></div><div class="form-group"><label>Payment Status${adminEditBtn('invoiceStatuses')}</label><select class="form-control" id="eInvStatus">${getInvoiceStatuses().map(s=>`<option ${s===inv.paymentStatus?'selected':''}>${s}</option>`).join('')}</select></div></div>
     <div class="form-group"><label>Transaction ID</label><input type="text" class="form-control" id="eInvTxn" value="${inv.paymentTransactionId||''}"></div>
     <div class="form-group"><label>Billing Address</label><input type="text" class="form-control" id="eInvAddr" value="${inv.billingAddress||''}"></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateInvoice('${inv.id}')">Save</button></div>`);
@@ -2362,7 +2542,7 @@ window.showAddAccount = function() {
     <div class="modal-body"><div class="form-group"><label>Full Name</label><input type="text" class="form-control" id="mAName"></div>
     <div class="form-group"><label>Email</label><input type="email" class="form-control" id="mAEmail"></div>
     <div class="form-group"><label>Password</label><input type="password" class="form-control" id="mAPass" placeholder="Set password"></div>
-    <div class="form-group"><label>Role\${adminEditBtn('userRoles')}</label><select class="form-control" id="mARole">${getUserRoles().map(s=>'<option>'+s+'</option>').join('')}</select></div></div>
+    <div class="form-group"><label>Role${adminEditBtn('userRoles')}</label><select class="form-control" id="mARole">${getUserRoles().map(s=>'<option>'+s+'</option>').join('')}</select></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addAccount()">Add User</button></div>`);
 };
 window.addAccount = function() {
@@ -2377,7 +2557,7 @@ window.showEditAccount = function(id) {
     <div class="modal-body"><div class="form-group"><label>Full Name</label><input type="text" class="form-control" id="eAName" value="${a.name}"></div>
     <div class="form-group"><label>Email</label><input type="email" class="form-control" id="eAEmail" value="${a.email}"></div>
     <div class="form-group"><label>Password</label><input type="password" class="form-control" id="eAPass" value="${a.password||''}" placeholder="Change password"></div>
-    <div class="form-group"><label>Role\${adminEditBtn('userRoles')}</label><select class="form-control" id="eARole">${getUserRoles().map(r=>`<option ${r===a.role?'selected':''}>${r}</option>`).join('')}</select></div></div>
+    <div class="form-group"><label>Role${adminEditBtn('userRoles')}</label><select class="form-control" id="eARole">${getUserRoles().map(r=>`<option ${r===a.role?'selected':''}>${r}</option>`).join('')}</select></div></div>
     <div class="modal-footer"><button class="btn btn-danger" onclick="deleteAccount('${a.id}')">Delete</button><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateAccount('${a.id}')">Save</button></div>`);
 };
 window.updateAccount = function(id) {
@@ -2770,7 +2950,7 @@ window.showReportIssue = function() {
     <div class="modal-body">
     <div class="form-group"><label>Room</label><select class="form-control" id="mRptRoom">${rooms.map(r=>`<option value="${r.roomNumber}">${r.roomNumber} - ${r.roomType}</option>`).join('')}</select></div>
     <div class="form-group"><label>Issue Description</label><textarea class="form-control" id="mRptIssue" rows="3" placeholder="Describe the issue..." style="min-height:60px;"></textarea></div>
-    <div class="form-group"><label>Priority\${adminEditBtn('ticketPriorities')}</label><select class="form-control" id="mRptPri">${getTicketPriorities().map(s=>'<option'+(s==='Medium'?' selected':'')+'>'+s+'</option>').join('')}</select></div></div>
+    <div class="form-group"><label>Priority${adminEditBtn('ticketPriorities')}</label><select class="form-control" id="mRptPri">${getTicketPriorities().map(s=>'<option'+(s==='Medium'?' selected':'')+'>'+s+'</option>').join('')}</select></div></div>
     <div class="modal-footer"><button class="btn btn-outline hk-large-btn" onclick="closeModal()">Cancel</button><button class="btn btn-primary hk-large-btn" onclick="submitReportIssue()">Submit Ticket</button></div>`);
 };
 window.submitReportIssue = function() {
@@ -2857,7 +3037,7 @@ function renderMaintenance() {
 window.showAddTicket = function() {
   openModal(`<div class="modal-header"><h2>New Maintenance Ticket</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
-    <div class="form-row"><div class="form-group"><label>Room Number</label><select class="form-control" id="mTkRoom">${rooms.map(r=>`<option value="${r.roomNumber}">${r.roomNumber} - ${r.roomType}</option>`).join('')}</select></div><div class="form-group"><label>Priority\${adminEditBtn('ticketPriorities')}</label><select class="form-control" id="mTkPri">${getTicketPriorities().map(s=>'<option'+(s==='High'?' selected':'')+'>'+s+'</option>').join('')}</select></div></div>
+    <div class="form-row"><div class="form-group"><label>Room Number</label><select class="form-control" id="mTkRoom">${rooms.map(r=>`<option value="${r.roomNumber}">${r.roomNumber} - ${r.roomType}</option>`).join('')}</select></div><div class="form-group"><label>Priority${adminEditBtn('ticketPriorities')}</label><select class="form-control" id="mTkPri">${getTicketPriorities().map(s=>'<option'+(s==='High'?' selected':'')+'>'+s+'</option>').join('')}</select></div></div>
     <div class="form-group"><label>Issue Description</label><textarea class="form-control" id="mTkIssue" rows="3" placeholder="Describe the issue..."></textarea></div>
     <div class="form-group"><label>Notes</label><textarea class="form-control" id="mTkNotes" rows="2" placeholder="Additional notes..."></textarea></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addTicket()">Create Ticket</button></div>`);
@@ -2992,7 +3172,7 @@ window.showAddInventory = function() {
   openModal(`<div class="modal-header"><h2>Add Inventory Item</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <div class="form-group"><label>Item Name</label><input type="text" class="form-control" id="mInvName" placeholder="e.g. Bath Towels"></div>
-    <div class="form-row"><div class="form-group"><label>Category\${adminEditBtn('inventoryCategories')}</label><select class="form-control" id="mInvCat">${getInventoryCategories().map(s=>'<option>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Quantity</label><input type="number" class="form-control" id="mInvQty" value="0" min="0"></div></div>
+    <div class="form-row"><div class="form-group"><label>Category${adminEditBtn('inventoryCategories')}</label><select class="form-control" id="mInvCat">${getInventoryCategories().map(s=>'<option>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Quantity</label><input type="number" class="form-control" id="mInvQty" value="0" min="0"></div></div>
     <div class="form-row"><div class="form-group"><label>Reorder Level</label><input type="number" class="form-control" id="mInvReorder" value="10" min="0"></div><div class="form-group"><label>Last Ordered</label><input type="date" class="form-control" id="mInvDate" value="${today()}"></div></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addInventoryItem()">Add Item</button></div>`);
 };
@@ -3008,7 +3188,7 @@ window.showEditInventory = function(id) {
   openModal(`<div class="modal-header"><h2>Edit Inventory Item</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <div class="form-group"><label>Item Name</label><input type="text" class="form-control" id="eInvName" value="${it.itemName}"></div>
-    <div class="form-row"><div class="form-group"><label>Category\${adminEditBtn('inventoryCategories')}</label><select class="form-control" id="eInvCat">${getInventoryCategories().map(c=>`<option ${c===it.category?'selected':''}>${c}</option>`).join('')}</select></div><div class="form-group"><label>Quantity</label><input type="number" class="form-control" id="eInvQty" value="${it.quantity}" min="0"></div></div>
+    <div class="form-row"><div class="form-group"><label>Category${adminEditBtn('inventoryCategories')}</label><select class="form-control" id="eInvCat">${getInventoryCategories().map(c=>`<option ${c===it.category?'selected':''}>${c}</option>`).join('')}</select></div><div class="form-group"><label>Quantity</label><input type="number" class="form-control" id="eInvQty" value="${it.quantity}" min="0"></div></div>
     <div class="form-row"><div class="form-group"><label>Reorder Level</label><input type="number" class="form-control" id="eInvReorder" value="${it.reorderLevel}" min="0"></div><div class="form-group"><label>Last Ordered</label><input type="date" class="form-control" id="eInvDate" value="${it.lastOrdered||''}"></div></div></div>
     <div class="modal-footer"><button class="btn btn-danger" onclick="deleteInventoryItem('${it.id}')">Delete</button><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateInventoryItem('${it.id}')">Save</button></div>`);
 };
@@ -3839,7 +4019,7 @@ window.showAddMenuItem = function() {
   openModal(`<div class="modal-header"><h2>Add Menu Item</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <div class="form-group"><label>Name</label><input type="text" class="form-control" id="mMiName" placeholder="e.g. Pad Thai"></div>
-    <div class="form-row"><div class="form-group"><label>Category\${adminEditBtn('menuCategories')}</label><select class="form-control" id="mMiCat">${getMenuCategories().map(s=>'<option>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Price ($)</label><input type="number" class="form-control" id="mMiPrice" step="0.01" placeholder="0.00"></div></div>
+    <div class="form-row"><div class="form-group"><label>Category${adminEditBtn('menuCategories')}</label><select class="form-control" id="mMiCat">${getMenuCategories().map(s=>'<option>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Price ($)</label><input type="number" class="form-control" id="mMiPrice" step="0.01" placeholder="0.00"></div></div>
     <div class="form-group"><label>Available</label><select class="form-control" id="mMiAvail"><option value="true">Yes</option><option value="false">No</option></select></div>
     <div class="form-group"><label>Description</label><textarea class="form-control" id="mMiDesc" rows="2" placeholder="Item description..."></textarea></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addMenuItem()">Add Item</button></div>`);
@@ -3856,7 +4036,7 @@ window.showEditMenuItem = function(id) {
   openModal(`<div class="modal-header"><h2>Edit Menu Item</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <div class="form-group"><label>Name</label><input type="text" class="form-control" id="eMiName" value="${m.name}"></div>
-    <div class="form-row"><div class="form-group"><label>Category\${adminEditBtn('menuCategories')}</label><select class="form-control" id="eMiCat">${getMenuCategories().map(c=>'<option'+(c===m.category?' selected':'')+'>'+c+'</option>').join('')}</select></div><div class="form-group"><label>Price ($)</label><input type="number" class="form-control" id="eMiPrice" step="0.01" value="${m.price}"></div></div>
+    <div class="form-row"><div class="form-group"><label>Category${adminEditBtn('menuCategories')}</label><select class="form-control" id="eMiCat">${getMenuCategories().map(c=>'<option'+(c===m.category?' selected':'')+'>'+c+'</option>').join('')}</select></div><div class="form-group"><label>Price ($)</label><input type="number" class="form-control" id="eMiPrice" step="0.01" value="${m.price}"></div></div>
     <div class="form-group"><label>Available</label><select class="form-control" id="eMiAvail"><option value="true" ${m.available?'selected':''}>Yes</option><option value="false" ${!m.available?'selected':''}>No</option></select></div>
     <div class="form-group"><label>Description</label><textarea class="form-control" id="eMiDesc" rows="2">${m.description||''}</textarea></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateMenuItem('${m.id}')">Save</button></div>`);
@@ -3922,7 +4102,7 @@ window.showAddStoreItem = function() {
   openModal(`<div class="modal-header"><h2>Add Store Item</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <div class="form-group"><label>Name</label><input type="text" class="form-control" id="mSiName" placeholder="e.g. Water Bottle"></div>
-    <div class="form-row"><div class="form-group"><label>Category\${adminEditBtn('storeCategories')}</label><select class="form-control" id="mSiCat">${getStoreCategories().map(s=>'<option>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Price ($)</label><input type="number" class="form-control" id="mSiPrice" step="0.01" placeholder="0.00"></div></div>
+    <div class="form-row"><div class="form-group"><label>Category${adminEditBtn('storeCategories')}</label><select class="form-control" id="mSiCat">${getStoreCategories().map(s=>'<option>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Price ($)</label><input type="number" class="form-control" id="mSiPrice" step="0.01" placeholder="0.00"></div></div>
     <div class="form-row"><div class="form-group"><label>Stock</label><input type="number" class="form-control" id="mSiStock" value="0" min="0"></div><div class="form-group"><label>Barcode</label><input type="text" class="form-control" id="mSiBarcode" placeholder="e.g. STR-016"></div></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addStoreItem()">Add Item</button></div>`);
 };
@@ -3938,7 +4118,7 @@ window.showEditStoreItem = function(id) {
   openModal(`<div class="modal-header"><h2>Edit Store Item</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <div class="form-group"><label>Name</label><input type="text" class="form-control" id="eSiName" value="${s.name}"></div>
-    <div class="form-row"><div class="form-group"><label>Category\${adminEditBtn('storeCategories')}</label><select class="form-control" id="eSiCat">${getStoreCategories().map(c=>'<option'+(c===s.category?' selected':'')+'>'+c+'</option>').join('')}</select></div><div class="form-group"><label>Price ($)</label><input type="number" class="form-control" id="eSiPrice" step="0.01" value="${s.price}"></div></div>
+    <div class="form-row"><div class="form-group"><label>Category${adminEditBtn('storeCategories')}</label><select class="form-control" id="eSiCat">${getStoreCategories().map(c=>'<option'+(c===s.category?' selected':'')+'>'+c+'</option>').join('')}</select></div><div class="form-group"><label>Price ($)</label><input type="number" class="form-control" id="eSiPrice" step="0.01" value="${s.price}"></div></div>
     <div class="form-row"><div class="form-group"><label>Stock</label><input type="number" class="form-control" id="eSiStock" value="${s.stock}" min="0"></div><div class="form-group"><label>Barcode</label><input type="text" class="form-control" id="eSiBarcode" value="${s.barcode||''}"></div></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateStoreItem('${s.id}')">Save</button></div>`);
 };
@@ -4402,23 +4582,27 @@ function openCsel(sel) {
   document.getElementById('cselTitle').textContent = labelRaw;
   document.getElementById('cselSearch').value = '';
   const actDiv = document.getElementById('cselActions');
-  actDiv.style.display = 'flex';
-  actDiv.style.padding = '0.5rem 1rem';
+  const lbl = labelRaw.toLowerCase();
+  const noEditIds = ['mBkRoom','eBkRoom','mSvcSelect','gpSvcSelect','mSrRoom','mSrService','mSrAssign','eSrAssign','posRoomSelect','restRoomSelect','restTableSelect','martCustSelect','mMsgBooking','mRptRoom','mTkRoom','eGBL','mGBL','mMiAvail','eMiAvail'];
+  const noEditLabels = ['room','select service','service','blacklist','available','assigned to','table number','booking / guest','room / booking','booking source','booking sources','payment method','payment methods','category','payment status'];
+  const isNoEdit = noEditIds.includes(sel.id) || noEditLabels.includes(lbl);
+  const isBoolOpts = sel.options.length <= 2 && Array.from(sel.options).every(o => ['yes','no','true','false','0','1'].includes(o.textContent.toLowerCase().trim()));
+  const hideActions = isNoEdit || isBoolOpts;
+  if (hideActions) {
+    actDiv.style.display = 'none';
+  } else {
+    actDiv.style.display = 'flex';
+    actDiv.style.justifyContent = 'flex-end';
+  }
+  actDiv.style.padding = '0.4rem 1rem';
   actDiv.style.gap = '0.5rem';
   actDiv.style.borderBottom = '1px solid var(--border)';
   const isDynamic = listName && listName.startsWith('_dynamic_');
-  actDiv.innerHTML = '<button type="button" class="btn btn-sm btn-primary" style="flex:1;">+ ADD</button>'
-    + '<button type="button" class="btn btn-sm btn-danger" style="flex:1;">DELETE</button>'
-    + '<button type="button" class="btn btn-sm btn-outline" style="flex:1;">EDIT</button>';
-  const btnAdd = actDiv.children[0];
-  const btnDel = actDiv.children[1];
-  const btnEdit = actDiv.children[2];
-  btnAdd.onclick = function(ev) { ev.preventDefault(); ev.stopPropagation(); cselQuickAdd(listName); };
-  btnDel.onclick = function(ev) { ev.preventDefault(); ev.stopPropagation(); cselQuickDelete(); };
+  actDiv.innerHTML = '<button type="button" class="btn btn-sm btn-outline" style="gap:0.3rem;">✏️ MANAGE LIST</button>';
+  const btnEdit = actDiv.children[0];
   btnEdit.onclick = function(ev) {
     ev.preventDefault(); ev.stopPropagation();
-    if (isDynamic) cselQuickEdit();
-    else { closeCsel(); manageList(listName); }
+    openListManager(listName, labelRaw, sel);
   };
   _cselOptions = Array.from(sel.options).map((opt, i) => ({text: opt.textContent, idx: i, selected: i === sel.selectedIndex}));
   renderCselList('');
@@ -4454,6 +4638,69 @@ function renderCselList(filter) {
   };
 }
 window.filterCselList = function(val) { renderCselList(val); };
+window.openListManager = function(listName, title, sel) {
+  closeCsel();
+  const isDynamic = listName && listName.startsWith('_dynamic_');
+  let items = [];
+  if (!isDynamic && settings[listName]) {
+    items = settings[listName].split(',').map(s=>s.trim()).filter(Boolean);
+  } else {
+    items = Array.from(sel.options).map(o => o.textContent);
+  }
+  let filterVal = '';
+  function renderMgr() {
+    const filtered = filterVal ? items.filter(v=>v.toLowerCase().includes(filterVal.toLowerCase())) : items;
+    openModal(`<div class="modal-header"><h2>Manage: ${title}</h2><button class="modal-close" onclick="closeModal();openCsel(document.getElementById('${sel.id}'))">&times;</button></div>
+      <div class="modal-body" style="padding:0.75rem;">
+      <div style="padding:0.5rem 0;"><input type="text" class="form-control" id="lmSearch" placeholder="Search..." value="${filterVal}" oninput="window._lmFilter(this.value)" style="font-size:1rem;"></div>
+      <div id="lmList" style="max-height:calc(100vh - 250px);overflow-y:auto;">
+      ${filtered.map((v,i) => '<div style="display:flex;align-items:center;gap:0.5rem;padding:0.7rem 0.5rem;border-bottom:1px solid var(--border);">'
+        +'<span style="flex:1;font-size:0.95rem;">'+v+'</span>'
+        +'<button class="btn btn-sm btn-outline" data-action="edit" data-val="'+v+'" style="min-width:50px;">Edit</button>'
+        +'<button class="btn btn-sm btn-danger" data-action="del" data-val="'+v+'" style="min-width:30px;">✕</button>'
+        +'</div>').join('')}
+      ${filtered.length===0?'<div style="padding:2rem;text-align:center;color:var(--text-light);">No items found</div>':''}
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-top:0.75rem;justify-content:center;padding:0.7rem;" id="lmAddBtn">+ ADD NEW VALUE</button>
+      </div>`);
+    document.getElementById('lmList').addEventListener('click', function(ev) {
+      const btn = ev.target.closest('[data-action]');
+      if (!btn) return;
+      const action = btn.getAttribute('data-action');
+      const val = btn.getAttribute('data-val');
+      if (action === 'edit') {
+        const newVal = prompt('Rename "'+val+'":', val);
+        if (newVal && newVal.trim() && newVal.trim() !== val) {
+          const idx = items.indexOf(val); if(idx>-1) items[idx] = newVal.trim();
+          saveMgrList(); renderMgr();
+        }
+      } else if (action === 'del') {
+        if (items.length <= 1) { toast('Cannot delete the last item'); return; }
+        if (!confirm('Delete "'+val+'"?')) return;
+        items = items.filter(v=>v!==val);
+        saveMgrList(); renderMgr();
+      }
+    });
+    document.getElementById('lmAddBtn').addEventListener('click', function() {
+      const newVal = prompt('Enter new value:');
+      if (newVal && newVal.trim()) {
+        if (items.includes(newVal.trim())) { toast('Already exists'); return; }
+        items.push(newVal.trim());
+        saveMgrList(); renderMgr();
+      }
+    });
+    window._lmFilter = function(v) { filterVal = v; renderMgr(); setTimeout(()=>{const el=document.getElementById('lmSearch');if(el){el.focus();el.setSelectionRange(v.length,v.length);}},50); };
+  }
+  function saveMgrList() {
+    if (!isDynamic) {
+      settings[listName] = items.join(',');
+      save('settings', settings);
+      logAudit('Update','Settings','Updated '+listName);
+    }
+    sel.innerHTML = items.map(v => '<option'+(v===sel.value?' selected':'')+'>'+v+'</option>').join('');
+  }
+  renderMgr();
+};
 window.cselQuickAdd = function(listName) {
   const val = prompt('Enter new value:');
   if (!val || !val.trim()) return;
