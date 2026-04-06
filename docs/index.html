@@ -587,6 +587,8 @@
   <div class="csel-overlay" id="cselOverlay">
     <div class="csel-panel">
       <div class="csel-header"><h3 id="cselTitle">Select</h3><button onclick="closeCsel()">✕</button></div>
+      <div id="cselActions" style="display:none;"></div>
+      <div style="padding:0.5rem 1rem;"><input type="text" class="form-control" id="cselSearch" placeholder="Search..." oninput="filterCselList(this.value)" style="font-size:0.95rem;"></div>
       <div class="csel-list" id="cselList"></div>
     </div>
   </div>
@@ -684,10 +686,17 @@ function getOrderStatuses() { return (settings.orderStatuses || 'New,Preparing,R
 function getPaymentTypes() { return (settings.paymentTypes || 'Pending,Cash,Credit Card,Room Charge').split(',').map(s=>s.trim()).filter(Boolean); }
 function getUserRoles() { return (settings.userRoles || 'Admin,Manager,Receptionist,Housekeeper').split(',').map(s=>s.trim()).filter(Boolean); }
 function getRequestStatuses() { return (settings.requestStatuses || 'Pending,In Progress,Completed,Cancelled').split(',').map(s=>s.trim()).filter(Boolean); }
+function getCurrencyLabels() { return (settings.currencyLabels || defaultSettings.currencyLabels || 'USD ($),EUR (€),GBP (£),THB (฿)').split(',').map(s=>s.trim()).filter(Boolean); }
+function getHousekeepingStatuses() { return (settings.housekeepingStatuses || defaultSettings.housekeepingStatuses || 'Clean,Dirty,Inspected,Out of Service').split(',').map(s=>s.trim()).filter(Boolean); }
+function getOccupancyStatuses() { return (settings.occupancyStatuses || defaultSettings.occupancyStatuses || 'Available,Occupied,Reserved').split(',').map(s=>s.trim()).filter(Boolean); }
+function getCancellationPolicies() { return (settings.cancellationPolicies || defaultSettings.cancellationPolicies || 'Free cancellation,Non-refundable').split(',').map(s=>s.trim()).filter(Boolean); }
+function getMessageTypes() { return (settings.messageTypes || defaultSettings.messageTypes || 'Welcome,Invoice,Reminder,Notification').split(',').map(s=>s.trim()).filter(Boolean); }
+function getMessageChannels() { return (settings.messageChannels || defaultSettings.messageChannels || 'Email,SMS,WhatsApp,In-App').split(',').map(s=>s.trim()).filter(Boolean); }
+function getTransactionStatuses() { return (settings.transactionStatuses || defaultSettings.transactionStatuses || 'Completed,Refunded,Pending').split(',').map(s=>s.trim()).filter(Boolean); }
 function selectOpts(arr, sel) { return arr.map(v=>`<option ${v===sel?'selected':''}>${v}</option>`).join(''); }
 function adminEditBtn(listName) { return currentRole==='Admin' ? ` <button class="btn btn-sm btn-outline" onclick="manageList('${listName}')" style="padding:0.2rem 0.5rem;font-size:0.7rem;min-height:auto;min-width:auto;">⊕</button>` : ''; }
 window.manageList = function(listName) {
-  const labelMap = {roomTypes:'Room Types',bedConfigs:'Bed Configurations',currencies:'Currencies',bookingSources:'Booking Sources',arrivalStatuses:'Arrival Statuses',paymentMethods:'Payment Methods',serviceCategories:'Service Categories',invoiceStatuses:'Invoice Statuses',ticketPriorities:'Ticket Priorities',ticketStatuses:'Ticket Statuses',inventoryCategories:'Inventory Categories',menuCategories:'Menu Categories',storeCategories:'Store Categories',orderStatuses:'Order Statuses',paymentTypes:'Payment Types',userRoles:'User Roles',requestStatuses:'Request Statuses'};
+  const labelMap = {roomTypes:'Room Types',bedConfigs:'Bed Configurations',currencies:'Currencies',currencyLabels:'Currency Labels (hotel)',bookingSources:'Booking Sources',arrivalStatuses:'Arrival Statuses',paymentMethods:'Payment Methods',serviceCategories:'Service Categories',invoiceStatuses:'Invoice Statuses',ticketPriorities:'Ticket Priorities',ticketStatuses:'Ticket Statuses',inventoryCategories:'Inventory Categories',menuCategories:'Menu Categories',storeCategories:'Store Categories',orderStatuses:'Order Statuses',paymentTypes:'Payment Types',userRoles:'User Roles',requestStatuses:'Request Statuses',housekeepingStatuses:'Housekeeping Statuses',occupancyStatuses:'Occupancy Statuses',cancellationPolicies:'Cancellation Policies',messageTypes:'Message Types',messageChannels:'Message Channels',transactionStatuses:'Transaction Statuses'};
   const label = labelMap[listName] || listName;
   const defaults = defaultSettings[listName] || '';
   const items = (settings[listName] || defaults).split(',').map(s=>s.trim()).filter(Boolean);
@@ -714,7 +723,7 @@ window.saveList = function(listName) {
   save('settings', settings);
   logAudit('Update','Settings','Updated '+listName+': '+values.join(', '));
   closeModal();
-  const labelMap = {roomTypes:'Room Types',bedConfigs:'Bed Configurations',currencies:'Currencies',bookingSources:'Booking Sources',arrivalStatuses:'Arrival Statuses',paymentMethods:'Payment Methods',serviceCategories:'Service Categories',invoiceStatuses:'Invoice Statuses',ticketPriorities:'Ticket Priorities',ticketStatuses:'Ticket Statuses',inventoryCategories:'Inventory Categories',menuCategories:'Menu Categories',storeCategories:'Store Categories',orderStatuses:'Order Statuses',paymentTypes:'Payment Types',userRoles:'User Roles',requestStatuses:'Request Statuses'};
+  const labelMap = {roomTypes:'Room Types',bedConfigs:'Bed Configurations',currencies:'Currencies',currencyLabels:'Currency Labels (hotel)',bookingSources:'Booking Sources',arrivalStatuses:'Arrival Statuses',paymentMethods:'Payment Methods',serviceCategories:'Service Categories',invoiceStatuses:'Invoice Statuses',ticketPriorities:'Ticket Priorities',ticketStatuses:'Ticket Statuses',inventoryCategories:'Inventory Categories',menuCategories:'Menu Categories',storeCategories:'Store Categories',orderStatuses:'Order Statuses',paymentTypes:'Payment Types',userRoles:'User Roles',requestStatuses:'Request Statuses',housekeepingStatuses:'Housekeeping Statuses',occupancyStatuses:'Occupancy Statuses',cancellationPolicies:'Cancellation Policies',messageTypes:'Message Types',messageChannels:'Message Channels',transactionStatuses:'Transaction Statuses'};
   toast((labelMap[listName] || listName) + ' updated');
   renderPage(document.querySelector('#sidebarNav a.active')?.dataset?.page || 'dashboard');
 };
@@ -1028,7 +1037,7 @@ const defaultInvoices = [
   {id:genId(),invoiceNumber:'INV-2002',bookingId:'',guestName:'Akira Tanaka',roomNumber:'305',subtotal:720,discountAmount:50,taxTotal:46.90,grandTotal:716.90,paymentStatus:'Partially Paid',paymentTransactionId:'TXN-10002',currency:'USD',billingAddress:'456 Sakura Ave, Tokyo, Japan',services:[{name:'Thai Massage',unitPrice:80,quantity:1,icon:'◎'}],date:'2026-03-20'},
   {id:genId(),invoiceNumber:'INV-2003',bookingId:'',guestName:'Sophie Laurent',roomNumber:'103',subtotal:400,discountAmount:0,taxTotal:28,grandTotal:428,paymentStatus:'Unpaid',paymentTransactionId:'',currency:'EUR',billingAddress:'789 Rue de Paris, Paris, France',services:[],date:'2026-03-25'},
 ];
-const defaultSettings = {hotelName:'Grand Hotel Management',email:'info@grandhotel.com',phone:'+1 555-0100',currency:'USD ($)',address:'123 Hotel Street, City, Country',maxGuests:3,surcharge:25,checkinTime:'14:00',checkoutTime:'12:00',darkMode:false,roomTypes:'Single,Double,Deluxe,Suite,Penthouse',bedConfigs:'King,Twin,Queen+Single,Double,King+Sofa',currencies:'USD,EUR,GBP,THB,ILS,JPY,CNY,AUD,CAD,CHF',bookingSources:'Direct,Booking.com,Expedia,Walk-in,Agoda,Airbnb',arrivalStatuses:'Expected,Checked-in,Checked-out,No-show',paymentMethods:'Credit Card,Cash,Bank Transfer,Room Charge',serviceCategories:'Room Service,Laundry,Airport Transfer,Mini-bar,Spa,Pool',invoiceStatuses:'Unpaid,Partially Paid,Fully Paid',ticketPriorities:'Low,Medium,High,Urgent',ticketStatuses:'Open,In Progress,Resolved',inventoryCategories:'Linen,Toiletries,F&B,Supplies',menuCategories:'Appetizer,Main Course,Dessert,Beverage,Side',storeCategories:'Drinks,Snacks,Toiletries,Souvenirs,Sundries',orderStatuses:'New,Preparing,Ready,Served,Paid',paymentTypes:'Pending,Cash,Credit Card,Room Charge',userRoles:'Admin,Manager,Receptionist,Housekeeper',requestStatuses:'Pending,In Progress,Completed,Cancelled'};
+const defaultSettings = {hotelName:'Grand Hotel Management',email:'info@grandhotel.com',phone:'+1 555-0100',currency:'USD ($)',address:'123 Hotel Street, City, Country',maxGuests:3,surcharge:25,checkinTime:'14:00',checkoutTime:'12:00',darkMode:false,roomTypes:'Single,Double,Deluxe,Suite,Penthouse',bedConfigs:'King,Twin,Queen+Single,Double,King+Sofa',currencies:'USD,EUR,GBP,THB,ILS,JPY,CNY,AUD,CAD,CHF',currencyLabels:'USD ($),EUR (€),GBP (£),THB (฿)',bookingSources:'Direct,Booking.com,Expedia,Walk-in,Agoda,Airbnb',arrivalStatuses:'Expected,Checked-in,Checked-out,No-show',paymentMethods:'Credit Card,Cash,Bank Transfer,Room Charge',serviceCategories:'Room Service,Laundry,Airport Transfer,Mini-bar,Spa,Pool',invoiceStatuses:'Unpaid,Partially Paid,Fully Paid',ticketPriorities:'Low,Medium,High,Urgent',ticketStatuses:'Open,In Progress,Resolved',inventoryCategories:'Linen,Toiletries,F&B,Supplies',menuCategories:'Appetizer,Main Course,Dessert,Beverage,Side',storeCategories:'Drinks,Snacks,Toiletries,Souvenirs,Sundries',orderStatuses:'New,Preparing,Ready,Served,Paid',paymentTypes:'Pending,Cash,Credit Card,Room Charge',userRoles:'Admin,Manager,Receptionist,Housekeeper',requestStatuses:'Pending,In Progress,Completed,Cancelled',housekeepingStatuses:'Clean,Dirty,Inspected,Out of Service',occupancyStatuses:'Available,Occupied,Reserved',cancellationPolicies:'Free cancellation,Non-refundable',messageTypes:'Welcome,Invoice,Reminder,Notification',messageChannels:'Email,SMS,WhatsApp,In-App',transactionStatuses:'Completed,Refunded,Pending'};
 const defaultTickets = [
   {id:genId(),roomNumber:'303',issue:'Bathroom renovation in progress',priority:'High',status:'Open',reportedBy:'Admin',reportedAt:'2026-03-28T10:00:00',resolvedAt:'',notes:'Major plumbing work required'},
   {id:genId(),roomNumber:'201',issue:'AC not cooling properly',priority:'Medium',status:'In Progress',reportedBy:'Receptionist',reportedAt:'2026-03-29T14:30:00',resolvedAt:'',notes:'Technician dispatched'},
@@ -1111,6 +1120,13 @@ if (!settings.orderStatuses) { settings.orderStatuses = defaultSettings.orderSta
 if (!settings.paymentTypes) { settings.paymentTypes = defaultSettings.paymentTypes; save('settings', settings); }
 if (!settings.userRoles) { settings.userRoles = defaultSettings.userRoles; save('settings', settings); }
 if (!settings.requestStatuses) { settings.requestStatuses = defaultSettings.requestStatuses; save('settings', settings); }
+if (!settings.currencyLabels) { settings.currencyLabels = defaultSettings.currencyLabels; save('settings', settings); }
+if (!settings.housekeepingStatuses) { settings.housekeepingStatuses = defaultSettings.housekeepingStatuses; save('settings', settings); }
+if (!settings.occupancyStatuses) { settings.occupancyStatuses = defaultSettings.occupancyStatuses; save('settings', settings); }
+if (!settings.cancellationPolicies) { settings.cancellationPolicies = defaultSettings.cancellationPolicies; save('settings', settings); }
+if (!settings.messageTypes) { settings.messageTypes = defaultSettings.messageTypes; save('settings', settings); }
+if (!settings.messageChannels) { settings.messageChannels = defaultSettings.messageChannels; save('settings', settings); }
+if (!settings.transactionStatuses) { settings.transactionStatuses = defaultSettings.transactionStatuses; save('settings', settings); }
 let tickets = load('tickets', null); if(!tickets) { tickets = defaultTickets; save('tickets', tickets); }
 let messages = load('messages', null); if(!messages) { messages = defaultMessages; save('messages', messages); }
 let inventory = load('inventory', null); if(!inventory) { inventory = defaultInventory; save('inventory', inventory); }
@@ -1377,15 +1393,13 @@ window.addRoom = function() {
 };
 window.showRoomDetail = function(id) {
   const r = rooms.find(x=>x.id===id); if(!r) return;
-  const hkStatuses = ['Clean','Dirty','Inspected','Out of Service'];
-  const occStatuses = ['Occupied','Available','Reserved'];
   openModal(`<div class="modal-header"><h2>Room ${r.roomNumber}</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <div class="form-row"><div class="form-group"><label>Room Number</label><input type="text" class="form-control" id="eRoomNum" value="${r.roomNumber}"></div><div class="form-group"><label>Floor Number</label><input type="number" class="form-control" id="eRoomFloor" value="${r.floorNumber}"></div></div>
     <div class="form-row"><div class="form-group"><label>Room Type${adminEditBtn('roomTypes')}</label><select class="form-control" id="eRoomType">${selectOpts(getRoomTypes(),r.roomType)}</select></div><div class="form-group"><label>Bed Config${adminEditBtn('bedConfigs')}</label><select class="form-control" id="eRoomBed">${selectOpts(getBedConfigs(),r.bedConfig)}</select></div></div>
     <div class="form-row"><div class="form-group"><label>Max Adults</label><input type="number" class="form-control" id="eRoomMaxA" value="${r.maxAdults}"></div><div class="form-group"><label>Max Children</label><input type="number" class="form-control" id="eRoomMaxC" value="${r.maxChildren}"></div></div>
     <div class="form-group"><label>Price Per Night ($)</label><input type="number" class="form-control" id="eRoomPrice" value="${r.price}" step="0.01"></div>
-    <div class="form-row"><div class="form-group"><label>Housekeeping Status</label><select class="form-control" id="eRoomHK">${hkStatuses.map(s=>`<option ${s===r.housekeepingStatus?'selected':''}>${s}</option>`).join('')}</select></div><div class="form-group"><label>Occupancy Status</label><select class="form-control" id="eRoomOcc">${occStatuses.map(s=>`<option ${s===r.occupancyStatus?'selected':''}>${s}</option>`).join('')}</select></div></div>
+    <div class="form-row"><div class="form-group"><label>Housekeeping Status${adminEditBtn('housekeepingStatuses')}</label><select class="form-control" id="eRoomHK">${selectOpts(getHousekeepingStatuses(),r.housekeepingStatus)}</select></div><div class="form-group"><label>Occupancy Status${adminEditBtn('occupancyStatuses')}</label><select class="form-control" id="eRoomOcc">${selectOpts(getOccupancyStatuses(),r.occupancyStatus)}</select></div></div>
     <div class="form-group"><label>Amenities</label><input type="text" class="form-control" id="eRoomAmen" value="${r.amenities||''}"></div>
     <div class="form-group"><label>Maintenance Logs</label><textarea class="form-control" id="eRoomMaint" rows="2">${r.maintenanceLogs||''}</textarea></div></div>
     <div class="modal-footer">${(currentRole !== 'Receptionist' && currentRole !== 'Housekeeper') ? '<button class="btn btn-danger" onclick="deleteRoom(\''+r.id+'\')">Delete</button>' : ''}<button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateRoom('${r.id}')">Save</button></div>`);
@@ -1501,7 +1515,7 @@ window.showAddBooking = function() {
     <div style="margin:-0.25rem 0 0.85rem;display:flex;gap:0.5rem;"><button class="btn btn-outline" style="flex:1;justify-content:center;padding:0.65rem;" onclick="openGuestPicker()">◉ SELECT GUEST</button><button class="btn btn-primary" style="flex:1;justify-content:center;padding:0.65rem;" onclick="addNewGuestFromBooking()">+ NEW GUEST</button></div>
     <div class="form-group"><label>Room <span id="mBkRoomCount" style="font-size:0.75rem;color:var(--primary);"></span></label><select class="form-control" id="mBkRoom">${avail.length?avail.map(r=>`<option value="${r.id}">${r.roomNumber} - ${r.roomType} (${fmt$(r.price)}/night)</option>`).join(''):'<option disabled>No rooms available</option>'}</select></div>
     <div class="form-row"><div class="form-group"><label>Adults</label><input type="number" class="form-control" id="mBkAdults" value="1" min="1"></div><div class="form-group"><label>Children</label><input type="number" class="form-control" id="mBkChildren" value="0" min="0"></div></div>
-    <div class="form-row"><div class="form-group"><label>Booking Source\${adminEditBtn('bookingSources')}</label><select class="form-control" id="mBkSrc">${getBookingSources().map(s=>'<option>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Cancellation Policy</label><select class="form-control" id="mBkCancel"><option>Free cancellation</option><option>Non-refundable</option></select></div></div>
+    <div class="form-row"><div class="form-group"><label>Booking Source\${adminEditBtn('bookingSources')}</label><select class="form-control" id="mBkSrc">${getBookingSources().map(s=>'<option>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Cancellation Policy\${adminEditBtn('cancellationPolicies')}</label><select class="form-control" id="mBkCancel">${getCancellationPolicies().map(s=>'<option>'+s+'</option>').join('')}</select></div></div>
     <div class="form-group"><label>Special Requests</label><textarea class="form-control" id="mBkReq" rows="2" placeholder="Special requests..."></textarea></div>
     <div class="form-group"><label>Notes</label><textarea class="form-control" id="mBkNotes" rows="2" placeholder="Internal notes..."></textarea></div>
     </div></div></div>
@@ -1557,7 +1571,7 @@ window.addNewGuestFromBooking = function() {
     <div class="modal-body">
     <div class="form-row"><div class="form-group"><label>First Name</label><input type="text" class="form-control" id="mNgFirst" placeholder="First name"></div><div class="form-group"><label>Last Name</label><input type="text" class="form-control" id="mNgLast" placeholder="Last name"></div></div>
     <div class="form-row"><div class="form-group"><label>Passport / ID</label><input type="text" class="form-control" id="mNgPassport" placeholder="e.g. US-12345678"></div><div class="form-group"><label>Nationality</label><input type="text" class="form-control" id="mNgNat" placeholder="Tap to select" readonly onclick="openNationalityPicker('mNgNat')" style="cursor:pointer;"></div></div>
-    <div class="form-row"><div class="form-group"><label>Date of Birth</label><input type="date" class="form-control" id="mNgDob"></div><div class="form-group"><label>Payment Method</label><select class="form-control" id="mNgPay">${getPaymentMethods().map(s=>'<option>'+s+'</option>').join('')}</select></div></div>
+    <div class="form-row"><div class="form-group"><label>Date of Birth</label><input type="date" class="form-control" id="mNgDob"></div><div class="form-group"><label>Payment Method\${adminEditBtn('paymentMethods')}</label><select class="form-control" id="mNgPay">${getPaymentMethods().map(s=>'<option>'+s+'</option>').join('')}</select></div></div>
     <div class="form-row"><div class="form-group"><label>Email</label><input type="email" class="form-control" id="mNgEmail" placeholder="email@example.com"></div><div class="form-group"><label>Phone</label><input type="tel" class="form-control" id="mNgPhone" placeholder="+1 555-0000"></div></div>
     <div class="form-group"><label>Guest Notes</label><textarea class="form-control" id="mNgNotes" rows="2" placeholder="Allergies, preferences..."></textarea></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="cancelNewGuestFromBooking()">Cancel</button><button class="btn btn-primary" onclick="saveNewGuestFromBooking()">Add Guest & Return</button></div>`);
@@ -1678,7 +1692,7 @@ function reopenNewGuestForm(backup) {
     <div class="modal-body">
     <div class="form-row"><div class="form-group"><label>First Name</label><input type="text" class="form-control" id="mNgFirst" placeholder="First name"></div><div class="form-group"><label>Last Name</label><input type="text" class="form-control" id="mNgLast" placeholder="Last name"></div></div>
     <div class="form-row"><div class="form-group"><label>Passport / ID</label><input type="text" class="form-control" id="mNgPassport" placeholder="e.g. US-12345678"></div><div class="form-group"><label>Nationality</label><input type="text" class="form-control" id="mNgNat" placeholder="Tap to select" readonly onclick="openNationalityPicker('mNgNat')" style="cursor:pointer;"></div></div>
-    <div class="form-row"><div class="form-group"><label>Date of Birth</label><input type="date" class="form-control" id="mNgDob"></div><div class="form-group"><label>Payment Method</label><select class="form-control" id="mNgPay">${getPaymentMethods().map(s=>'<option>'+s+'</option>').join('')}</select></div></div>
+    <div class="form-row"><div class="form-group"><label>Date of Birth</label><input type="date" class="form-control" id="mNgDob"></div><div class="form-group"><label>Payment Method\${adminEditBtn('paymentMethods')}</label><select class="form-control" id="mNgPay">${getPaymentMethods().map(s=>'<option>'+s+'</option>').join('')}</select></div></div>
     <div class="form-row"><div class="form-group"><label>Email</label><input type="email" class="form-control" id="mNgEmail" placeholder="email@example.com"></div><div class="form-group"><label>Phone</label><input type="tel" class="form-control" id="mNgPhone" placeholder="+1 555-0000"></div></div>
     <div class="form-group"><label>Guest Notes</label><textarea class="form-control" id="mNgNotes" rows="2" placeholder="Allergies, preferences..."></textarea></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="cancelNewGuestFromBooking()">Cancel</button><button class="btn btn-primary" onclick="saveNewGuestFromBooking()">Add Guest & Return</button></div>`);
@@ -1846,7 +1860,7 @@ window.showEditBooking = function(id) {
     <div class="form-row"><div class="form-group"><label>Check-in Date</label><input type="date" class="form-control" id="eBkInD" value="${b.checkinDate}"></div><div class="form-group"><label>Check-in Time</label><input type="time" class="form-control" id="eBkInT" value="${b.checkinTime||'14:00'}"></div></div>
     <div class="form-row"><div class="form-group"><label>Check-out Date</label><input type="date" class="form-control" id="eBkOutD" value="${b.checkoutDate}"></div><div class="form-group"><label>Check-out Time</label><input type="time" class="form-control" id="eBkOutT" value="${b.checkoutTime||'12:00'}"></div></div>
     <div class="form-row"><div class="form-group"><label>Adults</label><input type="number" class="form-control" id="eBkAdults" value="${b.numAdults||1}" min="1"></div><div class="form-group"><label>Children</label><input type="number" class="form-control" id="eBkChildren" value="${b.numChildren||0}" min="0"></div></div>
-    <div class="form-row"><div class="form-group"><label>Booking Source\${adminEditBtn('bookingSources')}</label><select class="form-control" id="eBkSrc">${getBookingSources().map(s=>`<option ${s===b.bookingSource?'selected':''}>${s}</option>`).join('')}</select></div><div class="form-group"><label>Cancellation Policy</label><select class="form-control" id="eBkCancel">${['Free cancellation','Non-refundable'].map(s=>`<option ${s===b.cancellationPolicy?'selected':''}>${s}</option>`).join('')}</select></div></div>
+    <div class="form-row"><div class="form-group"><label>Booking Source\${adminEditBtn('bookingSources')}</label><select class="form-control" id="eBkSrc">${getBookingSources().map(s=>`<option ${s===b.bookingSource?'selected':''}>${s}</option>`).join('')}</select></div><div class="form-group"><label>Cancellation Policy\${adminEditBtn('cancellationPolicies')}</label><select class="form-control" id="eBkCancel">${getCancellationPolicies().map(s=>`<option ${s===b.cancellationPolicy?'selected':''}>${s}</option>`).join('')}</select></div></div>
     <div class="form-group"><label>Arrival Status\${adminEditBtn('arrivalStatuses')}</label><select class="form-control" id="eBkStatus">${getArrivalStatuses().map(s=>`<option ${s===b.arrivalStatus?'selected':''}>${s}</option>`).join('')}</select></div>
     <div class="form-group"><label>Special Requests</label><textarea class="form-control" id="eBkReq" rows="2">${b.specialRequests||''}</textarea></div>
     <div class="form-group"><label>Notes</label><textarea class="form-control" id="eBkNotes" rows="2">${b.notes||''}</textarea></div></div>
@@ -2111,7 +2125,7 @@ window.showEditServiceRequest = function(id) {
     <div class="form-row"><div class="form-group"><label>Room</label><input type="text" class="form-control" value="${sr.roomNumber||''}" readonly style="background:#f0f4fb;"></div><div class="form-group"><label>Guest</label><input type="text" class="form-control" value="${sr.guestName||''}" readonly style="background:#f0f4fb;"></div></div>
     <div class="form-group"><label>Service</label><input type="text" class="form-control" id="eSrService" value="${sr.serviceName||''}"></div>
     <div class="form-row"><div class="form-group"><label>Assigned To</label><select class="form-control" id="eSrAssign"><option value="">Unassigned</option>${staffList.map(n=>'<option'+(n===sr.assignedTo?' selected':'')+'>'+n+'</option>').join('')}</select></div><div class="form-group"><label>Scheduled Time</label><input type="datetime-local" class="form-control" id="eSrTime" value="${sr.scheduledTime||''}"></div></div>
-    <div class="form-row"><div class="form-group"><label>Status</label><select class="form-control" id="eSrStatus">${getRequestStatuses().map(s=>'<option'+(s===sr.status?' selected':'')+'>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Charge ($)</label><input type="number" class="form-control" id="eSrCharge" step="0.01" value="${sr.charge||0}"></div></div>
+    <div class="form-row"><div class="form-group"><label>Status\${adminEditBtn('requestStatuses')}</label><select class="form-control" id="eSrStatus">${getRequestStatuses().map(s=>'<option'+(s===sr.status?' selected':'')+'>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Charge ($)</label><input type="number" class="form-control" id="eSrCharge" step="0.01" value="${sr.charge||0}"></div></div>
     <div class="form-group"><label>Notes</label><textarea class="form-control" id="eSrNotes" rows="2">${sr.notes||''}</textarea></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="updateServiceRequest('${sr.id}')">Save</button></div>`);
 };
@@ -2423,7 +2437,7 @@ function renderSettings() {
   document.getElementById('page-settings').innerHTML = `
     <div class="card"><div class="card-header"><h2>Hotel Settings</h2></div><div class="card-body">
       <div class="form-row"><div class="form-group"><label>Hotel Name</label><input type="text" class="form-control" id="sName" value="${s.hotelName}"></div><div class="form-group"><label>Contact Email</label><input type="email" class="form-control" id="sEmail" value="${s.email}"></div></div>
-      <div class="form-row"><div class="form-group"><label>Phone Number</label><input type="tel" class="form-control" id="sPhone" value="${s.phone}"></div><div class="form-group"><label>Currency</label><select class="form-control" id="sCurrency">${['USD ($)','EUR (€)','GBP (£)','THB (฿)'].map(c=>`<option ${c===s.currency?'selected':''}>${c}</option>`).join('')}</select></div></div>
+      <div class="form-row"><div class="form-group"><label>Phone Number</label><input type="tel" class="form-control" id="sPhone" value="${s.phone}"></div><div class="form-group"><label>Currency${adminEditBtn('currencyLabels')}</label><select class="form-control" id="sCurrency">${getCurrencyLabels().map(c=>`<option ${c===s.currency?'selected':''}>${c}</option>`).join('')}</select></div></div>
       <div class="form-group"><label>Address</label><input type="text" class="form-control" id="sAddr" value="${s.address}"></div>
       <h3 style="margin:1.5rem 0 1rem;font-size:1rem;">Regulations</h3>
       <div class="form-row"><div class="form-group"><label>Max Guests Per Room</label><input type="number" class="form-control" id="sMaxG" value="${s.maxGuests}"></div><div class="form-group"><label>Surcharge Rate (%)</label><input type="number" class="form-control" id="sSur" value="${s.surcharge}"></div></div>
@@ -3381,7 +3395,7 @@ window.showEditPosTxn = function(id) {
   openModal(`<div class="modal-header"><h2>Edit POS Transaction</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <div class="form-row"><div class="form-group"><label>Transaction ID</label><input type="text" class="form-control" value="${t.transactionId||''}" readonly style="background:#f0f4fb;"></div><div class="form-group"><label>Room Number</label><input type="text" class="form-control" id="ePtRoom" value="${t.roomNumber||''}"></div></div>
-    <div class="form-row"><div class="form-group"><label>Guest Name</label><input type="text" class="form-control" id="ePtGuest" value="${t.guestName||''}"></div><div class="form-group"><label>Paid By</label><select class="form-control" id="ePtPaid">${getPaymentMethods().map(s=>'<option'+(s===t.paidBy?' selected':'')+'>'+s+'</option>').join('')}</select></div></div>
+    <div class="form-row"><div class="form-group"><label>Guest Name</label><input type="text" class="form-control" id="ePtGuest" value="${t.guestName||''}"></div><div class="form-group"><label>Paid By${adminEditBtn('paymentMethods')}</label><select class="form-control" id="ePtPaid">${getPaymentMethods().map(s=>'<option'+(s===t.paidBy?' selected':'')+'>'+s+'</option>').join('')}</select></div></div>
     <div class="form-group"><label>Staff</label><input type="text" class="form-control" id="ePtStaff" value="${t.staffName||''}"></div>
     <div style="margin-top:0.75rem;"><p style="font-weight:600;font-size:0.85rem;">Items (${t.itemCount||0}):</p>
     ${(t.items||[]).map(i=>'<p style="font-size:0.85rem;">• '+i.name+' x'+i.qty+' — '+fmt$(i.unitPrice*i.qty)+'</p>').join('')}
@@ -3984,7 +3998,7 @@ window.showEditOrder = function(id) {
     <div class="modal-body">
     <div class="form-row"><div class="form-group"><label>Order Number</label><input type="text" class="form-control" value="${o.orderNumber}" readonly style="background:#f0f4fb;"></div><div class="form-group"><label>Room Number</label><input type="text" class="form-control" id="eOrdRoom" value="${o.roomNumber||''}"></div></div>
     <div class="form-row"><div class="form-group"><label>Guest Name</label><input type="text" class="form-control" id="eOrdGuest" value="${o.guestName||''}"></div><div class="form-group"><label>Table Number</label><input type="text" class="form-control" id="eOrdTable" value="${o.tableNumber||''}"></div></div>
-    <div class="form-row"><div class="form-group"><label>Status</label><select class="form-control" id="eOrdStatus">${getOrderStatuses().map(s=>'<option'+(s===o.status?' selected':'')+'>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Payment</label><select class="form-control" id="eOrdPaid">${getPaymentTypes().map(s=>'<option'+(s===o.paidBy?' selected':'')+'>'+s+'</option>').join('')}</select></div></div>
+    <div class="form-row"><div class="form-group"><label>Status${adminEditBtn('orderStatuses')}</label><select class="form-control" id="eOrdStatus">${getOrderStatuses().map(s=>'<option'+(s===o.status?' selected':'')+'>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Payment${adminEditBtn('paymentTypes')}</label><select class="form-control" id="eOrdPaid">${getPaymentTypes().map(s=>'<option'+(s===o.paidBy?' selected':'')+'>'+s+'</option>').join('')}</select></div></div>
     <div class="form-group"><label>Notes</label><textarea class="form-control" id="eOrdNotes" rows="2">${o.notes||''}</textarea></div>
     <div style="margin-top:0.75rem;"><p style="font-weight:600;font-size:0.85rem;">Items:</p>
     ${(o.items||[]).map(i=>'<p style="font-size:0.85rem;">• '+i.name+' x'+i.qty+' — '+fmt$(i.unitPrice*i.qty)+'</p>').join('')}
@@ -4057,7 +4071,7 @@ window.showEditTransaction = function(id) {
     <div class="modal-body">
     <div class="form-row"><div class="form-group"><label>Transaction ID</label><input type="text" class="form-control" value="${t.transactionId}" readonly style="background:#f0f4fb;"></div><div class="form-group"><label>Source</label><input type="text" class="form-control" value="${t.source||''}" readonly style="background:#f0f4fb;"></div></div>
     <div class="form-row"><div class="form-group"><label>Room Number</label><input type="text" class="form-control" id="eTxnRoom" value="${t.roomNumber||''}"></div><div class="form-group"><label>Guest Name</label><input type="text" class="form-control" id="eTxnGuest" value="${t.guestName||''}"></div></div>
-    <div class="form-row"><div class="form-group"><label>Payment Method</label><select class="form-control" id="eTxnPay">${getPaymentMethods().map(s=>'<option'+(s===t.paymentMethod?' selected':'')+'>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Status</label><select class="form-control" id="eTxnStatus">${['Completed','Refunded','Pending'].map(s=>'<option'+(s===t.status?' selected':'')+'>'+s+'</option>').join('')}</select></div></div>
+    <div class="form-row"><div class="form-group"><label>Payment Method${adminEditBtn('paymentMethods')}</label><select class="form-control" id="eTxnPay">${getPaymentMethods().map(s=>'<option'+(s===t.paymentMethod?' selected':'')+'>'+s+'</option>').join('')}</select></div><div class="form-group"><label>Status${adminEditBtn('transactionStatuses')}</label><select class="form-control" id="eTxnStatus">${getTransactionStatuses().map(s=>'<option'+(s===t.status?' selected':'')+'>'+s+'</option>').join('')}</select></div></div>
     <div style="margin-top:0.75rem;"><p style="font-weight:600;font-size:0.85rem;">Items:</p>
     ${(t.items||[]).map(i=>'<p style="font-size:0.85rem;">• '+i.name+' x'+i.qty+' — '+fmt$(i.unitPrice*i.qty)+'</p>').join('')}
     <p style="font-weight:700;margin-top:0.5rem;">Grand Total: ${fmt$(t.grandTotal)}</p></div></div>
@@ -4109,8 +4123,8 @@ window.showAddMessage = function() {
   openModal(`<div class="modal-header"><h2>Send Message</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
     <div class="form-group"><label>Booking / Guest</label><select class="form-control" id="mMsgBooking"><option value="">-- Select --</option>${checkedIn.map(b=>'<option value="'+b.bookingId+'">'+b.guestName+' (Room '+b.roomNumber+' · '+b.bookingId+')</option>').join('')}<option value="custom">Custom Recipient</option></select></div>
-    <div class="form-row"><div class="form-group"><label>Guest Name</label><input type="text" class="form-control" id="mMsgGuest" placeholder="Guest name"></div><div class="form-group"><label>Type</label><select class="form-control" id="mMsgType"><option>Welcome</option><option>Invoice</option><option>Reminder</option><option>Notification</option></select></div></div>
-    <div class="form-group"><label>Channel</label><select class="form-control" id="mMsgChannel"><option>Email</option><option>SMS</option><option>WhatsApp</option><option>In-App</option></select></div>
+    <div class="form-row"><div class="form-group"><label>Guest Name</label><input type="text" class="form-control" id="mMsgGuest" placeholder="Guest name"></div><div class="form-group"><label>Type${adminEditBtn('messageTypes')}</label><select class="form-control" id="mMsgType">${getMessageTypes().map(s=>'<option>'+s+'</option>').join('')}</select></div></div>
+    <div class="form-group"><label>Channel${adminEditBtn('messageChannels')}</label><select class="form-control" id="mMsgChannel">${getMessageChannels().map(s=>'<option>'+s+'</option>').join('')}</select></div>
     <div class="form-group"><label>Message</label><textarea class="form-control" id="mMsgText" rows="3" placeholder="Enter message..."></textarea></div></div>
     <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="addMessage()">Send Message</button></div>`);
   document.getElementById('mMsgBooking').addEventListener('change', function() {
@@ -4154,6 +4168,13 @@ function renderDropdowns() {
     {key:'paymentTypes', label:'Payment Types', icon:'💵'},
     {key:'userRoles', label:'User Roles', icon:'◔'},
     {key:'requestStatuses', label:'Request Statuses', icon:'📝'},
+    {key:'currencyLabels', label:'Currency Labels (hotel)', icon:'💱'},
+    {key:'housekeepingStatuses', label:'Housekeeping Statuses', icon:'🧹'},
+    {key:'occupancyStatuses', label:'Occupancy Statuses', icon:'🚪'},
+    {key:'cancellationPolicies', label:'Cancellation Policies', icon:'📜'},
+    {key:'messageTypes', label:'Message Types', icon:'✉️'},
+    {key:'messageChannels', label:'Message Channels', icon:'📡'},
+    {key:'transactionStatuses', label:'Transaction Statuses', icon:'◈'},
   ];
   let html = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;">';
   lists.forEach(l => {
@@ -4336,24 +4357,95 @@ let _cselTarget = null;
 function closeCsel() { document.getElementById('cselOverlay').classList.remove('active'); _cselTarget = null; }
 document.getElementById('cselOverlay').addEventListener('click', function(e) { if(e.target === this) closeCsel(); });
 
+function normalizeLabelForList(sel) {
+  const raw = (sel.closest('.form-group')?.querySelector('label')?.textContent || '').trim();
+  return raw.replace(/\u2295/g, '').replace(/[^\p{L}\p{N}\s]/gu, ' ').replace(/\s+/g, ' ').trim().toLowerCase();
+}
+
+const cselSelectIdToListName = {
+  mRoomType: 'roomTypes', eRoomType: 'roomTypes', mRoomBed: 'bedConfigs', eRoomBed: 'bedConfigs',
+  eRoomHK: 'housekeepingStatuses', eRoomOcc: 'occupancyStatuses', mBkSrc: 'bookingSources', eBkSrc: 'bookingSources',
+  mBkCancel: 'cancellationPolicies', eBkCancel: 'cancellationPolicies', eBkStatus: 'arrivalStatuses',
+  mNgPay: 'paymentMethods', mGPay: 'paymentMethods', eGPay: 'paymentMethods', eSrStatus: 'requestStatuses',
+  mSCat: 'serviceCategories', eSCat: 'serviceCategories', mInvCur: 'currencies', eInvCur: 'currencies',
+  mInvStatus: 'invoiceStatuses', eInvStatus: 'invoiceStatuses', mARole: 'userRoles', eARole: 'userRoles',
+  sCurrency: 'currencyLabels', mRptPri: 'ticketPriorities', mTkPri: 'ticketPriorities', mInvCat: 'inventoryCategories',
+  eInvCat: 'inventoryCategories', ePtPaid: 'paymentMethods', mMiCat: 'menuCategories', eMiCat: 'menuCategories',
+  mSiCat: 'storeCategories', eSiCat: 'storeCategories', eOrdStatus: 'orderStatuses', eOrdPaid: 'paymentTypes',
+  eTxnPay: 'paymentMethods', eTxnStatus: 'transactionStatuses', mMsgType: 'messageTypes', mMsgChannel: 'messageChannels'
+};
+
+function findListForSelect(sel) {
+  const btn = sel.closest('.form-group')?.querySelector('[onclick*="manageList"]');
+  if (btn) { const m = btn.getAttribute('onclick').match(/manageList\('([^']+)'\)/); if (m) return m[1]; }
+  const byId = sel.id && cselSelectIdToListName[sel.id];
+  if (byId) return byId;
+  const label = normalizeLabelForList(sel);
+  const autoMap = {
+    'room type':'roomTypes','bed config':'bedConfigs','currency':'currencies','booking source':'bookingSources',
+    'arrival status':'arrivalStatuses','payment method':'paymentMethods','payment':'paymentMethods',
+    'payment status':'invoiceStatuses','category':'serviceCategories','service category':'serviceCategories','cancellation policy':'cancellationPolicies',
+    'status':'requestStatuses','priority':'ticketPriorities','role':'userRoles','paid by':'paymentTypes',
+    'housekeeping status':'housekeepingStatuses','occupancy status':'occupancyStatuses',
+    'type':'messageTypes','channel':'messageChannels','transaction status':'transactionStatuses'
+  };
+  if (autoMap[label]) return autoMap[label];
+  return '_dynamic_' + (sel.id || 'unknown');
+}
+let _cselOptions = [];
 function openCsel(sel) {
   if (!sel || sel.tagName !== 'SELECT') return;
   _cselTarget = sel;
   sel.blur();
-  const label = sel.closest('.form-group')?.querySelector('label')?.textContent?.replace('⊕','').trim() || 'Select';
-  document.getElementById('cselTitle').textContent = label;
-  const list = document.getElementById('cselList');
-  let html = '';
-  Array.from(sel.options).forEach((opt, i) => {
-    const selected = i === sel.selectedIndex ? ' selected' : '';
-    html += '<div class="csel-item'+selected+'" data-idx="'+i+'"><span>'+opt.textContent+'</span><span class="csel-check">'+(i === sel.selectedIndex ? '✓' : '')+'</span></div>';
-  });
-  list.innerHTML = html;
+  const labelRaw = sel.closest('.form-group')?.querySelector('label')?.textContent?.replace(/\u2295/g, '').trim() || 'Select';
+  const listName = findListForSelect(sel);
+  document.getElementById('cselTitle').textContent = labelRaw;
+  document.getElementById('cselSearch').value = '';
+  const actDiv = document.getElementById('cselActions');
+  actDiv.style.display = 'flex';
+  actDiv.style.padding = '0.5rem 1rem';
+  actDiv.style.gap = '0.5rem';
+  actDiv.style.borderBottom = '1px solid var(--border)';
+  const isDynamic = listName && listName.startsWith('_dynamic_');
+  actDiv.innerHTML = '<button type="button" class="btn btn-sm btn-primary" style="flex:1;">+ ADD</button>'
+    + '<button type="button" class="btn btn-sm btn-danger" style="flex:1;">DELETE</button>'
+    + '<button type="button" class="btn btn-sm btn-outline" style="flex:1;">EDIT</button>';
+  const btnAdd = actDiv.children[0];
+  const btnDel = actDiv.children[1];
+  const btnEdit = actDiv.children[2];
+  btnAdd.onclick = function(ev) { ev.preventDefault(); ev.stopPropagation(); cselQuickAdd(listName); };
+  btnDel.onclick = function(ev) { ev.preventDefault(); ev.stopPropagation(); cselQuickDelete(); };
+  btnEdit.onclick = function(ev) {
+    ev.preventDefault(); ev.stopPropagation();
+    if (isDynamic) cselQuickEdit();
+    else { closeCsel(); manageList(listName); }
+  };
+  _cselOptions = Array.from(sel.options).map((opt, i) => ({text: opt.textContent, idx: i, selected: i === sel.selectedIndex}));
+  renderCselList('');
   document.getElementById('cselOverlay').classList.add('active');
+}
+function refreshCselFromSelect(sel) {
+  if (!sel || sel.tagName !== 'SELECT' || !_cselTarget || _cselTarget !== sel) return;
+  const filter = document.getElementById('cselSearch').value || '';
+  _cselOptions = Array.from(sel.options).map((opt, i) => ({text: opt.textContent, idx: i, selected: i === sel.selectedIndex}));
+  renderCselList(filter);
+}
+function renderCselList(filter) {
+  const list = document.getElementById('cselList');
+  const filtered = filter ? _cselOptions.filter(o => o.text.toLowerCase().includes(filter.toLowerCase())) : _cselOptions;
+  let html = '';
+  if (filtered.length === 0) {
+    html = '<div style="padding:2rem;text-align:center;color:var(--text-light);">No match</div>';
+  } else {
+    filtered.forEach(o => {
+      html += '<div class="csel-item'+(o.selected?' selected':'')+'" data-idx="'+o.idx+'"><span>'+o.text+'</span><span class="csel-check">'+(o.selected?'✓':'')+'</span></div>';
+    });
+  }
+  list.innerHTML = html;
   list.onclick = function(ev) {
     const item = ev.target.closest('.csel-item');
     if (!item) return;
-    const idx = parseInt(item.getAttribute('data-idx'));
+    const idx = parseInt(item.getAttribute('data-idx'), 10);
     if (_cselTarget) {
       _cselTarget.selectedIndex = idx;
       _cselTarget.dispatchEvent(new Event('change', {bubbles:true}));
@@ -4361,8 +4453,81 @@ function openCsel(sel) {
     closeCsel();
   };
 }
-document.addEventListener('mousedown', function(e) { const sel = e.target.closest('select.form-control'); if(sel){e.preventDefault();e.stopPropagation();openCsel(sel);} }, true);
-document.addEventListener('touchstart', function(e) { const sel = e.target.closest('select.form-control'); if(sel){e.preventDefault();e.stopPropagation();openCsel(sel);} }, {capture:true, passive:false});
+window.filterCselList = function(val) { renderCselList(val); };
+window.cselQuickAdd = function(listName) {
+  const val = prompt('Enter new value:');
+  if (!val || !val.trim()) return;
+  const trimmed = val.trim();
+  if (listName && !listName.startsWith('_dynamic_')) {
+    const current = (settings[listName] || '').split(',').map(s=>s.trim()).filter(Boolean);
+    if (current.includes(trimmed)) { toast('Value already exists'); return; }
+    current.push(trimmed);
+    settings[listName] = current.join(',');
+    save('settings', settings);
+    logAudit('Update','Settings','Added "'+trimmed+'" to '+listName);
+  }
+  if (_cselTarget) {
+    const exists = Array.from(_cselTarget.options).some(o => o.textContent === trimmed);
+    if (!exists) { const opt = document.createElement('option'); opt.textContent = trimmed; opt.value = trimmed; _cselTarget.appendChild(opt); }
+    _cselTarget.value = trimmed;
+    _cselTarget.dispatchEvent(new Event('change', {bubbles:true}));
+    refreshCselFromSelect(_cselTarget);
+  }
+  toast('"'+trimmed+'" added');
+};
+window.cselQuickEdit = function() {
+  if (!_cselTarget) return;
+  const sel = _cselTarget;
+  const selectedOpt = sel.options[sel.selectedIndex];
+  if (!selectedOpt) { toast('No value selected'); return; }
+  const oldVal = selectedOpt.textContent;
+  const newVal = prompt('Edit value:', oldVal);
+  if (!newVal || !newVal.trim() || newVal.trim() === oldVal) return;
+  const nv = newVal.trim();
+  const listName = findListForSelect(sel);
+  if (listName && !listName.startsWith('_dynamic_')) {
+    const current = (settings[listName] || '').split(',').map(s=>s.trim()).filter(Boolean);
+    const idx = current.indexOf(oldVal);
+    if (idx > -1) { current[idx] = nv; settings[listName] = current.join(','); save('settings', settings); }
+    logAudit('Update','Settings','Renamed "'+oldVal+'" to "'+nv+'" in '+listName);
+  }
+  selectedOpt.textContent = nv;
+  selectedOpt.value = nv;
+  sel.dispatchEvent(new Event('change', {bubbles:true}));
+  refreshCselFromSelect(sel);
+  toast('"'+oldVal+'" renamed to "'+nv+'"');
+};
+window.cselQuickDelete = function() {
+  if (!_cselTarget) return;
+  const sel = _cselTarget;
+  const selectedOpt = sel.options[sel.selectedIndex];
+  if (!selectedOpt) { toast('No value selected'); return; }
+  if (sel.options.length <= 1) { toast('Cannot delete the last option'); return; }
+  const val = selectedOpt.textContent;
+  if (!confirm('Delete "'+val+'" from this list?')) return;
+  const listName = findListForSelect(sel);
+  if (listName && !listName.startsWith('_dynamic_')) {
+    const current = (settings[listName] || '').split(',').map(s=>s.trim()).filter(Boolean);
+    const idx = current.indexOf(val);
+    if (idx > -1) { current.splice(idx, 1); settings[listName] = current.join(','); save('settings', settings); }
+    logAudit('Update','Settings','Deleted "'+val+'" from '+listName);
+  }
+  sel.remove(sel.selectedIndex);
+  if (sel.options.length > 0) sel.selectedIndex = 0;
+  sel.dispatchEvent(new Event('change', {bubbles:true}));
+  refreshCselFromSelect(sel);
+  toast('"'+val+'" deleted');
+};
+document.addEventListener('mousedown', function(e) {
+  if (e.target.closest('#cselOverlay')) return;
+  const sel = e.target.closest('select.form-control');
+  if (sel) { e.preventDefault(); e.stopPropagation(); openCsel(sel); }
+}, true);
+document.addEventListener('touchstart', function(e) {
+  if (e.target.closest('#cselOverlay')) return;
+  const sel = e.target.closest('select.form-control');
+  if (sel) { e.preventDefault(); e.stopPropagation(); openCsel(sel); }
+}, {capture:true, passive:false});
 document.addEventListener('focus', function(e) { if(e.target && e.target.matches && e.target.matches('select.form-control')){e.target.blur();openCsel(e.target);} }, true);
 
 // ===== BOTTOM NAVIGATION BAR =====

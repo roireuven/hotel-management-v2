@@ -3,6 +3,7 @@ package com.hotelmanager;
 import android.os.Bundle;
 import android.view.Window;
 import android.webkit.JsResult;
+import android.webkit.JsPromptResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -81,6 +82,23 @@ public class MainActivity extends AppCompatActivity {
                     .setMessage(message)
                     .setPositiveButton("Yes", (dialog, which) -> result.confirm())
                     .setNegativeButton("No", (dialog, which) -> result.cancel())
+                    .setCancelable(false)
+                    .show();
+                return true;
+            }
+
+            @Override
+            public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
+                final android.widget.EditText input = new android.widget.EditText(MainActivity.this);
+                if (defaultValue != null) {
+                    input.setText(defaultValue);
+                }
+                input.setSelectAllOnFocus(true);
+                new AlertDialog.Builder(MainActivity.this)
+                    .setTitle(message)
+                    .setView(input)
+                    .setPositiveButton("OK", (dialog, which) -> result.confirm(input.getText().toString()))
+                    .setNegativeButton("Cancel", (dialog, which) -> result.cancel())
                     .setCancelable(false)
                     .show();
                 return true;
