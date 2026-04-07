@@ -781,6 +781,7 @@ class XGrid {
     this.hideExport = opts.hideExport || false;
     this.rowClass = opts.rowClass || null;
     this.emptyMessage = opts.emptyMessage || null;
+    this.summaryRow = opts.summaryRow || null;
     this.showSearch = opts.showSearch || false;
     this.masterSearch = '';
     this.sortCol = null; this.sortDir = 'asc';
@@ -938,6 +939,27 @@ class XGrid {
         }
         html += `</tr>`;
       });
+      if (this.summaryRow && filtered.length > 0) {
+        const allData = this.getFiltered();
+        const sumBg = document.body.classList.contains('dark-mode') ? '#1a2744' : '#f0f4fb';
+        html += '<tr class="xgrid-summary-row" style="border-top:2px solid var(--text);font-weight:700;background:' + sumBg + ';">';
+        this.columns.forEach(col => {
+          if (col.hidden) return;
+          const fn = this.summaryRow[col.field];
+          if (fn === 'sum') {
+            const total = allData.reduce((s, r) => s + (parseFloat(r[col.field]) || 0), 0);
+            html += '<td><div class="cell">' + (col.format ? col.format(total, {}) : total.toFixed(2)) + '</div></td>';
+          } else if (fn === 'count') {
+            html += '<td><div class="cell">' + allData.length + '</div></td>';
+          } else if (fn === 'label') {
+            html += '<td><div class="cell" style="font-weight:700;">TOTAL</div></td>';
+          } else {
+            html += '<td><div class="cell"></div></td>';
+          }
+        });
+        if (this.actions && this.actions.length) html += '<td></td>';
+        html += '</tr>';
+      }
     }
     html += `</tbody></table></div>`;
     html += `<div class="xgrid-footer"><div>Page ${this.page + 1} of ${totalPages} &nbsp; <select onchange="window._xg_${this.container.id}.setPageSize(+this.value)">${[10, 15, 25, 50, 100].map(n => `<option value="${n}" ${n === this.pageSize ? 'selected' : ''}>${n}/page</option>`).join('')}</select></div>`;
@@ -2431,6 +2453,7 @@ function renderInvoices() {
       if (row.paymentStatus === 'Unpaid') return 'row-status-error';
       return '';
     },
+    summaryRow: {invoiceNumber:'label', subtotal:'sum', taxTotal:'sum', grandTotal:'sum'},
     hideExport: currentRole === 'Receptionist' || currentRole === 'Housekeeper',
     onAdd: () => showAddInvoice(),
     onImport: (rows) => { rows.forEach(r=>{if(!invoices.find(i=>i.id===r.id))invoices.push(r);}); save('invoices',invoices); logAudit('Import','Invoice','Imported '+rows.length+' rows'); renderInvoices(); },
@@ -3186,6 +3209,7 @@ function renderInventory() {
       if ((parseInt(row.quantity) || 0) <= (parseInt(row.reorderLevel) || 0)) return 'row-warning';
       return '';
     },
+    summaryRow: {itemName:'label', quantity:'sum'},
     onAdd: () => showAddInventory(), addLabel: 'Add New Item',
     onImport: (rows) => { rows.forEach(r=>{if(!inventory.find(i=>i.id===r.id))inventory.push(r);}); save('inventory',inventory); logAudit('Import','Inventory','Imported '+rows.length+' rows'); renderInventory(); },
     onEdit: (row, field, val) => {
@@ -3497,7 +3521,7 @@ function renderPOS() {
 
   html += '<div class="pos-actions"><button class="btn btn-primary" ' + (!canCheckout || needsRoom ? 'disabled style="opacity:0.5;"' : '') + ' onclick="posCheckout(\'Room Charge\')">🏨 Charge to Room</button><button class="btn btn-success" ' + (!canCheckout ? 'disabled style="opacity:0.5;"' : '') + ' onclick="posCheckout(\'Cash\')">💵 Cash Payment</button><button class="btn btn-warning" ' + (!canCheckout ? 'disabled style="opacity:0.5;"' : '') + ' onclick="posCheckout(\'Credit Card\')">💳 Credit Card</button></div>';
 
-  html += '<div class="card"><div class="card-header"><h2>Transaction History (All Sources)</h2></div><div class="card-body"><div id="txnHistoryGrid"></div></div></div>';
+  html += '<div class="card"><div class="card-header"><h2>Transaction History</h2><button class="btn btn-sm btn-outline" onclick="togglePosHistory()">◳ Filter by Guest/Room</button></div><div class="card-body"><div id="posHistFilter" style="display:none;margin-bottom:0.75rem;"><div class="form-row"><div class="form-group" style="margin-bottom:0;"><label>Guest</label><input type="text" class="form-control" id="posHistGuest" placeholder="Search guest..." oninput="filterPosHistory()"></div><div class="form-group" style="margin-bottom:0;"><label>Room</label><input type="text" class="form-control" id="posHistRoom" placeholder="Search room..." oninput="filterPosHistory()"></div></div></div><div id="txnHistoryGrid"></div></div></div>';
 
   html += '<div class="card"><div class="card-header"><h2>POS Transaction Log</h2></div><div class="card-body"><div id="posTransGrid"></div></div></div>';
   html += '<div class="card"><div class="card-header"><h2>◆ POS Change Log</h2></div><div class="card-body"><div id="posChangeLogGrid"></div></div></div>';
@@ -3524,6 +3548,7 @@ function renderPOS() {
     ],
     data: [...transactions].reverse(),
     showSearch: true,
+    summaryRow: {transactionId:'label', grandTotal:'sum'},
     emptyMessage: '◈ No transactions yet',
     actions: [
       {name:'refund',label:'Refund',cls:'btn-danger',condition:r=>r.status==='Completed',handler:id=>refundTransaction(transactions.find(t=>t.id===id)?transactions.find(t=>t.id===id).transactionId:id)},
@@ -3533,9 +3558,10 @@ function renderPOS() {
   new XGrid('posTransGrid', {
     columns: [
       {field:'timestamp',label:'Timestamp',format:v=>{try{const d=new Date(v);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}catch(e){return v;}},filterable:true,width:'130px'},
+      {field:'transactionId',label:'TXN ID',filterable:true,width:'100px'},
       {field:'roomNumber',label:'Room',filterable:true,width:'65px'},
       {field:'guestName',label:'Guest',filterable:true},
-      {field:'itemCount',label:'Items',width:'60px'},
+      {field:'items',label:'Items',format:(v,r)=>String((r&&r.itemCount!=null)?r.itemCount:(Array.isArray(v)?v.reduce((s,i)=>s+i.qty,0):0)),width:'60px'},
       {field:'subtotal',label:'Subtotal',format:v=>fmt$(v),width:'85px'},
       {field:'tax',label:'Tax',format:v=>fmt$(v),width:'70px'},
       {field:'grandTotal',label:'Total',format:v=>'<strong>'+fmt$(v)+'</strong>',width:'85px'},
@@ -3544,6 +3570,7 @@ function renderPOS() {
     ],
     data: [...posTransactions].reverse(),
     showSearch: true,
+    summaryRow: {transactionId:'label', grandTotal:'sum', items:'count'},
     emptyMessage: '◈ No POS transactions yet',
     actions: [
       {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditPosTxn(id)},
@@ -3559,6 +3586,35 @@ function renderPOS() {
   renderChangeLog('posChangeLogGrid', ['POS','posTransactions','pos']);
 }
 
+window.togglePosHistory = function() {
+  const f = document.getElementById('posHistFilter');
+  if (f) f.style.display = f.style.display === 'none' ? '' : 'none';
+};
+window.filterPosHistory = function() {
+  const gf = (document.getElementById('posHistGuest')?.value||'').toLowerCase();
+  const rf = (document.getElementById('posHistRoom')?.value||'').toLowerCase();
+  const filtered = transactions.filter(t => {
+    if (gf && !(t.guestName||'').toLowerCase().includes(gf)) return false;
+    if (rf && !String(t.roomNumber||'').toLowerCase().includes(rf)) return false;
+    return true;
+  });
+  new XGrid('txnHistoryGrid', {
+    columns: [
+      {field:'transactionId',label:'TXN #',filterable:true,width:'100px'},
+      {field:'timestamp',label:'Date',format:v=>{try{const d=new Date(v);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}catch(e){return v;}},filterable:true,width:'130px'},
+      {field:'source',label:'Source',filterable:true,width:'80px'},
+      {field:'roomNumber',label:'Room',filterable:true,width:'60px'},
+      {field:'guestName',label:'Guest',filterable:true},
+      {field:'grandTotal',label:'Total',format:v=>fmt$(v),width:'80px'},
+      {field:'paymentMethod',label:'Payment',filterable:true,width:'90px'},
+      {field:'status',label:'Status',filterable:true,width:'80px'},
+    ],
+    data: filtered,
+    showSearch: true,
+    summaryRow: {transactionId:'label', grandTotal:'sum'},
+    emptyMessage: '◈ No transactions found',
+  });
+};
 window.posSelectBooking = function(bookingId) {
   posSelectedBooking = bookingId || null;
   renderPOS();
@@ -3613,7 +3669,7 @@ window.posCheckout = function(paidBy) {
   });
 
   const posTxn = {
-    id: txn.id, timestamp: txn.timestamp, roomNumber: roomNumber, guestName: guestName,
+    id: txn.id, timestamp: txn.timestamp, source: txn.source || 'POS', roomNumber: roomNumber, guestName: guestName,
     bookingId: bookingId, items: txn.items, itemCount: txn.items.reduce((s, i) => s + i.qty, 0),
     subtotal: txn.subtotal, tax: txn.taxAmount, grandTotal: txn.grandTotal,
     paidBy: paidBy, staffName: txn.staffName, transactionId: txn.transactionId
@@ -3717,7 +3773,8 @@ function renderRestaurant() {
   html += '<div class="pos-totals"><div class="total-row"><span>Subtotal</span><span>' + fmt$(subtotal) + '</span></div><div class="total-row"><span>Tax (' + taxRate + '%)</span><span>' + fmt$(tax) + '</span></div><div class="total-row grand"><span>Grand Total</span><span>' + fmt$(grandTotal) + '</span></div></div></div>';
   html += notesHtml + actionsHtml;
 
-  html += '<div class="card" style="margin-top:1rem;"><div class="card-header"><h2>Active Orders</h2></div><div class="card-body"><div id="restOrderGrid"></div></div></div>';
+  html += '<div class="card" style="margin-top:1rem;"><div class="card-header"><h2>Active Orders</h2><button class="btn btn-sm btn-outline" onclick="toggleRestHistory()">◳ Past Orders</button></div><div class="card-body"><div id="restOrderGrid"></div></div></div>';
+  html += '<div class="card" id="restHistoryCard" style="display:none;"><div class="card-header"><h2>◆ Past Orders</h2><button class="btn btn-sm btn-outline" onclick="toggleRestHistory()">Hide</button></div><div class="card-body"><div class="form-row" style="margin-bottom:0.75rem;"><div class="form-group" style="margin-bottom:0;"><label>Filter by Guest</label><input type="text" class="form-control" id="restHistGuest" placeholder="Search guest..." oninput="filterRestHistory()"></div><div class="form-group" style="margin-bottom:0;"><label>Filter by Room/Table</label><input type="text" class="form-control" id="restHistRoom" placeholder="Search room/table..." oninput="filterRestHistory()"></div></div><div id="restHistoryGrid"></div></div></div>';
 
   html += '<div class="card"><div class="card-header"><h2>Kitchen View</h2></div><div class="card-body"><div id="restKitchenView"></div></div></div>';
   html += '<div class="card"><div class="card-header"><h2>◆ Restaurant Change Log</h2></div><div class="card-body"><div id="restChangeLogGrid"></div></div></div>';
@@ -3745,7 +3802,8 @@ function renderRestaurant() {
       {name:'payRoom',label:'🏨 Room',cls:'btn-primary',condition:r=>r.status==='Served'&&r.paidBy==='Pending',handler:id=>restPayOrder(id,'Room Charge')},
       {name:'payCash',label:'💵',cls:'btn-success',condition:r=>r.status==='Served'&&r.paidBy==='Pending',handler:id=>restPayOrder(id,'Cash')},
       {name:'payCard',label:'💳',cls:'btn-warning',condition:r=>r.status==='Served'&&r.paidBy==='Pending',handler:id=>restPayOrder(id,'Credit Card')},
-    ]
+    ],
+    summaryRow: {orderNumber:'label', grandTotal:'sum'},
   });
 
   const kitchenOrders = restaurantOrders.filter(o => o.status === 'Preparing' || o.status === 'Ready');
@@ -3770,6 +3828,42 @@ function renderRestaurant() {
   renderChangeLog('restChangeLogGrid', ['Restaurant','restaurantOrders']);
 }
 
+window.toggleRestHistory = function() {
+  const card = document.getElementById('restHistoryCard');
+  if (!card) return;
+  if (card.style.display === 'none') {
+    card.style.display = '';
+    filterRestHistory();
+    card.scrollIntoView({behavior:'smooth'});
+  } else {
+    card.style.display = 'none';
+  }
+};
+window.filterRestHistory = function() {
+  const guestFilter = (document.getElementById('restHistGuest')?.value || '').toLowerCase();
+  const roomFilter = (document.getElementById('restHistRoom')?.value || '').toLowerCase();
+  const paidOrders = restaurantOrders.filter(o => {
+    if (o.status !== 'Paid' && o.status !== 'Served') return false;
+    if (guestFilter && !(o.guestName||'').toLowerCase().includes(guestFilter)) return false;
+    if (roomFilter && !(o.tableNumber||'').toLowerCase().includes(roomFilter) && !String(o.roomNumber||'').toLowerCase().includes(roomFilter)) return false;
+    return true;
+  });
+  new XGrid('restHistoryGrid', {
+    columns: [
+      {field:'orderNumber',label:'Order #',filterable:true,width:'90px'},
+      {field:'timestamp',label:'Date',format:v=>{try{const d=new Date(v);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}catch(e){return v;}},filterable:true,width:'130px'},
+      {field:'tableNumber',label:'Table/Room',filterable:true,width:'100px'},
+      {field:'guestName',label:'Guest',filterable:true},
+      {field:'items',label:'Items',format:v=>Array.isArray(v)?v.map(i=>i.name+' x'+i.qty).join(', '):''},
+      {field:'grandTotal',label:'Total',format:v=>fmt$(v),width:'80px'},
+      {field:'paidBy',label:'Paid By',filterable:true,width:'90px'},
+    ],
+    data: paidOrders,
+    showSearch: true,
+    summaryRow: {orderNumber:'label', grandTotal:'sum'},
+    emptyMessage: '◈ No past orders found',
+  });
+};
 window.restSetOrderType = function(type) { restOrderType = type; restSelectedBooking = null; renderRestaurant(); };
 window.restSelectBooking = function(bkId) { restSelectedBooking = bkId || null; renderRestaurant(); };
 
@@ -3957,6 +4051,7 @@ function renderMiniMart() {
   new XGrid('martTransGrid', {
     columns: [
       {field:'timestamp',label:'Timestamp',format:v=>{try{const d=new Date(v);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}catch(e){return v;}},filterable:true,width:'130px'},
+      {field:'source',label:'Source',filterable:true,width:'90px'},
       {field:'roomNumber',label:'Room',filterable:true,width:'65px'},
       {field:'guestName',label:'Guest',filterable:true},
       {field:'itemCount',label:'Items',width:'60px'},
@@ -3967,6 +4062,8 @@ function renderMiniMart() {
       {field:'staffName',label:'Staff',filterable:true,width:'80px'},
     ],
     data: [...martTxns].reverse(),
+    showSearch: true,
+    summaryRow: {source:'label', grandTotal:'sum'},
     emptyMessage: '🛒 No mini-mart transactions yet',
   });
   renderChangeLog('martChangeLogGrid', ['Mini-Mart','storeItems','minimart']);
