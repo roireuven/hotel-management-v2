@@ -585,7 +585,7 @@
   <div class="modal-overlay" id="modalOverlay"><div class="modal" id="modalContent"></div></div>
   <div class="toast" id="toast"></div>
   <div class="csel-overlay" id="cselOverlay">
-    <div class="csel-panel">
+    <div class="csel-panel" onclick="event.stopPropagation()">
       <div class="csel-header"><h3 id="cselTitle">Select</h3><button onclick="closeCsel()">✕</button></div>
       <div id="cselActions" style="display:none;"></div>
       <div style="padding:0.5rem 1rem;"><input type="text" class="form-control" id="cselSearch" placeholder="Search..." oninput="filterCselList(this.value)" style="font-size:0.95rem;"></div>
@@ -630,7 +630,39 @@ function load(key, def) {
   try { const d = localStorage.getItem(DB_KEY + key); return d ? JSON.parse(d) : def; } catch(e) { return def; }
 }
 
+const _snapshots = {};
+const _noAutoAudit = {auditLog:1,bookingLog:1,inventoryLog:1,settings:1};
+function _takeSnapshot(key, data) {
+  if (_noAutoAudit[key] || !Array.isArray(data)) return;
+  _snapshots[key] = new Map(data.map(r => [r.id, JSON.stringify(r)]));
+}
+function _autoAudit(key, data) {
+  if (_noAutoAudit[key] || !Array.isArray(data) || !_snapshots[key]) return;
+  const prev = _snapshots[key];
+  const curr = new Map(data.map(r => [r.id, JSON.stringify(r)]));
+  const user = (typeof currentUser!=='undefined' && currentUser) ? currentUser.name : (typeof currentRole!=='undefined' ? currentRole : 'System');
+  curr.forEach((json, id) => {
+    if (!prev.has(id)) {
+      const r = JSON.parse(json);
+      auditLog.push({id:genId(),timestamp:new Date().toISOString(),module:key,user:user,action:'Insert',itemId:id,details:r.name||r.guestName||r.bookingId||r.roomNumber||r.itemName||r.invoiceNumber||r.transactionId||''});
+    } else if (prev.get(id) !== json) {
+      const r = JSON.parse(json);
+      auditLog.push({id:genId(),timestamp:new Date().toISOString(),module:key,user:user,action:'Update',itemId:id,details:r.name||r.guestName||r.bookingId||r.roomNumber||r.itemName||r.invoiceNumber||r.transactionId||''});
+    }
+  });
+  prev.forEach((json, id) => {
+    if (!curr.has(id)) {
+      const r = JSON.parse(json);
+      auditLog.push({id:genId(),timestamp:new Date().toISOString(),module:key,user:user,action:'Delete',itemId:id,details:r.name||r.guestName||r.bookingId||r.roomNumber||r.itemName||r.invoiceNumber||r.transactionId||''});
+    }
+  });
+  if (auditLog.length > 2000) auditLog = auditLog.slice(-2000);
+  _snapshots[key] = curr;
+  if (isAndroid) { try { HotelDB.upsert('audit_log', JSON.stringify(auditLog[auditLog.length-1])); } catch(e){} }
+  else { try { localStorage.setItem(DB_KEY + 'auditLog', JSON.stringify(auditLog)); } catch(e){} }
+}
 function save(key, data) {
+  _autoAudit(key, data);
   if (isAndroid) {
     try {
       if (key === 'settings') {
@@ -694,15 +726,16 @@ function getMessageTypes() { return (settings.messageTypes || defaultSettings.me
 function getMessageChannels() { return (settings.messageChannels || defaultSettings.messageChannels || 'Email,SMS,WhatsApp,In-App').split(',').map(s=>s.trim()).filter(Boolean); }
 function getTransactionStatuses() { return (settings.transactionStatuses || defaultSettings.transactionStatuses || 'Completed,Refunded,Pending').split(',').map(s=>s.trim()).filter(Boolean); }
 function selectOpts(arr, sel) { return arr.map(v=>`<option ${v===sel?'selected':''}>${v}</option>`).join(''); }
-function adminEditBtn(listName) { return currentRole==='Admin' ? ` <button class="btn btn-sm btn-outline" onclick="manageList('${listName}')" style="padding:0.2rem 0.5rem;font-size:0.7rem;min-height:auto;min-width:auto;">⊕</button>` : ''; }
+function adminEditBtn(listName) { return ''; }
 window.manageList = function(listName) {
   const labelMap = {roomTypes:'Room Types',bedConfigs:'Bed Configurations',currencies:'Currencies',currencyLabels:'Currency Labels (hotel)',bookingSources:'Booking Sources',arrivalStatuses:'Arrival Statuses',paymentMethods:'Payment Methods',serviceCategories:'Service Categories',invoiceStatuses:'Invoice Statuses',ticketPriorities:'Ticket Priorities',ticketStatuses:'Ticket Statuses',inventoryCategories:'Inventory Categories',menuCategories:'Menu Categories',storeCategories:'Store Categories',orderStatuses:'Order Statuses',paymentTypes:'Payment Types',userRoles:'User Roles',requestStatuses:'Request Statuses',housekeepingStatuses:'Housekeeping Statuses',occupancyStatuses:'Occupancy Statuses',cancellationPolicies:'Cancellation Policies',messageTypes:'Message Types',messageChannels:'Message Channels',transactionStatuses:'Transaction Statuses'};
   const label = labelMap[listName] || listName;
   const defaults = defaultSettings[listName] || '';
-  const items = (settings[listName] || defaults).split(',').map(s=>s.trim()).filter(Boolean);
+  const snapshot = (settings[listName] || defaults);
+  const items = snapshot.split(',').map(s=>s.trim()).filter(Boolean);
   let html = `<div class="modal-header"><h2>Manage ${label}</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
     <div class="modal-body">
-    <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:1rem;">Add, edit or delete values. These appear in all dropdown menus across the app.</p>
+    <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:1rem;">Add, edit or delete values. Click Save to apply. Cancel reverts all changes.</p>
     <div id="listItems">`;
   items.forEach((item, i) => {
     html += `<div style="display:flex;gap:0.5rem;align-items:center;margin-bottom:0.5rem;">
@@ -893,7 +926,7 @@ class XGrid {
               html += `<td><div class="cell editing"><input type="${inputType}" value="${val}" onkeydown="if(event.key==='Enter'){event.preventDefault();window._xg_${this.container.id}.commitEdit(${globalIdx},${ci},this.value);}if(event.key==='Escape')window._xg_${this.container.id}.cancelEdit()"><button class="btn btn-sm btn-primary" style="margin-left:2px;padding:0.2rem 0.5rem;" onclick="var inp=this.previousElementSibling;window._xg_${this.container.id}.commitEdit(${globalIdx},${ci},inp.value)">✓</button></div></td>`;
             }
           } else {
-            const tap = col.editable ? `onclick="window._xg_${this.container.id}.startEdit(${globalIdx},${ci})"` : '';
+            const tap = '';
             html += `<td><div class="cell" ${tap}>${displayVal}</div></td>`;
           }
         });
@@ -922,7 +955,7 @@ class XGrid {
   goPage(p) { this.page = Math.max(0, Math.min(p, this.getTotalPages() - 1)); this.render(); }
   setPageSize(n) { this.pageSize = n; this.page = 0; this.render(); }
   selectRow(idx) { this.selectedRow = this.selectedRow === idx ? null : idx; this.render(); }
-  startEdit(row, col) { this.editingCell = { row, col }; this.render(); }
+  startEdit(row, col) { return; }
   commitEdit(row, col, val) {
     const filtered = this.getFiltered(); const dataRow = filtered[row];
     if (!dataRow) { this.cancelEdit(); return; }
@@ -961,16 +994,19 @@ function nextTransactionId() {
 let currentRole = 'Admin';
 let currentUser = null;
 function renderChangeLog(containerId, moduleName) {
-  const filtered = auditLog.filter(a => (a.module||a.entity||'').toLowerCase() === moduleName.toLowerCase()).reverse();
+  const names = Array.isArray(moduleName) ? moduleName.map(n=>n.toLowerCase()) : [moduleName.toLowerCase()];
+  const filtered = auditLog.filter(a => { const m = (a.module||a.entity||'').toLowerCase(); return names.some(n => m===n || m.includes(n)); });
   new XGrid(containerId, {
     columns: [
       {field:'timestamp',label:'Timestamp',format:v=>{try{const d=new Date(v);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}catch(e){return v;}},filterable:true,width:'130px'},
+      {field:'module',label:'Module',filterable:true,width:'80px'},
       {field:'user',label:'User',filterable:true,width:'80px'},
       {field:'action',label:'Action',filterable:true,width:'80px'},
       {field:'itemId',label:'Item ID',filterable:true,width:'100px'},
       {field:'details',label:'Details',filterable:true},
     ],
     data: filtered,
+    emptyMessage: '◳ No changes recorded yet',
   });
 }
 function logAudit(action, tableName, recordId, details) {
@@ -1336,6 +1372,12 @@ if(bookings.length === 0) {
   save('bookings', bookings);
 }
 
+// Take initial snapshots for auto-audit
+['rooms','guests','bookings','services','invoices','accounts','tickets','messages','inventory','posTransactions','menuItems','restaurantOrders','storeItems','serviceRequests','transactions'].forEach(k => {
+  const d = {rooms,guests,bookings,services,invoices,accounts,tickets,messages,inventory,posTransactions,menuItems,restaurantOrders,storeItems,serviceRequests,transactions}[k];
+  if (Array.isArray(d)) _takeSnapshot(k, d);
+});
+
 // ===== NAVIGATION =====
 const pageTitles = {dashboard:'Dashboard',rooms:'Room Management',bookings:'Bookings',guests:'Guest Directory',housekeeping:'Housekeeping',maintenance:'Maintenance Tickets',services:'Services',invoices:'Invoices',guestportal:'Guest Portal',reports:'Reports & Analytics',accounts:'User Accounts',auditlog:'Audit Log',settings:'Settings & Regulations',inventory:'Inventory Management',pos:'Point of Sale',restaurant:'Restaurant',minimart:'Mini-Mart',menuitems:'Menu Items',storeitems:'Store Items',orderhistory:'Order History',alltransactions:'Transactions',messagelog:'Messages',dropdowns:'Dropdown Lists'};
 
@@ -1357,7 +1399,11 @@ document.getElementById('sidebarOverlay').addEventListener('click', () => { docu
 
 function openModal(html) { document.getElementById('modalContent').innerHTML = html; document.getElementById('modalOverlay').classList.add('active'); }
 function closeModal() { document.getElementById('modalOverlay').classList.remove('active'); }
-document.getElementById('modalOverlay').addEventListener('click', e => { if(e.target === document.getElementById('modalOverlay')) closeModal(); });
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if(e.target !== document.getElementById('modalOverlay')) return;
+  if(document.getElementById('cselOverlay').classList.contains('active')) return;
+  closeModal();
+});
 
 function renderPage(page) {
   const fn = {dashboard:renderDashboard,rooms:renderRooms,bookings:renderBookings,guests:renderGuests,housekeeping:renderHousekeeping,maintenance:renderMaintenance,services:renderServices,invoices:renderInvoices,guestportal:renderGuestPortal,reports:renderReports,accounts:renderAccounts,auditlog:renderAuditLog,settings:renderSettings,inventory:renderInventory,pos:renderPOS,restaurant:renderRestaurant,minimart:renderMiniMart,menuitems:renderMenuItems,storeitems:renderStoreItems,orderhistory:renderOrderHistory,alltransactions:renderAllTransactions,messagelog:renderMessageLog,dropdowns:renderDropdowns};
@@ -1553,7 +1599,9 @@ function renderRooms() {
     <div class="card"><div class="card-header"><h2>Room Overview</h2>${addRoomBtn}</div><div class="card-body">
       <div style="display:flex;gap:0.75rem;margin-bottom:1.25rem;flex-wrap:wrap;">${['all','Available','Occupied','Reserved','Out of Service'].map(f=>`<button class="btn ${roomFilter===f?'btn-primary':'btn-outline'}" onclick="roomFilter='${f}';renderRooms()">${f==='all'?'All':f} (${counts[f]})</button>`).join('')}</div>
       <div class="room-grid">${filtered.map(r=>`<div class="room-tile room-${roomTileClass(r)}" onclick="showRoomDetail('${r.id}')"><div class="room-number">${r.roomNumber}</div><div class="room-type">${r.roomType} · ${r.bedConfig}</div>${showPrice?`<div class="room-price">${fmt$(r.price)}/night</div>`:''}<div class="room-status">${roomTileLabel(r)}</div></div>`).join('')}</div>
-    </div></div>`;
+    </div></div>
+    <div class="card"><div class="card-header"><h2>◆ Rooms Change Log</h2></div><div class="card-body"><div id="roomsLogGrid"></div></div></div>`;
+  renderChangeLog('roomsLogGrid', ['Room','rooms']);
 }
 window.showAddRoom = function() {
   openModal(`<div class="modal-header"><h2>Add New Room</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
@@ -2142,7 +2190,7 @@ function renderGuests() {
     onEdit: (row, field, val) => { const g = guests.find(x=>x.id===row.id); if(g){if(field==='blacklist')val=parseInt(val)||0;g[field]=val;save('guests',guests);logAudit('Update','Guest','Updated '+g.firstName+' '+g.lastName);toast('Guest updated');} },
     actions: guestActions
   });
-  renderChangeLog('guestLogGrid', 'Guest');
+  renderChangeLog('guestLogGrid', ['Guest','guests']);
 }
 window.showAddGuest = function() {
   openModal(`<div class="modal-header"><h2>Add Guest</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
@@ -2265,7 +2313,7 @@ function renderServices() {
       {name:'delete',label:'✕',cls:'btn-danger',handler:id=>{if(!confirm('Delete?'))return;serviceRequests=serviceRequests.filter(x=>x.id!==id);save('serviceRequests',serviceRequests);logAudit('Delete','Service Request',id,'Deleted');renderServices();toast('Request deleted');}},
     ]
   });
-  renderChangeLog('serviceLogGrid', 'Service');
+  renderChangeLog('serviceLogGrid', ['Service','services']);
 }
 window.showAddServiceRequest = function() {
   const checkedIn = bookings.filter(b => b.arrivalStatus === 'Checked-in');
@@ -2401,7 +2449,7 @@ function renderInvoices() {
       {name:'delete',label:'✕',cls:'btn-danger',handler:id=>deleteInvoice(id)},
     ]
   });
-  renderChangeLog('invoiceLogGrid', 'Invoice');
+  renderChangeLog('invoiceLogGrid', ['Invoice','invoices']);
 }
 window.payInvoice = function(id) { const inv = invoices.find(i=>i.id===id); if(inv) { inv.paymentStatus='Fully Paid'; save('invoices',invoices); logAudit('Payment','Invoice',inv.invoiceNumber+' marked as Fully Paid'); renderInvoices(); toast('Invoice marked as paid'); } };
 window.deleteInvoice = function(id) { if(!confirm('Delete this invoice?')) return; const inv=invoices.find(i=>i.id===id); invoices = invoices.filter(i=>i.id!==id); save('invoices',invoices); logAudit('Delete','Invoice','Deleted '+(inv?inv.invoiceNumber:id)); renderInvoices(); toast('Invoice deleted'); };
@@ -2535,7 +2583,7 @@ function renderAccounts() {
       {name:'delete',label:'✕',cls:'btn-danger',handler:id=>{ deleteAccount(id); }},
     ]
   });
-  renderChangeLog('accountLogGrid', 'Account');
+  renderChangeLog('accountLogGrid', ['Account','accounts']);
 }
 window.showAddAccount = function() {
   openModal(`<div class="modal-header"><h2>Add User</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
@@ -2943,7 +2991,9 @@ function renderHousekeeping() {
         const cls = r.housekeepingStatus==='Dirty'?'hk-dirty':r.housekeepingStatus==='In Progress'?'hk-inprogress':r.housekeepingStatus==='Clean'?'hk-clean':r.housekeepingStatus==='Inspected'?'hk-inspected':'hk-oos';
         return `<div class="hk-card ${cls}${largeCls}" onclick="cycleHousekeeping('${r.id}')"><div class="hk-room">${r.roomNumber}</div><div class="hk-type">${r.roomType}</div><div class="hk-floor">Floor ${r.floorNumber}</div><div class="hk-status">${r.housekeepingStatus}</div></div>`;
       }).join('')}</div>
-    </div></div>`;
+    </div></div>
+    <div class="card"><div class="card-header"><h2>◆ Housekeeping Change Log</h2></div><div class="card-body"><div id="hkLogGrid"></div></div></div>`;
+  renderChangeLog('hkLogGrid', ['Housekeeping','rooms','Room']);
 }
 window.showReportIssue = function() {
   openModal(`<div class="modal-header"><h2>🔧 Report Issue</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
@@ -3032,7 +3082,7 @@ function renderMaintenance() {
       }},
     ]
   });
-  renderChangeLog('maintLogGrid', 'Ticket');
+  renderChangeLog('maintLogGrid', ['Ticket','tickets','Maintenance']);
 }
 window.showAddTicket = function() {
   openModal(`<div class="modal-header"><h2>New Maintenance Ticket</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
@@ -3059,7 +3109,9 @@ function renderGuestPortal() {
     <div class="card"><div class="card-header"><h2>🏷️ Guest Self-Service Portal</h2></div><div class="card-body">
       <div class="form-group"><label>Enter your Booking ID</label><div style="display:flex;gap:0.5rem;"><input type="text" class="form-control" id="gpBookingId" placeholder="e.g. BK-1001" style="max-width:250px;"><button class="btn btn-primary" onclick="lookupBooking()">Look Up</button></div></div>
       <div id="gpResult"></div>
-    </div></div>`;
+    </div></div>
+    <div class="card"><div class="card-header"><h2>◆ Guest Portal Change Log</h2></div><div class="card-body"><div id="gpChangeLogGrid"></div></div></div>`;
+  renderChangeLog('gpChangeLogGrid', ['Guest Portal','guestportal','Booking']);
 }
 window.lookupBooking = function() {
   const bkId = document.getElementById('gpBookingId').value.trim();
@@ -3115,7 +3167,8 @@ function renderInventory() {
   inventory.forEach(it => { it.status = inventoryStatus(it); });
   document.getElementById('page-inventory').innerHTML = `
     <div class="card"><div class="card-header"><h2>◆ Inventory Management</h2></div><div class="card-body"><div id="inventoryGrid"></div></div></div>
-    <div class="card"><div class="card-header"><h2>◆ Inventory Change Log</h2></div><div class="card-body"><div id="invLogGrid"></div></div></div>`;
+    <div class="card"><div class="card-header"><h2>◆ Inventory Change Log</h2></div><div class="card-body"><div id="invLogGrid"></div></div></div>
+    <div class="card"><div class="card-header"><h2>◆ Inventory Audit Log</h2></div><div class="card-body"><div id="invChangeLogGrid"></div></div></div>`;
   inventoryGrid = new XGrid('inventoryGrid', {
     columns: [
       {field:'itemName',label:'Item Name',editable:true,filterable:true},
@@ -3167,6 +3220,7 @@ function renderInventory() {
     ],
     data: [...inventoryLog].reverse(),
   });
+  renderChangeLog('invChangeLogGrid', ['Inventory','inventory']);
 }
 window.showAddInventory = function() {
   openModal(`<div class="modal-header"><h2>Add Inventory Item</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
@@ -3446,6 +3500,7 @@ function renderPOS() {
   html += '<div class="card"><div class="card-header"><h2>Transaction History (All Sources)</h2></div><div class="card-body"><div id="txnHistoryGrid"></div></div></div>';
 
   html += '<div class="card"><div class="card-header"><h2>POS Transaction Log</h2></div><div class="card-body"><div id="posTransGrid"></div></div></div>';
+  html += '<div class="card"><div class="card-header"><h2>◆ POS Change Log</h2></div><div class="card-body"><div id="posChangeLogGrid"></div></div></div>';
 
   document.getElementById('page-pos').innerHTML = html;
 
@@ -3501,6 +3556,7 @@ function renderPOS() {
       }},
     ]
   });
+  renderChangeLog('posChangeLogGrid', ['POS','posTransactions','pos']);
 }
 
 window.posSelectBooking = function(bookingId) {
@@ -3664,6 +3720,7 @@ function renderRestaurant() {
   html += '<div class="card" style="margin-top:1rem;"><div class="card-header"><h2>Active Orders</h2></div><div class="card-body"><div id="restOrderGrid"></div></div></div>';
 
   html += '<div class="card"><div class="card-header"><h2>Kitchen View</h2></div><div class="card-body"><div id="restKitchenView"></div></div></div>';
+  html += '<div class="card"><div class="card-header"><h2>◆ Restaurant Change Log</h2></div><div class="card-body"><div id="restChangeLogGrid"></div></div></div>';
 
   document.getElementById('page-restaurant').innerHTML = html;
 
@@ -3710,6 +3767,7 @@ function renderRestaurant() {
     });
     kvEl.innerHTML = kvHtml;
   }
+  renderChangeLog('restChangeLogGrid', ['Restaurant','restaurantOrders']);
 }
 
 window.restSetOrderType = function(type) { restOrderType = type; restSelectedBooking = null; renderRestaurant(); };
@@ -3891,6 +3949,7 @@ function renderMiniMart() {
   html += '<button class="btn btn-warning" ' + (!canCheckout ? 'disabled style="opacity:0.5;"' : '') + ' onclick="martCheckout(\'Credit Card\')">💳 Credit Card</button></div>';
 
   html += '<div class="card" style="margin-top:1rem;"><div class="card-header"><h2>Transaction Log</h2></div><div class="card-body"><div id="martTransGrid"></div></div></div>';
+  html += '<div class="card"><div class="card-header"><h2>◆ Mini-Mart Change Log</h2></div><div class="card-body"><div id="martChangeLogGrid"></div></div></div>';
 
   document.getElementById('page-minimart').innerHTML = html;
 
@@ -3910,6 +3969,7 @@ function renderMiniMart() {
     data: [...martTxns].reverse(),
     emptyMessage: '🛒 No mini-mart transactions yet',
   });
+  renderChangeLog('martChangeLogGrid', ['Mini-Mart','storeItems','minimart']);
 }
 
 window.martSelectCustomer = function(val) {
@@ -4013,7 +4073,7 @@ function renderMenuItems() {
       }},
     ]
   });
-  renderChangeLog('menuItemsLogGrid', 'Menu Item');
+  renderChangeLog('menuItemsLogGrid', ['Menu Item','menuItems','MenuItem']);
 }
 window.showAddMenuItem = function() {
   openModal(`<div class="modal-header"><h2>Add Menu Item</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
@@ -4096,7 +4156,7 @@ function renderStoreItems() {
       }},
     ]
   });
-  renderChangeLog('storeItemsLogGrid', 'Store Item');
+  renderChangeLog('storeItemsLogGrid', ['Store Item','storeItems','StoreItem']);
 }
 window.showAddStoreItem = function() {
   openModal(`<div class="modal-header"><h2>Add Store Item</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
@@ -4170,7 +4230,7 @@ function renderOrderHistory() {
       }},
     ]
   });
-  renderChangeLog('orderHistoryLogGrid', 'Restaurant Order');
+  renderChangeLog('orderHistoryLogGrid', ['Restaurant Order','restaurantOrders','Restaurant']);
 }
 window.showEditOrder = function(id) {
   const o = restaurantOrders.find(x=>x.id===id); if(!o) return;
@@ -4243,7 +4303,7 @@ function renderAllTransactions() {
       }},
     ]
   });
-  renderChangeLog('allTxnLogGrid', 'Transaction');
+  renderChangeLog('allTxnLogGrid', ['Transaction','transactions']);
 }
 window.showEditTransaction = function(id) {
   const t = transactions.find(x=>x.id===id); if(!t) return;
@@ -4296,7 +4356,7 @@ function renderMessageLog() {
       }},
     ]
   });
-  renderChangeLog('messageLogChangeGrid', 'Message');
+  renderChangeLog('messageLogChangeGrid', ['Message','messages']);
 }
 window.showAddMessage = function() {
   const checkedIn = bookings.filter(b => b.arrivalStatus === 'Checked-in');
@@ -4535,7 +4595,7 @@ updateBadges();
 // ===== CUSTOM SELECT PICKER =====
 let _cselTarget = null;
 function closeCsel() { document.getElementById('cselOverlay').classList.remove('active'); _cselTarget = null; }
-document.getElementById('cselOverlay').addEventListener('click', function(e) { if(e.target === this) closeCsel(); });
+document.getElementById('cselOverlay').addEventListener('click', function(e) { e.stopPropagation(); if(e.target === this) closeCsel(); });
 
 function normalizeLabelForList(sel) {
   const raw = (sel.closest('.form-group')?.querySelector('label')?.textContent || '').trim();
@@ -4584,7 +4644,7 @@ function openCsel(sel) {
   const actDiv = document.getElementById('cselActions');
   const lbl = labelRaw.toLowerCase();
   const noEditIds = ['mBkRoom','eBkRoom','mSvcSelect','gpSvcSelect','mSrRoom','mSrService','mSrAssign','eSrAssign','posRoomSelect','restRoomSelect','restTableSelect','martCustSelect','mMsgBooking','mRptRoom','mTkRoom','eGBL','mGBL','mMiAvail','eMiAvail'];
-  const noEditLabels = ['room','select service','service','blacklist','available','assigned to','table number','booking / guest','room / booking','booking source','booking sources','payment method','payment methods','category','payment status'];
+  const noEditLabels = ['room','select service','service','blacklist','available','assigned to','table number','booking / guest','room / booking'];
   const isNoEdit = noEditIds.includes(sel.id) || noEditLabels.includes(lbl);
   const isBoolOpts = sel.options.length <= 2 && Array.from(sel.options).every(o => ['yes','no','true','false','0','1'].includes(o.textContent.toLowerCase().trim()));
   const hideActions = isNoEdit || isBoolOpts;
@@ -4641,28 +4701,31 @@ window.filterCselList = function(val) { renderCselList(val); };
 window.openListManager = function(listName, title, sel) {
   closeCsel();
   const isDynamic = listName && listName.startsWith('_dynamic_');
-  let items = [];
-  if (!isDynamic && settings[listName]) {
-    items = settings[listName].split(',').map(s=>s.trim()).filter(Boolean);
-  } else {
-    items = Array.from(sel.options).map(o => o.textContent);
-  }
+  const snapshot = isDynamic ? Array.from(sel.options).map(o=>o.textContent) : (settings[listName]||'').split(',').map(s=>s.trim()).filter(Boolean);
+  let items = [...snapshot];
   let filterVal = '';
+  function cancelMgr() { items = [...snapshot]; sel.innerHTML = snapshot.map(v=>'<option'+(v===sel.value?' selected':'')+'>'+v+'</option>').join(''); closeModal(); openCsel(sel); }
+  function saveMgr() {
+    if (!isDynamic) { settings[listName] = items.join(','); save('settings',settings); logAudit('Update','Settings','Updated '+listName); }
+    sel.innerHTML = items.map(v=>'<option'+(v===sel.value?' selected':'')+'>'+v+'</option>').join('');
+    closeModal(); openCsel(sel); toast('List saved');
+  }
   function renderMgr() {
     const filtered = filterVal ? items.filter(v=>v.toLowerCase().includes(filterVal.toLowerCase())) : items;
-    openModal(`<div class="modal-header"><h2>Manage: ${title}</h2><button class="modal-close" onclick="closeModal();openCsel(document.getElementById('${sel.id}'))">&times;</button></div>
+    openModal(`<div class="modal-header"><h2>Manage: ${title}</h2><button class="modal-close" onclick="window._lmCancel()">&times;</button></div>
       <div class="modal-body" style="padding:0.75rem;">
       <div style="padding:0.5rem 0;"><input type="text" class="form-control" id="lmSearch" placeholder="Search..." value="${filterVal}" oninput="window._lmFilter(this.value)" style="font-size:1rem;"></div>
-      <div id="lmList" style="max-height:calc(100vh - 250px);overflow-y:auto;">
-      ${filtered.map((v,i) => '<div style="display:flex;align-items:center;gap:0.5rem;padding:0.7rem 0.5rem;border-bottom:1px solid var(--border);">'
+      <div id="lmList" style="max-height:calc(100vh - 300px);overflow-y:auto;">
+      ${filtered.map(v => '<div style="display:flex;align-items:center;gap:0.5rem;padding:0.7rem 0.5rem;border-bottom:1px solid var(--border);">'
         +'<span style="flex:1;font-size:0.95rem;">'+v+'</span>'
         +'<button class="btn btn-sm btn-outline" data-action="edit" data-val="'+v+'" style="min-width:50px;">Edit</button>'
         +'<button class="btn btn-sm btn-danger" data-action="del" data-val="'+v+'" style="min-width:30px;">✕</button>'
         +'</div>').join('')}
       ${filtered.length===0?'<div style="padding:2rem;text-align:center;color:var(--text-light);">No items found</div>':''}
       </div>
-      <button class="btn btn-primary" style="width:100%;margin-top:0.75rem;justify-content:center;padding:0.7rem;" id="lmAddBtn">+ ADD NEW VALUE</button>
-      </div>`);
+      <button class="btn btn-outline" style="width:100%;margin-top:0.75rem;justify-content:center;padding:0.7rem;" id="lmAddBtn">+ ADD NEW VALUE</button>
+      </div>
+      <div class="modal-footer"><button class="btn btn-outline" onclick="window._lmCancel()">CANCEL</button><button class="btn btn-primary" onclick="window._lmSave()">SAVE</button></div>`);
     document.getElementById('lmList').addEventListener('click', function(ev) {
       const btn = ev.target.closest('[data-action]');
       if (!btn) return;
@@ -4670,34 +4733,20 @@ window.openListManager = function(listName, title, sel) {
       const val = btn.getAttribute('data-val');
       if (action === 'edit') {
         const newVal = prompt('Rename "'+val+'":', val);
-        if (newVal && newVal.trim() && newVal.trim() !== val) {
-          const idx = items.indexOf(val); if(idx>-1) items[idx] = newVal.trim();
-          saveMgrList(); renderMgr();
-        }
+        if (newVal && newVal.trim() && newVal.trim() !== val) { const idx = items.indexOf(val); if(idx>-1) items[idx] = newVal.trim(); renderMgr(); }
       } else if (action === 'del') {
         if (items.length <= 1) { toast('Cannot delete the last item'); return; }
         if (!confirm('Delete "'+val+'"?')) return;
-        items = items.filter(v=>v!==val);
-        saveMgrList(); renderMgr();
+        items = items.filter(v=>v!==val); renderMgr();
       }
     });
     document.getElementById('lmAddBtn').addEventListener('click', function() {
       const newVal = prompt('Enter new value:');
-      if (newVal && newVal.trim()) {
-        if (items.includes(newVal.trim())) { toast('Already exists'); return; }
-        items.push(newVal.trim());
-        saveMgrList(); renderMgr();
-      }
+      if (newVal && newVal.trim()) { if (items.includes(newVal.trim())) { toast('Already exists'); return; } items.push(newVal.trim()); renderMgr(); }
     });
     window._lmFilter = function(v) { filterVal = v; renderMgr(); setTimeout(()=>{const el=document.getElementById('lmSearch');if(el){el.focus();el.setSelectionRange(v.length,v.length);}},50); };
-  }
-  function saveMgrList() {
-    if (!isDynamic) {
-      settings[listName] = items.join(',');
-      save('settings', settings);
-      logAudit('Update','Settings','Updated '+listName);
-    }
-    sel.innerHTML = items.map(v => '<option'+(v===sel.value?' selected':'')+'>'+v+'</option>').join('');
+    window._lmCancel = cancelMgr;
+    window._lmSave = saveMgr;
   }
   renderMgr();
 };
@@ -4770,12 +4819,31 @@ document.addEventListener('mousedown', function(e) {
   const sel = e.target.closest('select.form-control');
   if (sel) { e.preventDefault(); e.stopPropagation(); openCsel(sel); }
 }, true);
+let _touchSelTarget = null, _touchStartX = 0, _touchStartY = 0, _touchMoved = false;
 document.addEventListener('touchstart', function(e) {
   if (e.target.closest('#cselOverlay')) return;
   const sel = e.target.closest('select.form-control');
-  if (sel) { e.preventDefault(); e.stopPropagation(); openCsel(sel); }
+  if (sel) {
+    e.preventDefault(); e.stopPropagation();
+    _touchSelTarget = sel;
+    _touchStartX = e.touches[0].clientX;
+    _touchStartY = e.touches[0].clientY;
+    _touchMoved = false;
+  }
 }, {capture:true, passive:false});
-document.addEventListener('focus', function(e) { if(e.target && e.target.matches && e.target.matches('select.form-control')){e.target.blur();openCsel(e.target);} }, true);
+document.addEventListener('touchmove', function(e) {
+  if (!_touchSelTarget) return;
+  const dx = Math.abs(e.touches[0].clientX - _touchStartX);
+  const dy = Math.abs(e.touches[0].clientY - _touchStartY);
+  if (dx > 10 || dy > 10) _touchMoved = true;
+}, {capture:true, passive:true});
+document.addEventListener('touchend', function(e) {
+  if (!_touchSelTarget) return;
+  const sel = _touchSelTarget;
+  _touchSelTarget = null;
+  if (!_touchMoved) openCsel(sel);
+}, {capture:true, passive:true});
+document.addEventListener('focus', function(e) { if(e.target && e.target.matches && e.target.matches('select.form-control')){e.target.blur();} }, true);
 
 // ===== BOTTOM NAVIGATION BAR =====
 (function createBottomNav() {
