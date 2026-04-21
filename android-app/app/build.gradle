@@ -1,0 +1,42 @@
+apply plugin: 'com.android.application'
+
+android {
+    namespace 'com.hotelmanager'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.hotelmanager"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "2.0"
+    }
+
+    signingConfigs {
+        release {
+            storeFile file('../hotel-release.keystore')
+            storePassword 'hotel2026'
+            keyAlias 'hotelmanager'
+            keyPassword 'hotel2026'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.webkit:webkit:1.8.0'
+}
