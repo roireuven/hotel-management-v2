@@ -4298,7 +4298,11 @@ function renderRestaurant() {
     '</div>';
 
   let html = '<div class="card"><div class="card-header"><h2>New Order</h2></div><div class="card-body">' + orderTypeHtml + selHtml + '</div></div>';
-  html += '<div class="card"><div class="card-header"><h2>Menu</h2><span style="font-size:0.78rem;color:var(--text-light);">' + filtered.length + ' items</span></div><div class="card-body">' + tabsHtml + menuHtml + '</div></div>';
+  html += '<div class="card"><div class="card-header" style="flex-wrap:wrap;gap:0.5rem;"><h2 style="margin:0;">Menu</h2><div style="display:flex;flex-wrap:wrap;align-items:center;gap:0.35rem;margin-left:auto;">' +
+    '<button type="button" class="btn btn-sm btn-primary" onclick="if(window.showAddMenuItem)showAddMenuItem()" title="Create a dish and link it to F&amp;B inventory stock">+ Add product</button>' +
+    '<button type="button" class="btn btn-sm btn-outline" onclick="(function(){var l=document.querySelector(\'#sidebarNav a[data-page=menuitems]\');if(l)l.click();else toast(\'Menu Items page not available for this role\');})()">Menu items</button>' +
+    '<button type="button" class="btn btn-sm btn-outline" onclick="(function(){var l=document.querySelector(\'#sidebarNav a[data-page=inventory]\');if(l)l.click();else toast(\'Inventory not available for this role\');})()">Inventory</button></div>' +
+    '<span style="font-size:0.78rem;color:var(--text-light);width:100%;">' + filtered.length + ' items · add products under Menu Items, link stock in Inventory (F&amp;B category)</span></div><div class="card-body">' + tabsHtml + menuHtml + '</div></div>';
   html += '<div class="pos-cart"><div class="pos-cart-header">🛒 Order Cart (' + restCart.length + ' items)</div><div class="pos-cart-items">' + cartHtml + '</div>';
   html += '<div class="pos-totals"><div class="total-row"><span>Subtotal</span><span>' + fmt$(subtotal) + '</span></div><div class="total-row"><span>Tax (' + taxRate + '%)</span><span>' + fmt$(tax) + '</span></div><div class="total-row grand"><span>Grand Total</span><span>' + fmt$(grandTotal) + '</span></div></div></div>';
   html += notesHtml + actionsHtml;
@@ -5380,7 +5384,7 @@ function applyRBAC() {
   const allowedPages = {
     'Admin': null,
     'Manager': ['dashboard','rooms','bookings','guests','housekeeping','maintenance','services','invoices','reports','inventory','guestportal','pos','restaurant','minimart','menuitems','storeitems','orderhistory'],
-    'Receptionist': ['dashboard','rooms','bookings','guests','services','invoices','guestportal','pos','restaurant','minimart'],
+    'Receptionist': ['dashboard','rooms','bookings','guests','services','invoices','guestportal','pos','restaurant','minimart','menuitems','inventory'],
     'Housekeeper': ['dashboard','housekeeping','maintenance'],
   };
   const allowed = allowedPages[currentRole];
@@ -5786,12 +5790,13 @@ const _fabPageMap = {
   invoices: function() { if(window.showAddInvoice) showAddInvoice(); },
   accounts: function() { if(window.showAddAccount) showAddAccount(); },
   maintenance: function() { if(window.showAddTicket) showAddTicket(); },
+  restaurant: function() { if(window.showAddMenuItem) showAddMenuItem(); },
   menuitems: function() { if(window.showAddMenuItem) showAddMenuItem(); },
   storeitems: function() { if(window.showAddStoreItem) showAddStoreItem(); },
   messagelog: function() { if(window.showAddMessage) showAddMessage(); },
   housekeeping: null,
 };
-const _fabHiddenPages = ['dashboard', 'settings', 'auditlog', 'reports', 'pos', 'restaurant', 'minimart', 'guestportal', 'orderhistory', 'alltransactions', 'dropdowns'];
+const _fabHiddenPages = ['dashboard', 'settings', 'auditlog', 'reports', 'pos', 'minimart', 'guestportal', 'orderhistory', 'alltransactions', 'dropdowns'];
 
 function updateFAB(page) {
   const fab = document.getElementById('fabBtn');
