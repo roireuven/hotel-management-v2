@@ -265,7 +265,7 @@
     .login-card h1 { font-size: 1.5rem; font-weight: 700; color: #2c3e50; margin-bottom: 0.25rem; }
     .login-card .login-sub { font-size: 0.85rem; color: #65676b; margin-bottom: 1.5rem; }
     .login-card .form-group { text-align: left; }
-    .login-card .login-error { color: #e74c3c; font-size: 0.85rem; margin-top: 0.5rem; min-height: 1.2em; }
+    .login-card .login-error { color: #c0392b; font-size: 0.88rem; font-weight: 600; margin-top: 0.5rem; min-height: 1.35em; line-height: 1.35; padding: 0.35rem 0; }
     .login-card .btn-login { width: 100%; padding: 0.75rem; font-size: 1rem; margin-top: 0.5rem; }
     .login-card .login-hint { font-size: 0.78rem; color: #65676b; margin-top: 1.25rem; line-height: 1.5; }
     .login-creds { margin-top: 1.5rem; text-align: left; border-top: 1px solid #e0e0e0; padding-top: 1rem; margin-left: -20px; }
@@ -1357,6 +1357,7 @@ const defaultServiceRequests = [
 ];
 
 // ===== LOAD DATA =====
+let settings = load('settings', defaultSettings);
 let rooms = load('rooms', null); if(!rooms) { rooms = defaultRooms; save('rooms', rooms); }
 let guests = load('guests', null); if(!guests) { guests = defaultGuests; save('guests', guests); }
 let bookings = load('bookings', []);
@@ -1364,20 +1365,37 @@ let bookingLog = load('bookingLog', []);
 let services = load('services', null); if(!services) { services = defaultServices; save('services', services); }
 let invoices = load('invoices', null); if(!invoices) { invoices = defaultInvoices; save('invoices', invoices); }
 let accounts = load('accounts', null); if(!accounts) { accounts = defaultAccounts; save('accounts', accounts); }
-(function migrateRestaurantRoleAndUser() {
-  const roles = getUserRoles();
-  if (roles.indexOf('Restaurant') === -1) {
-    settings.userRoles = roles.concat(['Restaurant']).join(',');
-    save('settings', settings);
-  }
-  const reEmail = 'restaurant@hotel.com';
-  if (!accounts.some(function(a) { return a.email && a.email.toLowerCase() === reEmail; })) {
-    accounts.push({ id: genId(), name: 'Restaurant Staff', email: reEmail, role: 'Restaurant', status: 'active' });
-    save('accounts', accounts);
-  }
+(function migrateRestaurantRoleAndDemoAccounts() {
+  try {
+    const roles = getUserRoles();
+    if (roles.indexOf('Restaurant') === -1) {
+      settings.userRoles = roles.concat(['Restaurant']).join(',');
+      save('settings', settings);
+    }
+    const reEmail = 'restaurant@hotel.com';
+    if (!accounts.some(function(a) { return a.email && a.email.toLowerCase() === reEmail; })) {
+      accounts.push({ id: genId(), name: 'Restaurant Staff', email: reEmail, role: 'Restaurant', status: 'active' });
+      save('accounts', accounts);
+    }
+    const demoSeeds = [
+      { name: 'Admin User', email: 'admin@hotel.com', role: 'Admin', status: 'active' },
+      { name: 'Jane Smith', email: 'jane@hotel.com', role: 'Receptionist', status: 'active' },
+      { name: 'Mike Johnson', email: 'mike@hotel.com', role: 'Manager', status: 'active' },
+      { name: 'Restaurant Staff', email: 'restaurant@hotel.com', role: 'Restaurant', status: 'active' },
+      { name: 'Tom Williams', email: 'tom@hotel.com', role: 'Housekeeper', status: 'inactive' }
+    ];
+    let added = false;
+    demoSeeds.forEach(function(seed) {
+      const em = seed.email.toLowerCase();
+      if (!accounts.some(function(a) { return a.email && a.email.toLowerCase() === em; })) {
+        accounts.push({ id: genId(), name: seed.name, email: seed.email, role: seed.role, status: seed.status });
+        added = true;
+      }
+    });
+    if (added) save('accounts', accounts);
+  } catch (e) { console.warn('Account/role migration', e); }
 })();
 let auditLog = load('auditLog', []);
-let settings = load('settings', defaultSettings);
 if (!settings.roomTypes) { settings.roomTypes = defaultSettings.roomTypes; save('settings', settings); }
 if (!settings.bedConfigs) { settings.bedConfigs = defaultSettings.bedConfigs; save('settings', settings); }
 if (!settings.currencies) { settings.currencies = defaultSettings.currencies; save('settings', settings); }
@@ -5345,12 +5363,22 @@ window.doLogin = function() {
   const username = document.getElementById('loginUsername').value.trim().toLowerCase();
   const password = document.getElementById('loginPassword').value;
   const errEl = document.getElementById('loginError');
-  if (!username || !password) { errEl.textContent = 'Please enter username and password'; return; }
-  const account = accounts.find(a => a.email.toLowerCase() === username && a.status === 'active');
-  if (!account) { errEl.textContent = 'Account not found or inactive'; return; }
+  errEl.textContent = '';
+  if (!username || !password) { errEl.textContent = 'Please enter username and password'; errEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); return; }
+  let account = accounts.find(a => a.email.toLowerCase() === username && a.status === 'active');
+  if (!account && username === 'restaurant@hotel.com') {
+    accounts.push({ id: genId(), name: 'Restaurant Staff', email: 'restaurant@hotel.com', role: 'Restaurant', status: 'active' });
+    if (getUserRoles().indexOf('Restaurant') === -1) {
+      settings.userRoles = getUserRoles().concat(['Restaurant']).join(',');
+      save('settings', settings);
+    }
+    save('accounts', accounts);
+    account = accounts.find(a => a.email.toLowerCase() === username && a.status === 'active');
+  }
+  if (!account) { errEl.textContent = 'Account not found or inactive. Try password 1234 or ask an admin to add your user under Accounts.'; errEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); return; }
   const setupPw = localStorage.getItem(DB_KEY + 'setupPassword') || (isAndroid ? (function(){ try { return HotelDB.getSetting('setupPassword'); } catch(e){ return null; } })() : null);
   const validPw = password === '1234' || (setupPw && password === setupPw) || (account.password && password === account.password);
-  if (!validPw) { errEl.textContent = 'Invalid password'; return; }
+  if (!validPw) { errEl.textContent = 'Invalid password'; errEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); return; }
   currentUser = { id: account.id, name: account.name, email: account.email, role: account.role };
   currentRole = account.role;
   localStorage.setItem(DB_KEY + 'currentUser', JSON.stringify(currentUser));
