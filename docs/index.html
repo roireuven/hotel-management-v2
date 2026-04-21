@@ -554,7 +554,7 @@
 
       <div class="setup-step">
         <span class="step-num">3</span><span class="step-title">Role-Based Access</span>
-        <p>After first login, assign staff roles (Admin, Manager, Receptionist, Housekeeper, Restaurant). The <strong>Restaurant</strong> role only sees the Restaurant / F&amp;B order screen.</p>
+        <p>After first login, assign staff roles (Admin, Manager, Receptionist, Housekeeper, Restaurant). The <strong>Restaurant</strong> role focuses on F&amp;B: orders, menu items, and inventory (no rooms or hotel admin).</p>
       </div>
 
       <button class="btn btn-primary btn-setup" onclick="completeSetup()">Create Account & Get Started →</button>
@@ -580,7 +580,7 @@
             <tr data-tip="Reports, inventory, overrides, analytics"><td class="cred-role">◫ Manager</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">mike@hotel.com</td><td class="cred-pw">1234</td></tr>
             <tr data-tip="Rooms, bookings, check-in/out, invoices"><td class="cred-role">◎ Reception</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">jane@hotel.com</td><td class="cred-pw">1234</td></tr>
             <tr data-tip="Room cleaning status, maintenance tickets"><td class="cred-role">◧ Housekeeper</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">tom@hotel.com</td><td class="cred-pw">1234</td></tr>
-            <tr data-tip="Restaurant &amp; bar orders only — no rooms or admin"><td class="cred-role">◈ Restaurant</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">restaurant@hotel.com</td><td class="cred-pw">1234</td></tr>
+            <tr data-tip="Restaurant: orders + add menu products &amp; F&amp;B stock (no rooms)"><td class="cred-role">◈ Restaurant</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">restaurant@hotel.com</td><td class="cred-pw">1234</td></tr>
           </tbody>
         </table>
         <p style="text-align:center;margin-top:0.6rem;font-size:0.72rem;color:#999;">Tap an email to auto-fill the username field</p>
@@ -4330,16 +4330,12 @@ function renderRestaurant() {
     '</div>';
 
   let html = '<div class="card"><div class="card-header"><h2>New Order</h2></div><div class="card-body">' + orderTypeHtml + selHtml + '</div></div>';
-  const restStaffOnly = (typeof currentRole !== 'undefined' && currentRole === 'Restaurant');
-  const restMenuToolbar = restStaffOnly ? '' : (
+  const restMenuToolbar =
     '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:0.35rem;margin-left:auto;">' +
     '<button type="button" class="btn btn-sm btn-primary" onclick="if(window.showAddMenuItem)showAddMenuItem()" title="Create a dish and link it to F&amp;B inventory stock">+ Add product</button>' +
     '<button type="button" class="btn btn-sm btn-outline" onclick="(function(){var l=document.querySelector(\'#sidebarNav a[data-page=menuitems]\');if(l)l.click();else toast(\'Menu Items page not available for this role\');})()">Menu items</button>' +
-    '<button type="button" class="btn btn-sm btn-outline" onclick="(function(){var l=document.querySelector(\'#sidebarNav a[data-page=inventory]\');if(l)l.click();else toast(\'Inventory not available for this role\');})()">Inventory</button></div>'
-  );
-  const restMenuHint = restStaffOnly
-    ? (filtered.length + ' items on the menu')
-    : (filtered.length + ' items · add products under Menu Items, link stock in Inventory (F&amp;B category)');
+    '<button type="button" class="btn btn-sm btn-outline" onclick="(function(){var l=document.querySelector(\'#sidebarNav a[data-page=inventory]\');if(l)l.click();else toast(\'Inventory not available for this role\');})()">Inventory</button></div>';
+  const restMenuHint = filtered.length + ' items · use + Add product or Menu Items; link F&amp;B stock in Inventory';
   html += '<div class="card"><div class="card-header" style="flex-wrap:wrap;gap:0.5rem;"><h2 style="margin:0;">Menu</h2>' + restMenuToolbar +
     '<span style="font-size:0.78rem;color:var(--text-light);width:100%;">' + restMenuHint + '</span></div><div class="card-body">' + tabsHtml + menuHtml + '</div></div>';
   html += '<div class="pos-cart"><div class="pos-cart-header">🛒 Order Cart (' + restCart.length + ' items)</div><div class="pos-cart-items">' + cartHtml + '</div>';
@@ -5436,7 +5432,7 @@ function applyRBAC() {
     'Manager': ['dashboard','rooms','bookings','guests','housekeeping','maintenance','services','invoices','reports','inventory','guestportal','pos','restaurant','minimart','menuitems','storeitems','orderhistory'],
     'Receptionist': ['dashboard','rooms','bookings','guests','services','invoices','guestportal','pos','restaurant','minimart','menuitems','inventory'],
     'Housekeeper': ['dashboard','housekeeping','maintenance'],
-    'Restaurant': ['restaurant'],
+    'Restaurant': ['restaurant','menuitems','inventory'],
   };
   const allowed = allowedPages[currentRole];
   const links = document.querySelectorAll('#sidebarNav a[data-page]');
@@ -5820,10 +5816,6 @@ function updateBottomNavActive(page) {
 function showBottomNav(show) {
   const nav = document.getElementById('bottomNav');
   if (!nav) return;
-  if (show && typeof currentUser !== 'undefined' && currentUser && typeof currentRole !== 'undefined' && currentRole === 'Restaurant') {
-    nav.style.display = 'none';
-    return;
-  }
   nav.style.display = show ? 'flex' : 'none';
 }
 
@@ -5858,11 +5850,6 @@ const _fabHiddenPages = ['dashboard', 'settings', 'auditlog', 'reports', 'pos', 
 function updateFAB(page) {
   const fab = document.getElementById('fabBtn');
   if (!fab) return;
-  if (page === 'restaurant' && typeof currentRole !== 'undefined' && currentRole === 'Restaurant') {
-    fab.classList.add('hidden');
-    window._fabAction = null;
-    return;
-  }
   if (_fabHiddenPages.includes(page) || !_fabPageMap[page]) {
     fab.classList.add('hidden');
     window._fabAction = null;
