@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>Hotel Management System</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -370,6 +373,26 @@
     body.dark-mode .rest-menu-card:hover, body.dark-mode .rest-menu-card:active { background: #1a3a5e; }
     .rest-order-type { display: flex; gap: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap; }
     .rest-order-type .btn { flex: 1; min-width: 120px; }
+    .rest-floor-wrap { margin-bottom: 0.75rem; }
+    .rest-floor-legend { display: flex; flex-wrap: wrap; gap: 0.65rem 1rem; font-size: 0.72rem; color: var(--text-light); margin-bottom: 0.55rem; align-items: center; }
+    .rest-floor-legend span { display: inline-flex; align-items: center; gap: 0.35rem; }
+    .rest-floor-dot { width: 11px; height: 11px; border-radius: 3px; flex-shrink: 0; border: 1px solid rgba(0,0,0,0.12); }
+    .rest-floor-dot.avail { background: linear-gradient(145deg, #a5d6a7, #81c784); }
+    .rest-floor-dot.occ { background: linear-gradient(145deg, #ef9a9a, #e57373); }
+    .rest-floor-dot.pend { background: linear-gradient(145deg, #ffcc80, #ffb74d); }
+    .rest-table-floor { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.55rem; margin-bottom: 0.5rem; }
+    .rest-table-tile { border-radius: 12px; padding: 0.65rem 0.35rem; text-align: center; cursor: pointer; border: 2px solid transparent; font-weight: 700; font-size: 0.8rem; transition: transform 0.12s ease, box-shadow 0.12s ease; min-height: 58px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.15rem; font-family: inherit; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+    .rest-table-tile:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+    .rest-table-tile .rtt-num { font-size: 1.05rem; line-height: 1.1; }
+    .rest-table-tile .rtt-sub { font-size: 0.62rem; font-weight: 700; opacity: 0.95; text-transform: uppercase; letter-spacing: 0.04em; }
+    .rest-table-tile.available { background: linear-gradient(145deg, #c8e6c9 0%, #a5d6a7 100%); color: #1b5e20; border-color: #66bb6a; }
+    .rest-table-tile.occupied { background: linear-gradient(145deg, #ffcdd2 0%, #ef9a9a 100%); color: #b71c1c; border-color: #e57373; }
+    .rest-table-tile.pending { background: linear-gradient(145deg, #ffe0b2 0%, #ffcc80 100%); color: #e65100; border-color: #ffa726; }
+    .rest-table-tile.selected { box-shadow: 0 0 0 3px var(--primary), 0 4px 14px rgba(26,115,232,0.25); }
+    body.dark-mode .rest-table-tile.available { background: linear-gradient(145deg, #1b3d1f 0%, #2e4a32 100%); color: #c8e6c9; border-color: #43a047; }
+    body.dark-mode .rest-table-tile.occupied { background: linear-gradient(145deg, #4a1c1c 0%, #5c2626 100%); color: #ffcdd2; border-color: #e53935; }
+    body.dark-mode .rest-table-tile.pending { background: linear-gradient(145deg, #4a3510 0%, #5c4018 100%); color: #ffe0b2; border-color: #fb8c00; }
+    @media (max-width: 600px) { .rest-table-floor { grid-template-columns: repeat(3, 1fr); } }
     .kitchen-card { background: var(--card-bg); border: 2px solid var(--border); border-radius: 10px; padding: 1rem; margin-bottom: 0.75rem; }
     .kitchen-card .kc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
     .kitchen-card .kc-order-num { font-weight: 700; font-size: 1rem; }
@@ -1161,6 +1184,7 @@ const defaultTickets = [
   {id:genId(),roomNumber:'201',issue:'AC not cooling properly',priority:'High',status:'In Progress',reportedBy:'Receptionist',reportedAt:'2026-04-03T14:30:00',resolvedAt:'',notes:'Technician dispatched, waiting for replacement compressor'},
   {id:genId(),roomNumber:'302',issue:'Leaky faucet in bathroom',priority:'Medium',status:'Open',reportedBy:'Housekeeper',reportedAt:'2026-04-04T09:15:00',resolvedAt:'',notes:'Constant drip from hot water tap'},
   {id:genId(),roomNumber:'405',issue:'TV remote not working',priority:'Low',status:'Resolved',reportedBy:'Receptionist',reportedAt:'2026-03-27T09:00:00',resolvedAt:'2026-03-27T11:00:00',notes:'Batteries replaced'},
+  {id:genId(),roomNumber:'102',issue:'Corridor ceiling light flickers near room 102',priority:'Low',status:'Open',reportedBy:'Receptionist',reportedAt:'2026-04-14T10:15:00',resolvedAt:'',notes:'Demo sample ticket'},
   {id:genId(),roomNumber:'103',issue:'WiFi connectivity issues',priority:'High',status:'Open',reportedBy:'Admin',reportedAt:'2026-04-05T16:45:00',resolvedAt:'',notes:'Guest reports intermittent WiFi drops, router may need reset'},
   {id:genId(),roomNumber:'305',issue:'Bathroom drain clogged',priority:'Medium',status:'In Progress',reportedBy:'Receptionist',reportedAt:'2026-04-04T11:20:00',resolvedAt:'',notes:'Plumber scheduled for tomorrow morning'},
   {id:genId(),roomNumber:'104',issue:'Door lock malfunction',priority:'Urgent',status:'Open',reportedBy:'Admin',reportedAt:'2026-04-06T08:00:00',resolvedAt:'',notes:'Electronic lock not reading key cards, manual override in use'},
@@ -1249,6 +1273,10 @@ const defaultRestaurantOrders = [
   {id:genId(),timestamp:'2026-04-06T12:30:00',orderNumber:'RO-1013',roomNumber:'301',guestName:'Noam Levi',bookingId:'BK-1045',tableNumber:'Table 3',items:[{name:'Spring Rolls',qty:1,unitPrice:7},{name:'Pad Thai',qty:1,unitPrice:14}],subtotal:21,tax:1.47,grandTotal:22.47,status:'New',paidBy:'Pending',staffName:'Mike Johnson',notes:''},
   {id:genId(),timestamp:'2026-04-06T13:00:00',orderNumber:'RO-1014',roomNumber:'205',guestName:'Erik Lindqvist',bookingId:'BK-1051',tableNumber:'Room 205',items:[{name:'Fried Rice',qty:1,unitPrice:12},{name:'Fresh Juice',qty:1,unitPrice:6}],subtotal:18,tax:1.26,grandTotal:19.26,status:'New',paidBy:'Pending',staffName:'Jane Smith',notes:'Gluten-free'},
   {id:genId(),timestamp:'2026-04-06T13:15:00',orderNumber:'RO-1015',roomNumber:'204',guestName:'Lucas Santos',bookingId:'BK-1052',tableNumber:'Table 2',items:[{name:'Tom Yum Soup',qty:1,unitPrice:10},{name:'Green Curry',qty:1,unitPrice:16},{name:'Mango Sticky Rice',qty:2,unitPrice:8},{name:'Thai Iced Tea',qty:2,unitPrice:5}],subtotal:52,tax:3.64,grandTotal:55.64,status:'New',paidBy:'Pending',staffName:'Mike Johnson',notes:''},
+  {id:genId(),timestamp:'2026-04-14T11:20:00',orderNumber:'RO-1016',roomNumber:'104',guestName:'David Miller',bookingId:'BK-1044',tableNumber:'Room 104',items:[{name:'Pad Thai',qty:2,unitPrice:14},{name:'Green Curry',qty:1,unitPrice:16}],subtotal:44,tax:3.08,grandTotal:47.08,status:'Preparing',paidBy:'Pending',staffName:'Jane Smith',notes:'Demo sample — kitchen'},
+  {id:genId(),timestamp:'2026-04-14T12:00:00',orderNumber:'RO-1017',roomNumber:'',guestName:'Walk-in Guest',bookingId:'',tableNumber:'Table 6',items:[{name:'Spring Rolls',qty:1,unitPrice:7},{name:'Fried Rice',qty:2,unitPrice:12}],subtotal:31,tax:2.17,grandTotal:33.17,status:'Ready',paidBy:'Pending',staffName:'Mike Johnson',notes:''},
+  {id:genId(),timestamp:'2026-04-14T18:45:00',orderNumber:'RO-1018',roomNumber:'402',guestName:'Akira Tanaka',bookingId:'BK-1050',tableNumber:'Table 1',items:[{name:'Tom Yum Soup',qty:1,unitPrice:10},{name:'Grilled Fish',qty:1,unitPrice:22}],subtotal:32,tax:2.24,grandTotal:34.24,status:'Served',paidBy:'Pending',staffName:'Jane Smith',notes:'Awaiting payment'},
+  {id:genId(),timestamp:'2026-04-13T20:00:00',orderNumber:'RO-1019',roomNumber:'203',guestName:'Min-jun Park',bookingId:'BK-1041',tableNumber:'Room Service',items:[{name:'Club Sandwich',qty:2,unitPrice:13},{name:'Coffee',qty:2,unitPrice:4}],subtotal:34,tax:2.38,grandTotal:36.38,status:'Paid',paidBy:'Room Charge',staffName:'Jane Smith',notes:'Demo sample — settled'},
 ];
 const defaultPosTransactions = [
   {id:genId(),timestamp:'2026-01-05T10:30:00',roomNumber:'101',guestName:'John Smith',bookingId:'BK-1001',items:[{name:'Water Bottle',qty:2,unitPrice:2,total:4},{name:'Chips',qty:1,unitPrice:4,total:4}],itemCount:3,subtotal:8,tax:0.56,grandTotal:8.56,paidBy:'Room Charge',staffName:'Jane Smith',transactionId:'TXN-10101'},
@@ -1261,6 +1289,8 @@ const defaultPosTransactions = [
   {id:genId(),timestamp:'2026-04-04T11:30:00',roomNumber:'302',guestName:'Sophie Laurent',bookingId:'BK-1048',items:[{name:'Water Bottle',qty:2,unitPrice:2,total:4},{name:'Toothbrush',qty:1,unitPrice:5,total:5}],itemCount:3,subtotal:9,tax:0.63,grandTotal:9.63,paidBy:'Room Charge',staffName:'Jane Smith',transactionId:'TXN-10108'},
   {id:genId(),timestamp:'2026-04-05T16:00:00',roomNumber:'104',guestName:'David Miller',bookingId:'BK-1044',items:[{name:'Coffee',qty:3,unitPrice:4,total:12},{name:'Ice Cream',qty:1,unitPrice:5,total:5}],itemCount:4,subtotal:17,tax:1.19,grandTotal:18.19,paidBy:'Credit Card',staffName:'Jane Smith',transactionId:'TXN-10109'},
   {id:genId(),timestamp:'2026-04-06T09:00:00',roomNumber:'402',guestName:'Akira Tanaka',bookingId:'BK-1050',items:[{name:'Phone Charger',qty:1,unitPrice:15,total:15},{name:'Coca-Cola',qty:2,unitPrice:3,total:6}],itemCount:3,subtotal:21,tax:1.47,grandTotal:22.47,paidBy:'Cash',staffName:'Mike Johnson',transactionId:'TXN-10110'},
+  {id:genId(),timestamp:'2026-04-14T08:30:00',roomNumber:'301',guestName:'Noam Levi',bookingId:'BK-1045',items:[{name:'Water Bottle',qty:4,unitPrice:2,total:8},{name:'Chips',qty:2,unitPrice:4,total:8}],itemCount:6,subtotal:16,tax:1.12,grandTotal:17.12,paidBy:'Room Charge',staffName:'Jane Smith',transactionId:'TXN-10111',source:'Mini-Mart'},
+  {id:genId(),timestamp:'2026-04-14T14:00:00',roomNumber:'102',guestName:'Sarah Thompson',bookingId:'BK-1060',items:[{name:'Beer',qty:4,unitPrice:6,total:24}],itemCount:4,subtotal:24,tax:1.68,grandTotal:25.68,paidBy:'Credit Card',staffName:'Mike Johnson',transactionId:'TXN-10112',source:'Mini-Mart'},
 ];
 const defaultServiceRequests = [
   {id:genId(),timestamp:'2026-01-03T15:00:00',bookingId:'BK-1001',roomNumber:'101',guestName:'John Smith',serviceName:'Breakfast Buffet',status:'Completed',assignedTo:'Jane Smith',scheduledTime:'2026-01-04T07:00:00',completedTime:'2026-01-04T07:30:00',notes:'Delivered to room',charge:25},
@@ -1394,6 +1424,51 @@ if(bookings.length === 0) {
   save('bookings', bookings);
 }
 
+function mergePosTransactionsIntoUnified() {
+  if (!Array.isArray(posTransactions) || !Array.isArray(transactions)) return;
+  const ids = new Set(transactions.map(t => t.transactionId).filter(Boolean));
+  let added = 0;
+  posTransactions.forEach(pt => {
+    const tid = pt.transactionId;
+    if (!tid || ids.has(tid)) return;
+    ids.add(tid);
+    const itemsRaw = pt.items || [];
+    const items = itemsRaw.map(i => ({
+      itemId: i.itemId || '',
+      name: i.name,
+      qty: i.qty,
+      unitPrice: i.unitPrice,
+      total: (parseFloat(i.unitPrice) || 0) * (parseInt(i.qty, 10) || 0),
+      inventoryDeducted: false
+    }));
+    const sub = parseFloat(pt.subtotal);
+    const taxAmt = parseFloat(pt.tax);
+    const gtot = parseFloat(pt.grandTotal);
+    transactions.push({
+      id: pt.id || genId(),
+      transactionId: tid,
+      timestamp: pt.timestamp || new Date().toISOString(),
+      source: pt.source || 'POS',
+      orderId: '',
+      roomNumber: pt.roomNumber != null ? String(pt.roomNumber) : '',
+      guestName: pt.guestName || '',
+      bookingId: pt.bookingId || '',
+      items: items,
+      subtotal: isNaN(sub) ? 0 : sub,
+      taxRate: parseFloat(settings.surcharge) || 7,
+      taxAmount: isNaN(taxAmt) ? 0 : taxAmt,
+      grandTotal: isNaN(gtot) ? 0 : gtot,
+      status: pt.status || 'Completed',
+      paymentMethod: pt.paidBy || 'Cash',
+      invoiceId: pt.invoiceId || '',
+      staffName: pt.staffName || ''
+    });
+    added++;
+  });
+  if (added > 0) save('transactions', transactions);
+}
+mergePosTransactionsIntoUnified();
+
 // Take initial snapshots for auto-audit
 ['rooms','guests','bookings','services','invoices','accounts','tickets','messages','inventory','posTransactions','menuItems','restaurantOrders','storeItems','serviceRequests','transactions'].forEach(k => {
   const d = {rooms,guests,bookings,services,invoices,accounts,tickets,messages,inventory,posTransactions,menuItems,restaurantOrders,storeItems,serviceRequests,transactions}[k];
@@ -1420,7 +1495,7 @@ document.getElementById('menuToggle').addEventListener('click', () => { document
 document.getElementById('sidebarOverlay').addEventListener('click', () => { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('open'); });
 
 function openModal(html) { document.getElementById('modalContent').innerHTML = html; document.getElementById('modalOverlay').classList.add('active'); }
-function closeModal() { document.getElementById('modalOverlay').classList.remove('active'); }
+function closeModal() { window._cashPaymentCtx = null; document.getElementById('modalOverlay').classList.remove('active'); }
 document.getElementById('modalOverlay').addEventListener('click', e => {
   if(e.target !== document.getElementById('modalOverlay')) return;
   if(document.getElementById('cselOverlay').classList.contains('active')) return;
@@ -2712,6 +2787,8 @@ function renderSettings() {
       <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:1rem;">Export all data as a ZIP file containing CSV files for each table plus a full backup for restore.</p>
       <div style="display:flex;flex-direction:column;gap:0.75rem;">
         <button class="btn btn-primary" style="width:100%;justify-content:center;padding:0.75rem;" onclick="exportAllCSV()">◆ EXPORT ALL DATA (CSV ZIP)</button>
+        <button class="btn btn-outline" style="width:100%;justify-content:center;padding:0.75rem;" onclick="reloadBuiltInSampleData()">◆ Reload built-in demo sample</button>
+        <p style="font-size:0.8rem;color:var(--text-light);margin:0;">Clears saved data and reloads the bundled demo (rooms, bookings, restaurant orders, POS, etc.). Same reset as <strong>Factory Reset</strong> below.</p>
         <button class="btn btn-outline" style="width:100%;justify-content:center;padding:0.75rem;" onclick="document.getElementById('importFileInput').click()">◆ IMPORT DATA (ZIP / JSON)</button>
         <input type="file" id="importFileInput" accept=".json,.zip" style="display:none" onchange="importData(this)">
       </div>
@@ -2988,6 +3065,14 @@ window.resetAll = function() {
     ['rooms','guests','bookings','bookingLog','services','invoices','accounts','tickets','messages','inventory','inventoryLog','auditLog','settings','posTransactions','menuItems','restaurantOrders','storeItems','serviceRequests','transactions'].forEach(t => { try { HotelDB.deleteAll(t); } catch(e){} });
   }
   Object.keys(localStorage).forEach(k => { if(k.startsWith(DB_KEY)) localStorage.removeItem(k); });
+  location.reload();
+};
+window.reloadBuiltInSampleData = function() {
+  if (!confirm('Reload the full built-in demo sample?\n\nThis clears all saved data in this browser and reloads bundled sample rooms, bookings, restaurant orders, POS, and logs.')) return;
+  if (isAndroid) {
+    ['rooms','guests','bookings','bookingLog','services','invoices','accounts','tickets','messages','inventory','inventoryLog','auditLog','settings','posTransactions','menuItems','restaurantOrders','storeItems','serviceRequests','transactions'].forEach(t => { try { HotelDB.deleteAll(t); } catch(e){} });
+  }
+  Object.keys(localStorage).forEach(k => { if (k.startsWith(DB_KEY)) localStorage.removeItem(k); });
   location.reload();
 };
 
@@ -3297,18 +3382,33 @@ window.deleteInventoryItem = function(id) {
 };
 
 // ===== UNIFIED TRANSACTION SYSTEM =====
+function computeLineTotalsFromRawLineItems(rawItems, taxRate) {
+  const tr = (taxRate != null && taxRate !== '' && !isNaN(Number(taxRate))) ? Number(taxRate) : (parseFloat(settings.surcharge) || 7);
+  const subtotal = (rawItems || []).reduce((s, it) => {
+    const qty = parseInt(it.qty, 10) || 0;
+    const up = parseFloat(it.unitPrice) || 0;
+    return s + up * qty;
+  }, 0);
+  const taxAmount = Math.round(subtotal * tr) / 100;
+  const grandTotal = Math.round((subtotal + taxAmount) * 100) / 100;
+  return { subtotal: subtotal, taxAmount: taxAmount, grandTotal: grandTotal, taxRate: tr };
+}
+
 function processSale(saleData) {
   const txnId = nextTransactionId();
   const staffName = saleData.staffName || (currentUser ? currentUser.name : currentRole);
-  const taxRate = saleData.taxRate || parseFloat(settings.surcharge) || 7;
-  const items = (saleData.items || []).map(item => ({
+  const taxRateParam = saleData.taxRate != null ? saleData.taxRate : (parseFloat(settings.surcharge) || 7);
+  const rawItems = saleData.items || [];
+  const totals = computeLineTotalsFromRawLineItems(rawItems, taxRateParam);
+  const subtotal = totals.subtotal;
+  const taxAmount = totals.taxAmount;
+  const grandTotal = totals.grandTotal;
+  const taxRate = totals.taxRate;
+  const items = rawItems.map(item => ({
     itemId: item.itemId || '', name: item.name, qty: item.qty,
-    unitPrice: item.unitPrice, total: item.unitPrice * item.qty,
+    unitPrice: item.unitPrice, total: (parseFloat(item.unitPrice) || 0) * (parseInt(item.qty, 10) || 0),
     inventoryDeducted: false
   }));
-  const subtotal = items.reduce((s, i) => s + i.total, 0);
-  const taxAmount = Math.round(subtotal * taxRate) / 100;
-  const grandTotal = Math.round((subtotal + taxAmount) * 100) / 100;
 
   const txn = {
     id: genId(), transactionId: txnId, timestamp: new Date().toISOString(),
@@ -3423,6 +3523,143 @@ function processSale(saleData) {
   return txn;
 }
 
+window.openCashPaymentModal = function(opts) {
+  const total = Math.round((opts.grandTotal || 0) * 100) / 100;
+  window._cashPaymentCtx = { grandTotal: total, onValid: opts.onValid };
+  const title = opts.title || 'Cash payment';
+  let keypadHtml = '';
+  const keyRows = [['1', '2', '3'], ['4', '5', '6'], ['7', '8', '9'], ['.', '0', 'C']];
+  keyRows.forEach(function(row) {
+    keypadHtml += '<div style="display:flex;gap:6px;justify-content:center;margin-bottom:6px;">';
+    row.forEach(function(k) {
+      const isC = k === 'C';
+      const st = isC
+        ? 'background:#212121 !important;color:#fff !important;border-color:#212121 !important;min-width:58px;min-height:52px;'
+        : 'min-width:58px;min-height:52px;background:#eceff1;border:1px solid #cfd8dc;color:#111;';
+      keypadHtml += '<button type="button" class="btn" style="' + st + 'font-size:1.15rem;font-weight:700;border-radius:6px;" onclick="cashPayKey(\'' + k + '\')">' + k + '</button>';
+    });
+    keypadHtml += '</div>';
+  });
+  let greenCol = '';
+  [1, 5, 10, 20, 50, 100].forEach(function(n) {
+    greenCol += '<button type="button" class="btn btn-sm btn-success" style="min-width:54px;padding:10px 8px;font-weight:700;" onclick="cashPayAdd(' + n + ')">' + n + '</button>';
+  });
+  const body =
+    '<div id="cashPayChangeBanner" style="padding:14px 12px;border-radius:8px;text-align:center;font-weight:800;font-size:1.35rem;margin-bottom:12px;background:#78909c;color:#fff;">' +
+    '<span id="cashPayBannerText">Change Due: </span><span id="cashPayChange">—</span></div>' +
+    '<div style="display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap;align-items:flex-end;">' +
+    '<div style="flex:1;min-width:140px;">' +
+    '<div style="font-size:0.7rem;font-weight:600;color:var(--text-light);text-transform:uppercase;">Total</div>' +
+    '<div style="font-size:1.65rem;font-weight:800;color:var(--primary);">' + fmt$(total) + '</div></div>' +
+    '<div style="flex:1;min-width:140px;">' +
+    '<div style="font-size:0.7rem;font-weight:600;color:var(--text-light);text-transform:uppercase;">Charged</div>' +
+    '<input type="text" inputmode="decimal" autocomplete="off" class="form-control" id="cashPayTender" placeholder="0.00" ' +
+    'style="font-size:1.65rem;font-weight:700;background:#fff;" oninput="updateCashPayChange()"></div></div>' +
+    '<div style="display:flex;gap:10px;justify-content:center;align-items:flex-start;flex-wrap:wrap;margin-bottom:8px;">' +
+    '<div style="display:flex;flex-direction:column;gap:6px;">' + greenCol + '</div>' +
+    '<div>' + keypadHtml + '</div>' +
+    '<div style="display:flex;flex-direction:column;gap:6px;">' +
+    '<button type="button" class="btn btn-sm" style="background:#6a1b9a;color:#fff;border:none;font-weight:700;padding:10px 8px;" onclick="cashPaySetExact()">All</button>' +
+    '<button type="button" class="btn btn-sm btn-primary" style="font-weight:700;padding:10px 8px;" onclick="cashPaySetExact()">' + fmt$(total) + '</button>' +
+    '</div></div>' +
+    '<p style="font-size:0.75rem;color:var(--text-light);text-align:center;margin:0;">Use the keypad to enter cash received. Change shows above.</p>';
+  openModal('<div class="modal-header"><h2>💵 ' + title + '</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>' +
+    '<div class="modal-body" style="max-width:640px;margin:0 auto;">' + body + '</div>' +
+    '<div class="modal-footer" style="justify-content:space-between;"><button type="button" class="btn btn-outline" onclick="closeModal()">Close</button>' +
+    '<button type="button" class="btn btn-primary" onclick="submitCashPayment()">Confirm cash</button></div>');
+  setTimeout(function() {
+    const inp = document.getElementById('cashPayTender');
+    if (inp) { inp.value = ''; inp.focus(); updateCashPayChange(); }
+  }, 80);
+};
+
+window.cashPayKey = function(key) {
+  const inp = document.getElementById('cashPayTender');
+  if (!inp) return;
+  let s = String(inp.value || '').trim();
+  if (key === 'C') {
+    inp.value = '';
+    updateCashPayChange();
+    return;
+  }
+  if (key === '.') {
+    if (s.indexOf('.') >= 0) return;
+    inp.value = s === '' ? '0.' : s + '.';
+    updateCashPayChange();
+    return;
+  }
+  if (!/^[0-9]$/.test(key)) return;
+  const dot = s.indexOf('.');
+  if (dot >= 0 && s.length - dot - 1 >= 2) return;
+  if (s === '0') s = key;
+  else if (s === '' && key === '0') s = '0';
+  else s += key;
+  inp.value = s;
+  updateCashPayChange();
+};
+
+window.cashPayAdd = function(n) {
+  const inp = document.getElementById('cashPayTender');
+  if (!inp) return;
+  const cur = parseFloat(inp.value) || 0;
+  inp.value = String(Math.round((cur + n) * 100) / 100);
+  updateCashPayChange();
+};
+
+window.cashPaySetExact = function() {
+  const ctx = window._cashPaymentCtx;
+  const inp = document.getElementById('cashPayTender');
+  if (!inp || !ctx) return;
+  inp.value = String(ctx.grandTotal);
+  updateCashPayChange();
+};
+
+window.updateCashPayChange = function() {
+  const ctx = window._cashPaymentCtx;
+  const inp = document.getElementById('cashPayTender');
+  const chEl = document.getElementById('cashPayChange');
+  const ban = document.getElementById('cashPayChangeBanner');
+  const lbl = document.getElementById('cashPayBannerText');
+  if (!ctx || !inp || !chEl || !ban) return;
+  const raw = String(inp.value || '').trim();
+  const tender = parseFloat(raw);
+  if (raw === '' || isNaN(tender)) {
+    ban.style.background = '#78909c';
+    ban.style.color = '#fff';
+    if (lbl) lbl.textContent = 'Change Due: ';
+    chEl.textContent = '—';
+    return;
+  }
+  const diff = Math.round((tender - ctx.grandTotal) * 100) / 100;
+  if (diff < -0.001) {
+    ban.style.background = '#ef6c00';
+    ban.style.color = '#fff';
+    if (lbl) lbl.textContent = 'Still need: ';
+    chEl.textContent = fmt$(Math.abs(diff));
+  } else {
+    ban.style.background = '#e53935';
+    ban.style.color = '#fff';
+    if (lbl) lbl.textContent = 'Change Due: ';
+    chEl.textContent = fmt$(Math.max(0, diff));
+  }
+};
+
+window.submitCashPayment = function() {
+  const ctx = window._cashPaymentCtx;
+  const inp = document.getElementById('cashPayTender');
+  if (!ctx || !inp) return;
+  const tender = parseFloat(inp.value) || 0;
+  if (tender + 1e-9 < ctx.grandTotal) {
+    toast('Amount received must cover the total (' + fmt$(ctx.grandTotal) + ')');
+    return;
+  }
+  const change = Math.round((tender - ctx.grandTotal) * 100) / 100;
+  const cb = ctx.onValid;
+  window._cashPaymentCtx = null;
+  closeModal();
+  if (typeof cb === 'function') cb(tender, change);
+};
+
 function refundTransaction(txnId) {
   const txn = transactions.find(t => t.transactionId === txnId || t.id === txnId);
   if (!txn) { toast('Transaction not found'); return; }
@@ -3430,6 +3667,12 @@ function refundTransaction(txnId) {
   if (!confirm('Refund transaction ' + txn.transactionId + ' for ' + fmt$(txn.grandTotal) + '?')) return;
 
   txn.status = 'Refunded';
+
+  const posRow = posTransactions.find(p => p.transactionId === txn.transactionId);
+  if (posRow) {
+    posRow.status = 'Refunded';
+    save('posTransactions', posTransactions);
+  }
 
   (txn.items || []).forEach(item => {
     if (txn.source === 'Mini-Mart') {
@@ -3657,6 +3900,26 @@ window.posCartRemove = function(idx) {
   renderPOS();
 };
 
+function posCheckoutRun(paidBy, roomNumber, guestName, bookingId, saleItems, tr) {
+  const txn = processSale({
+    source: 'POS', paymentMethod: paidBy,
+    roomNumber: roomNumber, guestName: guestName, bookingId: bookingId,
+    items: saleItems, taxRate: tr
+  });
+  const posTxn = {
+    id: txn.id, timestamp: txn.timestamp, source: txn.source || 'POS', roomNumber: roomNumber, guestName: guestName,
+    bookingId: bookingId, items: txn.items, itemCount: txn.items.reduce((s, i) => s + i.qty, 0),
+    subtotal: txn.subtotal, tax: txn.taxAmount, grandTotal: txn.grandTotal,
+    paidBy: paidBy, staffName: txn.staffName, transactionId: txn.transactionId,
+    status: txn.status || 'Completed'
+  };
+  posTransactions.push(posTxn);
+  save('posTransactions', posTransactions);
+  toast('Sale completed - ' + fmt$(txn.grandTotal) + ' (' + txn.transactionId + ')');
+  posCart = [];
+  renderPOS();
+}
+
 window.posCheckout = function(paidBy) {
   if (posCart.length === 0) { toast('Cart is empty'); return; }
   if (paidBy === 'Room Charge' && !posSelectedBooking) { toast('Select a room first'); return; }
@@ -3664,29 +3927,30 @@ window.posCheckout = function(paidBy) {
   let roomNumber = '', guestName = '', bookingId = '';
   if (posSelectedBooking) {
     const b = bookings.find(x => x.id === posSelectedBooking);
-    if (b) { roomNumber = b.roomNumber; guestName = b.guestName; bookingId = b.bookingId; }
+    if (b) {
+      roomNumber = b.roomNumber;
+      guestName = b.guestName;
+      bookingId = (b.bookingId != null && b.bookingId !== '') ? b.bookingId : String(b.id || '');
+    }
   }
 
   const saleItems = posCart.map(ci => ({itemId: ci.inventoryId, name: ci.name, qty: ci.qty, unitPrice: ci.unitPrice}));
+  const tr = parseFloat(settings.surcharge) || 7;
 
-  const txn = processSale({
-    source: 'POS', paymentMethod: paidBy,
-    roomNumber: roomNumber, guestName: guestName, bookingId: bookingId,
-    items: saleItems, taxRate: parseFloat(settings.surcharge) || 7
-  });
+  if (paidBy === 'Cash') {
+    const g = computeLineTotalsFromRawLineItems(saleItems, tr).grandTotal;
+    openCashPaymentModal({
+      grandTotal: g,
+      title: 'Point of Sale — Cash',
+      onValid: function(tender, change) {
+        toast('Change due: ' + fmt$(change));
+        posCheckoutRun('Cash', roomNumber, guestName, bookingId, saleItems, tr);
+      }
+    });
+    return;
+  }
 
-  const posTxn = {
-    id: txn.id, timestamp: txn.timestamp, source: txn.source || 'POS', roomNumber: roomNumber, guestName: guestName,
-    bookingId: bookingId, items: txn.items, itemCount: txn.items.reduce((s, i) => s + i.qty, 0),
-    subtotal: txn.subtotal, tax: txn.taxAmount, grandTotal: txn.grandTotal,
-    paidBy: paidBy, staffName: txn.staffName, transactionId: txn.transactionId
-  };
-  posTransactions.push(posTxn);
-  save('posTransactions', posTransactions);
-
-  toast('Sale completed - ' + fmt$(txn.grandTotal) + ' (' + txn.transactionId + ')');
-  posCart = [];
-  renderPOS();
+  posCheckoutRun(paidBy, roomNumber, guestName, bookingId, saleItems, tr);
 };
 
 window.showEditPosTxn = function(id) {
@@ -3719,6 +3983,89 @@ let restSelectedBooking = null;
 let restTableNumber = 'Table 1';
 let restMenuFilter = 'All';
 
+function restOrderIsActive(o) { return o && o.status !== 'Paid'; }
+function restOrderIsPast(o) { return o && o.status === 'Paid'; }
+
+function restOrderMatchesSelectedBooking(o, bk) {
+  if (!o || !bk) return false;
+  const or = String(o.roomNumber ?? '').trim();
+  const br = String(bk.roomNumber ?? '').trim();
+  if (or && br && or === br) return true;
+  if ((o.guestName || '') && (bk.guestName || '') && o.guestName === bk.guestName) return true;
+  const oid = String(o.bookingId ?? '').trim();
+  const bid = String((bk.bookingId != null && bk.bookingId !== '') ? bk.bookingId : (bk.id ?? '')).trim();
+  if (oid && bid && oid === bid) return true;
+  return false;
+}
+
+function restOrderIsPayableLine(o) {
+  if (!o || o.status !== 'Served' || o.transactionId) return false;
+  const pb = o.paidBy;
+  return pb === 'Pending' || pb == null || pb === '';
+}
+
+function restGetOrdersForPhysicalTable(tableLabel) {
+  return restaurantOrders.filter(function(o) {
+    return restOrderIsActive(o) && String(o.tableNumber || '').trim() === String(tableLabel).trim();
+  });
+}
+
+function restGetTableFloorState(tableLabel) {
+  const active = restGetOrdersForPhysicalTable(tableLabel);
+  if (!active.length) return 'available';
+  if (active.some(function(o) { return restOrderIsPayableLine(o); })) return 'pending';
+  return 'occupied';
+}
+
+function restStatusClassForTile(st) {
+  if (st === 'New') return 'new';
+  if (st === 'Preparing') return 'preparing';
+  if (st === 'Ready') return 'ready';
+  if (st === 'Served') return 'served';
+  return 'paid';
+}
+
+window.restTableFloorClick = function(tableName) {
+  restTableNumber = tableName;
+  const st = restGetTableFloorState(tableName);
+  renderRestaurant();
+  if (st !== 'available') {
+    setTimeout(function() { restOpenTableBillModal(tableName); }, 30);
+  }
+};
+
+window.restOpenTableBillModal = function(tableName) {
+  const orders = restGetOrdersForPhysicalTable(tableName);
+  if (!orders.length) return;
+  let body = '';
+  orders.forEach(function(o) {
+    const itemsStr = (o.items || []).map(function(i) { return i.name + ' ×' + i.qty; }).join(', ');
+    const stCls = restStatusClassForTile(o.status);
+    body += '<div style="border:1px solid var(--border);border-radius:10px;padding:0.75rem;margin-bottom:0.6rem;background:var(--card-bg);">';
+    body += '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.35rem;"><strong>' + o.orderNumber + '</strong>';
+    body += '<span class="status status-' + stCls + '">' + (o.status || '') + '</span></div>';
+    body += '<div style="font-size:0.82rem;margin:0.35rem 0;color:var(--text);">' + itemsStr + '</div>';
+    body += '<div style="font-weight:700;margin:0.25rem 0;">' + fmt$(o.grandTotal) + '</div>';
+    if (o.notes) body += '<div style="font-size:0.78rem;color:var(--text-light);margin-bottom:0.35rem;">📝 ' + o.notes + '</div>';
+    body += '<div style="display:flex;flex-wrap:wrap;gap:0.35rem;margin-top:0.45rem;">';
+    if (o.status === 'New') body += '<button class="btn btn-sm btn-warning" onclick="closeModal();restUpdateStatus(\'' + o.id + '\',\'Preparing\')">🔥 Prep</button>';
+    if (o.status === 'Preparing') body += '<button class="btn btn-sm btn-success" onclick="closeModal();restUpdateStatus(\'' + o.id + '\',\'Ready\')">✅ Ready</button>';
+    if (o.status === 'Ready') body += '<button class="btn btn-sm btn-outline" onclick="closeModal();restUpdateStatus(\'' + o.id + '\',\'Served\')">🍽️ Served</button>';
+    if (restOrderIsPayableLine(o) && String(o.roomNumber || '').trim() !== '' && String(o.bookingId || '').trim() !== '') {
+      body += '<button class="btn btn-sm btn-primary" onclick="closeModal();restPayOrder(\'' + o.id + '\',\'Room Charge\')">🏨 Room</button>';
+    }
+    if (restOrderIsPayableLine(o)) {
+      body += '<button class="btn btn-sm btn-success" onclick="closeModal();restPayOrder(\'' + o.id + '\',\'Cash\')">💵 Cash</button>';
+      body += '<button class="btn btn-sm btn-warning" onclick="closeModal();restPayOrder(\'' + o.id + '\',\'Credit Card\')">💳 Card</button>';
+    }
+    if (o.status === 'Served' && o.paidBy === 'Table' && o.transactionId) {
+      body += '<button class="btn btn-sm btn-outline" onclick="closeModal();restMarkTableServedDone(\'' + o.id + '\')">✓ Done</button>';
+    }
+    body += '</div></div>';
+  });
+  openModal('<div class="modal-header"><h2>' + tableName + ' — Open bill</h2><button class="modal-close" onclick="closeModal()">&times;</button></div><div class="modal-body" style="max-height:70vh;overflow-y:auto;">' + body + '</div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Close</button></div>');
+};
+
 function renderRestaurant() {
   const checkedIn = bookings.filter(b => b.arrivalStatus === 'Checked-in');
   const taxRate = parseFloat(settings.serviceTax || settings.taxRate) || 7;
@@ -3733,9 +4080,24 @@ function renderRestaurant() {
     checkedIn.forEach(b => { selHtml += '<option value="' + b.id + '"' + (restSelectedBooking === b.id ? ' selected' : '') + '>Room ' + b.roomNumber + ' - ' + b.guestName + ' (' + b.bookingId + ')</option>'; });
     selHtml += '</select></div>';
   } else {
-    selHtml = '<div class="form-group" style="margin-bottom:0.75rem;"><label>Table Number</label><select class="form-control" id="restTableSelect" onchange="restTableNumber=this.value">';
-    for (let i = 1; i <= 10; i++) { selHtml += '<option' + (restTableNumber === 'Table ' + i ? ' selected' : '') + '>Table ' + i + '</option>'; }
-    selHtml += '</select></div>';
+    let floorHtml = '<div class="rest-floor-wrap"><p style="font-size:0.82rem;font-weight:700;margin:0 0 0.45rem;color:var(--text);">Table floor</p>';
+    floorHtml += '<div class="rest-floor-legend">' +
+      '<span><span class="rest-floor-dot avail"></span>Available</span>' +
+      '<span><span class="rest-floor-dot occ"></span>Occupied</span>' +
+      '<span><span class="rest-floor-dot pend"></span>Check / pay</span>' +
+      '</div>';
+    floorHtml += '<div class="rest-table-floor" role="group" aria-label="Restaurant tables">';
+    for (let i = 1; i <= 10; i++) {
+      const tName = 'Table ' + i;
+      const st = restGetTableFloorState(tName);
+      const sub = st === 'available' ? 'Open' : (st === 'pending' ? 'Check' : 'Order');
+      const sel = restTableNumber === tName ? ' selected' : '';
+      floorHtml += '<button type="button" class="rest-table-tile ' + st + sel + '" onclick="restTableFloorClick(\'' + tName + '\')" title="' + tName + ' — ' + sub + '">' +
+        '<span class="rtt-num">' + i + '</span><span class="rtt-sub">' + sub + '</span></button>';
+    }
+    floorHtml += '</div>';
+    floorHtml += '<p style="font-size:0.78rem;color:var(--text-light);margin:0.35rem 0 0;line-height:1.4;">Tap a <strong>green</strong> table to start a new order. <strong>Red</strong> = open order (kitchen / dining). <strong>Amber</strong> = check requested, payment pending. Tap red or amber to open the bill.</p></div>';
+    selHtml = floorHtml;
   }
 
   const categories = ['All'].concat(getMenuCategories());
@@ -3762,14 +4124,21 @@ function renderRestaurant() {
   const tax = Math.round(subtotal * taxRate) / 100;
   const grandTotal = Math.round((subtotal + tax) * 100) / 100;
   const canSend = restCart.length > 0;
-  const needsTarget = restOrderType === 'Room Service' && !restSelectedBooking;
+  const needsGuestForKitchen = restOrderType === 'Room Service' && !restSelectedBooking;
+  const chargeRoomDisabled = !canSend || (restOrderType === 'Room Service' && !restSelectedBooking);
+  let chargeMainBtn = '';
+  if (restOrderType === 'Table') {
+    chargeMainBtn = '<button class="btn btn-success" ' + (!canSend ? 'disabled style="opacity:0.5;"' : '') + ' onclick="restChargeToTableWalkIn()" title="Uses Table # above. Posts the tab and adds this order to Active Orders.">🏨 Charge to Room</button>';
+  } else {
+    chargeMainBtn = '<button class="btn btn-success" ' + (chargeRoomDisabled ? 'disabled style="opacity:0.5;"' : '') + ' onclick="restCheckout(\'Room Charge\')">🏨 Charge to Room</button>';
+  }
 
   let notesHtml = '<div class="form-group" style="margin-top:0.5rem;"><label>Order Notes</label><input type="text" class="form-control" id="restOrderNotes" placeholder="Special instructions..."></div>';
 
   let actionsHtml = '<div class="pos-actions">' +
-    '<button class="btn btn-primary" ' + (!canSend || needsTarget ? 'disabled style="opacity:0.5;"' : '') + ' onclick="restSendToKitchen()">🔥 Send to Kitchen</button>' +
-    '<button class="btn btn-success" ' + (!canSend || needsTarget ? 'disabled style="opacity:0.5;"' : '') + ' onclick="restCheckout(\'Room Charge\')">🏨 Charge to Room</button>' +
-    '<button class="btn btn-warning" ' + (!canSend ? 'disabled style="opacity:0.5;"' : '') + ' onclick="restCheckout(\'Cash\')">💵 Cash</button>' +
+    '<button class="btn btn-primary" ' + (!canSend || needsGuestForKitchen ? 'disabled style="opacity:0.5;"' : '') + ' onclick="restSendToKitchen()">🔥 Send to Kitchen</button>' +
+    '<button class="btn btn-outline" ' + (!canSend || needsGuestForKitchen ? 'disabled style="opacity:0.5;"' : '') + ' onclick="restSendToRoom()" title="Same as Send to Kitchen, but the order is created as Ready">🏨 Send to Room</button>' +
+    chargeMainBtn +
     '</div><div class="pos-actions" style="margin-top:0;">' +
     '<button class="btn btn-outline" ' + (!canSend ? 'disabled style="opacity:0.5;"' : '') + ' onclick="restCheckout(\'Credit Card\')">💳 Credit Card</button>' +
     '</div>';
@@ -3780,16 +4149,34 @@ function renderRestaurant() {
   html += '<div class="pos-totals"><div class="total-row"><span>Subtotal</span><span>' + fmt$(subtotal) + '</span></div><div class="total-row"><span>Tax (' + taxRate + '%)</span><span>' + fmt$(tax) + '</span></div><div class="total-row grand"><span>Grand Total</span><span>' + fmt$(grandTotal) + '</span></div></div></div>';
   html += notesHtml + actionsHtml;
 
-  const filterLabel = restSelectedBooking ? (() => { const bk = bookings.find(b=>b.id===restSelectedBooking); return bk ? 'Room '+bk.roomNumber+' - '+bk.guestName : 'Selected Guest'; })() : (restOrderType==='Table' && typeof restTableNumber!=='undefined' && restTableNumber ? 'Table '+restTableNumber : 'All');
-  html += '<div class="card" style="margin-top:1rem;"><div class="card-header"><h2>Active Orders <span style="font-size:0.75rem;color:var(--primary);font-weight:400;">('+filterLabel+')</span></h2><div style="display:flex;gap:0.4rem;"><button class="btn btn-sm btn-outline" onclick="restSelectedBooking=null;renderRestaurant()">Show All</button><button class="btn btn-sm btn-outline" onclick="toggleRestHistory()">◳ Past Orders</button></div></div><div class="card-body"><div id="restOrderGrid"></div></div></div>';
-  html += '<div class="card" id="restHistoryCard" style="display:none;"><div class="card-header"><h2>◆ Past Orders</h2><button class="btn btn-sm btn-outline" onclick="toggleRestHistory()">Hide</button></div><div class="card-body"><div class="form-row" style="margin-bottom:0.75rem;"><div class="form-group" style="margin-bottom:0;"><label>Filter by Guest</label><input type="text" class="form-control" id="restHistGuest" placeholder="Search guest..." oninput="filterRestHistory()"></div><div class="form-group" style="margin-bottom:0;"><label>Filter by Room/Table</label><input type="text" class="form-control" id="restHistRoom" placeholder="Search room/table..." oninput="filterRestHistory()"></div></div><div id="restHistoryGrid"></div></div></div>';
+  const filterLabel = restSelectedBooking ? (() => { const bk = bookings.find(b=>b.id===restSelectedBooking); return bk ? 'Room '+bk.roomNumber+' - '+bk.guestName : 'Selected Guest'; })() : (restOrderType==='Table' && typeof restTableNumber!=='undefined' && restTableNumber ? restTableNumber : 'All');
+
+  let activeOrdersPreview = restaurantOrders.filter(restOrderIsActive);
+  if (restSelectedBooking) {
+    const bk = bookings.find(b => b.id === restSelectedBooking);
+    if (bk) activeOrdersPreview = activeOrdersPreview.filter(o => restOrderMatchesSelectedBooking(o, bk));
+  } else if (restOrderType === 'Table' && typeof restTableNumber !== 'undefined' && restTableNumber) {
+    activeOrdersPreview = activeOrdersPreview.filter(o => o.tableNumber === restTableNumber);
+  }
+  const totalActiveOrderAmt = Math.round(activeOrdersPreview.reduce((s, o) => s + (parseFloat(o.grandTotal) || 0), 0) * 100) / 100;
+  const canPayTotalsEnabled = totalActiveOrderAmt > 0;
+  const payTotalBar = '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:0.5rem;margin-top:0.35rem;width:100%;">' +
+    '<span style="font-size:0.85rem;color:var(--text-light);">Total Active Order:</span>' +
+    '<strong style="font-size:1rem;">' + fmt$(totalActiveOrderAmt) + '</strong>' +
+    '<button type="button" class="btn btn-sm btn-primary" style="display:none" ' + (!canPayTotalsEnabled ? 'disabled ' : '') + ' onclick="restPayActiveOrdersTotal(\'Room Charge\')">🏨 Pay total — Room</button>' +
+    '<button type="button" class="btn btn-sm btn-success" ' + (!canPayTotalsEnabled ? 'disabled style="opacity:0.5;"' : '') + ' onclick="restPayActiveOrdersTotal(\'Cash\')">💵 Pay total — Cash</button>' +
+    '<button type="button" class="btn btn-sm btn-outline" ' + (!canPayTotalsEnabled ? 'disabled style="opacity:0.5;"' : '') + ' onclick="restPayActiveOrdersTotal(\'Credit Card\')">💳 Pay total — Card</button>' +
+    '</div>';
+
+  html += '<div class="card" style="margin-top:1rem;"><div class="card-header" style="flex-direction:column;align-items:stretch;"><div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:0.5rem;"><h2 style="margin:0;">Active Orders <span style="font-size:0.75rem;color:var(--primary);font-weight:400;">('+filterLabel+')</span></h2><div style="display:flex;gap:0.4rem;"><button class="btn btn-sm btn-outline" onclick="restSelectedBooking=null;renderRestaurant()">Show All</button><button class="btn btn-sm btn-outline" onclick="toggleRestHistory()">◳ Past Orders</button></div></div>' + payTotalBar + '</div><div class="card-body"><div id="restOrderGrid"></div></div></div>';
+  html += '<div class="card" id="restHistoryCard" style="display:none;"><div class="card-header"><h2>◆ Past Orders <span style="font-size:0.75rem;color:var(--primary);font-weight:400;">('+filterLabel+')</span></h2><button class="btn btn-sm btn-outline" onclick="toggleRestHistory()">Hide</button></div><div class="card-body"><p style="font-size:0.78rem;color:var(--text-light);margin:0 0 0.75rem;line-height:1.35;">Only paid orders for the room/guest or table selected above.</p><div id="restHistoryGrid"></div></div></div>';
 
   html += '<div class="card"><div class="card-header"><h2>Kitchen View</h2></div><div class="card-body"><div id="restKitchenView"></div></div></div>';
   html += '<div class="card"><div class="card-header"><h2>◆ Restaurant Change Log</h2></div><div class="card-body"><div id="restChangeLogGrid"></div></div></div>';
 
   document.getElementById('page-restaurant').innerHTML = html;
 
-  let activeOrders = restaurantOrders.filter(o => o.status !== 'Paid');
+  let activeOrders = restaurantOrders.filter(restOrderIsActive);
   if (restSelectedBooking) {
     const bk = bookings.find(b => b.id === restSelectedBooking);
     if (bk) activeOrders = activeOrders.filter(o => o.roomNumber === bk.roomNumber || o.guestName === bk.guestName || o.bookingId === bk.bookingId);
@@ -3814,9 +4201,10 @@ function renderRestaurant() {
       {name:'preparing',label:'🔥 Prep',cls:'btn-warning',condition:r=>r.status==='New',handler:id=>restUpdateStatus(id,'Preparing')},
       {name:'ready',label:'✅ Ready',cls:'btn-success',condition:r=>r.status==='Preparing',handler:id=>restUpdateStatus(id,'Ready')},
       {name:'served',label:'🍽️ Served',cls:'btn-outline',condition:r=>r.status==='Ready',handler:id=>restUpdateStatus(id,'Served')},
-      {name:'payRoom',label:'🏨 Room',cls:'btn-primary',condition:r=>r.status==='Served'&&r.paidBy==='Pending',handler:id=>restPayOrder(id,'Room Charge')},
-      {name:'payCash',label:'💵',cls:'btn-success',condition:r=>r.status==='Served'&&r.paidBy==='Pending',handler:id=>restPayOrder(id,'Cash')},
-      {name:'payCard',label:'💳',cls:'btn-warning',condition:r=>r.status==='Served'&&r.paidBy==='Pending',handler:id=>restPayOrder(id,'Credit Card')},
+      {name:'payRoom',label:'🏨 Room',cls:'btn-primary',condition:r=>restOrderIsPayableLine(r)&&String(r.roomNumber||'').trim()!==''&&String(r.bookingId||'').trim()!=='',handler:id=>restPayOrder(id,'Room Charge')},
+      {name:'payCash',label:'💵',cls:'btn-success',condition:r=>restOrderIsPayableLine(r),handler:id=>restPayOrder(id,'Cash')},
+      {name:'payCard',label:'💳',cls:'btn-warning',condition:r=>restOrderIsPayableLine(r),handler:id=>restPayOrder(id,'Credit Card')},
+      {name:'donePrepaid',label:'✓ Done',cls:'btn-outline',condition:r=>r.status==='Served'&&!!r.transactionId&&r.paidBy==='Table',handler:id=>restMarkTableServedDone(id)},
     ],
   });
 
@@ -3854,14 +4242,28 @@ window.toggleRestHistory = function() {
   }
 };
 window.filterRestHistory = function() {
-  const guestFilter = (document.getElementById('restHistGuest')?.value || '').toLowerCase();
-  const roomFilter = (document.getElementById('restHistRoom')?.value || '').toLowerCase();
-  const paidOrders = restaurantOrders.filter(o => {
-    if (o.status !== 'Paid' && o.status !== 'Served') return false;
-    if (guestFilter && !(o.guestName||'').toLowerCase().includes(guestFilter)) return false;
-    if (roomFilter && !(o.tableNumber||'').toLowerCase().includes(roomFilter) && !String(o.roomNumber||'').toLowerCase().includes(roomFilter)) return false;
-    return true;
-  });
+  let paidOrders = restaurantOrders.filter(o => restOrderIsPast(o));
+  let emptyHistMsg;
+  if (restOrderType === 'Room Service') {
+    if (!restSelectedBooking) {
+      paidOrders = [];
+      emptyHistMsg = '◈ Select a room/guest above to see their past orders';
+    } else {
+      const bk = bookings.find(b => b.id === restSelectedBooking);
+      if (!bk) {
+        paidOrders = [];
+        emptyHistMsg = '◈ Select a room/guest above to see their past orders';
+      } else {
+        paidOrders = paidOrders.filter(o => restOrderMatchesSelectedBooking(o, bk));
+        emptyHistMsg = '◈ No past paid orders for Room ' + bk.roomNumber + ' — ' + bk.guestName;
+      }
+    }
+  } else {
+    const tbl = String(restTableNumber || '').trim();
+    paidOrders = paidOrders.filter(o => String(o.tableNumber || '').trim() === tbl);
+    emptyHistMsg = tbl ? ('◈ No past orders for ' + restTableNumber) : '◈ Select a table above to see past orders';
+  }
+  paidOrders.sort((a, b) => { try { return new Date(b.timestamp) - new Date(a.timestamp); } catch (e) { return 0; } });
   new XGrid('restHistoryGrid', {
     columns: [
       {field:'orderNumber',label:'Order #',filterable:true,width:'90px'},
@@ -3870,12 +4272,13 @@ window.filterRestHistory = function() {
       {field:'guestName',label:'Guest',filterable:true},
       {field:'items',label:'Items',format:v=>Array.isArray(v)?v.map(i=>i.name+' x'+i.qty).join(', '):''},
       {field:'grandTotal',label:'Total',format:v=>fmt$(v),width:'80px'},
+      {field:'status',label:'Status',format:()=>'<span class="status status-paid">Paid</span>',width:'75px',filterable:true},
       {field:'paidBy',label:'Paid By',filterable:true,width:'90px'},
     ],
     data: paidOrders,
     showSearch: true,
     summaryRow: {orderNumber:'label', grandTotal:'sum'},
-    emptyMessage: '◈ No past orders found',
+    emptyMessage: emptyHistMsg,
   });
 };
 window.restSetOrderType = function(type) { restOrderType = type; restSelectedBooking = null; renderRestaurant(); };
@@ -3910,7 +4313,11 @@ window.restSendToKitchen = function() {
 
   if (restOrderType === 'Room Service' && restSelectedBooking) {
     const b = bookings.find(x => x.id === restSelectedBooking);
-    if (b) { roomNumber = b.roomNumber; guestName = b.guestName; bookingId = b.bookingId; tableNumber = 'Room Service'; }
+    if (b) {
+      roomNumber = b.roomNumber; guestName = b.guestName;
+      bookingId = (b.bookingId != null && b.bookingId !== '') ? b.bookingId : String(b.id || '');
+      tableNumber = 'Room Service';
+    }
   } else {
     tableNumber = restTableNumber || 'Table 1';
   }
@@ -3935,14 +4342,59 @@ window.restSendToKitchen = function() {
   renderRestaurant();
 };
 
+window.restSendToRoom = function() {
+  if (restCart.length === 0) { toast('Cart is empty'); return; }
+  if (restOrderType === 'Room Service' && !restSelectedBooking) { toast('Select a room first'); return; }
+
+  const taxRate = parseFloat(settings.serviceTax || settings.taxRate) || 7;
+  const staffName = currentUser ? currentUser.name : currentRole;
+  let roomNumber = '', guestName = '', bookingId = '', tableNumber = '';
+
+  if (restOrderType === 'Room Service' && restSelectedBooking) {
+    const b = bookings.find(x => x.id === restSelectedBooking);
+    if (b) {
+      roomNumber = b.roomNumber; guestName = b.guestName;
+      bookingId = (b.bookingId != null && b.bookingId !== '') ? b.bookingId : String(b.id || '');
+      tableNumber = 'Room Service';
+    }
+  } else {
+    tableNumber = restTableNumber || 'Table 1';
+  }
+
+  const items = restCart.map(ci => ({name: ci.name, qty: ci.qty, unitPrice: ci.unitPrice, total: ci.unitPrice * ci.qty}));
+  const subtotal = items.reduce((s, i) => s + i.total, 0);
+  const tax = Math.round(subtotal * taxRate) / 100;
+  const grandTotal = Math.round((subtotal + tax) * 100) / 100;
+  const notes = document.getElementById('restOrderNotes') ? document.getElementById('restOrderNotes').value : '';
+
+  const order = {
+    id: genId(), timestamp: new Date().toISOString(), orderNumber: nextOrderNumber(),
+    roomNumber: roomNumber, guestName: guestName, bookingId: bookingId, tableNumber: tableNumber,
+    items: items, subtotal: subtotal, tax: tax, grandTotal: grandTotal,
+    status: 'Ready', paidBy: 'Pending', staffName: staffName, notes: notes
+  };
+  restaurantOrders.push(order);
+  save('restaurantOrders', restaurantOrders);
+  logAudit('New Order', 'Restaurant', order.orderNumber, 'Sent to room (ready): ' + fmt$(grandTotal) + ' (' + tableNumber + ')');
+  toast('Order ' + order.orderNumber + ' sent to room — Ready');
+  restCart = [];
+  renderRestaurant();
+};
+
 window.restCheckout = function(paidBy) {
   if (restCart.length === 0) { toast('Cart is empty'); return; }
-  if (paidBy === 'Room Charge' && !restSelectedBooking) { toast('Select a room first'); return; }
+  if (paidBy === 'Room Charge') {
+    if (restOrderType !== 'Room Service' || !restSelectedBooking) { toast('Select a room / guest first'); return; }
+  }
 
   let roomNumber = '', guestName = '', bookingId = '', tableNumber = '';
   if (restOrderType === 'Room Service' && restSelectedBooking) {
     const b = bookings.find(x => x.id === restSelectedBooking);
-    if (b) { roomNumber = b.roomNumber; guestName = b.guestName; bookingId = b.bookingId; tableNumber = 'Room Service'; }
+    if (b) {
+      roomNumber = b.roomNumber; guestName = b.guestName;
+      bookingId = (b.bookingId != null && b.bookingId !== '') ? b.bookingId : String(b.id || '');
+      tableNumber = 'Room Service';
+    }
   } else {
     tableNumber = restTableNumber || 'Table 1';
   }
@@ -3972,6 +4424,33 @@ window.restCheckout = function(paidBy) {
   renderRestaurant();
 };
 
+window.restChargeToTableWalkIn = function() {
+  if (restCart.length === 0) { toast('Cart is empty'); return; }
+  if (restOrderType !== 'Table') { return; }
+  const taxRate = parseFloat(settings.serviceTax || settings.taxRate) || 7;
+  const tableNumber = restTableNumber || 'Table 1';
+  const notes = document.getElementById('restOrderNotes') ? document.getElementById('restOrderNotes').value : '';
+  const orderNum = nextOrderNumber();
+  const saleItems = restCart.map(ci => ({itemId: ci.menuItemId, name: ci.name, qty: ci.qty, unitPrice: ci.unitPrice}));
+  const txn = processSale({
+    source: 'Restaurant', paymentMethod: 'Table',
+    roomNumber: '', guestName: 'Walk-in', bookingId: '',
+    orderId: orderNum, items: saleItems, taxRate: taxRate
+  });
+  const order = {
+    id: genId(), timestamp: txn.timestamp, orderNumber: orderNum,
+    roomNumber: '', guestName: 'Walk-in', bookingId: '', tableNumber: tableNumber,
+    items: txn.items, subtotal: txn.subtotal, tax: txn.taxAmount, grandTotal: txn.grandTotal,
+    status: 'Preparing', paidBy: 'Table', staffName: txn.staffName, notes: notes, transactionId: txn.transactionId
+  };
+  restaurantOrders.push(order);
+  save('restaurantOrders', restaurantOrders);
+  logAudit('New Order', 'Restaurant', order.orderNumber, 'Charge to room (table ' + tableNumber + '): ' + fmt$(txn.grandTotal) + ' (' + txn.transactionId + ')');
+  toast('Charged to ' + tableNumber + ' — added to Active Orders (' + txn.transactionId + ')');
+  restCart = [];
+  renderRestaurant();
+};
+
 window.restUpdateStatus = function(orderId, newStatus) {
   const o = restaurantOrders.find(x => x.id === orderId); if (!o) return;
   o.status = newStatus;
@@ -3981,8 +4460,32 @@ window.restUpdateStatus = function(orderId, newStatus) {
   renderRestaurant();
 };
 
-window.restPayOrder = function(orderId, paidBy) {
+window.restMarkTableServedDone = function(orderId) {
   const o = restaurantOrders.find(x => x.id === orderId); if (!o) return;
+  if (o.status !== 'Served' || o.paidBy !== 'Table' || !o.transactionId) return;
+  o.status = 'Paid';
+  save('restaurantOrders', restaurantOrders);
+  logAudit('Complete', 'Restaurant', o.orderNumber, 'Table order completed (prepaid)');
+  toast(o.orderNumber + ' cleared from active orders');
+  renderRestaurant();
+};
+
+window.restPayOrder = function(orderId, paidBy, skipRender) {
+  const o = restaurantOrders.find(x => x.id === orderId); if (!o) return;
+  if (o.transactionId) { if (!skipRender) toast('Already charged'); return; }
+
+  if (paidBy === 'Cash' && !skipRender) {
+    const gt = parseFloat(o.grandTotal) || 0;
+    openCashPaymentModal({
+      grandTotal: gt,
+      title: 'Restaurant — Cash (' + o.orderNumber + ')',
+      onValid: function(tender, change) {
+        toast('Change due: ' + fmt$(change));
+        restPayOrder(orderId, 'Cash', true);
+      }
+    });
+    return;
+  }
 
   const saleItems = (o.items || []).map(item => ({itemId: '', name: item.name, qty: item.qty, unitPrice: item.unitPrice}));
 
@@ -3998,8 +4501,49 @@ window.restPayOrder = function(orderId, paidBy) {
   o.transactionId = txn.transactionId;
   save('restaurantOrders', restaurantOrders);
 
-  toast(o.orderNumber + ' paid by ' + paidBy + ' (' + txn.transactionId + ')');
-  renderRestaurant();
+  if (!skipRender) {
+    toast(o.orderNumber + ' paid by ' + paidBy + ' (' + txn.transactionId + ')');
+    renderRestaurant();
+  }
+  return txn.transactionId;
+};
+
+window.restPayActiveOrdersTotal = function(paidBy) {
+  let activeOrders = restaurantOrders.filter(restOrderIsActive);
+  if (restSelectedBooking) {
+    const bk = bookings.find(b => b.id === restSelectedBooking);
+    if (bk) activeOrders = activeOrders.filter(o => o.roomNumber === bk.roomNumber || o.guestName === bk.guestName || o.bookingId === bk.bookingId);
+  } else if (restOrderType === 'Table' && typeof restTableNumber !== 'undefined' && restTableNumber) {
+    activeOrders = activeOrders.filter(o => o.tableNumber === restTableNumber);
+  }
+  const payable = activeOrders.filter(o => !o.transactionId);
+  if (!payable.length) { toast('No unpaid orders to settle in this view'); return; }
+  if (paidBy === 'Room Charge') {
+    const rooms = new Set(payable.map(o => String(o.roomNumber || '')));
+    const guests = new Set(payable.map(o => o.guestName || ''));
+    if (rooms.size > 1 || guests.size > 1) {
+      toast('Filter by one room/guest (Show All → pick guest) to charge the combined total to a room');
+      return;
+    }
+  }
+  const totalDue = Math.round(payable.reduce((s, o) => s + (parseFloat(o.grandTotal) || 0), 0) * 100) / 100;
+  function settleAll() {
+    payable.forEach(o => restPayOrder(o.id, paidBy, true));
+    toast('Paid ' + payable.length + ' order(s) — ' + fmt$(totalDue) + ' (' + paidBy + ')');
+    renderRestaurant();
+  }
+  if (paidBy === 'Cash') {
+    openCashPaymentModal({
+      grandTotal: totalDue,
+      title: 'Pay all orders — Cash',
+      onValid: function(tender, change) {
+        toast('Change due: ' + fmt$(change));
+        settleAll();
+      }
+    });
+    return;
+  }
+  settleAll();
 };
 
 // ===== MINI-MART MODULE =====
@@ -4115,6 +4659,26 @@ window.martCartQty = function(idx, delta) {
 
 window.martCartRemove = function(idx) { martCart.splice(idx, 1); renderMiniMart(); };
 
+function martCheckoutRun(paidBy, roomNumber, guestName, bookingId, saleItems, tr) {
+  const txn = processSale({
+    source: 'Mini-Mart', paymentMethod: paidBy,
+    roomNumber: roomNumber, guestName: guestName, bookingId: bookingId,
+    items: saleItems, taxRate: tr
+  });
+  const posTxn = {
+    id: txn.id, timestamp: txn.timestamp, source: 'Mini-Mart',
+    roomNumber: roomNumber, guestName: guestName, bookingId: bookingId,
+    items: txn.items, itemCount: txn.items.reduce((s, i) => s + i.qty, 0),
+    subtotal: txn.subtotal, tax: txn.taxAmount, grandTotal: txn.grandTotal,
+    paidBy: paidBy, staffName: txn.staffName, transactionId: txn.transactionId
+  };
+  posTransactions.push(posTxn);
+  save('posTransactions', posTransactions);
+  toast('Sale completed - ' + fmt$(txn.grandTotal) + ' (' + txn.transactionId + ')');
+  martCart = [];
+  renderMiniMart();
+}
+
 window.martCheckout = function(paidBy) {
   if (martCart.length === 0) { toast('Cart is empty'); return; }
   if (paidBy === 'Room Charge' && (!martSelectedBooking || martIsWalkin)) { toast('Select a room first'); return; }
@@ -4126,26 +4690,22 @@ window.martCheckout = function(paidBy) {
   }
 
   const saleItems = martCart.map(ci => ({itemId: ci.storeItemId, name: ci.name, qty: ci.qty, unitPrice: ci.unitPrice}));
+  const tr = parseFloat(settings.surcharge) || 7;
 
-  const txn = processSale({
-    source: 'Mini-Mart', paymentMethod: paidBy,
-    roomNumber: roomNumber, guestName: guestName, bookingId: bookingId,
-    items: saleItems, taxRate: parseFloat(settings.surcharge) || 7
-  });
+  if (paidBy === 'Cash') {
+    const g = computeLineTotalsFromRawLineItems(saleItems, tr).grandTotal;
+    openCashPaymentModal({
+      grandTotal: g,
+      title: 'Mini-Mart — Cash',
+      onValid: function(tender, change) {
+        toast('Change due: ' + fmt$(change));
+        martCheckoutRun('Cash', roomNumber, guestName, bookingId, saleItems, tr);
+      }
+    });
+    return;
+  }
 
-  const posTxn = {
-    id: txn.id, timestamp: txn.timestamp, source: 'Mini-Mart',
-    roomNumber: roomNumber, guestName: guestName, bookingId: bookingId,
-    items: txn.items, itemCount: txn.items.reduce((s, i) => s + i.qty, 0),
-    subtotal: txn.subtotal, tax: txn.taxAmount, grandTotal: txn.grandTotal,
-    paidBy: paidBy, staffName: txn.staffName, transactionId: txn.transactionId
-  };
-  posTransactions.push(posTxn);
-  save('posTransactions', posTransactions);
-
-  toast('Sale completed - ' + fmt$(txn.grandTotal) + ' (' + txn.transactionId + ')');
-  martCart = [];
-  renderMiniMart();
+  martCheckoutRun(paidBy, roomNumber, guestName, bookingId, saleItems, tr);
 };
 
 // ===== MENU ITEMS CRUD =====
