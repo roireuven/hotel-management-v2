@@ -554,7 +554,7 @@
 
       <div class="setup-step">
         <span class="step-num">3</span><span class="step-title">Role-Based Access</span>
-        <p>After first login, assign staff roles (Admin, Manager, Receptionist, Housekeeper). Each role sees different features and data.</p>
+        <p>After first login, assign staff roles (Admin, Manager, Receptionist, Housekeeper, Restaurant). The <strong>Restaurant</strong> role only sees the Restaurant / F&amp;B order screen.</p>
       </div>
 
       <button class="btn btn-primary btn-setup" onclick="completeSetup()">Create Account & Get Started →</button>
@@ -580,6 +580,7 @@
             <tr data-tip="Reports, inventory, overrides, analytics"><td class="cred-role">◫ Manager</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">mike@hotel.com</td><td class="cred-pw">1234</td></tr>
             <tr data-tip="Rooms, bookings, check-in/out, invoices"><td class="cred-role">◎ Reception</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">jane@hotel.com</td><td class="cred-pw">1234</td></tr>
             <tr data-tip="Room cleaning status, maintenance tickets"><td class="cred-role">◧ Housekeeper</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">tom@hotel.com</td><td class="cred-pw">1234</td></tr>
+            <tr data-tip="Restaurant &amp; bar orders only — no rooms or admin"><td class="cred-role">◈ Restaurant</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">restaurant@hotel.com</td><td class="cred-pw">1234</td></tr>
           </tbody>
         </table>
         <p style="text-align:center;margin-top:0.6rem;font-size:0.72rem;color:#999;">Tap an email to auto-fill the username field</p>
@@ -786,7 +787,7 @@ function getMenuCategories() { return (settings.menuCategories || 'Appetizer,Mai
 function getStoreCategories() { return (settings.storeCategories || 'Drinks,Snacks,Toiletries,Souvenirs,Sundries').split(',').map(s=>s.trim()).filter(Boolean); }
 function getOrderStatuses() { return (settings.orderStatuses || 'New,Preparing,Ready,Served,Paid').split(',').map(s=>s.trim()).filter(Boolean); }
 function getPaymentTypes() { return (settings.paymentTypes || 'Pending,Cash,Credit Card,Room Charge').split(',').map(s=>s.trim()).filter(Boolean); }
-function getUserRoles() { return (settings.userRoles || 'Admin,Manager,Receptionist,Housekeeper').split(',').map(s=>s.trim()).filter(Boolean); }
+function getUserRoles() { return (settings.userRoles || 'Admin,Manager,Receptionist,Housekeeper,Restaurant').split(',').map(s=>s.trim()).filter(Boolean); }
 function getRequestStatuses() { return (settings.requestStatuses || 'Pending,In Progress,Completed,Cancelled').split(',').map(s=>s.trim()).filter(Boolean); }
 function getCurrencyLabels() { return (settings.currencyLabels || defaultSettings.currencyLabels || 'USD ($),EUR (€),GBP (£),THB (฿)').split(',').map(s=>s.trim()).filter(Boolean); }
 function getHousekeepingStatuses() { return (settings.housekeepingStatuses || defaultSettings.housekeepingStatuses || 'Clean,Dirty,Inspected,Out of Service').split(',').map(s=>s.trim()).filter(Boolean); }
@@ -1182,6 +1183,7 @@ const defaultAccounts = [
   {id:genId(),name:'Admin User',email:'admin@hotel.com',role:'Admin',status:'active'},
   {id:genId(),name:'Jane Smith',email:'jane@hotel.com',role:'Receptionist',status:'active'},
   {id:genId(),name:'Mike Johnson',email:'mike@hotel.com',role:'Manager',status:'active'},
+  {id:genId(),name:'Restaurant Staff',email:'restaurant@hotel.com',role:'Restaurant',status:'active'},
   {id:genId(),name:'Tom Williams',email:'tom@hotel.com',role:'Housekeeper',status:'inactive'},
 ];
 const defaultInvoices = [
@@ -1226,7 +1228,7 @@ const defaultInvoices = [
   {id:genId(),invoiceNumber:'INV-2039',bookingId:'BK-1050',guestName:'Akira Tanaka',roomNumber:'402',subtotal:1950,discountAmount:0,taxTotal:136.50,grandTotal:2086.50,paymentStatus:'Unpaid',paymentTransactionId:'',currency:'THB',billingAddress:'456 Sakura Ave, Tokyo, Japan',services:[{name:'Thai Massage',unitPrice:80,quantity:1,icon:'◎'},{name:'Pool Day Pass',unitPrice:10,quantity:2,icon:'●'}],date:'2026-04-06'},
   {id:genId(),invoiceNumber:'INV-2040',bookingId:'BK-1052',guestName:'Lucas Santos',roomNumber:'204',subtotal:1800,discountAmount:0,taxTotal:126.00,grandTotal:1926.00,paymentStatus:'Unpaid',paymentTransactionId:'',currency:'USD',billingAddress:'300 Copacabana Ave, Rio de Janeiro, Brazil',services:[],date:'2026-04-06'},
 ];
-const defaultSettings = {hotelName:'Grand Hotel Management',email:'info@grandhotel.com',phone:'+1 555-0100',currency:'USD ($)',address:'123 Hotel Street, City, Country',maxGuests:3,surcharge:25,checkinTime:'14:00',checkoutTime:'12:00',darkMode:false,roomTypes:'Single,Double,Deluxe,Suite,Penthouse',bedConfigs:'King,Twin,Queen+Single,Double,King+Sofa',currencies:'USD,EUR,GBP,THB,ILS,JPY,CNY,AUD,CAD,CHF',currencyLabels:'USD ($),EUR (€),GBP (£),THB (฿)',bookingSources:'Direct,Booking.com,Expedia,Walk-in,Agoda,Airbnb',arrivalStatuses:'Expected,Checked-in,Checked-out,No-show',paymentMethods:'Credit Card,Cash,Bank Transfer,Room Charge',serviceCategories:'Room Service,Laundry,Airport Transfer,Mini-bar,Spa,Pool',invoiceStatuses:'Unpaid,Partially Paid,Fully Paid',ticketPriorities:'Low,Medium,High,Urgent',ticketStatuses:'Open,In Progress,Resolved',inventoryCategories:'Linen,Toiletries,F&B,Supplies',menuCategories:'Appetizer,Main Course,Dessert,Beverage,Side',storeCategories:'Drinks,Snacks,Toiletries,Souvenirs,Sundries',orderStatuses:'New,Preparing,Ready,Served,Paid',paymentTypes:'Pending,Cash,Credit Card,Room Charge',userRoles:'Admin,Manager,Receptionist,Housekeeper',requestStatuses:'Pending,In Progress,Completed,Cancelled',housekeepingStatuses:'Clean,Dirty,Inspected,Out of Service',occupancyStatuses:'Available,Occupied,Reserved',cancellationPolicies:'Free cancellation,Non-refundable',messageTypes:'Welcome,Invoice,Reminder,Notification',messageChannels:'Email,SMS,WhatsApp,In-App',transactionStatuses:'Completed,Refunded,Pending'};
+const defaultSettings = {hotelName:'Grand Hotel Management',email:'info@grandhotel.com',phone:'+1 555-0100',currency:'USD ($)',address:'123 Hotel Street, City, Country',maxGuests:3,surcharge:25,checkinTime:'14:00',checkoutTime:'12:00',darkMode:false,roomTypes:'Single,Double,Deluxe,Suite,Penthouse',bedConfigs:'King,Twin,Queen+Single,Double,King+Sofa',currencies:'USD,EUR,GBP,THB,ILS,JPY,CNY,AUD,CAD,CHF',currencyLabels:'USD ($),EUR (€),GBP (£),THB (฿)',bookingSources:'Direct,Booking.com,Expedia,Walk-in,Agoda,Airbnb',arrivalStatuses:'Expected,Checked-in,Checked-out,No-show',paymentMethods:'Credit Card,Cash,Bank Transfer,Room Charge',serviceCategories:'Room Service,Laundry,Airport Transfer,Mini-bar,Spa,Pool',invoiceStatuses:'Unpaid,Partially Paid,Fully Paid',ticketPriorities:'Low,Medium,High,Urgent',ticketStatuses:'Open,In Progress,Resolved',inventoryCategories:'Linen,Toiletries,F&B,Supplies',menuCategories:'Appetizer,Main Course,Dessert,Beverage,Side',storeCategories:'Drinks,Snacks,Toiletries,Souvenirs,Sundries',orderStatuses:'New,Preparing,Ready,Served,Paid',paymentTypes:'Pending,Cash,Credit Card,Room Charge',userRoles:'Admin,Manager,Receptionist,Housekeeper,Restaurant',requestStatuses:'Pending,In Progress,Completed,Cancelled',housekeepingStatuses:'Clean,Dirty,Inspected,Out of Service',occupancyStatuses:'Available,Occupied,Reserved',cancellationPolicies:'Free cancellation,Non-refundable',messageTypes:'Welcome,Invoice,Reminder,Notification',messageChannels:'Email,SMS,WhatsApp,In-App',transactionStatuses:'Completed,Refunded,Pending'};
 const defaultTickets = [
   {id:genId(),roomNumber:'201',issue:'AC not cooling properly',priority:'High',status:'In Progress',reportedBy:'Receptionist',reportedAt:'2026-04-03T14:30:00',resolvedAt:'',notes:'Technician dispatched, waiting for replacement compressor'},
   {id:genId(),roomNumber:'302',issue:'Leaky faucet in bathroom',priority:'Medium',status:'Open',reportedBy:'Housekeeper',reportedAt:'2026-04-04T09:15:00',resolvedAt:'',notes:'Constant drip from hot water tap'},
@@ -1362,6 +1364,18 @@ let bookingLog = load('bookingLog', []);
 let services = load('services', null); if(!services) { services = defaultServices; save('services', services); }
 let invoices = load('invoices', null); if(!invoices) { invoices = defaultInvoices; save('invoices', invoices); }
 let accounts = load('accounts', null); if(!accounts) { accounts = defaultAccounts; save('accounts', accounts); }
+(function migrateRestaurantRoleAndUser() {
+  const roles = getUserRoles();
+  if (roles.indexOf('Restaurant') === -1) {
+    settings.userRoles = roles.concat(['Restaurant']).join(',');
+    save('settings', settings);
+  }
+  const reEmail = 'restaurant@hotel.com';
+  if (!accounts.some(function(a) { return a.email && a.email.toLowerCase() === reEmail; })) {
+    accounts.push({ id: genId(), name: 'Restaurant Staff', email: reEmail, role: 'Restaurant', status: 'active' });
+    save('accounts', accounts);
+  }
+})();
 let auditLog = load('auditLog', []);
 let settings = load('settings', defaultSettings);
 if (!settings.roomTypes) { settings.roomTypes = defaultSettings.roomTypes; save('settings', settings); }
@@ -4298,11 +4312,18 @@ function renderRestaurant() {
     '</div>';
 
   let html = '<div class="card"><div class="card-header"><h2>New Order</h2></div><div class="card-body">' + orderTypeHtml + selHtml + '</div></div>';
-  html += '<div class="card"><div class="card-header" style="flex-wrap:wrap;gap:0.5rem;"><h2 style="margin:0;">Menu</h2><div style="display:flex;flex-wrap:wrap;align-items:center;gap:0.35rem;margin-left:auto;">' +
+  const restStaffOnly = (typeof currentRole !== 'undefined' && currentRole === 'Restaurant');
+  const restMenuToolbar = restStaffOnly ? '' : (
+    '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:0.35rem;margin-left:auto;">' +
     '<button type="button" class="btn btn-sm btn-primary" onclick="if(window.showAddMenuItem)showAddMenuItem()" title="Create a dish and link it to F&amp;B inventory stock">+ Add product</button>' +
     '<button type="button" class="btn btn-sm btn-outline" onclick="(function(){var l=document.querySelector(\'#sidebarNav a[data-page=menuitems]\');if(l)l.click();else toast(\'Menu Items page not available for this role\');})()">Menu items</button>' +
-    '<button type="button" class="btn btn-sm btn-outline" onclick="(function(){var l=document.querySelector(\'#sidebarNav a[data-page=inventory]\');if(l)l.click();else toast(\'Inventory not available for this role\');})()">Inventory</button></div>' +
-    '<span style="font-size:0.78rem;color:var(--text-light);width:100%;">' + filtered.length + ' items · add products under Menu Items, link stock in Inventory (F&amp;B category)</span></div><div class="card-body">' + tabsHtml + menuHtml + '</div></div>';
+    '<button type="button" class="btn btn-sm btn-outline" onclick="(function(){var l=document.querySelector(\'#sidebarNav a[data-page=inventory]\');if(l)l.click();else toast(\'Inventory not available for this role\');})()">Inventory</button></div>'
+  );
+  const restMenuHint = restStaffOnly
+    ? (filtered.length + ' items on the menu')
+    : (filtered.length + ' items · add products under Menu Items, link stock in Inventory (F&amp;B category)');
+  html += '<div class="card"><div class="card-header" style="flex-wrap:wrap;gap:0.5rem;"><h2 style="margin:0;">Menu</h2>' + restMenuToolbar +
+    '<span style="font-size:0.78rem;color:var(--text-light);width:100%;">' + restMenuHint + '</span></div><div class="card-body">' + tabsHtml + menuHtml + '</div></div>';
   html += '<div class="pos-cart"><div class="pos-cart-header">🛒 Order Cart (' + restCart.length + ' items)</div><div class="pos-cart-items">' + cartHtml + '</div>';
   html += '<div class="pos-totals"><div class="total-row"><span>Subtotal</span><span>' + fmt$(subtotal) + '</span></div><div class="total-row"><span>Tax (' + taxRate + '%)</span><span>' + fmt$(tax) + '</span></div><div class="total-row grand"><span>Grand Total</span><span>' + fmt$(grandTotal) + '</span></div></div></div>';
   html += notesHtml + actionsHtml;
@@ -5337,6 +5358,7 @@ window.doLogin = function() {
   updateTopbarUser();
   applyRBAC();
   navigateToDefaultPage();
+  showBottomNav(true);
   logAudit('Login','Account',account.id,account.name + ' logged in');
   toast('Welcome, ' + account.name);
 };
@@ -5363,7 +5385,7 @@ function updateTopbarUser() {
 }
 
 function navigateToDefaultPage() {
-  const defaultPages = { 'Admin': 'dashboard', 'Manager': 'reports', 'Receptionist': 'rooms', 'Housekeeper': 'housekeeping' };
+  const defaultPages = { 'Admin': 'dashboard', 'Manager': 'reports', 'Receptionist': 'rooms', 'Housekeeper': 'housekeeping', 'Restaurant': 'restaurant' };
   const page = defaultPages[currentRole] || 'dashboard';
   const link = document.querySelector('#sidebarNav a[data-page="' + page + '"]');
   if (link) link.click();
@@ -5386,6 +5408,7 @@ function applyRBAC() {
     'Manager': ['dashboard','rooms','bookings','guests','housekeeping','maintenance','services','invoices','reports','inventory','guestportal','pos','restaurant','minimart','menuitems','storeitems','orderhistory'],
     'Receptionist': ['dashboard','rooms','bookings','guests','services','invoices','guestportal','pos','restaurant','minimart','menuitems','inventory'],
     'Housekeeper': ['dashboard','housekeeping','maintenance'],
+    'Restaurant': ['restaurant'],
   };
   const allowed = allowedPages[currentRole];
   const links = document.querySelectorAll('#sidebarNav a[data-page]');
@@ -5405,7 +5428,7 @@ function applyRBAC() {
   });
   const activePage = document.querySelector('#sidebarNav a.active');
   if (activePage && activePage.style.display === 'none') {
-    const defaultPages = { 'Admin': 'dashboard', 'Manager': 'reports', 'Receptionist': 'rooms', 'Housekeeper': 'housekeeping' };
+    const defaultPages = { 'Admin': 'dashboard', 'Manager': 'reports', 'Receptionist': 'rooms', 'Housekeeper': 'housekeeping', 'Restaurant': 'restaurant' };
     const defPage = defaultPages[currentRole] || 'dashboard';
     const link = document.querySelector('#sidebarNav a[data-page="' + defPage + '"]');
     if (link) link.click();
@@ -5471,6 +5494,7 @@ window.completeSetup = function() {
         updateTopbarUser();
         applyRBAC();
         navigateToDefaultPage();
+        showBottomNav(true);
         return;
       }
     }
@@ -5767,7 +5791,12 @@ function updateBottomNavActive(page) {
 
 function showBottomNav(show) {
   const nav = document.getElementById('bottomNav');
-  if (nav) nav.style.display = show ? 'flex' : 'none';
+  if (!nav) return;
+  if (show && typeof currentUser !== 'undefined' && currentUser && typeof currentRole !== 'undefined' && currentRole === 'Restaurant') {
+    nav.style.display = 'none';
+    return;
+  }
+  nav.style.display = show ? 'flex' : 'none';
 }
 
 // ===== FLOATING ACTION BUTTON =====
@@ -5801,6 +5830,11 @@ const _fabHiddenPages = ['dashboard', 'settings', 'auditlog', 'reports', 'pos', 
 function updateFAB(page) {
   const fab = document.getElementById('fabBtn');
   if (!fab) return;
+  if (page === 'restaurant' && typeof currentRole !== 'undefined' && currentRole === 'Restaurant') {
+    fab.classList.add('hidden');
+    window._fabAction = null;
+    return;
+  }
   if (_fabHiddenPages.includes(page) || !_fabPageMap[page]) {
     fab.classList.add('hidden');
     window._fabAction = null;
