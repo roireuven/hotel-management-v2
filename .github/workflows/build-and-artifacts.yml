@@ -1,5 +1,6 @@
 # Builds a debug APK and a source ZIP on every push (and manual run).
-# Download artifacts from: repo → Actions → latest workflow run.
+# Stable APK URL (after CI runs): releases/download/apk-latest/HotelManager-debug.apk
+# Artifacts: repo → Actions → latest workflow run.
 # Pages demo still deploys from workflows/pages.yml on master.
 
 name: Build APK and source archive
@@ -13,7 +14,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: build-artifacts-${{ github.workflow }}-${{ github.ref }}
@@ -62,3 +63,16 @@ jobs:
           path: android-app/app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
           retention-days: 90
+
+      - name: Publish rolling release (stable download URL)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          APK=$(ls android-app/app/build/outputs/apk/debug/*.apk | head -1)
+          cp "$APK" HotelManager-debug.apk
+          gh release delete apk-latest --yes --cleanup-tag 2>/dev/null || true
+          gh release create apk-latest HotelManager-debug.apk \
+            --title "Latest debug APK" \
+            --notes "Automated debug build. Commit \`${{ github.sha }}\` — workflow run ${{ github.run_id }}." \
+            --prerelease
