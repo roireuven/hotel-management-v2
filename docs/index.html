@@ -750,6 +750,9 @@ function save(key, data) {
       });
       HotelDB.upsertAll(dbKey(key), JSON.stringify(toSave));
     } catch(e) { console.error('DB save error', e); }
+    if (key === 'restaurantOrders') {
+      try { window.dispatchEvent(new CustomEvent('hotel-sync-restaurantOrders')); } catch (e) {}
+    }
     return;
   }
   localStorage.setItem(DB_KEY + key, JSON.stringify(data));
@@ -1580,7 +1583,7 @@ document.querySelectorAll('#sidebarNav a[data-page]').forEach(link => {
     link.classList.add('active');
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById('page-' + page).classList.add('active');
-    document.getElementById('pageTitle').textContent = pageTitles[page] || page;
+    document.getElementById('pageTitle').textContent = (page === 'restaurant' && typeof currentRole !== 'undefined' && currentRole === 'Kitchen') ? 'Kitchen' : (pageTitles[page] || page);
     document.getElementById('sidebar').classList.remove('open');
     document.getElementById('sidebarOverlay').classList.remove('open');
     renderPage(page);
@@ -5945,6 +5948,11 @@ document.addEventListener('focus', function(e) { if(e.target && e.target.matches
 })();
 
 window.bnav = function(page) {
+  if (currentRole === 'Kitchen' && page !== 'restaurant') {
+    toast('Kitchen role: open ☰ Menu to use the sidebar.');
+    toggleSidebarFromNav();
+    return;
+  }
   const link = document.querySelector('#sidebarNav a[data-page="' + page + '"]');
   if (link) link.click();
 };
