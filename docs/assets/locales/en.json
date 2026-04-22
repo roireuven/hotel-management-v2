@@ -96,6 +96,28 @@
     "laoKipHint": "Lao interface: set hotel reporting currency to Lao kip (LAK) if you operate in Laos.",
     "useLakCurrency": "Use LAK for hotel currency"
   },
+  "dashboard": {
+    "dailyOverview": "Daily Overview",
+    "fromDate": "From Date",
+    "toDate": "To Date",
+    "validDateRange": "Select a valid date range",
+    "legendOccupied": "Occupied",
+    "legendAvailable": "Available",
+    "tableDate": "Date",
+    "tableAvailable": "Available",
+    "tableOccupied": "Occupied",
+    "tableInvoices": "Invoices",
+    "tableTotal": "Total",
+    "totalRooms": "Total Rooms",
+    "available": "Available",
+    "occupied": "Occupied",
+    "outOfService": "Out of Service",
+    "dirty": "Dirty",
+    "clean": "Clean",
+    "yourTasksToday": "Your Tasks Today",
+    "tasksLine": "You have {dirty} rooms that need cleaning and {oos} rooms out of service.",
+    "goHousekeeping": "Go to Housekeeping Board"
+  },
   "minimart": {
     "guestPickerLabel": "Mini-mart — who is this order for?",
     "searchGuestPlaceholder": "Search by room, guest, or booking ID…",

@@ -661,6 +661,28 @@
     "laoKipHint": "Lao interface: set hotel reporting currency to Lao kip (LAK) if you operate in Laos.",
     "useLakCurrency": "Use LAK for hotel currency"
   },
+  "dashboard": {
+    "dailyOverview": "Daily Overview",
+    "fromDate": "From Date",
+    "toDate": "To Date",
+    "validDateRange": "Select a valid date range",
+    "legendOccupied": "Occupied",
+    "legendAvailable": "Available",
+    "tableDate": "Date",
+    "tableAvailable": "Available",
+    "tableOccupied": "Occupied",
+    "tableInvoices": "Invoices",
+    "tableTotal": "Total",
+    "totalRooms": "Total Rooms",
+    "available": "Available",
+    "occupied": "Occupied",
+    "outOfService": "Out of Service",
+    "dirty": "Dirty",
+    "clean": "Clean",
+    "yourTasksToday": "Your Tasks Today",
+    "tasksLine": "You have {dirty} rooms that need cleaning and {oos} rooms out of service.",
+    "goHousekeeping": "Go to Housekeeping Board"
+  },
   "minimart": {
     "guestPickerLabel": "Mini-mart — who is this order for?",
     "searchGuestPlaceholder": "Search by room, guest, or booking ID…",
@@ -1921,6 +1943,35 @@ function i18nAssetUrl(name) {
   var base = (typeof document !== 'undefined' && document.baseURI) || (typeof location !== 'undefined' && location.href) || 'http://localhost/';
   return new URL('assets/locales/' + name, base).toString();
 }
+/** Loads locale JSON: fetch first, then XHR (helps when file:// blocks fetch). */
+function loadLocaleJsonFile(nameOrUrl) {
+  var url = nameOrUrl;
+  if (typeof nameOrUrl === 'string' && nameOrUrl.indexOf('://') < 0 && nameOrUrl.indexOf('/') < 0) {
+    url = i18nAssetUrl(nameOrUrl);
+  }
+  return fetch(url)
+    .then(function(r) { if (r && r.ok) return r.json(); throw new Error('bad'); })
+    .catch(function() {
+      return new Promise(function(resolve, reject) {
+        var x = new XMLHttpRequest();
+        x.onreadystatechange = function() {
+          if (x.readyState !== 4) return;
+          if (x.status === 200 || (x.status === 0 && x.responseText)) {
+            try { resolve(JSON.parse(x.responseText)); } catch (e) { reject(e); }
+            return;
+          }
+          reject(new Error('XHR ' + x.status));
+        };
+        x.onerror = function() { reject(new Error('XHR error')); };
+        try { x.open('GET', url, true); x.send(); } catch (e) { reject(e); }
+      });
+    });
+}
+function i18nDateShortLabel(isoYmd) {
+  var loc = (typeof getCurrentUiLocale === 'function') ? getCurrentUiLocale() : 'en';
+  var bcp = (loc === 'he') ? 'he-IL' : (loc === 'th' ? 'th-TH' : (loc === 'lo' ? 'lo-LA' : (loc === 'es' ? 'es' : (loc === 'fr' ? 'fr-FR' : 'en'))));
+  return new Date(isoYmd + 'T12:00:00').toLocaleDateString(bcp, { month: 'short', day: 'numeric' });
+}
 function i18nDeepGet(obj, key) { if (!obj || !key) return null; return key.split('.').reduce(function(o, k) { return o && o[k] !== undefined ? o[k] : undefined; }, obj); }
 function t(key, params) {
   var s = i18nDeepGet(i18nData, key);
@@ -1989,14 +2040,13 @@ window.setAppLocale = function(lang) {
   applyDocumentLocale(lang);
   function end() { finishLocaleSwitch(); }
   function loadLang(l) {
-    fetch(i18nAssetUrl(l + '.json'))
-      .then(function(r) { if (!r || !r.ok) throw new Error('locale'); return r.json(); })
+    loadLocaleJsonFile(l + '.json')
       .then(function(d) { i18nData = d; end(); })
       .catch(function() { i18nData = i18nEn || readEmbeddedI18nEn() || {}; end(); });
   }
   if (!i18nEn || (typeof i18nEn === 'object' && Object.keys(i18nEn).length === 0)) {
-    fetch(i18nAssetUrl('en.json'))
-      .then(function(r) { if (r && r.ok) return r.json(); return readEmbeddedI18nEn() || {}; })
+    loadLocaleJsonFile('en.json')
+      .then(function(d) { return d && typeof d === 'object' && Object.keys(d).length ? d : readEmbeddedI18nEn() || {}; })
       .catch(function() { return readEmbeddedI18nEn() || {}; })
       .then(function(d) { i18nEn = d || readEmbeddedI18nEn() || {}; if (lang === 'en') { i18nData = i18nEn; end(); } else loadLang(lang); });
     return;
@@ -2028,8 +2078,8 @@ function initI18n() {
     var l = document.querySelector('#sidebarNav a.active');
     if (l) { var p = l.getAttribute('data-page'); if (p) { var pt = document.getElementById('pageTitle'); if (pt) pt.textContent = getPageTitleString(p); renderPage(p); } }
   }
-  return fetch(i18nAssetUrl('en.json'))
-    .then(function(r) { if (r && r.ok) return r.json(); return readEmbeddedI18nEn() || {}; })
+  return loadLocaleJsonFile('en.json')
+    .then(function(d) { return d && typeof d === 'object' && Object.keys(d).length ? d : readEmbeddedI18nEn() || {}; })
     .catch(function() { return readEmbeddedI18nEn() || {}; })
     .then(function(d) {
       if (!d || (typeof d === 'object' && d !== null && !Object.keys(d).length)) d = readEmbeddedI18nEn() || {};
@@ -2039,8 +2089,7 @@ function initI18n() {
     })
     .then(function(w) {
       if (w === 'en') return;
-      return fetch(i18nAssetUrl(w + '.json'))
-        .then(function(r) { if (r && r.ok) return r.json(); throw new Error(w); })
+      return loadLocaleJsonFile(w + '.json')
         .then(function(d) { i18nData = d; })
         .catch(function() { i18nData = i18nEn; });
     })
@@ -2130,17 +2179,17 @@ function renderDashboard() {
   let statsHtml;
   if (isHK) {
     statsHtml = `<div class="stats-grid" style="display:none;">
-      <div class="stat-card"><div class="stat-icon blue">▣</div><div class="stat-info"><h3>${total}</h3><p>Total Rooms</p></div></div>
-      <div class="stat-card"><div class="stat-icon red">●</div><div class="stat-info"><h3>${dirtyCnt}</h3><p>Dirty</p></div></div>
-      <div class="stat-card"><div class="stat-icon green">●</div><div class="stat-info"><h3>${cleanCnt}</h3><p>Clean</p></div></div>
-      <div class="stat-card"><div class="stat-icon orange">⚡</div><div class="stat-info"><h3>${oos}</h3><p>Out of Service</p></div></div>
+      <div class="stat-card"><div class="stat-icon blue">▣</div><div class="stat-info"><h3>${total}</h3><p>${t('dashboard.totalRooms')}</p></div></div>
+      <div class="stat-card"><div class="stat-icon red">●</div><div class="stat-info"><h3>${dirtyCnt}</h3><p>${t('dashboard.dirty')}</p></div></div>
+      <div class="stat-card"><div class="stat-icon green">●</div><div class="stat-info"><h3>${cleanCnt}</h3><p>${t('dashboard.clean')}</p></div></div>
+      <div class="stat-card"><div class="stat-icon orange">⚡</div><div class="stat-info"><h3>${oos}</h3><p>${t('dashboard.outOfService')}</p></div></div>
     </div>`;
   } else {
     statsHtml = `<div class="stats-grid" style="display:none;">
-      <div class="stat-card"><div class="stat-icon blue">▣</div><div class="stat-info"><h3>${total}</h3><p>Total Rooms</p></div></div>
-      <div class="stat-card"><div class="stat-icon green">◆</div><div class="stat-info"><h3>${vacant}</h3><p>Available</p></div></div>
-      <div class="stat-card"><div class="stat-icon orange">▤</div><div class="stat-info"><h3>${occ}</h3><p>Occupied</p></div></div>
-      <div class="stat-card"><div class="stat-icon red">⚡</div><div class="stat-info"><h3>${oos}</h3><p>Out of Service</p></div></div>
+      <div class="stat-card"><div class="stat-icon blue">▣</div><div class="stat-info"><h3>${total}</h3><p>${t('dashboard.totalRooms')}</p></div></div>
+      <div class="stat-card"><div class="stat-icon green">◆</div><div class="stat-info"><h3>${vacant}</h3><p>${t('dashboard.available')}</p></div></div>
+      <div class="stat-card"><div class="stat-icon orange">▤</div><div class="stat-info"><h3>${occ}</h3><p>${t('dashboard.occupied')}</p></div></div>
+      <div class="stat-card"><div class="stat-icon red">⚡</div><div class="stat-info"><h3>${oos}</h3><p>${t('dashboard.outOfService')}</p></div></div>
     </div>`;
   }
 
@@ -2151,8 +2200,8 @@ function renderDashboard() {
 
   let bodyHtml = '';
   if (!isHK) {
-    bodyHtml += `<div class="card"><div class="card-header"><h2>◆ Daily Overview</h2></div><div class="card-body">
-      <div class="form-row" style="margin-bottom:0.75rem;"><div class="form-group" style="margin-bottom:0;"><label>From Date</label><input type="date" class="form-control" id="dashFrom" value="${defFromStr}" onchange="updateDashChart()"></div><div class="form-group" style="margin-bottom:0;"><label>To Date</label><input type="date" class="form-control" id="dashTo" value="${defToStr}" onchange="updateDashChart()"></div></div>
+    bodyHtml += `<div class="card"><div class="card-header"><h2>◆ ${t('dashboard.dailyOverview')}</h2></div><div class="card-body">
+      <div class="form-row" style="margin-bottom:0.75rem;"><div class="form-group" style="margin-bottom:0;"><label>${t('dashboard.fromDate')}</label><input type="date" class="form-control" id="dashFrom" value="${defFromStr}" onchange="updateDashChart()"></div><div class="form-group" style="margin-bottom:0;"><label>${t('dashboard.toDate')}</label><input type="date" class="form-control" id="dashTo" value="${defToStr}" onchange="updateDashChart()"></div></div>
       <div id="dashChartArea"></div>
     </div></div>
     <div class="card" style="display:none;"><div class="card-header"><h2>Recent Activity</h2></div><div class="card-body"><div class="table-wrap"><table><thead><tr><th>Guest</th><th>Room</th><th>Status</th></tr></thead><tbody>${recent.length?recent.map(b=>`<tr><td>${b.guestName}</td><td>${b.roomNumber}</td><td><span class="status status-${b.arrivalStatus==='Checked-in'?'checked-in':b.arrivalStatus==='Expected'?'pending':'checked-out'}">${b.arrivalStatus}</span></td></tr>`).join(''):'<tr><td colspan="3" style="text-align:center;color:var(--text-light);">No recent activity</td></tr>'}</tbody></table></div></div></div>
@@ -2160,9 +2209,9 @@ function renderDashboard() {
       ${recentMsgs.length?recentMsgs.map(m=>`<div class="msg-item"><div class="msg-icon ${m.type.toLowerCase()}">${m.type==='Welcome'?'👋':m.type==='Invoice'?'🧾':'🔔'}</div><div class="msg-text"><strong>${m.guestName}</strong> — ${m.message}<div class="msg-meta">${m.type} · ${m.channel} · ${new Date(m.sentAt).toLocaleString()}</div></div></div>`).join(''):'<p style="text-align:center;color:var(--text-light);padding:1rem;">No messages yet</p>'}
     </div></div>`;
   } else {
-    bodyHtml += `<div class="card"><div class="card-header"><h2>Your Tasks Today</h2></div><div class="card-body">
-      <p style="font-size:1rem;margin-bottom:1rem;">You have <strong>${dirtyCnt}</strong> rooms that need cleaning and <strong>${oos}</strong> rooms out of service.</p>
-      <button class="btn btn-primary hk-large-btn" onclick="document.querySelector('[data-page=housekeeping]').click()">◧ Go to Housekeeping Board</button>
+    bodyHtml += `<div class="card"><div class="card-header"><h2>${t('dashboard.yourTasksToday')}</h2></div><div class="card-body">
+      <p style="font-size:1rem;margin-bottom:1rem;">${t('dashboard.tasksLine', { dirty: String(dirtyCnt), oos: String(oos) })}</p>
+      <button class="btn btn-primary hk-large-btn" onclick="document.querySelector('[data-page=housekeeping]').click()">◧ ${t('dashboard.goHousekeeping')}</button>
     </div></div>`;
   }
 
@@ -2176,7 +2225,7 @@ window.updateDashChart = function() {
   const area = document.getElementById('dashChartArea');
   if (!fromEl || !toEl || !area) return;
   const from = fromEl.value; const to = toEl.value;
-  if (!from || !to || to < from) { area.innerHTML = '<p style="text-align:center;color:var(--text-light);padding:1rem;">Select a valid date range</p>'; return; }
+  if (!from || !to || to < from) { area.innerHTML = '<p style="text-align:center;color:var(--text-light);padding:1rem;">' + t('dashboard.validDateRange') + '</p>'; return; }
 
   const totalRooms = rooms.length;
   const days = [];
@@ -2201,21 +2250,21 @@ window.updateDashChart = function() {
   const maxOcc = Math.max(...days.map(d => d.occupied + d.vacant), 1);
   const maxInv = Math.max(...days.map(d => d.invSum), 1) || 1;
   days.forEach(day => {
-    const label = new Date(day.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const label = (typeof i18nDateShortLabel === 'function') ? i18nDateShortLabel(day.date) : new Date(day.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     const occH = (day.occupied / maxOcc) * 540;
     const vacH = (day.vacant / maxOcc) * 540;
     chartHtml += `<div class="bar-group" onclick="showDayDetail('${day.date}')" style="cursor:pointer;width:30px;min-width:30px;max-width:30px;"><div class="bar-value" style="font-size:0.55rem;">${fmt$(day.invSum)}</div><div style="display:flex;flex-direction:column;width:30px;"><div class="bar" style="height:${vacH}px;background:#42b72a;border-radius:3px 3px 0 0;"></div><div class="bar" style="height:${occH}px;background:#1a73e8;"></div></div><div class="bar-label" style="font-size:0.5rem;">${label}</div></div>`;
   });
-  chartHtml += '</div><div class="legend"><div class="legend-item"><div class="legend-dot" style="background:#1a73e8"></div> Occupied</div><div class="legend-item"><div class="legend-dot" style="background:#42b72a"></div> Available</div></div></div></div>';
+  chartHtml += '</div><div class="legend"><div class="legend-item"><div class="legend-dot" style="background:#1a73e8"></div> ' + t('dashboard.legendOccupied') + '</div><div class="legend-item"><div class="legend-dot" style="background:#42b72a"></div> ' + t('dashboard.legendAvailable') + '</div></div></div></div>';
 
-  chartHtml += '<div class="table-wrap" style="margin-top:1rem;"><table style="font-size:0.8rem;"><thead><tr><th>Date</th><th>Available</th><th>Occupied</th><th>Invoices</th></tr></thead><tbody>';
+  chartHtml += '<div class="table-wrap" style="margin-top:1rem;"><table style="font-size:0.8rem;"><thead><tr><th>' + t('dashboard.tableDate') + '</th><th>' + t('dashboard.tableAvailable') + '</th><th>' + t('dashboard.tableOccupied') + '</th><th>' + t('dashboard.tableInvoices') + '</th></tr></thead><tbody>';
   let totalInv = 0;
   days.forEach(day => {
-    const label = new Date(day.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const label = (typeof i18nDateShortLabel === 'function') ? i18nDateShortLabel(day.date) : new Date(day.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     totalInv += day.invSum;
     chartHtml += `<tr onclick="showDayDetail('${day.date}')" style="cursor:pointer;"><td>${label}</td><td style="color:#2e7d32;font-weight:600;">${day.vacant}</td><td style="color:#1565c0;font-weight:600;">${day.occupied}</td><td style="font-weight:600;">${fmt$(day.invSum)}</td></tr>`;
   });
-  chartHtml += `<tr style="border-top:2px solid var(--text);font-weight:700;"><td>Total</td><td></td><td></td><td>${fmt$(totalInv)}</td></tr>`;
+  chartHtml += '<tr style="border-top:2px solid var(--text);font-weight:700;"><td>' + t('dashboard.tableTotal') + '</td><td></td><td></td><td>' + fmt$(totalInv) + '</td></tr>';
   chartHtml += '</tbody></table></div>';
 
   chartHtml += '<div id="dashDayDetail"></div>';

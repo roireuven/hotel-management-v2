@@ -96,6 +96,28 @@
     "laoKipHint": "ຖ້າເຮັດວຽກຢູ່ລາວ: ແນະໃຫ້ຕັ້ງສະກຸນເງິນໂຮງແຣມເປັນ ກີບ (LAK).",
     "useLakCurrency": "ໃຊ້ LAK ເປັນສະກຸນເງິນໂຮງແຣມ"
   },
+  "dashboard": {
+    "dailyOverview": "ພາບລວມປະຈຳວັນ",
+    "fromDate": "ວັນທີເລີ່ມ",
+    "toDate": "ວັນທີສິ້ນສຸດ",
+    "validDateRange": "ເລືອກຊ່ວງວັນທີທີ່ຖືກຕ້ອງ",
+    "legendOccupied": "ມີຄົນເຂົ້າພັກ",
+    "legendAvailable": "ຫວ່າງ",
+    "tableDate": "ວັນທີ",
+    "tableAvailable": "ຫວ່າງ",
+    "tableOccupied": "ມີຄົນ",
+    "tableInvoices": "ໃບແຈ້ງໜີ້",
+    "tableTotal": "ລວມ",
+    "totalRooms": "ຫ້ອງທັງໝົດ",
+    "available": "ຫວ່າງ",
+    "occupied": "ມີຄົນ",
+    "outOfService": "ປິດໃຊ້ຊົ່ວຄາວ",
+    "dirty": "ສົກປິ້ນ",
+    "clean": "ສະອາດ",
+    "yourTasksToday": "ວຽກວັນນີ້",
+    "tasksLine": "ມີ {dirty} ຫ້ອງຕ້ອງປິ້ນ ແລະ {oos} ຫ້ອງຢຸດບໍລິການ",
+    "goHousekeeping": "ໄປກະດານແມ່ບ້ານ"
+  },
   "minimart": {
     "guestPickerLabel": "ມິນິມາເດີ — ສັ່ງໃຫ້ໃຜ?",
     "searchGuestPlaceholder": "ຄົ້ນຫາຕາມຫ້ອງ, ແຂກ, ຫຼືເລກການຈອງ…",
