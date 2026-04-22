@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;500;600&family=Noto+Sans+Lao:wght@400;500;600&family=Noto+Sans+Thai:wght@400;500;600&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
   <script>
-  (function () { try { var st = localStorage.getItem('hotel_mgr_uiLocale') || 'en'; document.documentElement.setAttribute('lang', st); document.documentElement.setAttribute('dir', st === 'he' ? 'rtl' : 'ltr'); } catch (e) {} })();
+  (function () { try { var st = localStorage.getItem('hotel_mgr_uiLocale') || 'en'; if (!/^(en|he|th|lo|es|fr)$/.test(st)) st = 'en'; document.documentElement.setAttribute('lang', st); document.documentElement.setAttribute('dir', st === 'he' ? 'rtl' : 'ltr'); } catch (e) {} })();
   </script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1625,10 +1625,20 @@ const I18N_LOCALE_LIST = [
   { code: 'fr', label: 'Français (French)' }
 ];
 function getCurrentUiLocale() {
-  try { return localStorage.getItem(I18N_KEY) || 'en'; } catch (e) { return 'en'; }
+  try {
+    var v = localStorage.getItem(I18N_KEY) || 'en';
+    if (!{ en:1, he:1, th:1, lo:1, es:1, fr:1 }[v]) return 'en';
+    return v;
+  } catch (e) { return 'en'; }
 }
 let i18nEn = null;
 let i18nData = null;
+/** Skips the custom full-screen select picker (language must use native or simple change). */
+function isLocaleOrNativeSelect(sel) {
+  if (!sel || sel.tagName !== 'SELECT') return false;
+  if (sel.id === 'settingsLocaleSelect' || sel.getAttribute('data-locale-select') === '1') return true;
+  return false;
+}
 function i18nAssetUrl(name) { return new URL('assets/locales/' + name, document.baseURI || (window.location && window.location.href) || 'http://localhost/').toString(); }
 function i18nDeepGet(obj, key) { if (!obj || !key) return null; return key.split('.').reduce(function(o, k) { return o && o[k] !== undefined ? o[k] : undefined; }, obj); }
 function t(key, params) {
@@ -1648,7 +1658,8 @@ function applyDocumentLocale(lang) {
   document.documentElement.setAttribute('dir', lang === 'he' ? 'rtl' : 'ltr');
 }
 function applyShellI18n() {
-  if (!i18nEn) return;
+  if (!i18nEn) i18nEn = {};
+  if (!i18nData) i18nData = i18nEn;
   document.querySelectorAll('[data-i18n]').forEach(function(el) { var k = el.getAttribute('data-i18n'); if (k) el.textContent = t(k); });
   document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) { var k = el.getAttribute('data-i18n-placeholder'); if (k) el.setAttribute('placeholder', t(k)); });
   var out = document.getElementById('logoutBtn');
@@ -1657,11 +1668,12 @@ function applyShellI18n() {
   if (lml) lml.textContent = t('topbar.language');
   var hint = document.querySelector('.lang-menu .lang-menu-hint');
   if (hint) hint.textContent = t('topbar.chooseLanguage');
+  document.querySelectorAll('#bottomNav [data-i18n]').forEach(function(el) { var k = el.getAttribute('data-i18n'); if (k) el.textContent = t(k); });
   document.title = t('app.title');
   if (typeof applyRBAC === 'function') applyRBAC();
 }
 function syncLangMenuHighlight() {
-  var cur = (function() { try { return localStorage.getItem(I18N_KEY); } catch (e) { return 'en'; } }()) || 'en';
+  var cur = getCurrentUiLocale();
   document.querySelectorAll('.lang-opt').forEach(function(b) { b.setAttribute('aria-pressed', b.getAttribute('data-lang') === cur ? 'true' : 'false'); });
 }
 function finishLocaleSwitch() {
@@ -1705,14 +1717,23 @@ window.setAppLocale = function(lang) {
 };
 function initI18n() {
   var want = (function() { try { return localStorage.getItem(I18N_KEY); } catch (e) { return null; } }()) || 'en';
+  if (!{ en:1, he:1, th:1, lo:1, es:1, fr:1 }[want]) want = 'en';
   applyDocumentLocale(want);
   document.addEventListener('click', function(ev) {
     var m = document.getElementById('langMenu');
     var w = document.querySelector('.lang-menu-wrap');
     if (m && m.classList.contains('open') && w && !w.contains(ev.target)) { m.style.display = 'none'; m.classList.remove('open'); var b2 = document.getElementById('langMenuBtn'); if (b2) b2.setAttribute('aria-expanded', 'false'); }
   });
+  function afterLoad() {
+    applyShellI18n();
+    syncLangMenuHighlight();
+    var lo = document.getElementById('loginOverlay');
+    if (lo && !lo.classList.contains('hidden')) return;
+    var l = document.querySelector('#sidebarNav a.active');
+    if (l) { var p = l.getAttribute('data-page'); if (p) { var pt = document.getElementById('pageTitle'); if (pt) pt.textContent = getPageTitleString(p); renderPage(p); } }
+  }
   return fetch(i18nAssetUrl('en.json'))
-    .then(function(r) { return r.json(); })
+    .then(function(r) { if (!r.ok) throw new Error('en fetch'); return r.json(); })
     .then(function(d) {
       i18nEn = d;
       if (want === 'en') i18nData = d;
@@ -1720,9 +1741,14 @@ function initI18n() {
     })
     .then(function(w) {
       if (w === 'en') return;
-      return fetch(i18nAssetUrl(w + '.json')).then(function(r) { return r.json(); }).then(function(d) { i18nData = d; }).catch(function() { i18nData = i18nEn; });
+      return fetch(i18nAssetUrl(w + '.json')).then(function(r) { if (!r.ok) throw new Error(w); return r.json(); }).then(function(d) { i18nData = d; }).catch(function() { i18nData = i18nEn; });
     })
-    .then(function() { applyShellI18n(); syncLangMenuHighlight(); var lo = document.getElementById('loginOverlay'); if (lo && !lo.classList.contains('hidden')) return; var l = document.querySelector('#sidebarNav a.active'); if (l) { var p = l.getAttribute('data-page'); if (p) { document.getElementById('pageTitle').textContent = getPageTitleString(p); renderPage(p); } } });
+    .then(function() { afterLoad(); })
+    .catch(function() {
+      if (!i18nEn) i18nEn = {};
+      if (!i18nData) i18nData = i18nEn;
+      afterLoad();
+    });
 }
 
 document.querySelectorAll('#sidebarNav a[data-page]').forEach(link => {
@@ -3034,7 +3060,7 @@ function renderSettings() {
       <h3 style="margin:0 0 0.75rem;font-size:1rem;">${t('settings.languageSection')}</h3>
       <div class="form-group" style="margin-bottom:1rem;">
         <label for="settingsLocaleSelect">${t('settings.appLanguage')}</label>
-        <select class="form-control" id="settingsLocaleSelect" onchange="setAppLocale(this.value)">
+        <select class="form-control" id="settingsLocaleSelect" data-locale-select="1" onchange="setAppLocale(this.value)">
           ${localeOptionsHtml}
         </select>
         <p style="font-size:0.8rem;color:var(--text-light);margin:0.35rem 0 0;">${t('settings.languageHint')}</p>
@@ -5839,6 +5865,12 @@ window.doLogin = function() {
   applyRBAC();
   navigateToDefaultPage();
   showBottomNav(true);
+  if (typeof applyShellI18n === 'function') applyShellI18n();
+  const _actA = document.querySelector('#sidebarNav a.active');
+  if (_actA) {
+    const _p = _actA.getAttribute('data-page');
+    if (_p) { const _pt = document.getElementById('pageTitle'); if (_pt) _pt.textContent = getPageTitleString(_p); }
+  }
   logAudit('Login','Account',account.id,account.name + ' logged in');
   toast('Welcome, ' + account.name);
 };
@@ -6034,6 +6066,7 @@ function findListForSelect(sel) {
 let _cselOptions = [];
 function openCsel(sel) {
   if (!sel || sel.tagName !== 'SELECT') return;
+  if (isLocaleOrNativeSelect(sel)) return;
   _cselTarget = sel;
   sel.blur();
   const labelRaw = sel.closest('.form-group')?.querySelector('label')?.textContent?.replace(/\u2295/g, '').trim() || 'Select';
@@ -6216,13 +6249,13 @@ window.cselQuickDelete = function() {
 document.addEventListener('mousedown', function(e) {
   if (e.target.closest('#cselOverlay')) return;
   const sel = e.target.closest('select.form-control');
-  if (sel) { e.preventDefault(); e.stopPropagation(); openCsel(sel); }
+  if (sel && !isLocaleOrNativeSelect(sel)) { e.preventDefault(); e.stopPropagation(); openCsel(sel); }
 }, true);
 let _touchSelTarget = null, _touchStartX = 0, _touchStartY = 0, _touchMoved = false;
 document.addEventListener('touchstart', function(e) {
   if (e.target.closest('#cselOverlay')) return;
   const sel = e.target.closest('select.form-control');
-  if (sel) {
+  if (sel && !isLocaleOrNativeSelect(sel)) {
     e.preventDefault(); e.stopPropagation();
     _touchSelTarget = sel;
     _touchStartX = e.touches[0].clientX;
@@ -6242,7 +6275,7 @@ document.addEventListener('touchend', function(e) {
   _touchSelTarget = null;
   if (!_touchMoved) openCsel(sel);
 }, {capture:true, passive:true});
-document.addEventListener('focus', function(e) { if(e.target && e.target.matches && e.target.matches('select.form-control')){e.target.blur();} }, true);
+document.addEventListener('focus', function(e) { if (e.target && e.target.matches && e.target.matches('select.form-control') && !isLocaleOrNativeSelect(e.target)) { e.target.blur(); } }, true);
 
 // ===== BOTTOM NAVIGATION BAR =====
 (function createBottomNav() {
@@ -6250,10 +6283,10 @@ document.addEventListener('focus', function(e) { if(e.target && e.target.matches
   nav.className = 'bottom-nav';
   nav.id = 'bottomNav';
   nav.innerHTML = `
-    <button class="bottom-nav-item active" data-bnav="dashboard" onclick="bnav('dashboard')"><span class="bnav-icon">⊞</span><span class="bnav-label">Dashboard</span></button>
-    <button class="bottom-nav-item" data-bnav="pos" onclick="bnav('pos')"><span class="bnav-icon">◈</span><span class="bnav-label">POS</span></button>
-    <button class="bottom-nav-item" data-bnav="bookings" onclick="bnav('bookings')"><span class="bnav-icon">▤</span><span class="bnav-label">Bookings</span></button>
-    <button class="bottom-nav-item" data-bnav="menu" onclick="toggleSidebarFromNav()"><span class="bnav-icon">☰</span><span class="bnav-label">Menu</span></button>
+    <button class="bottom-nav-item active" data-bnav="dashboard" onclick="bnav('dashboard')"><span class="bnav-icon">⊞</span><span class="bnav-label" data-i18n="bnav.dashboard">Dashboard</span></button>
+    <button class="bottom-nav-item" data-bnav="pos" onclick="bnav('pos')"><span class="bnav-icon">◈</span><span class="bnav-label" data-i18n="bnav.pos">POS</span></button>
+    <button class="bottom-nav-item" data-bnav="bookings" onclick="bnav('bookings')"><span class="bnav-icon">▤</span><span class="bnav-label" data-i18n="bnav.bookings">Bookings</span></button>
+    <button class="bottom-nav-item" data-bnav="menu" onclick="toggleSidebarFromNav()"><span class="bnav-icon">☰</span><span class="bnav-label" data-i18n="bnav.menu">Menu</span></button>
   `;
   document.body.appendChild(nav);
 })();

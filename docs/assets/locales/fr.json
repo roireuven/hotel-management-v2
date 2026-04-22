@@ -66,6 +66,12 @@
     "language": "Langue",
     "chooseLanguage": "Choisir la langue"
   },
+  "bnav": {
+    "dashboard": "Tableau de bord",
+    "pos": "POS",
+    "bookings": "Réservations",
+    "menu": "Menu"
+  },
   "login": {
     "title": "Gestion hôtelière",
     "subtitle": "Système de gestion — Connectez-vous",

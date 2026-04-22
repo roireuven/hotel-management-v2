@@ -66,6 +66,12 @@
     "language": "Language",
     "chooseLanguage": "Choose language"
   },
+  "bnav": {
+    "dashboard": "Dashboard",
+    "pos": "POS",
+    "bookings": "Bookings",
+    "menu": "Menu"
+  },
   "login": {
     "title": "Hotel Manager",
     "subtitle": "Management System — Please sign in",

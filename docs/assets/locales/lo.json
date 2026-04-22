@@ -66,6 +66,12 @@
     "language": "ພາສາ",
     "chooseLanguage": "ເລືອກພາສາ"
   },
+  "bnav": {
+    "dashboard": "ແດຊບອດ",
+    "pos": "POS",
+    "bookings": "ການຈອງ",
+    "menu": "ເມນູ"
+  },
   "login": {
     "title": "ຜູ້ຈັດການໂຮງແຮມ",
     "subtitle": "ລະບົບຈັດການ — ເຂົ້າສູ່ລະບົບ",

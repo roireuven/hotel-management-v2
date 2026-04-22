@@ -66,6 +66,12 @@
     "language": "ภาษา",
     "chooseLanguage": "เลือกภาษา"
   },
+  "bnav": {
+    "dashboard": "แดชบอร์ด",
+    "pos": "POS",
+    "bookings": "การจอง",
+    "menu": "เมนู"
+  },
   "login": {
     "title": "Hotel Manager",
     "subtitle": "ระบบจัดการ — เข้าสู่ระบบ",

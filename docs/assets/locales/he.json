@@ -66,6 +66,12 @@
     "language": "שפה",
     "chooseLanguage": "בחר שפה"
   },
+  "bnav": {
+    "dashboard": "לוח בקרה",
+    "pos": "קופה",
+    "bookings": "הזמנות",
+    "menu": "תפריט"
+  },
   "login": {
     "title": "מנהל מלון",
     "subtitle": "מערכת ניהול — היכנס לחשבון",
