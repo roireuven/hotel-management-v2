@@ -4913,6 +4913,7 @@ let martCart = [];
 let martSelectedBooking = null;
 let martIsWalkin = false;
 let martSearchTerm = '';
+let martHistoryPanelOpen = false;
 
 function renderMiniMart() {
   const checkedIn = bookings.filter(b => b.arrivalStatus === 'Checked-in');
@@ -4997,32 +4998,136 @@ function renderMiniMart() {
   html += '<button class="btn btn-warning" ' + (!canCheckout ? 'disabled style="opacity:0.5;"' : '') + ' onclick="martCheckout(\'Credit Card\')">💳 Credit Card</button></div>';
 
   const martFilterLabel = (martSelectedBooking && !martIsWalkin) ? (() => { const bk=bookings.find(b=>b.id===martSelectedBooking); return bk ? 'Room '+bk.roomNumber+' - '+bk.guestName : 'Selected Guest'; })() : 'All Customers';
-  html += '<div class="card" style="margin-top:1rem;"><div class="card-header"><h2>Transaction Log <span style="font-size:0.75rem;color:var(--primary);font-weight:400;">('+martFilterLabel+')</span></h2>'+(martSelectedBooking&&!martIsWalkin?'<button class="btn btn-sm btn-outline" onclick="martIsWalkin=true;martSelectedBooking=null;renderMiniMart()">Show All</button>':'')+'</div><div class="card-body"><div id="martTransGrid"></div></div></div>';
+  const martScopeHint = (function() {
+    if (martSelectedBooking && !martIsWalkin) {
+      const bk = bookings.find(function(b) { return b.id === martSelectedBooking; });
+      return bk ? ('Room ' + bk.roomNumber + ' · ' + bk.guestName) : 'Selected guest';
+    }
+    return 'All customers (walk-in or not filtered)';
+  })();
+  const canPayActiveTotals = martCart.length > 0;
+  const payTotalBarMm = '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:0.5rem;margin-top:0.35rem;width:100%;">' +
+    '<span style="font-size:0.85rem;color:var(--text-light);">Total Active Order:</span>' +
+    '<strong style="font-size:1rem;">' + fmt$(grandTotal) + '</strong>' +
+    '<button type="button" class="btn btn-sm btn-primary" ' + (!canChargeRoom || !canPayActiveTotals ? 'disabled style="opacity:0.5;"' : '') + ' onclick="martCheckout(\'Room Charge\')">🏨 Pay total — Room</button>' +
+    '<button type="button" class="btn btn-sm btn-success" ' + (!canPayActiveTotals ? 'disabled style="opacity:0.5;"' : '') + ' onclick="martCheckout(\'Cash\')">💵 Pay total — Cash</button>' +
+    '<button type="button" class="btn btn-sm btn-outline" ' + (!canPayActiveTotals ? 'disabled style="opacity:0.5;"' : '') + ' onclick="martCheckout(\'Credit Card\')">💳 Pay total — Card</button>' +
+    '</div>';
+  let activeCartRows = [];
+  if (martCart.length > 0) {
+    const _bk = martSelectedBooking && !martIsWalkin ? bookings.find(function(b) { return b.id === martSelectedBooking; }) : null;
+    const _itemsStr = martCart.map(function(ci) { return ci.name + ' x' + ci.qty; }).join(', ');
+    activeCartRows.push({
+      orderNumber: 'MM-OPEN',
+      timestamp: new Date().toISOString(),
+      tableNumber: _bk ? ('Room ' + _bk.roomNumber) : 'Walk-in',
+      guestName: _bk ? _bk.guestName : 'Walk-in',
+      items: _itemsStr,
+      grandTotal: grandTotal,
+      status: 'Open',
+      paidBy: 'Pending',
+    });
+  }
+  html += '<div class="card" style="margin-top:1rem;"><div class="card-header" style="flex-direction:column;align-items:stretch;">' +
+    '<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:0.5rem;">' +
+    '<h2 style="margin:0;">Active Orders <span style="font-size:0.75rem;color:var(--primary);font-weight:400;">(' + martFilterLabel + ')</span></h2>' +
+    '<div style="display:flex;flex-wrap:wrap;gap:0.4rem;">' +
+    (martSelectedBooking && !martIsWalkin ? '<button type="button" class="btn btn-sm btn-outline" onclick="martIsWalkin=true;martSelectedBooking=null;renderMiniMart()" title="Clear guest filter (cart unchanged)">Show all</button>' : '') +
+    '<button type="button" class="btn btn-sm btn-outline" onclick="toggleMartHistory()">◳ Past Orders</button>' +
+    '</div></div>' +
+    '<p style="font-size:0.72rem;color:var(--text-light);margin:0.25rem 0 0;line-height:1.35;">Scope: <strong>' + martScopeHint + '</strong> · your <strong>cart</strong> appears here as one open order until checkout.</p>' + payTotalBarMm +
+    '</div><div class="card-body"><div id="martActiveGrid"></div></div></div>';
+  html += '<div class="card" id="martHistoryCard" style="' + (martHistoryPanelOpen ? '' : 'display:none;') + '"><div class="card-header"><h2>◆ Past Orders <span style="font-size:0.75rem;color:var(--primary);font-weight:400;">(' + martFilterLabel + ')</span></h2><button type="button" class="btn btn-sm btn-outline" onclick="toggleMartHistory()">Hide</button></div><div class="card-body"><p id="martHistoryHint" style="font-size:0.78rem;color:var(--text-light);margin:0 0 0.75rem;line-height:1.35;"></p><div id="martHistoryGrid"></div></div></div>';
   html += '<div class="card"><div class="card-header"><h2>◆ Mini-Mart Change Log</h2></div><div class="card-body"><div id="martChangeLogGrid"></div></div></div>';
 
   document.getElementById('page-minimart').innerHTML = html;
 
-  const martTxns = posTransactions.filter(t => t.source === 'Mini-Mart');
-  new XGrid('martTransGrid', {
+  posTransactions = load('posTransactions', posTransactions);
+  const emptyActMsg = '🛒 No open cart — add items in Store Items above';
+  new XGrid('martActiveGrid', {
     columns: [
-      {field:'timestamp',label:'Timestamp',format:v=>{try{const d=new Date(v);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}catch(e){return v;}},filterable:true,width:'130px'},
-      {field:'source',label:'Source',filterable:true,width:'90px'},
-      {field:'roomNumber',label:'Room',filterable:true,width:'65px'},
+      {field:'orderNumber',label:'Order #',filterable:true,width:'90px'},
+      {field:'timestamp',label:'Time',format:function(v){try{var d=new Date(v);return d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}catch(e){return v;}},width:'75px'},
+      {field:'tableNumber',label:'Table/Room',filterable:true,width:'100px'},
       {field:'guestName',label:'Guest',filterable:true},
-      {field:'itemCount',label:'Items',width:'60px'},
-      {field:'subtotal',label:'Subtotal',format:v=>fmt$(v),width:'85px'},
-      {field:'tax',label:'Tax',format:v=>fmt$(v),width:'70px'},
-      {field:'grandTotal',label:'Total',format:v=>'<strong>'+fmt$(v)+'</strong>',width:'85px'},
-      {field:'paidBy',label:'Paid By',filterable:true,width:'100px'},
-      {field:'staffName',label:'Staff',filterable:true,width:'80px'},
+      {field:'items',label:'Items',format:function(v){return v;}},
+      {field:'grandTotal',label:'Total',format:function(v){return '<strong>'+fmt$(v)+'</strong>';},width:'80px'},
+      {field:'status',label:'Status',format:function(v){return v==='Open' ? '<span class="status status-new">Open</span>' : '<span class="status status-paid">'+v+'</span>';},filterable:true,width:'95px'},
+      {field:'paidBy',label:'Payment',filterable:true,width:'95px'},
     ],
-    data: (martSelectedBooking && !martIsWalkin) ? (() => { const bk=bookings.find(b=>b.id===martSelectedBooking); return bk ? martTxns.filter(t=>t.roomNumber===bk.roomNumber||t.guestName===bk.guestName) : martTxns; })() : martTxns,
-    showSearch: true,
-    summaryRow: {source:'label', grandTotal:'sum'},
-    emptyMessage: (martSelectedBooking && !martIsWalkin) ? '🛒 No transactions for this guest' : '🛒 No mini-mart transactions yet',
+    data: activeCartRows,
+    summaryRow: {orderNumber:'label', grandTotal:'sum'},
+    emptyMessage: emptyActMsg,
   });
+  if (martHistoryPanelOpen) {
+    filterMartHistory();
+  }
   renderChangeLog('martChangeLogGrid', ['Mini-Mart','storeItems','minimart']);
 }
+
+window.toggleMartHistory = function() {
+  martHistoryPanelOpen = !martHistoryPanelOpen;
+  renderMiniMart();
+  if (martHistoryPanelOpen) {
+    var c = document.getElementById('martHistoryCard');
+    if (c) c.scrollIntoView({ behavior: 'smooth' });
+  }
+};
+
+window.filterMartHistory = function() {
+  posTransactions = load('posTransactions', posTransactions);
+  var paidRows = posTransactions.filter(function(t) { return t && t.source === 'Mini-Mart'; });
+  var emptyHistMsg = '';
+  var hintHtml = '';
+  if (!martSelectedBooking || martIsWalkin) {
+    hintHtml = 'Showing <strong>all paid</strong> mini-mart sales (pick a guest above to filter).';
+    emptyHistMsg = '◈ No past mini-mart sales yet';
+  } else {
+    var bk = bookings.find(function(b) { return b.id === martSelectedBooking; });
+    if (!bk) {
+      paidRows = [];
+      hintHtml = 'Select a valid guest.';
+      emptyHistMsg = '◈ Select a room/guest above';
+    } else {
+      paidRows = paidRows.filter(function(t) {
+        return String(t.roomNumber || '') === String(bk.roomNumber) || String(t.guestName || '') === String(bk.guestName);
+      });
+      hintHtml = 'Paid sales for <strong>Room ' + String(bk.roomNumber) + '</strong> — ' + String(bk.guestName) + '.';
+      emptyHistMsg = '◈ No past sales for this guest';
+    }
+  }
+  paidRows.sort(function(a, b) { try { return new Date(b.timestamp) - new Date(a.timestamp); } catch (e) { return 0; } });
+  var mapped = paidRows.map(function(t) {
+    return {
+      orderNumber: t.transactionId || t.id || '—',
+      timestamp: t.timestamp,
+      tableNumber: t.roomNumber ? ('Room ' + t.roomNumber) : '—',
+      guestName: t.guestName || '—',
+      items: Array.isArray(t.items) ? t.items.map(function(i) { return i.name + ' x' + i.qty; }).join(', ') : '',
+      grandTotal: t.grandTotal,
+      status: 'Paid',
+      paidBy: t.paidBy || '—',
+    };
+  });
+  var hintEl = document.getElementById('martHistoryHint');
+  if (hintEl) hintEl.innerHTML = hintHtml;
+  new XGrid('martHistoryGrid', {
+    columns: [
+      {field:'orderNumber',label:'Order #',filterable:true,width:'90px'},
+      {field:'timestamp',label:'Date',format:function(v){try{var d=new Date(v);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}catch(e){return v;}},filterable:true,width:'130px'},
+      {field:'tableNumber',label:'Table/Room',filterable:true,width:'100px'},
+      {field:'guestName',label:'Guest',filterable:true},
+      {field:'items',label:'Items',format:function(v){return v;}},
+      {field:'grandTotal',label:'Total',format:function(v){return fmt$(v);},width:'80px'},
+      {field:'status',label:'Status',format:function(){return '<span class="status status-paid">Paid</span>';},width:'75px',filterable:true},
+      {field:'paidBy',label:'Paid By',filterable:true,width:'90px'},
+    ],
+    data: mapped,
+    showSearch: true,
+    summaryRow: {orderNumber:'label', grandTotal:'sum'},
+    emptyMessage: emptyHistMsg,
+  });
+};
 
 window.martSelectCustomer = function(val) {
   if (val === 'walkin') { martIsWalkin = true; martSelectedBooking = null; }
