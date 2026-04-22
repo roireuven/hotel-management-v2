@@ -64,6 +64,8 @@
   "topbar": {
     "logout": "Cerrar sesión",
     "language": "Idioma",
+    "localization": "Localización",
+    "localizationTitle": "Cambiar idioma y región",
     "chooseLanguage": "Elegir idioma"
   },
   "bnav": {

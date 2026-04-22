@@ -64,6 +64,8 @@
   "topbar": {
     "logout": "התנתקות",
     "language": "שפה",
+    "localization": "הגדרות שפה",
+    "localizationTitle": "החלפת שפה ואזור",
     "chooseLanguage": "בחר שפה"
   },
   "bnav": {

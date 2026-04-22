@@ -64,6 +64,8 @@
   "topbar": {
     "logout": "Déconnexion",
     "language": "Langue",
+    "localization": "Langue & région",
+    "localizationTitle": "Changer de langue et de région",
     "chooseLanguage": "Choisir la langue"
   },
   "bnav": {

@@ -64,6 +64,8 @@
   "topbar": {
     "logout": "ອອກຈາກລະບົບ",
     "language": "ພາສາ",
+    "localization": "ພາສາ & ພູມມິພາກ",
+    "localizationTitle": "ປ່ຽນພາສາ ແລະ ພູມມິພາກ",
     "chooseLanguage": "ເລືອກພາສາ"
   },
   "bnav": {

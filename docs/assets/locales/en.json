@@ -64,6 +64,8 @@
   "topbar": {
     "logout": "Logout",
     "language": "Language",
+    "localization": "Localization",
+    "localizationTitle": "Change language and region",
     "chooseLanguage": "Choose language"
   },
   "bnav": {

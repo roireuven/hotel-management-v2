@@ -47,6 +47,10 @@
     .lang-menu .lang-opt:hover, .lang-menu .lang-opt:focus { background: #e8f0fe; }
     .lang-menu .lang-opt[aria-pressed="true"] { background: #e3f2fd; color: var(--primary); font-weight: 700; }
     [dir="rtl"] .main .lang-menu { inset-inline-end: auto; inset-inline-start: 0; }
+    .topbar-locale-wrap { position: relative; flex-shrink: 0; }
+    .topbar-locale-wrap .lang-menu { inset-inline-end: auto; inset-inline-start: 0; }
+    [dir="rtl"] .topbar-locale-wrap .lang-menu { inset-inline-start: auto; inset-inline-end: 0; }
+    .topbar .btn-lang .lang-btn-ico { font-size: 1.1rem; line-height: 1; }
     .login-lang-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0.3rem; margin-top: 0.4rem; margin-bottom: 0.15rem; max-width: 100%; }
     .login-lang-row .btn { padding: 0.25rem 0.45rem; min-height: 30px; font-size: 0.68rem; }
     .sidebar { width: 280px; background: linear-gradient(180deg, #0a1628 0%, #1a3a5c 50%, #1a73e8 100%); color: #ecf0f1; min-height: 100vh; position: fixed; left: 0; top: 0; bottom: 0; overflow-y: auto; z-index: 100; transition: transform 0.3s ease; transform: translateX(-100%); }
@@ -663,8 +667,30 @@
   </aside>
   <div class="main">
     <div class="topbar">
-      <div class="topbar-left"><button class="menu-toggle" id="menuToggle">☰</button><h1 id="pageTitle">Dashboard</h1></div>
-      <div class="topbar-right"><div class="lang-menu-wrap"><button type="button" class="btn-lang" id="langMenuBtn" onclick="toggleLangMenu(event)" aria-haspopup="true" aria-expanded="false" title="Language">🌐<span id="langMenuBtnLabel" data-i18n="topbar.language">Language</span></button><div class="lang-menu" id="langMenu" role="menu" aria-label="Language"><div class="lang-menu-hint" data-i18n="topbar.chooseLanguage">Choose language</div><button type="button" class="lang-opt" role="menuitem" data-lang="en" onclick="setAppLocale('en')">English</button><button type="button" class="lang-opt" role="menuitem" data-lang="he" onclick="setAppLocale('he')">עברית (Hebrew)</button><button type="button" class="lang-opt" role="menuitem" data-lang="th" onclick="setAppLocale('th')">ไทย (Thai)</button><button type="button" class="lang-opt" role="menuitem" data-lang="lo" onclick="setAppLocale('lo')">ລາວ (Lao)</button><button type="button" class="lang-opt" role="menuitem" data-lang="es" onclick="setAppLocale('es')">Español (Spanish)</button><button type="button" class="lang-opt" role="menuitem" data-lang="fr" onclick="setAppLocale('fr')">Français (French)</button></div></div><button class="dark-toggle" id="darkToggle" onclick="toggleDarkMode()" title="Toggle Dark Mode">◐</button><div class="topbar-user"><div><div class="user-name" id="topbarUserName"></div><div class="user-role-tag" id="topbarUserRole"></div></div><div class="avatar" id="userAvatar">A</div></div><button class="btn-logout" id="logoutBtn" onclick="doLogout()" data-i18n="topbar.logout">Logout</button></div>
+      <div class="topbar-left">
+        <button class="menu-toggle" id="menuToggle">☰</button>
+        <div class="lang-menu-wrap topbar-locale-wrap">
+          <button type="button" class="btn-lang" id="langMenuBtn" onclick="toggleLangMenu(event)" aria-haspopup="true" aria-expanded="false" data-i18n-title="topbar.localizationTitle" title="Change language and region" aria-label="Localization">
+            <span class="lang-btn-ico" aria-hidden="true">🌐</span>
+            <span id="langMenuBtnLabel" data-i18n="topbar.localization">Localization</span>
+          </button>
+          <div class="lang-menu" id="langMenu" role="menu" aria-label="Language">
+            <div class="lang-menu-hint" data-i18n="topbar.chooseLanguage">Choose language</div>
+            <button type="button" class="lang-opt" role="menuitem" data-lang="en" onclick="setAppLocale('en')">English</button>
+            <button type="button" class="lang-opt" role="menuitem" data-lang="he" onclick="setAppLocale('he')">עברית (Hebrew)</button>
+            <button type="button" class="lang-opt" role="menuitem" data-lang="th" onclick="setAppLocale('th')">ไทย (Thai)</button>
+            <button type="button" class="lang-opt" role="menuitem" data-lang="lo" onclick="setAppLocale('lo')">ລາວ (Lao)</button>
+            <button type="button" class="lang-opt" role="menuitem" data-lang="es" onclick="setAppLocale('es')">Español (Spanish)</button>
+            <button type="button" class="lang-opt" role="menuitem" data-lang="fr" onclick="setAppLocale('fr')">Français (French)</button>
+          </div>
+        </div>
+        <h1 id="pageTitle">Dashboard</h1>
+      </div>
+      <div class="topbar-right">
+        <button class="dark-toggle" id="darkToggle" onclick="toggleDarkMode()" title="Toggle Dark Mode">◐</button>
+        <div class="topbar-user"><div><div class="user-name" id="topbarUserName"></div><div class="user-role-tag" id="topbarUserRole"></div></div><div class="avatar" id="userAvatar">A</div></div>
+        <button class="btn-logout" id="logoutBtn" onclick="doLogout()" data-i18n="topbar.logout">Logout</button>
+      </div>
     </div>
     <div class="content">
       <div class="page active" id="page-dashboard"></div>
@@ -1662,10 +1688,11 @@ function applyShellI18n() {
   if (!i18nData) i18nData = i18nEn;
   document.querySelectorAll('[data-i18n]').forEach(function(el) { var k = el.getAttribute('data-i18n'); if (k) el.textContent = t(k); });
   document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) { var k = el.getAttribute('data-i18n-placeholder'); if (k) el.setAttribute('placeholder', t(k)); });
+  document.querySelectorAll('[data-i18n-title]').forEach(function(el) { var k = el.getAttribute('data-i18n-title'); if (k) el.setAttribute('title', t(k)); });
   var out = document.getElementById('logoutBtn');
   if (out) out.textContent = t('topbar.logout');
-  var lml = document.getElementById('langMenuBtnLabel');
-  if (lml) lml.textContent = t('topbar.language');
+  var lmb = document.getElementById('langMenuBtn');
+  if (lmb) lmb.setAttribute('aria-label', t('topbar.localization'));
   var hint = document.querySelector('.lang-menu .lang-menu-hint');
   if (hint) hint.textContent = t('topbar.chooseLanguage');
   document.querySelectorAll('#bottomNav [data-i18n]').forEach(function(el) { var k = el.getAttribute('data-i18n'); if (k) el.textContent = t(k); });

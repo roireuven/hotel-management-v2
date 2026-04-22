@@ -64,6 +64,8 @@
   "topbar": {
     "logout": "ออกจากระบบ",
     "language": "ภาษา",
+    "localization": "ภาษาและภูมิภาค",
+    "localizationTitle": "เปลี่ยนภาษาและภูมิภาค",
     "chooseLanguage": "เลือกภาษา"
   },
   "bnav": {
