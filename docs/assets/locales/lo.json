@@ -67,7 +67,8 @@
     "localization": "ພາສາ & ພູມມິພາກ",
     "localizationTitle": "ປ່ຽນພາສາ ແລະ ພູມມິພາກ",
     "chooseLanguage": "ເລືອກພາສາ",
-    "localePicker": "ເລືອກພາສາໜ້າຈໍ (ໄວ)"
+    "localePicker": "ເລືອກພາສາໜ້າຈໍ (ໄວ)",
+    "toggleDark": "ສະຫຼັບໂໝດສວ່າງ/ມືດ"
   },
   "bnav": {
     "dashboard": "ແດຊບອດ",
@@ -117,6 +118,17 @@
     "yourTasksToday": "ວຽກວັນນີ້",
     "tasksLine": "ມີ {dirty} ຫ້ອງຕ້ອງປິ້ນ ແລະ {oos} ຫ້ອງຢຸດບໍລິການ",
     "goHousekeeping": "ໄປກະດານແມ່ບ້ານ"
+  },
+  "rooms": {
+    "roomOverview": "ພາບລວມຫ້ອງ",
+    "addRoom": "ເພີ່ມຫ້ອງ",
+    "filterAll": "ທັງໝົດ",
+    "perNight": "/ຄືນ",
+    "changeLog": "ບັນທຶກ — ຫ້ອງ",
+    "statusAvailable": "ວ່າງ",
+    "statusOccupied": "ມີຄົນ",
+    "statusReserved": "ຈອງ",
+    "statusOutOfService": "ຢຸດບໍລິການ"
   },
   "minimart": {
     "guestPickerLabel": "ມິນິມາເດີ — ສັ່ງໃຫ້ໃຜ?",
@@ -171,5 +183,78 @@
     "emptyPastAll": "ຍັງບໍ່ມີລາຍການ",
     "emptyPastGuest": "ບໍ່ມີຍອດສຳລັບແຂກນີ້",
     "selectValidGuest": "ເລືອກແຂກເທິງ"
+  },
+  "book": {
+    "emptyGrid": "ຍັງບໍ່ມີການຈອງ. ສ້າງການຈອງທຳອິດ!",
+    "addNew": "ຈອງໃຫມ່",
+    "checkIn": "ເຊັກອິນ",
+    "checkOut": "ເຊັກເອົາ",
+    "invoiceBtn": "ໃບແຈ້ງໜີ້",
+    "waiveFee": "ຍົກເວ້ນຄ່າທຳນຽມ",
+    "discount": "ສ່ວນຫຼຸດ"
+  },
+  "common": {
+    "cancel": "ຍົກເລີກ",
+    "save": "ບັນທຶກ",
+    "delete": "ລຶບ",
+    "edit": "ແກ້ໄຂ",
+    "add": "ເພີ່ມ",
+    "search": "ຄົ້ນຫາ"
+  },
+  "g": {
+    "bookingId": "ຈອງ #",
+    "guest": "ແຂກ",
+    "room": "ຫ້ອງ",
+    "status": "ສະຖານະ",
+    "checkIn": "ເຊັກອິນ",
+    "checkOut": "ເຊັກເອົາ",
+    "adults": "ຜູ່ໃຫຍ່",
+    "children": "ເດັກ",
+    "source": "ແຫຼ່ງ",
+    "name": "ຊື່",
+    "email": "ອີເມວ",
+    "phone": "ໂທ",
+    "date": "ວັນທີ",
+    "timestamp": "ເວລາ",
+    "user": "ຜູ້ໃຊ້",
+    "action": "ການກະທຳ",
+    "details": "ລາຍລະອຽດ",
+    "items": "ລາຍການ",
+    "subtotal": "ລວມຍ່ອຍ",
+    "tax": "ພາສີ",
+    "total": "ລວມ",
+    "payment": "ການຈ່າຍ",
+    "type": "ປະເພດ",
+    "firstName": "ຊື່",
+    "lastName": "ນາມສະກຸນ",
+    "passportId": "ໜັງສື / ບັດ",
+    "nationality": "ສັນຊາດ",
+    "blacklist": "ບັນຊີດຳ",
+    "visits": "ຄັ້ງທີ່ມາ"
+  },
+  "guest": {
+    "emptyGrid": "ຍັງບໍ່ມີແຂກ — ເພີ່ມຄົນແລກ!"
+  },
+  "logs": {
+    "bookings": "ບັນທຶກ — ການຈອງ",
+    "guests": "ບັນທຶກ — ແຂກ",
+    "housekeeping": "ບັນທຶກ — ແມ່ບ້ານ",
+    "invoices": "ບັນທຶກ — ໃບແຈ້ງໜີ້",
+    "pos": "ບັນທຶກ — POS",
+    "posTrans": "ບັນທຶກ — POS",
+    "services": "ບັນທຶກ — ບໍລິການ",
+    "maintenance": "ບັນທຶກ — ຊ່ອມ",
+    "inventory": "ບັນທຶກ — ສະຕັອກ",
+    "accounts": "ບັນທຶກ — ບັນຊີ",
+    "guestportal": "ບັນທຶກ — ພໍທແຂກ",
+    "messages": "ບັນທຶກ — ຂໍ້ຄວາມ",
+    "menuitems": "ບັນທຶກ — ເມນູ",
+    "storeitems": "ບັນທຶກ — ສິນຄ້າ",
+    "orderhistory": "ບັນທຶກ — ປະຫວັດ",
+    "allTransactions": "ບັນທຶກ — ທຸລະກຳ",
+    "restaurant": "ບັນທຶກ — ຮ້ານອາຫານ",
+    "dropdowns": "ບັນທຶກ — ລາຍການ",
+    "posTxnHist": "ປະຫວັດທຸລະກຳ",
+    "posPostedLog": "ລາຍການ POS"
   }
 }

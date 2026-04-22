@@ -67,7 +67,8 @@
     "localization": "Langue & région",
     "localizationTitle": "Changer de langue et de région",
     "chooseLanguage": "Choisir la langue",
-    "localePicker": "Langue de l’interface (sélection rapide)"
+    "localePicker": "Langue de l’interface (sélection rapide)",
+    "toggleDark": "Mode clair / sombre"
   },
   "bnav": {
     "dashboard": "Tableau de bord",
@@ -182,5 +183,78 @@
     "emptyPastAll": "Aucune vente",
     "emptyPastGuest": "Aucune vente pour ce client",
     "selectValidGuest": "Sélectionnez un client ci-dessus"
+  },
+  "book": {
+    "emptyGrid": "Aucune réservation. Créez la première !",
+    "addNew": "Nouvelle réservation",
+    "checkIn": "Arrivée",
+    "checkOut": "Départ",
+    "invoiceBtn": "Facture",
+    "waiveFee": "Gratuit (annulation)",
+    "discount": "Remise"
+  },
+  "common": {
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "add": "Ajouter",
+    "search": "Rechercher"
+  },
+  "g": {
+    "bookingId": "N° réservation",
+    "guest": "Client",
+    "room": "Chambre",
+    "status": "Statut",
+    "checkIn": "Arrivée",
+    "checkOut": "Départ",
+    "adults": "Adultes",
+    "children": "Enfants",
+    "source": "Source",
+    "name": "Nom",
+    "email": "E-mail",
+    "phone": "Téléphone",
+    "date": "Date",
+    "timestamp": "Horodatage",
+    "user": "Utilisateur",
+    "action": "Action",
+    "details": "Détails",
+    "items": "Articles",
+    "subtotal": "Sous-total",
+    "tax": "TVA",
+    "total": "Total",
+    "payment": "Paiement",
+    "type": "Type",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "passportId": "Passeport / ID",
+    "nationality": "Nationalité",
+    "blacklist": "Liste noire",
+    "visits": "Visites"
+  },
+  "guest": {
+    "emptyGrid": "Aucun client. Ajoutez le premier !"
+  },
+  "logs": {
+    "bookings": "Journal des modifications — Réservations",
+    "guests": "Journal des modifications — Clients",
+    "housekeeping": "Journal des modifications — Ménage",
+    "invoices": "Journal des modifications — Factures",
+    "pos": "Journal des modifications — PDV",
+    "posTrans": "Journal des modifications — PDV",
+    "services": "Journal des modifications — Services",
+    "maintenance": "Journal des modifications — Entretien",
+    "inventory": "Journal des modifications — Stock",
+    "accounts": "Journal des modifications — Comptes",
+    "guestportal": "Journal des modifications — Portail client",
+    "messages": "Journal des modifications — Messages",
+    "menuitems": "Journal des modifications — Articles menu",
+    "storeitems": "Journal des modifications — Magasin",
+    "orderhistory": "Journal des modifications — Historique commandes",
+    "allTransactions": "Journal des modifications — Transactions",
+    "restaurant": "Journal des modifications — Restaurant",
+    "dropdowns": "Journal des modifications — Listes",
+    "posTxnHist": "Historique des transactions",
+    "posPostedLog": "Journal d’enregistrement PDV"
   }
 }

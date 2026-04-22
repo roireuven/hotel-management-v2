@@ -67,7 +67,8 @@
     "localization": "Localización",
     "localizationTitle": "Cambiar idioma y región",
     "chooseLanguage": "Elegir idioma",
-    "localePicker": "Idioma de la interfaz (selección rápida)"
+    "localePicker": "Idioma de la interfaz (selección rápida)",
+    "toggleDark": "Cambiar modo claro/oscuro"
   },
   "bnav": {
     "dashboard": "Panel",
@@ -95,6 +96,39 @@
     "currencyInvalidReset": "Se restableció la moneda del hotel a la primera opción de la lista (ya no coincidía con las etiquetas).",
     "laoKipHint": "Interfaz en lao: si opera en Laos, puede usar LAK (kip laosiano) como moneda de informes.",
     "useLakCurrency": "Usar LAK como moneda del hotel"
+  },
+  "dashboard": {
+    "dailyOverview": "Resumen del día",
+    "fromDate": "Desde",
+    "toDate": "Hasta",
+    "validDateRange": "Seleccione un rango de fechas válido",
+    "legendOccupied": "Ocupado",
+    "legendAvailable": "Disponible",
+    "tableDate": "Fecha",
+    "tableAvailable": "Disponible",
+    "tableOccupied": "Ocupado",
+    "tableInvoices": "Facturas",
+    "tableTotal": "Total",
+    "totalRooms": "Habitaciones totales",
+    "available": "Disponible",
+    "occupied": "Ocupado",
+    "outOfService": "Fuera de servicio",
+    "dirty": "A limpiar",
+    "clean": "Limpio",
+    "yourTasksToday": "Sus tareas hoy",
+    "tasksLine": "Tiene {dirty} habitaciones por limpiar y {oos} fuera de servicio.",
+    "goHousekeeping": "Ir a limpieza"
+  },
+  "rooms": {
+    "roomOverview": "Resumen de habitaciones",
+    "addRoom": "Añadir habitación",
+    "filterAll": "Todas",
+    "perNight": "/noche",
+    "changeLog": "Registro de cambios — Habitaciones",
+    "statusAvailable": "Disponible",
+    "statusOccupied": "Ocupada",
+    "statusReserved": "Reservada",
+    "statusOutOfService": "Fuera de servicio"
   },
   "minimart": {
     "guestPickerLabel": "Minimarket — ¿Para quién es el pedido?",
@@ -149,5 +183,78 @@
     "emptyPastAll": "Aún no hay ventas",
     "emptyPastGuest": "Nada para este huésped",
     "selectValidGuest": "Elija un huésped arriba"
+  },
+  "book": {
+    "emptyGrid": "Aún no hay reservas. Cree la primera.",
+    "addNew": "Nueva reserva",
+    "checkIn": "Entrada",
+    "checkOut": "Salida",
+    "invoiceBtn": "Factura",
+    "waiveFee": "Eximir cargo",
+    "discount": "Descuento"
+  },
+  "common": {
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "add": "Añadir",
+    "search": "Buscar"
+  },
+  "g": {
+    "bookingId": "Reserva n.º",
+    "guest": "Huésped",
+    "room": "Habitación",
+    "status": "Estado",
+    "checkIn": "Entrada",
+    "checkOut": "Salida",
+    "adults": "Adultos",
+    "children": "Niños",
+    "source": "Origen",
+    "name": "Nombre",
+    "email": "Correo",
+    "phone": "Teléfono",
+    "date": "Fecha",
+    "timestamp": "Marca de hora",
+    "user": "Usuario",
+    "action": "Acción",
+    "details": "Detalles",
+    "items": "Artículos",
+    "subtotal": "Subtotal",
+    "tax": "Impuesto",
+    "total": "Total",
+    "payment": "Pago",
+    "type": "Tipo",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "passportId": "Pasaporte / ID",
+    "nationality": "Nacionalidad",
+    "blacklist": "Lista de bloqueo",
+    "visits": "Visitas"
+  },
+  "guest": {
+    "emptyGrid": "Aún no hay huéspedes. Añada el primero."
+  },
+  "logs": {
+    "bookings": "Registro de cambios — Reservas",
+    "guests": "Registro de cambios — Huéspedes",
+    "housekeeping": "Registro de cambios — Limpieza",
+    "invoices": "Registro de cambios — Facturas",
+    "pos": "Registro de cambios — TPV",
+    "posTrans": "Registro de cambios — TPV",
+    "services": "Registro de cambios — Servicios",
+    "maintenance": "Registro de cambios — Mantenimiento",
+    "inventory": "Registro de cambios — Inventario",
+    "accounts": "Registro de cambios — Cuentas",
+    "guestportal": "Registro de cambios — Portal",
+    "messages": "Registro de cambios — Mensajes",
+    "menuitems": "Registro de cambios — Platos",
+    "storeitems": "Registro de cambios — Tienda",
+    "orderhistory": "Registro de cambios — Pedidos",
+    "allTransactions": "Registro de cambios — Transacciones",
+    "restaurant": "Registro de cambios — Restaurante",
+    "dropdowns": "Registro de cambios — Listas",
+    "posTxnHist": "Historial de transacciones",
+    "posPostedLog": "Registro TPV (publicado)"
   }
 }

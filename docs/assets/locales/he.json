@@ -67,7 +67,8 @@
     "localization": "הגדרות שפה",
     "localizationTitle": "החלפת שפה ואזור",
     "chooseLanguage": "בחר שפה",
-    "localePicker": "שפת ממשק (בחירה מהירה)"
+    "localePicker": "שפת ממשק (בחירה מהירה)",
+    "toggleDark": "החלפת מצב בהיר/כהה"
   },
   "bnav": {
     "dashboard": "לוח בקרה",
@@ -95,6 +96,39 @@
     "currencyInvalidReset": "מטבע המלון אופס לאפשרות הראשונה ברשימה (לא היה תואם לרשימת המטבעות).",
     "laoKipHint": "ממשק בלאו: אפשר להגדיר את מטבע הדיווח לקיפ לאו (LAK) אם עובדים בלאוס.",
     "useLakCurrency": "השתמש ב־LAK כמטבע המלון"
+  },
+  "dashboard": {
+    "dailyOverview": "מבט יומי",
+    "fromDate": "מתאריך",
+    "toDate": "עד תאריך",
+    "validDateRange": "בחרו טווח תאריכים חוקי",
+    "legendOccupied": "תפוס",
+    "legendAvailable": "פנוי",
+    "tableDate": "תאריך",
+    "tableAvailable": "פנוי",
+    "tableOccupied": "תפוס",
+    "tableInvoices": "חשבוניות",
+    "tableTotal": "סה״כ",
+    "totalRooms": "סה״כ חדרים",
+    "available": "פנוי",
+    "occupied": "תפוס",
+    "outOfService": "מושבת",
+    "dirty": "לניקוי",
+    "clean": "נקי",
+    "yourTasksToday": "המשימות שלך היום",
+    "tasksLine": "יש {dirty} חדרים הדורשים ניקוי ו-{oos} חדרים מחוץ לשירות.",
+    "goHousekeeping": "מעבר ללוח בית המלון (ניקיון)"
+  },
+  "rooms": {
+    "roomOverview": "סקירת חדרים",
+    "addRoom": "הוסף חדר",
+    "filterAll": "הכול",
+    "perNight": "/לילה",
+    "changeLog": "יומן שינויים — חדרים",
+    "statusAvailable": "פנוי",
+    "statusOccupied": "תפוס",
+    "statusReserved": "בהזמנה",
+    "statusOutOfService": "מושבת"
   },
   "minimart": {
     "guestPickerLabel": "מיני-מרט — עבור מי ההזמנה?",
@@ -149,5 +183,78 @@
     "emptyPastAll": "אין עדיין מכירות",
     "emptyPastGuest": "אין מכירות עבור אורח זה",
     "selectValidGuest": "בחר אורח למעלה"
+  },
+  "book": {
+    "emptyGrid": "אין הזמנות עדיין. צרו את ההזמנה הראשונה!",
+    "addNew": "הזמנה חדשה",
+    "checkIn": "כניסה (צ׳ק-אין)",
+    "checkOut": "יציאה (צ׳ק-אאוט)",
+    "invoiceBtn": "חשבונית",
+    "waiveFee": "בטל/י עמלת ביטול",
+    "discount": "הנחה"
+  },
+  "common": {
+    "cancel": "ביטול",
+    "save": "שמור",
+    "delete": "מחק",
+    "edit": "ערוך",
+    "add": "הוסף",
+    "search": "חפש"
+  },
+  "g": {
+    "bookingId": "הזמנה #",
+    "guest": "אורח",
+    "room": "חדר",
+    "status": "סטטוס",
+    "checkIn": "צ'ק-אין",
+    "checkOut": "צ'ק-אאוט",
+    "adults": "מבוגרים",
+    "children": "ילדים",
+    "source": "מקור",
+    "name": "שם",
+    "email": "אימייל",
+    "phone": "טלפון",
+    "date": "תאריך",
+    "timestamp": "חותמת זמן",
+    "user": "משתמש",
+    "action": "פעולה",
+    "details": "פרטים",
+    "items": "פריטים",
+    "subtotal": "ביניים",
+    "tax": "מס",
+    "total": "סה״כ",
+    "payment": "תשלום",
+    "type": "סוג",
+    "firstName": "שם פרטי",
+    "lastName": "שם משפחה",
+    "passportId": "דרכון / מזהה",
+    "nationality": "אזרחות",
+    "blacklist": "רשימה שחורה",
+    "visits": "ביקורים"
+  },
+  "guest": {
+    "emptyGrid": "אין אורחים. הוסיפו אורח ראשון!"
+  },
+  "logs": {
+    "bookings": "יומן שינויים — הזמנות",
+    "guests": "יומן שינויים — אורחים",
+    "housekeeping": "יומן שינויים — ניקיון",
+    "invoices": "יומן שינויים — חשבוניות",
+    "pos": "יומן שינויים — קופה",
+    "posTrans": "יומן שינויים — עסקאות POS",
+    "services": "יומן שינויים — שירותים",
+    "maintenance": "יומן שינויים — תחזוקה",
+    "inventory": "יומן שינויים — מלאי",
+    "accounts": "יומן שינויים — חשבונות",
+    "guestportal": "יומן שינויים — פורטל אורח",
+    "messages": "יומן שינויים — הודעות",
+    "menuitems": "יומן שינויים — פריטי תפריט",
+    "storeitems": "יומן שינויים — פריטי חנות",
+    "orderhistory": "יומן שינויים — היסטוריית הזמנות",
+    "allTransactions": "יומן שינויים — עסקאות",
+    "restaurant": "יומן שינויים — מסעדה",
+    "dropdowns": "יומן שינויים — רשימות",
+    "posTxnHist": "היסטוריית עסקאות",
+    "posPostedLog": "יומן רישום עסקאות POS"
   }
 }

@@ -67,7 +67,8 @@
     "localization": "ภาษาและภูมิภาค",
     "localizationTitle": "เปลี่ยนภาษาและภูมิภาค",
     "chooseLanguage": "เลือกภาษา",
-    "localePicker": "เลือกภาษาของอินเทอร์เฟซ (ด่วน)"
+    "localePicker": "เลือกภาษาของอินเทอร์เฟซ (ด่วน)",
+    "toggleDark": "สลับโหมดสว่าง/มืด"
   },
   "bnav": {
     "dashboard": "แดชบอร์ด",
@@ -95,6 +96,39 @@
     "currencyInvalidReset": "รีเซ็ตสกุลเงินโรงแรมเป็นตัวเลือกแรกในรายการ (ไม่ตรงกับรายการสกุลเงินอีกต่อไป)",
     "laoKipHint": "หน้าลาว: หากดำเนินงานในลาว อาจตั้งสกุลเงินรายงานเป็น LAK (กีบ)",
     "useLakCurrency": "ใช้ LAK เป็นสกุลเงินโรงแรม"
+  },
+  "dashboard": {
+    "dailyOverview": "ภาพรวมรายวัน",
+    "fromDate": "จากวันที่",
+    "toDate": "ถึงวันที่",
+    "validDateRange": "เลือกช่วงวันที่ให้ถูกต้อง",
+    "legendOccupied": "มีแขก",
+    "legendAvailable": "ว่าง",
+    "tableDate": "วันที่",
+    "tableAvailable": "ว่าง",
+    "tableOccupied": "ไม่ว่าง",
+    "tableInvoices": "ใบแจ้งหนี้",
+    "tableTotal": "รวม",
+    "totalRooms": "ห้องทั้งหมด",
+    "available": "ว่าง",
+    "occupied": "ไม่ว่าง",
+    "outOfService": "ปิดใช้",
+    "dirty": "สกปรก/รอทำ",
+    "clean": "สะอาด",
+    "yourTasksToday": "งานของคุณวันนี้",
+    "tasksLine": "คุณมี {dirty} ห้องที่รอทำความสะอาด และ {oos} ห้องที่งดให้บริการ",
+    "goHousekeeping": "ไปกระดานแม่บ้าน"
+  },
+  "rooms": {
+    "roomOverview": "ภาพรวมห้อง",
+    "addRoom": "เพิ่มห้อง",
+    "filterAll": "ทั้งหมด",
+    "perNight": "/คืน",
+    "changeLog": "บันทึกการเปลี่ยนแปลง — ห้อง",
+    "statusAvailable": "ว่าง",
+    "statusOccupied": "ไม่ว่าง",
+    "statusReserved": "จอง",
+    "statusOutOfService": "งดบริการ"
   },
   "minimart": {
     "guestPickerLabel": "มินิมาร์ท — ออเดอร์นี้สำหรับใคร?",
@@ -149,5 +183,78 @@
     "emptyPastAll": "ยังไม่มีรายการขาย",
     "emptyPastGuest": "ไม่มียอดสำหรับแขกนี้",
     "selectValidGuest": "เลือกแขกด้านบน"
+  },
+  "book": {
+    "emptyGrid": "ยังไม่มีการจอง สร้างการจองแรกของคุณ!",
+    "addNew": "เพิ่มการจองใหม่",
+    "checkIn": "เช็กอิน",
+    "checkOut": "เช็กเอาต์",
+    "invoiceBtn": "ใบแจ้งหนี้",
+    "waiveFee": "ยกเว้นค่าธรรมเนียม",
+    "discount": "ส่วนลด"
+  },
+  "common": {
+    "cancel": "ยกเลิก",
+    "save": "บันทึก",
+    "delete": "ลบ",
+    "edit": "แก้ไข",
+    "add": "เพิ่ม",
+    "search": "ค้นหา"
+  },
+  "g": {
+    "bookingId": "รหัสจอง #",
+    "guest": "แขก",
+    "room": "ห้อง",
+    "status": "สถานะ",
+    "checkIn": "เช็กอิน",
+    "checkOut": "เช็กเอาต์",
+    "adults": "ผู้ใหญ่",
+    "children": "เด็ก",
+    "source": "แหล่ง",
+    "name": "ชื่อ",
+    "email": "อีเมล",
+    "phone": "โทรศัพท์",
+    "date": "วันที่",
+    "timestamp": "เวลา/บันทึก",
+    "user": "ผู้ใช้",
+    "action": "การกระทำ",
+    "details": "รายละเอียด",
+    "items": "รายการ",
+    "subtotal": "ยอดรวมย่อย",
+    "tax": "ภาษี",
+    "total": "รวม",
+    "payment": "ชำระเงิน",
+    "type": "ประเภท",
+    "firstName": "ชื่อ",
+    "lastName": "นามสกุล",
+    "passportId": "หนังสือเดินทาง / บัตร",
+    "nationality": "สัญชาติ",
+    "blacklist": "บัญชีดำ",
+    "visits": "จำนวนครั้งที่มา"
+  },
+  "guest": {
+    "emptyGrid": "ยังไม่มีแขก เพิ่มแขกคนแรก!"
+  },
+  "logs": {
+    "bookings": "บันทึกการเปลี่ยนแปลง — การจอง",
+    "guests": "บันทึกการเปลี่ยนแปลง — แขก",
+    "housekeeping": "บันทึกการเปลี่ยนแปลง — แม่บ้าน",
+    "invoices": "บันทึกการเปลี่ยนแปลง — ใบแจ้งหนี้",
+    "pos": "บันทึกการเปลี่ยนแปลง — POS",
+    "posTrans": "บันทึกการเปลี่ยนแปลง — ธุรกรรม POS",
+    "services": "บันทึกการเปลี่ยนแปลง — บริการ",
+    "maintenance": "บันทึกการเปลี่ยนแปลง — ซ่อม",
+    "inventory": "บันทึกการเปลี่ยนแปลง — สต็อก",
+    "accounts": "บันทึกการเปลี่ยนแปลง — บัญชี",
+    "guestportal": "บันทึกการเปลี่ยนแปลง — พอร์ทัล",
+    "messages": "บันทึกการเปลี่ยนแปลง — ข้อความ",
+    "menuitems": "บันทึกการเปลี่ยนแปลง — รายการเมนู",
+    "storeitems": "บันทึกการเปลี่ยนแปลง — รายการร้าน",
+    "orderhistory": "บันทึกการเปลี่ยนแปลง — ออเดอร์",
+    "allTransactions": "บันทึกการเปลี่ยนแปลง — ธุรกรรม",
+    "restaurant": "บันทึกการเปลี่ยนแปลง — ร้านอาหาร",
+    "dropdowns": "บันทึกการเปลี่ยนแปลง — รายการดรอปดาวน์",
+    "posTxnHist": "ประวัติธุรกรรม",
+    "posPostedLog": "บันทึกรายการ POS ที่ลงบัญชี"
   }
 }

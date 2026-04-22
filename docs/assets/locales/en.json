@@ -67,7 +67,8 @@
     "localization": "Localization",
     "localizationTitle": "Change language and region",
     "chooseLanguage": "Choose language",
-    "localePicker": "Interface language (quick pick)"
+    "localePicker": "Interface language (quick pick)",
+    "toggleDark": "Toggle light / dark mode"
   },
   "bnav": {
     "dashboard": "Dashboard",
@@ -182,5 +183,78 @@
     "emptyPastAll": "No past mini-mart sales yet",
     "emptyPastGuest": "No past sales for this guest",
     "selectValidGuest": "Select a room/guest above"
+  },
+  "book": {
+    "emptyGrid": "No bookings yet. Create your first booking!",
+    "addNew": "Add New Booking",
+    "checkIn": "Check In",
+    "checkOut": "Check Out",
+    "invoiceBtn": "Invoice",
+    "waiveFee": "Waive Fee",
+    "discount": "Discount"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "search": "Search"
+  },
+  "g": {
+    "bookingId": "Booking #",
+    "guest": "Guest",
+    "room": "Room",
+    "status": "Status",
+    "checkIn": "Check-in",
+    "checkOut": "Check-out",
+    "adults": "Adults",
+    "children": "Children",
+    "source": "Source",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "date": "Date",
+    "timestamp": "Timestamp",
+    "user": "User",
+    "action": "Action",
+    "details": "Details",
+    "items": "Items",
+    "subtotal": "Subtotal",
+    "tax": "Tax",
+    "total": "Total",
+    "payment": "Payment",
+    "type": "Type",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "passportId": "Passport / ID",
+    "nationality": "Nationality",
+    "blacklist": "Blacklist",
+    "visits": "Visits"
+  },
+  "guest": {
+    "emptyGrid": "No guests yet. Add your first guest!"
+  },
+  "logs": {
+    "bookings": "Bookings change log",
+    "guests": "Guests change log",
+    "housekeeping": "Housekeeping change log",
+    "invoices": "Invoices change log",
+    "pos": "POS change log",
+    "posTrans": "POS posted transactions",
+    "services": "Services change log",
+    "maintenance": "Maintenance change log",
+    "inventory": "Inventory change log",
+    "accounts": "Accounts change log",
+    "guestportal": "Guest portal change log",
+    "messages": "Messages change log",
+    "menuitems": "Menu items change log",
+    "storeitems": "Store items change log",
+    "orderhistory": "Order history change log",
+    "allTransactions": "Transactions change log",
+    "restaurant": "Restaurant change log",
+    "dropdowns": "Dropdowns change log",
+    "posTxnHist": "Transaction history",
+    "posPostedLog": "POS transaction log"
   }
 }
