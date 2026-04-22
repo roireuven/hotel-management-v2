@@ -683,6 +683,17 @@
     "tasksLine": "You have {dirty} rooms that need cleaning and {oos} rooms out of service.",
     "goHousekeeping": "Go to Housekeeping Board"
   },
+  "rooms": {
+    "roomOverview": "Room Overview",
+    "addRoom": "Add Room",
+    "filterAll": "All",
+    "perNight": "/night",
+    "changeLog": "Rooms Change Log",
+    "statusAvailable": "Available",
+    "statusOccupied": "Occupied",
+    "statusReserved": "Reserved",
+    "statusOutOfService": "Out of Service"
+  },
   "minimart": {
     "guestPickerLabel": "Mini-mart — who is this order for?",
     "searchGuestPlaceholder": "Search by room, guest, or booking ID…",
@@ -1967,6 +1978,23 @@ function loadLocaleJsonFile(nameOrUrl) {
       });
     });
 }
+/** Merges locale `over` onto English `base` so missing nested keys still resolve. */
+function i18nDeepMerge(base, over) {
+  if (!over || typeof over !== 'object' || over === null) return base && typeof base === 'object' ? JSON.parse(JSON.stringify(base)) : base;
+  if (!base || typeof base !== 'object' || base === null) return JSON.parse(JSON.stringify(over));
+  var out = JSON.parse(JSON.stringify(base));
+  for (var k in over) {
+    if (!Object.prototype.hasOwnProperty.call(over, k)) continue;
+    var bv = out[k];
+    var ov = over[k];
+    if (ov !== null && typeof ov === 'object' && !Array.isArray(ov) && (bv == null || (typeof bv === 'object' && !Array.isArray(bv)))) {
+      out[k] = i18nDeepMerge(bv && typeof bv === 'object' ? bv : {}, ov);
+    } else {
+      out[k] = ov;
+    }
+  }
+  return out;
+}
 function i18nDateShortLabel(isoYmd) {
   var loc = (typeof getCurrentUiLocale === 'function') ? getCurrentUiLocale() : 'en';
   var bcp = (loc === 'he') ? 'he-IL' : (loc === 'th' ? 'th-TH' : (loc === 'lo' ? 'lo-LA' : (loc === 'es' ? 'es' : (loc === 'fr' ? 'fr-FR' : 'en'))));
@@ -2041,7 +2069,7 @@ window.setAppLocale = function(lang) {
   function end() { finishLocaleSwitch(); }
   function loadLang(l) {
     loadLocaleJsonFile(l + '.json')
-      .then(function(d) { i18nData = d; end(); })
+      .then(function(d) { i18nData = i18nDeepMerge(i18nEn || readEmbeddedI18nEn() || {}, d || {}); end(); })
       .catch(function() { i18nData = i18nEn || readEmbeddedI18nEn() || {}; end(); });
   }
   if (!i18nEn || (typeof i18nEn === 'object' && Object.keys(i18nEn).length === 0)) {
@@ -2090,7 +2118,7 @@ function initI18n() {
     .then(function(w) {
       if (w === 'en') return;
       return loadLocaleJsonFile(w + '.json')
-        .then(function(d) { i18nData = d; })
+        .then(function(d) { i18nData = i18nDeepMerge(i18nEn || readEmbeddedI18nEn() || {}, d || {}); })
         .catch(function() { i18nData = i18nEn; });
     })
     .then(function() { afterLoad(); })
@@ -2158,9 +2186,21 @@ function roomTileClass(r) {
   if (r.occupancyStatus === 'Reserved') return 'reserved';
   return 'available';
 }
+function roomFilterLabel(f) {
+  if (f === 'all') return t('rooms.filterAll');
+  if (f === 'Available') return t('rooms.statusAvailable');
+  if (f === 'Occupied') return t('rooms.statusOccupied');
+  if (f === 'Reserved') return t('rooms.statusReserved');
+  if (f === 'Out of Service') return t('rooms.statusOutOfService');
+  return f;
+}
 function roomTileLabel(r) {
-  if (r.housekeepingStatus === 'Out of Service') return 'Out of Service';
-  return r.occupancyStatus;
+  if (r.housekeepingStatus === 'Out of Service') return t('rooms.statusOutOfService');
+  var s = r.occupancyStatus;
+  if (s === 'Available') return t('rooms.statusAvailable');
+  if (s === 'Occupied') return t('rooms.statusOccupied');
+  if (s === 'Reserved') return t('rooms.statusReserved');
+  return s || '';
 }
 
 // ===== DASHBOARD =====
@@ -2325,14 +2365,15 @@ function renderRooms() {
   let filtered = rooms;
   if (roomFilter === 'Out of Service') filtered = rooms.filter(r=>r.housekeepingStatus==='Out of Service');
   else if (roomFilter !== 'all') filtered = rooms.filter(r=>r.occupancyStatus===roomFilter && r.housekeepingStatus!=='Out of Service');
-  const addRoomBtn = (currentRole === 'Receptionist' || currentRole === 'Housekeeper') ? '' : '<button class="btn btn-primary" onclick="showAddRoom()">+ Add Room</button>';
+  const addRoomBtn = (currentRole === 'Receptionist' || currentRole === 'Housekeeper') ? '' : '<button class="btn btn-primary" onclick="showAddRoom()">+ ' + t('rooms.addRoom') + '</button>';
   const showPrice = currentRole !== 'Housekeeper';
+  const roomFilterKeys = ['all', 'Available', 'Occupied', 'Reserved', 'Out of Service'];
   document.getElementById('page-rooms').innerHTML = `
-    <div class="card"><div class="card-header"><h2>Room Overview</h2>${addRoomBtn}</div><div class="card-body">
-      <div style="display:flex;gap:0.75rem;margin-bottom:1.25rem;flex-wrap:wrap;">${['all','Available','Occupied','Reserved','Out of Service'].map(f=>`<button class="btn ${roomFilter===f?'btn-primary':'btn-outline'}" onclick="roomFilter='${f}';renderRooms()">${f==='all'?'All':f} (${counts[f]})</button>`).join('')}</div>
-      <div class="room-grid">${filtered.map(r=>`<div class="room-tile room-${roomTileClass(r)}" onclick="showRoomDetail('${r.id}')"><div class="room-number">${r.roomNumber}</div><div class="room-type">${r.roomType} · ${r.bedConfig}</div>${showPrice?`<div class="room-price">${fmt$(r.price)}/night</div>`:''}<div class="room-status">${roomTileLabel(r)}</div></div>`).join('')}</div>
+    <div class="card"><div class="card-header"><h2>` + t('rooms.roomOverview') + `</h2>${addRoomBtn}</div><div class="card-body">
+      <div style="display:flex;gap:0.75rem;margin-bottom:1.25rem;flex-wrap:wrap;">${roomFilterKeys.map(f=>`<button class="btn ${roomFilter===f?'btn-primary':'btn-outline'}" onclick="roomFilter='${f}';renderRooms()">${roomFilterLabel(f)} (${counts[f]})</button>`).join('')}</div>
+      <div class="room-grid">${filtered.map(r=>`<div class="room-tile room-${roomTileClass(r)}" onclick="showRoomDetail('${r.id}')"><div class="room-number">${r.roomNumber}</div><div class="room-type">${r.roomType} · ${r.bedConfig}</div>${showPrice?('<div class="room-price">'+fmt$(r.price)+t('rooms.perNight')+'</div>'):''}<div class="room-status">${roomTileLabel(r)}</div></div>`).join('')}</div>
     </div></div>
-    <div class="card"><div class="card-header"><h2>◆ Rooms Change Log</h2></div><div class="card-body"><div id="roomsLogGrid"></div></div></div>`;
+    <div class="card"><div class="card-header"><h2>◆ ` + t('rooms.changeLog') + `</h2></div><div class="card-body"><div id="roomsLogGrid"></div></div></div>`;
   renderChangeLog('roomsLogGrid', ['Room','rooms']);
 }
 window.showAddRoom = function() {

@@ -118,6 +118,17 @@
     "tasksLine": "You have {dirty} rooms that need cleaning and {oos} rooms out of service.",
     "goHousekeeping": "Go to Housekeeping Board"
   },
+  "rooms": {
+    "roomOverview": "Room Overview",
+    "addRoom": "Add Room",
+    "filterAll": "All",
+    "perNight": "/night",
+    "changeLog": "Rooms Change Log",
+    "statusAvailable": "Available",
+    "statusOccupied": "Occupied",
+    "statusReserved": "Reserved",
+    "statusOutOfService": "Out of Service"
+  },
   "minimart": {
     "guestPickerLabel": "Mini-mart — who is this order for?",
     "searchGuestPlaceholder": "Search by room, guest, or booking ID…",
