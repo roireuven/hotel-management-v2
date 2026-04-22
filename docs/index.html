@@ -554,7 +554,7 @@
 
       <div class="setup-step">
         <span class="step-num">3</span><span class="step-title">Role-Based Access</span>
-        <p>After first login, assign staff roles (Admin, Manager, Receptionist, Housekeeper, Restaurant). The <strong>Restaurant</strong> role focuses on F&amp;B: orders, menu items, and inventory (no rooms or hotel admin).</p>
+        <p>After first login, assign staff roles (Admin, Manager, Receptionist, Housekeeper, Restaurant, Kitchen). <strong>Restaurant</strong> takes orders and payment; <strong>Kitchen</strong> sees the same live order queue (prep / ready / served) without billing.</p>
       </div>
 
       <button class="btn btn-primary btn-setup" onclick="completeSetup()">Create Account & Get Started →</button>
@@ -581,6 +581,7 @@
             <tr data-tip="Rooms, bookings, check-in/out, invoices"><td class="cred-role">◎ Reception</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">jane@hotel.com</td><td class="cred-pw">1234</td></tr>
             <tr data-tip="Room cleaning status, maintenance tickets"><td class="cred-role">◧ Housekeeper</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">tom@hotel.com</td><td class="cred-pw">1234</td></tr>
             <tr data-tip="Restaurant: orders + add menu products &amp; F&amp;B stock (no rooms)"><td class="cred-role">◈ Restaurant</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">restaurant@hotel.com</td><td class="cred-pw">1234</td></tr>
+            <tr data-tip="Kitchen: live order queue (same data as Restaurant; prep / ready / served only)"><td class="cred-role">◆ Kitchen</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">kitchen@hotel.com</td><td class="cred-pw">1234</td></tr>
           </tbody>
         </table>
         <p style="text-align:center;margin-top:0.6rem;font-size:0.72rem;color:#999;">Tap an email to auto-fill the username field</p>
@@ -752,6 +753,9 @@ function save(key, data) {
     return;
   }
   localStorage.setItem(DB_KEY + key, JSON.stringify(data));
+  if (key === 'restaurantOrders') {
+    try { window.dispatchEvent(new CustomEvent('hotel-sync-restaurantOrders')); } catch (e) {}
+  }
 }
 
 function saveOne(key, row) {
@@ -787,7 +791,7 @@ function getMenuCategories() { return (settings.menuCategories || 'Appetizer,Mai
 function getStoreCategories() { return (settings.storeCategories || 'Drinks,Snacks,Toiletries,Souvenirs,Sundries').split(',').map(s=>s.trim()).filter(Boolean); }
 function getOrderStatuses() { return (settings.orderStatuses || 'New,Preparing,Ready,Served,Paid').split(',').map(s=>s.trim()).filter(Boolean); }
 function getPaymentTypes() { return (settings.paymentTypes || 'Pending,Cash,Credit Card,Room Charge').split(',').map(s=>s.trim()).filter(Boolean); }
-function getUserRoles() { return (settings.userRoles || 'Admin,Manager,Receptionist,Housekeeper,Restaurant').split(',').map(s=>s.trim()).filter(Boolean); }
+function getUserRoles() { return (settings.userRoles || 'Admin,Manager,Receptionist,Housekeeper,Restaurant,Kitchen').split(',').map(s=>s.trim()).filter(Boolean); }
 function getRequestStatuses() { return (settings.requestStatuses || 'Pending,In Progress,Completed,Cancelled').split(',').map(s=>s.trim()).filter(Boolean); }
 function getCurrencyLabels() { return (settings.currencyLabels || defaultSettings.currencyLabels || 'USD ($),EUR (€),GBP (£),THB (฿)').split(',').map(s=>s.trim()).filter(Boolean); }
 function getHousekeepingStatuses() { return (settings.housekeepingStatuses || defaultSettings.housekeepingStatuses || 'Clean,Dirty,Inspected,Out of Service').split(',').map(s=>s.trim()).filter(Boolean); }
@@ -1184,6 +1188,7 @@ const defaultAccounts = [
   {id:genId(),name:'Jane Smith',email:'jane@hotel.com',role:'Receptionist',status:'active'},
   {id:genId(),name:'Mike Johnson',email:'mike@hotel.com',role:'Manager',status:'active'},
   {id:genId(),name:'Restaurant Staff',email:'restaurant@hotel.com',role:'Restaurant',status:'active'},
+  {id:genId(),name:'Kitchen Staff',email:'kitchen@hotel.com',role:'Kitchen',status:'active'},
   {id:genId(),name:'Tom Williams',email:'tom@hotel.com',role:'Housekeeper',status:'inactive'},
 ];
 const defaultInvoices = [
@@ -1223,12 +1228,12 @@ const defaultInvoices = [
   {id:genId(),invoiceNumber:'INV-2034',bookingId:'BK-1040',guestName:'Siriporn Chaiyasit',roomNumber:'304',subtotal:260,discountAmount:0,taxTotal:18.20,grandTotal:278.20,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10034',currency:'THB',billingAddress:'88 Sukhumvit Rd, Bangkok, Thailand',services:[],date:'2026-04-05'},
   {id:genId(),invoiceNumber:'INV-2035',bookingId:'BK-1042',guestName:'Priya Sharma',roomNumber:'103',subtotal:400,discountAmount:0,taxTotal:28.00,grandTotal:428.00,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10035',currency:'USD',billingAddress:'45 MG Road, Mumbai, India',services:[],date:'2026-04-05'},
   {id:genId(),invoiceNumber:'INV-2036',bookingId:'BK-1044',guestName:'David Miller',roomNumber:'104',subtotal:1050,discountAmount:50,taxTotal:70.00,grandTotal:1070.00,paymentStatus:'Partially Paid',paymentTransactionId:'TXN-10036',currency:'USD',billingAddress:'500 Park Ave, New York, USA',services:[],date:'2026-04-05'},
-  {id:genId(),invoiceNumber:'INV-2037',bookingId:'BK-1046',guestName:'Lin Wei',roomNumber:'403',subtotal:520,discountAmount:0,taxTotal:36.40,grandTotal:556.40,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10037',currency:'USD',billingAddress:'99 Nanjing Rd, Shanghai, China',services:[],date:'2026-04-05'},
-  {id:genId(),invoiceNumber:'INV-2038',bookingId:'BK-1048',guestName:'Sophie Laurent',roomNumber:'302',subtotal:630,discountAmount:0,taxTotal:44.10,grandTotal:674.10,paymentStatus:'Unpaid',paymentTransactionId:'',currency:'EUR',billingAddress:'789 Rue de Paris, Paris, France',services:[],date:'2026-04-06'},
-  {id:genId(),invoiceNumber:'INV-2039',bookingId:'BK-1050',guestName:'Akira Tanaka',roomNumber:'402',subtotal:1950,discountAmount:0,taxTotal:136.50,grandTotal:2086.50,paymentStatus:'Unpaid',paymentTransactionId:'',currency:'THB',billingAddress:'456 Sakura Ave, Tokyo, Japan',services:[{name:'Thai Massage',unitPrice:80,quantity:1,icon:'◎'},{name:'Pool Day Pass',unitPrice:10,quantity:2,icon:'●'}],date:'2026-04-06'},
-  {id:genId(),invoiceNumber:'INV-2040',bookingId:'BK-1052',guestName:'Lucas Santos',roomNumber:'204',subtotal:1800,discountAmount:0,taxTotal:126.00,grandTotal:1926.00,paymentStatus:'Unpaid',paymentTransactionId:'',currency:'USD',billingAddress:'300 Copacabana Ave, Rio de Janeiro, Brazil',services:[],date:'2026-04-06'},
+  {id:genId(),invoiceNumber:'INV-2037',bookingId:'BK-1043',guestName:'Lin Wei',roomNumber:'403',subtotal:520,discountAmount:0,taxTotal:36.40,grandTotal:556.40,paymentStatus:'Fully Paid',paymentTransactionId:'TXN-10037',currency:'USD',billingAddress:'99 Nanjing Rd, Shanghai, China',services:[],date:'2026-04-05'},
+  {id:genId(),invoiceNumber:'INV-2038',bookingId:'BK-1047',guestName:'Sophie Laurent',roomNumber:'302',subtotal:630,discountAmount:0,taxTotal:44.10,grandTotal:674.10,paymentStatus:'Unpaid',paymentTransactionId:'',currency:'EUR',billingAddress:'789 Rue de Paris, Paris, France',services:[],date:'2026-04-06'},
+  {id:genId(),invoiceNumber:'INV-2039',bookingId:'BK-1049',guestName:'Akira Tanaka',roomNumber:'402',subtotal:1950,discountAmount:0,taxTotal:136.50,grandTotal:2086.50,paymentStatus:'Unpaid',paymentTransactionId:'',currency:'THB',billingAddress:'456 Sakura Ave, Tokyo, Japan',services:[{name:'Thai Massage',unitPrice:80,quantity:1,icon:'◎'},{name:'Pool Day Pass',unitPrice:10,quantity:2,icon:'●'}],date:'2026-04-06'},
+  {id:genId(),invoiceNumber:'INV-2040',bookingId:'BK-1051',guestName:'Lucas Santos',roomNumber:'204',subtotal:1800,discountAmount:0,taxTotal:126.00,grandTotal:1926.00,paymentStatus:'Unpaid',paymentTransactionId:'',currency:'USD',billingAddress:'300 Copacabana Ave, Rio de Janeiro, Brazil',services:[],date:'2026-04-06'},
 ];
-const defaultSettings = {hotelName:'Grand Hotel Management',email:'info@grandhotel.com',phone:'+1 555-0100',currency:'USD ($)',address:'123 Hotel Street, City, Country',maxGuests:3,surcharge:25,checkinTime:'14:00',checkoutTime:'12:00',darkMode:false,roomTypes:'Single,Double,Deluxe,Suite,Penthouse',bedConfigs:'King,Twin,Queen+Single,Double,King+Sofa',currencies:'USD,EUR,GBP,THB,ILS,JPY,CNY,AUD,CAD,CHF',currencyLabels:'USD ($),EUR (€),GBP (£),THB (฿)',bookingSources:'Direct,Booking.com,Expedia,Walk-in,Agoda,Airbnb',arrivalStatuses:'Expected,Checked-in,Checked-out,No-show',paymentMethods:'Credit Card,Cash,Bank Transfer,Room Charge',serviceCategories:'Room Service,Laundry,Airport Transfer,Mini-bar,Spa,Pool',invoiceStatuses:'Unpaid,Partially Paid,Fully Paid',ticketPriorities:'Low,Medium,High,Urgent',ticketStatuses:'Open,In Progress,Resolved',inventoryCategories:'Linen,Toiletries,F&B,Supplies',menuCategories:'Appetizer,Main Course,Dessert,Beverage,Side',storeCategories:'Drinks,Snacks,Toiletries,Souvenirs,Sundries',orderStatuses:'New,Preparing,Ready,Served,Paid',paymentTypes:'Pending,Cash,Credit Card,Room Charge',userRoles:'Admin,Manager,Receptionist,Housekeeper,Restaurant',requestStatuses:'Pending,In Progress,Completed,Cancelled',housekeepingStatuses:'Clean,Dirty,Inspected,Out of Service',occupancyStatuses:'Available,Occupied,Reserved',cancellationPolicies:'Free cancellation,Non-refundable',messageTypes:'Welcome,Invoice,Reminder,Notification',messageChannels:'Email,SMS,WhatsApp,In-App',transactionStatuses:'Completed,Refunded,Pending'};
+const defaultSettings = {hotelName:'Grand Hotel Management',email:'info@grandhotel.com',phone:'+1 555-0100',currency:'USD ($)',address:'123 Hotel Street, City, Country',maxGuests:3,surcharge:25,checkinTime:'14:00',checkoutTime:'12:00',darkMode:false,roomTypes:'Single,Double,Deluxe,Suite,Penthouse',bedConfigs:'King,Twin,Queen+Single,Double,King+Sofa',currencies:'USD,EUR,GBP,THB,ILS,JPY,CNY,AUD,CAD,CHF',currencyLabels:'USD ($),EUR (€),GBP (£),THB (฿)',bookingSources:'Direct,Booking.com,Expedia,Walk-in,Agoda,Airbnb',arrivalStatuses:'Expected,Checked-in,Checked-out,No-show',paymentMethods:'Credit Card,Cash,Bank Transfer,Room Charge',serviceCategories:'Room Service,Laundry,Airport Transfer,Mini-bar,Spa,Pool',invoiceStatuses:'Unpaid,Partially Paid,Fully Paid',ticketPriorities:'Low,Medium,High,Urgent',ticketStatuses:'Open,In Progress,Resolved',inventoryCategories:'Linen,Toiletries,F&B,Supplies',menuCategories:'Appetizer,Main Course,Dessert,Beverage,Side',storeCategories:'Drinks,Snacks,Toiletries,Souvenirs,Sundries',orderStatuses:'New,Preparing,Ready,Served,Paid',paymentTypes:'Pending,Cash,Credit Card,Room Charge',userRoles:'Admin,Manager,Receptionist,Housekeeper,Restaurant,Kitchen',requestStatuses:'Pending,In Progress,Completed,Cancelled',housekeepingStatuses:'Clean,Dirty,Inspected,Out of Service',occupancyStatuses:'Available,Occupied,Reserved',cancellationPolicies:'Free cancellation,Non-refundable',messageTypes:'Welcome,Invoice,Reminder,Notification',messageChannels:'Email,SMS,WhatsApp,In-App',transactionStatuses:'Completed,Refunded,Pending'};
 const defaultTickets = [
   {id:genId(),roomNumber:'201',issue:'AC not cooling properly',priority:'High',status:'In Progress',reportedBy:'Receptionist',reportedAt:'2026-04-03T14:30:00',resolvedAt:'',notes:'Technician dispatched, waiting for replacement compressor'},
   {id:genId(),roomNumber:'302',issue:'Leaky faucet in bathroom',priority:'Medium',status:'Open',reportedBy:'Housekeeper',reportedAt:'2026-04-04T09:15:00',resolvedAt:'',notes:'Constant drip from hot water tap'},
@@ -1256,7 +1261,7 @@ const defaultMessages = [
   {id:genId(),bookingId:'BK-1038',guestName:'Marco Rossi',type:'Welcome',message:'Welcome back, Mr. Rossi! Your deluxe room 203 is ready.',sentAt:'2026-04-01T14:00:00',channel:'WhatsApp'},
   {id:genId(),bookingId:'BK-1041',guestName:'Min-jun Park',type:'Reminder',message:'Reminder: Your checkout is scheduled for April 8. Please contact the front desk if you need to extend your stay.',sentAt:'2026-04-06T09:00:00',channel:'In-App'},
   {id:genId(),bookingId:'BK-1044',guestName:'David Miller',type:'Welcome',message:'Welcome back, Mr. Miller! Your suite 104 is ready with your preferred business setup.',sentAt:'2026-04-03T14:00:00',channel:'Email'},
-  {id:genId(),bookingId:'BK-1048',guestName:'Sophie Laurent',type:'Welcome',message:'Bienvenue! Your room 302 is ready. Enjoy your stay at Grand Hotel Management.',sentAt:'2026-04-04T14:00:00',channel:'Email'},
+  {id:genId(),bookingId:'BK-1047',guestName:'Sophie Laurent',type:'Welcome',message:'Bienvenue! Your room 302 is ready. Enjoy your stay at Grand Hotel Management.',sentAt:'2026-04-04T14:00:00',channel:'Email'},
   {id:genId(),bookingId:'BK-1053',guestName:'Charlotte Brown',type:'Notification',message:'Your requested extra pillows have been delivered to room 101. Please call reception if you need anything else.',sentAt:'2026-04-15T16:00:00',channel:'In-App'},
   {id:genId(),bookingId:'BK-1055',guestName:'Carlos Hernandez',type:'Welcome',message:'Welcome to Grand Hotel Management! Your room 301 is ready. We hope you enjoy your stay.',sentAt:'2026-05-01T14:00:00',channel:'Email'},
   {id:genId(),bookingId:'BK-1058',guestName:'Priya Sharma',type:'Reminder',message:'Your reservation for June 15 is confirmed. We look forward to welcoming you!',sentAt:'2026-06-10T10:00:00',channel:'Email'},
@@ -1300,7 +1305,7 @@ const defaultInventory = [
   {id:genId(),itemName:'Shampoo Bottles',category:'Toiletries',quantity:200,reorderLevel:50,lastOrdered:'2026-03-20'},
   {id:genId(),itemName:'Soap Bars',category:'Toiletries',quantity:250,reorderLevel:60,lastOrdered:'2026-03-18'},
   {id:genId(),itemName:'Water Bottles',category:'F&B',quantity:500,reorderLevel:100,lastOrdered:'2026-03-25'},
-  {id:genId(),itemName:'Coffee Pods',category:'F&B',quantity:8,reorderLevel:40,lastOrdered:'2026-02-28'},
+  {id:genId(),itemName:'Coffee Pods',category:'F&B',quantity:320,reorderLevel:80,lastOrdered:'2026-02-28'},
   {id:genId(),itemName:'Toilet Paper Rolls',category:'Supplies',quantity:0,reorderLevel:50,lastOrdered:'2026-03-01'},
   {id:genId(),itemName:'Pillow Cases',category:'Linen',quantity:90,reorderLevel:25,lastOrdered:'2026-03-12'},
   {id:genId(),itemName:'Hand Sanitizer',category:'Supplies',quantity:45,reorderLevel:20,lastOrdered:'2026-03-22'},
@@ -1316,15 +1321,15 @@ const defaultRestaurantOrders = [
   {id:genId(),timestamp:'2026-03-23T20:00:00',orderNumber:'RO-1007',roomNumber:'402',guestName:'Yuki Yamamoto',bookingId:'BK-1024',tableNumber:'Table 2',items:[{name:'Green Curry',qty:1,unitPrice:16},{name:'Spring Rolls',qty:2,unitPrice:7},{name:'Thai Iced Tea',qty:2,unitPrice:5}],subtotal:40,tax:2.80,grandTotal:42.80,status:'Paid',paidBy:'Cash',staffName:'Jane Smith',notes:''},
   {id:genId(),timestamp:'2026-04-01T19:15:00',orderNumber:'RO-1008',roomNumber:'305',guestName:'Klaus Hoffmann',bookingId:'BK-1033',tableNumber:'Room 305',items:[{name:'Grilled Fish',qty:1,unitPrice:22},{name:'Caesar Salad',qty:1,unitPrice:9}],subtotal:31,tax:2.17,grandTotal:33.17,status:'Paid',paidBy:'Room Charge',staffName:'Jane Smith',notes:''},
   {id:genId(),timestamp:'2026-04-02T20:30:00',orderNumber:'RO-1009',roomNumber:'203',guestName:'Marco Rossi',bookingId:'BK-1038',tableNumber:'Table 4',items:[{name:'Tom Yum Soup',qty:1,unitPrice:10},{name:'Pad Thai',qty:1,unitPrice:14},{name:'Wine',qty:1,unitPrice:15}],subtotal:39,tax:2.73,grandTotal:41.73,status:'Paid',paidBy:'Credit Card',staffName:'Mike Johnson',notes:''},
-  {id:genId(),timestamp:'2026-04-04T12:00:00',orderNumber:'RO-1010',roomNumber:'302',guestName:'Sophie Laurent',bookingId:'BK-1048',tableNumber:'Room 302',items:[{name:'Caesar Salad',qty:1,unitPrice:9},{name:'Fresh Juice',qty:1,unitPrice:6}],subtotal:15,tax:1.05,grandTotal:16.05,status:'Served',paidBy:'Pending',staffName:'Jane Smith',notes:'Vegetarian'},
-  {id:genId(),timestamp:'2026-04-05T19:00:00',orderNumber:'RO-1011',roomNumber:'402',guestName:'Akira Tanaka',bookingId:'BK-1050',tableNumber:'Table 1',items:[{name:'Green Curry',qty:1,unitPrice:16},{name:'Fried Rice',qty:1,unitPrice:12},{name:'Thai Iced Tea',qty:1,unitPrice:5}],subtotal:33,tax:2.31,grandTotal:35.31,status:'Served',paidBy:'Pending',staffName:'Jane Smith',notes:'No shellfish'},
+  {id:genId(),timestamp:'2026-04-04T12:00:00',orderNumber:'RO-1010',roomNumber:'302',guestName:'Sophie Laurent',bookingId:'BK-1047',tableNumber:'Room 302',items:[{name:'Caesar Salad',qty:1,unitPrice:9},{name:'Fresh Juice',qty:1,unitPrice:6}],subtotal:15,tax:1.05,grandTotal:16.05,status:'Served',paidBy:'Pending',staffName:'Jane Smith',notes:'Vegetarian'},
+  {id:genId(),timestamp:'2026-04-05T19:00:00',orderNumber:'RO-1011',roomNumber:'402',guestName:'Akira Tanaka',bookingId:'BK-1049',tableNumber:'Table 1',items:[{name:'Green Curry',qty:1,unitPrice:16},{name:'Fried Rice',qty:1,unitPrice:12},{name:'Thai Iced Tea',qty:1,unitPrice:5}],subtotal:33,tax:2.31,grandTotal:35.31,status:'Served',paidBy:'Pending',staffName:'Jane Smith',notes:'No shellfish'},
   {id:genId(),timestamp:'2026-04-05T20:15:00',orderNumber:'RO-1012',roomNumber:'104',guestName:'David Miller',bookingId:'BK-1044',tableNumber:'Room 104',items:[{name:'Club Sandwich',qty:1,unitPrice:13},{name:'Coffee',qty:1,unitPrice:4}],subtotal:17,tax:1.19,grandTotal:18.19,status:'Paid',paidBy:'Room Charge',staffName:'Jane Smith',notes:''},
   {id:genId(),timestamp:'2026-04-06T12:30:00',orderNumber:'RO-1013',roomNumber:'301',guestName:'Noam Levi',bookingId:'BK-1045',tableNumber:'Table 3',items:[{name:'Spring Rolls',qty:1,unitPrice:7},{name:'Pad Thai',qty:1,unitPrice:14}],subtotal:21,tax:1.47,grandTotal:22.47,status:'New',paidBy:'Pending',staffName:'Mike Johnson',notes:''},
-  {id:genId(),timestamp:'2026-04-06T13:00:00',orderNumber:'RO-1014',roomNumber:'205',guestName:'Erik Lindqvist',bookingId:'BK-1051',tableNumber:'Room 205',items:[{name:'Fried Rice',qty:1,unitPrice:12},{name:'Fresh Juice',qty:1,unitPrice:6}],subtotal:18,tax:1.26,grandTotal:19.26,status:'New',paidBy:'Pending',staffName:'Jane Smith',notes:'Gluten-free'},
-  {id:genId(),timestamp:'2026-04-06T13:15:00',orderNumber:'RO-1015',roomNumber:'204',guestName:'Lucas Santos',bookingId:'BK-1052',tableNumber:'Table 2',items:[{name:'Tom Yum Soup',qty:1,unitPrice:10},{name:'Green Curry',qty:1,unitPrice:16},{name:'Mango Sticky Rice',qty:2,unitPrice:8},{name:'Thai Iced Tea',qty:2,unitPrice:5}],subtotal:52,tax:3.64,grandTotal:55.64,status:'New',paidBy:'Pending',staffName:'Mike Johnson',notes:''},
+  {id:genId(),timestamp:'2026-04-06T13:00:00',orderNumber:'RO-1014',roomNumber:'205',guestName:'Erik Lindqvist',bookingId:'BK-1050',tableNumber:'Room 205',items:[{name:'Fried Rice',qty:1,unitPrice:12},{name:'Fresh Juice',qty:1,unitPrice:6}],subtotal:18,tax:1.26,grandTotal:19.26,status:'New',paidBy:'Pending',staffName:'Jane Smith',notes:'Gluten-free'},
+  {id:genId(),timestamp:'2026-04-06T13:15:00',orderNumber:'RO-1015',roomNumber:'204',guestName:'Lucas Santos',bookingId:'BK-1051',tableNumber:'Table 2',items:[{name:'Tom Yum Soup',qty:1,unitPrice:10},{name:'Green Curry',qty:1,unitPrice:16},{name:'Mango Sticky Rice',qty:2,unitPrice:8},{name:'Thai Iced Tea',qty:2,unitPrice:5}],subtotal:52,tax:3.64,grandTotal:55.64,status:'New',paidBy:'Pending',staffName:'Mike Johnson',notes:''},
   {id:genId(),timestamp:'2026-04-14T11:20:00',orderNumber:'RO-1016',roomNumber:'104',guestName:'David Miller',bookingId:'BK-1044',tableNumber:'Room 104',items:[{name:'Pad Thai',qty:2,unitPrice:14},{name:'Green Curry',qty:1,unitPrice:16}],subtotal:44,tax:3.08,grandTotal:47.08,status:'Preparing',paidBy:'Pending',staffName:'Jane Smith',notes:'Demo sample — kitchen'},
   {id:genId(),timestamp:'2026-04-14T12:00:00',orderNumber:'RO-1017',roomNumber:'',guestName:'Walk-in Guest',bookingId:'',tableNumber:'Table 6',items:[{name:'Spring Rolls',qty:1,unitPrice:7},{name:'Fried Rice',qty:2,unitPrice:12}],subtotal:31,tax:2.17,grandTotal:33.17,status:'Ready',paidBy:'Pending',staffName:'Mike Johnson',notes:''},
-  {id:genId(),timestamp:'2026-04-14T18:45:00',orderNumber:'RO-1018',roomNumber:'402',guestName:'Akira Tanaka',bookingId:'BK-1050',tableNumber:'Table 1',items:[{name:'Tom Yum Soup',qty:1,unitPrice:10},{name:'Grilled Fish',qty:1,unitPrice:22}],subtotal:32,tax:2.24,grandTotal:34.24,status:'Served',paidBy:'Pending',staffName:'Jane Smith',notes:'Awaiting payment'},
+  {id:genId(),timestamp:'2026-04-14T18:45:00',orderNumber:'RO-1018',roomNumber:'402',guestName:'Akira Tanaka',bookingId:'BK-1049',tableNumber:'Table 1',items:[{name:'Tom Yum Soup',qty:1,unitPrice:10},{name:'Grilled Fish',qty:1,unitPrice:22}],subtotal:32,tax:2.24,grandTotal:34.24,status:'Served',paidBy:'Pending',staffName:'Jane Smith',notes:'Awaiting payment'},
   {id:genId(),timestamp:'2026-04-13T20:00:00',orderNumber:'RO-1019',roomNumber:'203',guestName:'Min-jun Park',bookingId:'BK-1041',tableNumber:'Room Service',items:[{name:'Club Sandwich',qty:2,unitPrice:13},{name:'Coffee',qty:2,unitPrice:4}],subtotal:34,tax:2.38,grandTotal:36.38,status:'Paid',paidBy:'Room Charge',staffName:'Jane Smith',notes:'Demo sample — settled'},
 ];
 const defaultPosTransactions = [
@@ -1335,11 +1340,11 @@ const defaultPosTransactions = [
   {id:genId(),timestamp:'2026-03-08T14:30:00',roomNumber:'205',guestName:'Erik Lindqvist',bookingId:'BK-1019',items:[{name:'Wine',qty:1,unitPrice:15,total:15}],itemCount:1,subtotal:15,tax:1.05,grandTotal:16.05,paidBy:'Credit Card',staffName:'Mike Johnson',transactionId:'TXN-10105'},
   {id:genId(),timestamp:'2026-03-16T16:00:00',roomNumber:'305',guestName:'David Miller',bookingId:'BK-1022',items:[{name:'Aspirin',qty:1,unitPrice:6,total:6},{name:'Water Bottle',qty:2,unitPrice:2,total:4}],itemCount:3,subtotal:10,tax:0.70,grandTotal:10.70,paidBy:'Room Charge',staffName:'Jane Smith',transactionId:'TXN-10106'},
   {id:genId(),timestamp:'2026-04-02T10:00:00',roomNumber:'203',guestName:'Marco Rossi',bookingId:'BK-1038',items:[{name:'Wine',qty:2,unitPrice:15,total:30},{name:'Chocolate Bar',qty:2,unitPrice:3.5,total:7}],itemCount:4,subtotal:37,tax:2.59,grandTotal:39.59,paidBy:'Cash',staffName:'Mike Johnson',transactionId:'TXN-10107'},
-  {id:genId(),timestamp:'2026-04-04T11:30:00',roomNumber:'302',guestName:'Sophie Laurent',bookingId:'BK-1048',items:[{name:'Water Bottle',qty:2,unitPrice:2,total:4},{name:'Toothbrush',qty:1,unitPrice:5,total:5}],itemCount:3,subtotal:9,tax:0.63,grandTotal:9.63,paidBy:'Room Charge',staffName:'Jane Smith',transactionId:'TXN-10108'},
+  {id:genId(),timestamp:'2026-04-04T11:30:00',roomNumber:'302',guestName:'Sophie Laurent',bookingId:'BK-1047',items:[{name:'Water Bottle',qty:2,unitPrice:2,total:4},{name:'Toothbrush',qty:1,unitPrice:5,total:5}],itemCount:3,subtotal:9,tax:0.63,grandTotal:9.63,paidBy:'Room Charge',staffName:'Jane Smith',transactionId:'TXN-10108'},
   {id:genId(),timestamp:'2026-04-05T16:00:00',roomNumber:'104',guestName:'David Miller',bookingId:'BK-1044',items:[{name:'Coffee',qty:3,unitPrice:4,total:12},{name:'Ice Cream',qty:1,unitPrice:5,total:5}],itemCount:4,subtotal:17,tax:1.19,grandTotal:18.19,paidBy:'Credit Card',staffName:'Jane Smith',transactionId:'TXN-10109'},
-  {id:genId(),timestamp:'2026-04-06T09:00:00',roomNumber:'402',guestName:'Akira Tanaka',bookingId:'BK-1050',items:[{name:'Phone Charger',qty:1,unitPrice:15,total:15},{name:'Coca-Cola',qty:2,unitPrice:3,total:6}],itemCount:3,subtotal:21,tax:1.47,grandTotal:22.47,paidBy:'Cash',staffName:'Mike Johnson',transactionId:'TXN-10110'},
+  {id:genId(),timestamp:'2026-04-06T09:00:00',roomNumber:'402',guestName:'Akira Tanaka',bookingId:'BK-1049',items:[{name:'Phone Charger',qty:1,unitPrice:15,total:15},{name:'Coca-Cola',qty:2,unitPrice:3,total:6}],itemCount:3,subtotal:21,tax:1.47,grandTotal:22.47,paidBy:'Cash',staffName:'Mike Johnson',transactionId:'TXN-10110'},
   {id:genId(),timestamp:'2026-04-14T08:30:00',roomNumber:'301',guestName:'Noam Levi',bookingId:'BK-1045',items:[{name:'Water Bottle',qty:4,unitPrice:2,total:8},{name:'Chips',qty:2,unitPrice:4,total:8}],itemCount:6,subtotal:16,tax:1.12,grandTotal:17.12,paidBy:'Room Charge',staffName:'Jane Smith',transactionId:'TXN-10111',source:'Mini-Mart'},
-  {id:genId(),timestamp:'2026-04-14T14:00:00',roomNumber:'102',guestName:'Sarah Thompson',bookingId:'BK-1060',items:[{name:'Beer',qty:4,unitPrice:6,total:24}],itemCount:4,subtotal:24,tax:1.68,grandTotal:25.68,paidBy:'Credit Card',staffName:'Mike Johnson',transactionId:'TXN-10112',source:'Mini-Mart'},
+  {id:genId(),timestamp:'2026-04-14T14:00:00',roomNumber:'102',guestName:'Sarah Thompson',bookingId:'BK-1054',items:[{name:'Beer',qty:4,unitPrice:6,total:24}],itemCount:4,subtotal:24,tax:1.68,grandTotal:25.68,paidBy:'Credit Card',staffName:'Mike Johnson',transactionId:'TXN-10112',source:'Mini-Mart'},
 ];
 const defaultServiceRequests = [
   {id:genId(),timestamp:'2026-01-03T15:00:00',bookingId:'BK-1001',roomNumber:'101',guestName:'John Smith',serviceName:'Breakfast Buffet',status:'Completed',assignedTo:'Jane Smith',scheduledTime:'2026-01-04T07:00:00',completedTime:'2026-01-04T07:30:00',notes:'Delivered to room',charge:25},
@@ -1350,9 +1355,9 @@ const defaultServiceRequests = [
   {id:genId(),timestamp:'2026-03-26T14:00:00',bookingId:'BK-1025',roomNumber:'203',guestName:'François Dubois',serviceName:'Mini-bar Replenishment',status:'Completed',assignedTo:'Tom Williams',scheduledTime:'2026-03-26T15:00:00',completedTime:'2026-03-26T15:30:00',notes:'Extra wine and water',charge:35},
   {id:genId(),timestamp:'2026-04-02T09:00:00',bookingId:'BK-1038',roomNumber:'203',guestName:'Marco Rossi',serviceName:'Standard Wash & Iron',status:'Completed',assignedTo:'Tom Williams',scheduledTime:'2026-04-02T12:00:00',completedTime:'2026-04-02T16:00:00',notes:'Express service requested',charge:30},
   {id:genId(),timestamp:'2026-04-04T10:00:00',bookingId:'BK-1044',roomNumber:'104',guestName:'David Miller',serviceName:'Breakfast Buffet',status:'Completed',assignedTo:'Jane Smith',scheduledTime:'2026-04-04T07:00:00',completedTime:'2026-04-04T07:30:00',notes:'',charge:25},
-  {id:genId(),timestamp:'2026-04-05T11:00:00',bookingId:'BK-1048',roomNumber:'302',guestName:'Sophie Laurent',serviceName:'Pool Day Pass',status:'Completed',assignedTo:'Mike Johnson',scheduledTime:'2026-04-05T12:00:00',completedTime:'2026-04-05T12:10:00',notes:'2 passes for couple',charge:20},
-  {id:genId(),timestamp:'2026-04-06T08:30:00',bookingId:'BK-1050',roomNumber:'402',guestName:'Akira Tanaka',serviceName:'Thai Massage (60 min)',status:'In Progress',assignedTo:'Jane Smith',scheduledTime:'2026-04-06T10:00:00',completedTime:'',inProgressTime:'2026-04-06T10:00:00',notes:'Requested deep tissue',charge:80},
-  {id:genId(),timestamp:'2026-04-06T09:00:00',bookingId:'BK-1052',roomNumber:'204',guestName:'Lucas Santos',serviceName:'Airport Pickup',status:'Pending',assignedTo:'Mike Johnson',scheduledTime:'2026-04-07T09:00:00',completedTime:'',notes:'International terminal, flight LH-472',charge:45},
+  {id:genId(),timestamp:'2026-04-05T11:00:00',bookingId:'BK-1047',roomNumber:'302',guestName:'Sophie Laurent',serviceName:'Pool Day Pass',status:'Completed',assignedTo:'Mike Johnson',scheduledTime:'2026-04-05T12:00:00',completedTime:'2026-04-05T12:10:00',notes:'2 passes for couple',charge:20},
+  {id:genId(),timestamp:'2026-04-06T08:30:00',bookingId:'BK-1049',roomNumber:'402',guestName:'Akira Tanaka',serviceName:'Thai Massage (60 min)',status:'In Progress',assignedTo:'Jane Smith',scheduledTime:'2026-04-06T10:00:00',completedTime:'',inProgressTime:'2026-04-06T10:00:00',notes:'Requested deep tissue',charge:80},
+  {id:genId(),timestamp:'2026-04-06T09:00:00',bookingId:'BK-1051',roomNumber:'204',guestName:'Lucas Santos',serviceName:'Airport Pickup',status:'Pending',assignedTo:'Mike Johnson',scheduledTime:'2026-04-07T09:00:00',completedTime:'',notes:'International terminal, flight LH-472',charge:45},
   {id:genId(),timestamp:'2026-04-06T09:30:00',bookingId:'BK-1045',roomNumber:'301',guestName:'Noam Levi',serviceName:'Mini-bar Replenishment',status:'Pending',assignedTo:'',scheduledTime:'',completedTime:'',notes:'Requested kosher snacks',charge:35},
 ];
 
@@ -1367,14 +1372,24 @@ let invoices = load('invoices', null); if(!invoices) { invoices = defaultInvoice
 let accounts = load('accounts', null); if(!accounts) { accounts = defaultAccounts; save('accounts', accounts); }
 (function migrateRestaurantRoleAndDemoAccounts() {
   try {
-    const roles = getUserRoles();
+    let roles = getUserRoles();
     if (roles.indexOf('Restaurant') === -1) {
       settings.userRoles = roles.concat(['Restaurant']).join(',');
       save('settings', settings);
     }
+    roles = getUserRoles();
     const reEmail = 'restaurant@hotel.com';
     if (!accounts.some(function(a) { return a.email && a.email.toLowerCase() === reEmail; })) {
       accounts.push({ id: genId(), name: 'Restaurant Staff', email: reEmail, role: 'Restaurant', status: 'active' });
+      save('accounts', accounts);
+    }
+    if (roles.indexOf('Kitchen') === -1) {
+      settings.userRoles = roles.concat(['Kitchen']).join(',');
+      save('settings', settings);
+    }
+    const kitEmail = 'kitchen@hotel.com';
+    if (!accounts.some(function(a) { return a.email && a.email.toLowerCase() === kitEmail; })) {
+      accounts.push({ id: genId(), name: 'Kitchen Staff', email: kitEmail, role: 'Kitchen', status: 'active' });
       save('accounts', accounts);
     }
     const demoSeeds = [
@@ -1382,6 +1397,7 @@ let accounts = load('accounts', null); if(!accounts) { accounts = defaultAccount
       { name: 'Jane Smith', email: 'jane@hotel.com', role: 'Receptionist', status: 'active' },
       { name: 'Mike Johnson', email: 'mike@hotel.com', role: 'Manager', status: 'active' },
       { name: 'Restaurant Staff', email: 'restaurant@hotel.com', role: 'Restaurant', status: 'active' },
+      { name: 'Kitchen Staff', email: 'kitchen@hotel.com', role: 'Kitchen', status: 'active' },
       { name: 'Tom Williams', email: 'tom@hotel.com', role: 'Housekeeper', status: 'inactive' }
     ];
     let added = false;
@@ -1572,6 +1588,18 @@ document.querySelectorAll('#sidebarNav a[data-page]').forEach(link => {
 });
 document.getElementById('menuToggle').addEventListener('click', () => { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('open'); });
 document.getElementById('sidebarOverlay').addEventListener('click', () => { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('open'); });
+
+window.addEventListener('storage', function(ev) {
+  if (!ev.key || ev.key !== DB_KEY + 'restaurantOrders') return;
+  try { restaurantOrders = ev.newValue ? JSON.parse(ev.newValue) : []; } catch (err) { return; }
+  const nav = document.querySelector('#sidebarNav a[data-page="restaurant"]');
+  if (nav && nav.classList.contains('active')) renderRestaurant();
+});
+window.addEventListener('hotel-sync-restaurantOrders', function() {
+  restaurantOrders = load('restaurantOrders', restaurantOrders);
+  const nav = document.querySelector('#sidebarNav a[data-page="restaurant"]');
+  if (nav && nav.classList.contains('active')) renderRestaurant();
+});
 
 function openModal(html) { document.getElementById('modalContent').innerHTML = html; document.getElementById('modalOverlay').classList.add('active'); }
 function closeModal() { window._cashPaymentCtx = null; document.getElementById('modalOverlay').classList.remove('active'); }
@@ -4204,8 +4232,65 @@ window.restOpenTableBillModal = function(tableName) {
 };
 
 function renderRestaurant() {
+  restaurantOrders = load('restaurantOrders', restaurantOrders);
   const checkedIn = bookings.filter(b => b.arrivalStatus === 'Checked-in');
   const taxRate = parseFloat(settings.serviceTax || settings.taxRate) || 7;
+  const isKitchen = currentRole === 'Kitchen';
+
+  if (isKitchen) {
+    const navRest = document.querySelector('#sidebarNav a[data-page="restaurant"]');
+    if (navRest && navRest.classList.contains('active')) {
+      document.getElementById('pageTitle').textContent = 'Kitchen';
+    }
+    const syncBanner = '<div class="card" style="margin-bottom:1rem;border-left:4px solid #1a73e8;"><div class="card-body" style="padding:0.75rem 1rem;font-size:0.82rem;line-height:1.45;"><strong>Synced with Restaurant</strong> — Everyone uses the same saved orders. This screen updates when orders change here, in another tab, or when front-of-house edits the queue.</div></div>';
+    const kitchenQueue = restaurantOrders.filter(function(o) {
+      return o && (o.status === 'New' || o.status === 'Preparing' || o.status === 'Ready');
+    }).sort(function(a, b) { try { return new Date(a.timestamp) - new Date(b.timestamp); } catch (e) { return 0; } });
+    let kvHtml = '';
+    if (kitchenQueue.length === 0) {
+      kvHtml = '<div style="text-align:center;padding:2rem;color:var(--text-light);">No tickets in the kitchen queue (nothing at New, Preparing, or Ready)</div>';
+    } else {
+      kitchenQueue.forEach(function(o) {
+        const borderColor = o.status === 'New' ? '#1565c0' : (o.status === 'Preparing' ? '#e65100' : '#2e7d32');
+        const idS = String(o.id).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+        kvHtml += '<div class="kitchen-card" style="border-color:' + borderColor + ';"><div class="kc-header"><span class="kc-order-num">' + o.orderNumber + '</span><span class="status status-' + String(o.status || '').toLowerCase() + '">' + o.status + '</span></div>';
+        kvHtml += '<div class="kc-items">' + (o.items || []).map(function(i) { return '<div class="kc-item">• ' + i.name + ' x' + i.qty + '</div>'; }).join('') + '</div>';
+        if (o.notes) kvHtml += '<div style="font-size:0.8rem;color:var(--text-light);margin-bottom:0.5rem;">📝 ' + o.notes + '</div>';
+        kvHtml += '<div style="font-size:0.78rem;color:var(--text-light);">' + (o.tableNumber || '') + (o.guestName ? ' · ' + o.guestName : '') + '</div>';
+        kvHtml += '<div class="kc-actions" style="margin-top:0.5rem;">';
+        if (o.status === 'New') kvHtml += '<button class="btn btn-sm btn-warning" onclick="restUpdateStatus(\'' + idS + '\',\'Preparing\')">🔥 Start prep</button>';
+        if (o.status === 'Preparing') kvHtml += '<button class="btn btn-sm btn-success" onclick="restUpdateStatus(\'' + idS + '\',\'Ready\')">✅ Mark ready</button>';
+        if (o.status === 'Ready') kvHtml += '<button class="btn btn-sm btn-outline" onclick="restUpdateStatus(\'' + idS + '\',\'Served\')">🍽️ Mark served</button>';
+        kvHtml += '</div></div>';
+      });
+    }
+    const activeOrdersKitchen = restaurantOrders.filter(restOrderIsActive);
+    let html = syncBanner;
+    html += '<div class="card"><div class="card-header"><h2 style="margin:0;">Kitchen queue</h2><p style="font-size:0.75rem;color:var(--text-light);margin:0.35rem 0 0;line-height:1.35;">Oldest first · advance status as you cook</p></div><div class="card-body">' + kvHtml + '</div></div>';
+    html += '<div class="card" style="margin-top:1rem;"><div class="card-header" style="flex-direction:column;align-items:stretch;"><h2 style="margin:0;">All active orders</h2><p style="font-size:0.72rem;color:var(--text-light);margin:0.35rem 0 0;line-height:1.35;">Same list as Restaurant — payment actions are hidden for Kitchen.</p></div><div class="card-body"><div id="restOrderGrid"></div></div></div>';
+    document.getElementById('page-restaurant').innerHTML = html;
+    new XGrid('restOrderGrid', {
+      columns: [
+        {field:'orderNumber',label:'Order #',filterable:true,width:'90px'},
+        {field:'timestamp',label:'Time',format:function(v){try{var d=new Date(v);return d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}catch(e){return v;}},width:'75px'},
+        {field:'tableNumber',label:'Table/Room',filterable:true,width:'100px'},
+        {field:'guestName',label:'Guest',filterable:true},
+        {field:'items',label:'Items',format:function(v){return Array.isArray(v)?v.map(function(i){return i.name+' x'+i.qty;}).join(', '):'';}},
+        {field:'grandTotal',label:'Total',format:function(v){return '<strong>'+fmt$(v)+'</strong>';},width:'80px'},
+        {field:'status',label:'Status',format:function(v){var cls=v==='New'?'new':v==='Preparing'?'preparing':v==='Ready'?'ready':v==='Served'?'served':'paid';return '<span class="status status-'+cls+'">'+v+'</span>';},filterable:true,width:'95px'},
+        {field:'paidBy',label:'Payment',filterable:true,width:'95px'},
+      ],
+      data: activeOrdersKitchen,
+      summaryRow: {orderNumber:'label', grandTotal:'sum'},
+      emptyMessage: '🍽️ No active orders',
+      actions: [
+        {name:'preparing',label:'🔥 Prep',cls:'btn-warning',condition:function(r){return r.status==='New';},handler:function(id){restUpdateStatus(id,'Preparing');}},
+        {name:'ready',label:'✅ Ready',cls:'btn-success',condition:function(r){return r.status==='Preparing';},handler:function(id){restUpdateStatus(id,'Ready');}},
+        {name:'served',label:'🍽️ Served',cls:'btn-outline',condition:function(r){return r.status==='Ready';},handler:function(id){restUpdateStatus(id,'Served');}},
+      ],
+    });
+    return;
+  }
 
   let orderTypeHtml = '<div class="rest-order-type">' +
     '<button class="btn ' + (restOrderType === 'Room Service' ? 'btn-primary' : 'btn-outline') + '" onclick="restSetOrderType(\'Room Service\')">🏨 Room Service</button>' +
@@ -4423,21 +4508,24 @@ function renderRestaurant() {
     ],
   });
 
-  const kitchenOrders = restaurantOrders.filter(o => o.status === 'Preparing' || o.status === 'Ready');
+  const kitchenOrders = restaurantOrders.filter(function(o) { return o && (o.status === 'New' || o.status === 'Preparing' || o.status === 'Ready'); })
+    .sort(function(a, b) { try { return new Date(a.timestamp) - new Date(b.timestamp); } catch (e) { return 0; } });
   const kvEl = document.getElementById('restKitchenView');
   if (kitchenOrders.length === 0) {
-    kvEl.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-light);">No active kitchen orders</div>';
+    kvEl.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-light);">No tickets at New / Preparing / Ready</div>';
   } else {
     let kvHtml = '';
-    kitchenOrders.forEach(o => {
-      const borderColor = o.status === 'Preparing' ? '#e65100' : '#2e7d32';
-      kvHtml += '<div class="kitchen-card" style="border-color:' + borderColor + ';"><div class="kc-header"><span class="kc-order-num">' + o.orderNumber + '</span><span class="status status-' + o.status.toLowerCase() + '">' + o.status + '</span></div>';
-      kvHtml += '<div class="kc-items">' + (o.items || []).map(i => '<div class="kc-item">• ' + i.name + ' x' + i.qty + '</div>').join('') + '</div>';
+    kitchenOrders.forEach(function(o) {
+      const borderColor = o.status === 'New' ? '#1565c0' : (o.status === 'Preparing' ? '#e65100' : '#2e7d32');
+      const idS = String(o.id).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+      kvHtml += '<div class="kitchen-card" style="border-color:' + borderColor + ';"><div class="kc-header"><span class="kc-order-num">' + o.orderNumber + '</span><span class="status status-' + String(o.status || '').toLowerCase() + '">' + o.status + '</span></div>';
+      kvHtml += '<div class="kc-items">' + (o.items || []).map(function(i) { return '<div class="kc-item">• ' + i.name + ' x' + i.qty + '</div>'; }).join('') + '</div>';
       if (o.notes) kvHtml += '<div style="font-size:0.8rem;color:var(--text-light);margin-bottom:0.5rem;">📝 ' + o.notes + '</div>';
       kvHtml += '<div style="font-size:0.78rem;color:var(--text-light);">' + o.tableNumber + (o.guestName ? ' · ' + o.guestName : '') + '</div>';
       kvHtml += '<div class="kc-actions" style="margin-top:0.5rem;">';
-      if (o.status === 'Preparing') kvHtml += '<button class="btn btn-sm btn-success" onclick="restUpdateStatus(\'' + o.id + '\',\'Ready\')">✅ Mark Ready</button>';
-      if (o.status === 'Ready') kvHtml += '<button class="btn btn-sm btn-outline" onclick="restUpdateStatus(\'' + o.id + '\',\'Served\')">🍽️ Mark Served</button>';
+      if (o.status === 'New') kvHtml += '<button class="btn btn-sm btn-warning" onclick="restUpdateStatus(\'' + idS + '\',\'Preparing\')">🔥 Start prep</button>';
+      if (o.status === 'Preparing') kvHtml += '<button class="btn btn-sm btn-success" onclick="restUpdateStatus(\'' + idS + '\',\'Ready\')">✅ Mark Ready</button>';
+      if (o.status === 'Ready') kvHtml += '<button class="btn btn-sm btn-outline" onclick="restUpdateStatus(\'' + idS + '\',\'Served\')">🍽️ Mark Served</button>';
       kvHtml += '</div></div>';
     });
     kvEl.innerHTML = kvHtml;
@@ -4545,6 +4633,7 @@ window.restCartQty = function(idx, delta) {
 window.restCartRemove = function(idx) { restCart.splice(idx, 1); renderRestaurant(); };
 
 window.restSendToKitchen = function() {
+  if (currentRole === 'Kitchen') { toast('Kitchen cannot create orders — use Restaurant login'); return; }
   if (restCart.length === 0) { toast('Cart is empty'); return; }
   if (restOrderType === 'Room Service' && !restSelectedBooking) { toast('Select a room first'); return; }
 
@@ -4584,6 +4673,7 @@ window.restSendToKitchen = function() {
 };
 
 window.restSendToRoom = function() {
+  if (currentRole === 'Kitchen') { toast('Kitchen cannot create orders — use Restaurant login'); return; }
   if (restCart.length === 0) { toast('Cart is empty'); return; }
   if (restOrderType === 'Room Service' && !restSelectedBooking) { toast('Select a room first'); return; }
 
@@ -4623,6 +4713,7 @@ window.restSendToRoom = function() {
 };
 
 window.restCheckout = function(paidBy) {
+  if (currentRole === 'Kitchen') { toast('Kitchen cannot take payment'); return; }
   if (restCart.length === 0) { toast('Cart is empty'); return; }
   if (paidBy === 'Room Charge') {
     if (restOrderType !== 'Room Service' || !restSelectedBooking) { toast('Select a room / guest first'); return; }
@@ -4676,6 +4767,7 @@ window.restCheckout = function(paidBy) {
 };
 
 window.restChargeToTableWalkIn = function() {
+  if (currentRole === 'Kitchen') { toast('Kitchen cannot create orders — use Restaurant login'); return; }
   if (restCart.length === 0) { toast('Cart is empty'); return; }
   if (restOrderType !== 'Table') { return; }
   const taxRate = parseFloat(settings.serviceTax || settings.taxRate) || 7;
@@ -4722,6 +4814,7 @@ window.restUpdateStatus = function(orderId, newStatus) {
 };
 
 window.restMarkTableServedDone = function(orderId) {
+  if (currentRole === 'Kitchen') { toast('Kitchen cannot close paid tabs — use Restaurant'); return; }
   const o = restaurantOrders.find(x => x.id === orderId); if (!o) return;
   if (o.status !== 'Served' || o.paidBy !== 'Table' || !o.transactionId) return;
   o.status = 'Paid';
@@ -4732,6 +4825,7 @@ window.restMarkTableServedDone = function(orderId) {
 };
 
 window.restPayOrder = function(orderId, paidBy, skipRender) {
+  if (currentRole === 'Kitchen') { if (!skipRender) toast('Kitchen cannot take payment'); return; }
   const o = restaurantOrders.find(x => x.id === orderId); if (!o) return;
   if (o.transactionId) { if (!skipRender) toast('Already charged'); return; }
 
@@ -4773,6 +4867,7 @@ window.restPayOrder = function(orderId, paidBy, skipRender) {
 };
 
 window.restPayActiveOrdersTotal = function(paidBy) {
+  if (currentRole === 'Kitchen') { toast('Kitchen cannot take payment'); return; }
   let activeOrders = restaurantOrders.filter(restOrderIsActive);
   if (restSelectedBooking) {
     const bk = bookings.find(b => b.id === restSelectedBooking);
@@ -5410,6 +5505,15 @@ window.doLogin = function() {
     save('accounts', accounts);
     account = accounts.find(a => a.email.toLowerCase() === username && a.status === 'active');
   }
+  if (!account && username === 'kitchen@hotel.com') {
+    accounts.push({ id: genId(), name: 'Kitchen Staff', email: 'kitchen@hotel.com', role: 'Kitchen', status: 'active' });
+    if (getUserRoles().indexOf('Kitchen') === -1) {
+      settings.userRoles = getUserRoles().concat(['Kitchen']).join(',');
+      save('settings', settings);
+    }
+    save('accounts', accounts);
+    account = accounts.find(a => a.email.toLowerCase() === username && a.status === 'active');
+  }
   if (!account) { errEl.textContent = 'Account not found or inactive. Try password 1234 or ask an admin to add your user under Accounts.'; errEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); return; }
   const setupPw = localStorage.getItem(DB_KEY + 'setupPassword') || (isAndroid ? (function(){ try { return HotelDB.getSetting('setupPassword'); } catch(e){ return null; } })() : null);
   const validPw = password === '1234' || (setupPw && password === setupPw) || (account.password && password === account.password);
@@ -5448,7 +5552,7 @@ function updateTopbarUser() {
 }
 
 function navigateToDefaultPage() {
-  const defaultPages = { 'Admin': 'dashboard', 'Manager': 'reports', 'Receptionist': 'rooms', 'Housekeeper': 'housekeeping', 'Restaurant': 'restaurant' };
+  const defaultPages = { 'Admin': 'dashboard', 'Manager': 'reports', 'Receptionist': 'rooms', 'Housekeeper': 'housekeeping', 'Restaurant': 'restaurant', 'Kitchen': 'restaurant' };
   const page = defaultPages[currentRole] || 'dashboard';
   const link = document.querySelector('#sidebarNav a[data-page="' + page + '"]');
   if (link) link.click();
@@ -5472,6 +5576,7 @@ function applyRBAC() {
     'Receptionist': ['dashboard','rooms','bookings','guests','services','invoices','guestportal','pos','restaurant','minimart','menuitems','inventory'],
     'Housekeeper': ['dashboard','housekeeping','maintenance'],
     'Restaurant': ['restaurant','menuitems','inventory'],
+    'Kitchen': ['restaurant'],
   };
   const allowed = allowedPages[currentRole];
   const links = document.querySelectorAll('#sidebarNav a[data-page]');
@@ -5491,10 +5596,15 @@ function applyRBAC() {
   });
   const activePage = document.querySelector('#sidebarNav a.active');
   if (activePage && activePage.style.display === 'none') {
-    const defaultPages = { 'Admin': 'dashboard', 'Manager': 'reports', 'Receptionist': 'rooms', 'Housekeeper': 'housekeeping', 'Restaurant': 'restaurant' };
+    const defaultPages = { 'Admin': 'dashboard', 'Manager': 'reports', 'Receptionist': 'rooms', 'Housekeeper': 'housekeeping', 'Restaurant': 'restaurant', 'Kitchen': 'restaurant' };
     const defPage = defaultPages[currentRole] || 'dashboard';
     const link = document.querySelector('#sidebarNav a[data-page="' + defPage + '"]');
     if (link) link.click();
+  }
+  const restNav = document.querySelector('#sidebarNav a[data-page="restaurant"]');
+  if (restNav) {
+    if (currentRole === 'Kitchen') restNav.innerHTML = '<span class="icon">◆</span> Kitchen';
+    else restNav.innerHTML = '<span class="icon">◈</span> Restaurant';
   }
 }
 
