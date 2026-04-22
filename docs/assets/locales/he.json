@@ -79,6 +79,11 @@
     "pwd": "סיסמה",
     "tapEmail": "לחץ על אימייל למילוי אוטומטי"
   },
+  "settings": {
+    "languageSection": "שפת המערכת",
+    "appLanguage": "שפת ממשק",
+    "languageHint": "חל על תפריטים ותוויות נפוצות. זהה לבחירת השפה בסרך העליון."
+  },
   "minimart": {
     "guestPickerLabel": "מיני-מרט — עבור מי ההזמנה?",
     "searchGuestPlaceholder": "חיפוש לפי חדר, אורח או מספר הזמנה…",

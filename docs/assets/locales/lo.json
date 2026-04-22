@@ -79,6 +79,11 @@
     "pwd": "ລະຫັດ",
     "tapEmail": "ແຕະອີເມວເພື່ອຕື່ມໃຫ້"
   },
+  "settings": {
+    "languageSection": "ພາສາແອັບ",
+    "appLanguage": "ພາສາໜ້າຈໍ",
+    "languageHint": "ໃຊ້ກັບເມນູແລະຂໍ້ຄວາມ — ຄືກັນກັບການເລືອກພາສາໃນແຖບເທິງ"
+  },
   "minimart": {
     "guestPickerLabel": "ມິນິມາເດີ — ສັ່ງໃຫ້ໃຜ?",
     "searchGuestPlaceholder": "ຄົ້ນຫາຕາມຫ້ອງ, ແຂກ, ຫຼືເລກການຈອງ…",

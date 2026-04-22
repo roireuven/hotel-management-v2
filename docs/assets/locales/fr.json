@@ -79,6 +79,11 @@
     "pwd": "MDP",
     "tapEmail": "Appuyez sur un e-mail pour remplir l’utilisateur"
   },
+  "settings": {
+    "languageSection": "Langue de l’app",
+    "appLanguage": "Langue de l’interface",
+    "languageHint": "S’applique aux menus et libellés courants. Identique au sélecteur de la barre supérieure."
+  },
   "minimart": {
     "guestPickerLabel": "Mini-marché — commande pour qui ?",
     "searchGuestPlaceholder": "Recherche chambre, client ou n° de résa…",

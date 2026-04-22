@@ -79,6 +79,11 @@
     "pwd": "PWD",
     "tapEmail": "Tap an email to auto-fill the username field"
   },
+  "settings": {
+    "languageSection": "App language",
+    "appLanguage": "Interface language",
+    "languageHint": "Applies to menus and common labels. Same as the language control in the top bar."
+  },
   "minimart": {
     "guestPickerLabel": "Mini-mart — who is this order for?",
     "searchGuestPlaceholder": "Search by room, guest, or booking ID…",

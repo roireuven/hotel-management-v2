@@ -1616,6 +1616,17 @@ const pageTitles = {dashboard:'Dashboard',rooms:'Room Management',bookings:'Book
 
 // ===== I18N (en / he / th) =====
 const I18N_KEY = DB_KEY + 'uiLocale';
+const I18N_LOCALE_LIST = [
+  { code: 'en', label: 'English' },
+  { code: 'he', label: 'עברית (Hebrew)' },
+  { code: 'th', label: 'ไทย (Thai)' },
+  { code: 'lo', label: 'ລາວ (Lao)' },
+  { code: 'es', label: 'Español (Spanish)' },
+  { code: 'fr', label: 'Français (French)' }
+];
+function getCurrentUiLocale() {
+  try { return localStorage.getItem(I18N_KEY) || 'en'; } catch (e) { return 'en'; }
+}
 let i18nEn = null;
 let i18nData = null;
 function i18nAssetUrl(name) { return new URL('assets/locales/' + name, document.baseURI || (window.location && window.location.href) || 'http://localhost/').toString(); }
@@ -3014,8 +3025,20 @@ function renderSettings() {
   const s = settings;
   const counts = getDbCounts();
   const dbType = isAndroid ? '🟢 SQLite Database (hotel_manager.db)' : '🔵 Browser localStorage';
+  const curLoc = getCurrentUiLocale();
+  const localeOptionsHtml = I18N_LOCALE_LIST.map(function (o) {
+    return '<option value="' + o.code + '"' + (o.code === curLoc ? ' selected' : '') + '>' + o.label + '</option>';
+  }).join('');
   document.getElementById('page-settings').innerHTML = `
     <div class="card"><div class="card-header"><h2>Hotel Settings</h2></div><div class="card-body">
+      <h3 style="margin:0 0 0.75rem;font-size:1rem;">${t('settings.languageSection')}</h3>
+      <div class="form-group" style="margin-bottom:1rem;">
+        <label for="settingsLocaleSelect">${t('settings.appLanguage')}</label>
+        <select class="form-control" id="settingsLocaleSelect" onchange="setAppLocale(this.value)">
+          ${localeOptionsHtml}
+        </select>
+        <p style="font-size:0.8rem;color:var(--text-light);margin:0.35rem 0 0;">${t('settings.languageHint')}</p>
+      </div>
       <div class="form-row"><div class="form-group"><label>Hotel Name</label><input type="text" class="form-control" id="sName" value="${s.hotelName}"></div><div class="form-group"><label>Contact Email</label><input type="email" class="form-control" id="sEmail" value="${s.email}"></div></div>
       <div class="form-row"><div class="form-group"><label>Phone Number</label><input type="tel" class="form-control" id="sPhone" value="${s.phone}"></div><div class="form-group"><label>Currency${adminEditBtn('currencyLabels')}</label><select class="form-control" id="sCurrency">${getCurrencyLabels().map(c=>`<option ${c===s.currency?'selected':''}>${c}</option>`).join('')}</select></div></div>
       <div class="form-group"><label>Address</label><input type="text" class="form-control" id="sAddr" value="${s.address}"></div>

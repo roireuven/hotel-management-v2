@@ -79,6 +79,11 @@
     "pwd": "PWD",
     "tapEmail": "Pulse un correo para rellenar el usuario"
   },
+  "settings": {
+    "languageSection": "Idioma de la app",
+    "appLanguage": "Idioma de la interfaz",
+    "languageHint": "Afecta a menús y textos comunes. Es el mismo control que en la barra superior."
+  },
   "minimart": {
     "guestPickerLabel": "Minimarket — ¿Para quién es el pedido?",
     "searchGuestPlaceholder": "Buscar por habitación, huésped o reserva…",
