@@ -4101,9 +4101,26 @@ let restOrderType = 'Room Service';
 let restSelectedBooking = null;
 let restTableNumber = 'Table 1';
 let restMenuFilter = 'All';
+/** Table mode: when true, Active/Past lists show all tables until a table tile is selected. */
+let restFocusAllTables = true;
+/** Keeps Past Orders panel open across re-renders (status updates, kitchen, etc.). */
+let restHistoryPanelOpen = false;
 
 function restOrderIsActive(o) { return o && o.status !== 'Paid'; }
 function restOrderIsPast(o) { return o && o.status === 'Paid'; }
+
+/** Single source for which rows appear in Active Orders (and totals bar). */
+function restApplyActiveOrderFilter(orders) {
+  let list = orders.filter(restOrderIsActive);
+  if (restOrderType === 'Room Service' && restSelectedBooking) {
+    const bk = bookings.find(function(b) { return b.id === restSelectedBooking; });
+    if (bk) list = list.filter(function(o) { return restOrderMatchesSelectedBooking(o, bk); });
+  } else if (restOrderType === 'Table' && !restFocusAllTables && restTableNumber) {
+    const tn = String(restTableNumber).trim();
+    list = list.filter(function(o) { return String(o.tableNumber || '').trim() === tn; });
+  }
+  return list;
+}
 
 function restOrderMatchesSelectedBooking(o, bk) {
   if (!o || !bk) return false;
@@ -4145,6 +4162,7 @@ function restStatusClassForTile(st) {
 }
 
 window.restTableFloorClick = function(tableName) {
+  restFocusAllTables = false;
   restTableNumber = tableName;
   const st = restGetTableFloorState(tableName);
   renderRestaurant();
@@ -4342,15 +4360,11 @@ function renderRestaurant() {
   html += '<div class="pos-totals"><div class="total-row"><span>Subtotal</span><span>' + fmt$(subtotal) + '</span></div><div class="total-row"><span>Tax (' + taxRate + '%)</span><span>' + fmt$(tax) + '</span></div><div class="total-row grand"><span>Grand Total</span><span>' + fmt$(grandTotal) + '</span></div></div></div>';
   html += notesHtml + actionsHtml;
 
-  const filterLabel = restSelectedBooking ? (() => { const bk = bookings.find(b=>b.id===restSelectedBooking); return bk ? 'Room '+bk.roomNumber+' - '+bk.guestName : 'Selected Guest'; })() : (restOrderType==='Table' && typeof restTableNumber!=='undefined' && restTableNumber ? restTableNumber : 'All');
+  const filterLabel = restSelectedBooking
+    ? (function() { const bk = bookings.find(function(b) { return b.id === restSelectedBooking; }); return bk ? ('Room ' + bk.roomNumber + ' - ' + bk.guestName) : 'Selected Guest'; })()
+    : (restOrderType === 'Table' ? (restFocusAllTables ? 'All tables' : (restTableNumber || 'Table')) : 'All guests');
 
-  let activeOrdersPreview = restaurantOrders.filter(restOrderIsActive);
-  if (restSelectedBooking) {
-    const bk = bookings.find(b => b.id === restSelectedBooking);
-    if (bk) activeOrdersPreview = activeOrdersPreview.filter(o => restOrderMatchesSelectedBooking(o, bk));
-  } else if (restOrderType === 'Table' && typeof restTableNumber !== 'undefined' && restTableNumber) {
-    activeOrdersPreview = activeOrdersPreview.filter(o => o.tableNumber === restTableNumber);
-  }
+  const activeOrdersPreview = restApplyActiveOrderFilter(restaurantOrders);
   const totalActiveOrderAmt = Math.round(activeOrdersPreview.reduce((s, o) => s + (parseFloat(o.grandTotal) || 0), 0) * 100) / 100;
   const canPayTotalsEnabled = totalActiveOrderAmt > 0;
   const payTotalBar = '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:0.5rem;margin-top:0.35rem;width:100%;">' +
@@ -4361,21 +4375,29 @@ function renderRestaurant() {
     '<button type="button" class="btn btn-sm btn-outline" ' + (!canPayTotalsEnabled ? 'disabled style="opacity:0.5;"' : '') + ' onclick="restPayActiveOrdersTotal(\'Credit Card\')">💳 Pay total — Card</button>' +
     '</div>';
 
-  html += '<div class="card" style="margin-top:1rem;"><div class="card-header" style="flex-direction:column;align-items:stretch;"><div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:0.5rem;"><h2 style="margin:0;">Active Orders <span style="font-size:0.75rem;color:var(--primary);font-weight:400;">('+filterLabel+')</span></h2><div style="display:flex;gap:0.4rem;"><button class="btn btn-sm btn-outline" onclick="restSelectedBooking=null;renderRestaurant()">Show All</button><button class="btn btn-sm btn-outline" onclick="toggleRestHistory()">◳ Past Orders</button></div></div>' + payTotalBar + '</div><div class="card-body"><div id="restOrderGrid"></div></div></div>';
-  html += '<div class="card" id="restHistoryCard" style="display:none;"><div class="card-header"><h2>◆ Past Orders <span style="font-size:0.75rem;color:var(--primary);font-weight:400;">('+filterLabel+')</span></h2><button class="btn btn-sm btn-outline" onclick="toggleRestHistory()">Hide</button></div><div class="card-body"><p style="font-size:0.78rem;color:var(--text-light);margin:0 0 0.75rem;line-height:1.35;">Only paid orders for the room/guest or table selected above.</p><div id="restHistoryGrid"></div></div></div>';
+  const scopeHint = (function() {
+    if (restOrderType === 'Room Service' && restSelectedBooking) {
+      const bk = bookings.find(function(b) { return b.id === restSelectedBooking; });
+      return bk ? ('Room ' + bk.roomNumber + ' · ' + bk.guestName) : 'Selected guest';
+    }
+    if (restOrderType === 'Table') {
+      return restFocusAllTables ? 'All tables' : (restTableNumber || 'Table');
+    }
+    return 'All rooms (not filtered)';
+  })();
+  html += '<div class="card" style="margin-top:1rem;"><div class="card-header" style="flex-direction:column;align-items:stretch;"><div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:0.5rem;"><h2 style="margin:0;">Active Orders <span style="font-size:0.75rem;color:var(--primary);font-weight:400;">('+filterLabel+')</span></h2><div style="display:flex;flex-wrap:wrap;gap:0.4rem;"><button type="button" class="btn btn-sm btn-outline" onclick="restSelectedBooking=null;restFocusAllTables=true;renderRestaurant()" title="Show every open order (all guests or all tables)">Show all</button><button type="button" class="btn btn-sm btn-outline" onclick="toggleRestHistory()">◳ Past Orders</button></div></div><p style="font-size:0.72rem;color:var(--text-light);margin:0.25rem 0 0;line-height:1.35;">Scope: <strong>' + scopeHint + '</strong> · non-paid statuses (New → Served) appear here.</p>' + payTotalBar + '</div><div class="card-body"><div id="restOrderGrid"></div></div></div>';
+  html += '<div class="card" id="restHistoryCard" style="' + (restHistoryPanelOpen ? '' : 'display:none;') + '"><div class="card-header"><h2>◆ Past Orders <span style="font-size:0.75rem;color:var(--primary);font-weight:400;">('+filterLabel+')</span></h2><button type="button" class="btn btn-sm btn-outline" onclick="toggleRestHistory()">Hide</button></div><div class="card-body"><p id="restHistoryHint" style="font-size:0.78rem;color:var(--text-light);margin:0 0 0.75rem;line-height:1.35;"></p><div id="restHistoryGrid"></div></div></div>';
 
   html += '<div class="card"><div class="card-header"><h2>Kitchen View</h2></div><div class="card-body"><div id="restKitchenView"></div></div></div>';
   html += '<div class="card"><div class="card-header"><h2>◆ Restaurant Change Log</h2></div><div class="card-body"><div id="restChangeLogGrid"></div></div></div>';
 
   document.getElementById('page-restaurant').innerHTML = html;
 
-  let activeOrders = restaurantOrders.filter(restOrderIsActive);
-  if (restSelectedBooking) {
-    const bk = bookings.find(b => b.id === restSelectedBooking);
-    if (bk) activeOrders = activeOrders.filter(o => o.roomNumber === bk.roomNumber || o.guestName === bk.guestName || o.bookingId === bk.bookingId);
-  } else if (restOrderType === 'Table' && typeof restTableNumber !== 'undefined' && restTableNumber) {
-    activeOrders = activeOrders.filter(o => o.tableNumber === restTableNumber);
-  }
+  const activeOrders = restApplyActiveOrderFilter(restaurantOrders);
+  let emptyActMsg = '🍽️ No active orders';
+  if (restOrderType === 'Room Service' && restSelectedBooking) emptyActMsg = '🍽️ No active orders for this guest';
+  else if (restOrderType === 'Table' && !restFocusAllTables) emptyActMsg = '🍽️ No active orders for ' + (restTableNumber || 'this table');
+  else if (restOrderType === 'Table') emptyActMsg = '🍽️ No active orders on any table';
   new XGrid('restOrderGrid', {
     columns: [
       {field:'orderNumber',label:'Order #',filterable:true,width:'90px'},
@@ -4389,7 +4411,7 @@ function renderRestaurant() {
     ],
     data: activeOrders,
     summaryRow: {orderNumber:'label', grandTotal:'sum'},
-    emptyMessage: restSelectedBooking ? '🍽️ No active orders for this guest' : '🍽️ No active orders',
+    emptyMessage: emptyActMsg,
     actions: [
       {name:'preparing',label:'🔥 Prep',cls:'btn-warning',condition:r=>r.status==='New',handler:id=>restUpdateStatus(id,'Preparing')},
       {name:'ready',label:'✅ Ready',cls:'btn-success',condition:r=>r.status==='Preparing',handler:id=>restUpdateStatus(id,'Ready')},
@@ -4421,42 +4443,54 @@ function renderRestaurant() {
     kvEl.innerHTML = kvHtml;
   }
   renderChangeLog('restChangeLogGrid', ['Restaurant','restaurantOrders']);
+
+  if (restHistoryPanelOpen) {
+    filterRestHistory();
+  }
 }
 
 window.toggleRestHistory = function() {
-  const card = document.getElementById('restHistoryCard');
-  if (!card) return;
-  if (card.style.display === 'none') {
-    card.style.display = '';
-    filterRestHistory();
-    card.scrollIntoView({behavior:'smooth'});
-  } else {
-    card.style.display = 'none';
+  restHistoryPanelOpen = !restHistoryPanelOpen;
+  renderRestaurant();
+  if (restHistoryPanelOpen) {
+    var c = document.getElementById('restHistoryCard');
+    if (c) c.scrollIntoView({ behavior: 'smooth' });
   }
 };
 window.filterRestHistory = function() {
-  let paidOrders = restaurantOrders.filter(o => restOrderIsPast(o));
+  let paidOrders = restaurantOrders.filter(function(o) { return restOrderIsPast(o); });
   let emptyHistMsg;
+  let hintHtml = '';
   if (restOrderType === 'Room Service') {
     if (!restSelectedBooking) {
-      paidOrders = [];
-      emptyHistMsg = '◈ Select a room/guest above to see their past orders';
+      hintHtml = 'Showing <strong>all paid</strong> restaurant orders (pick a guest above to filter).';
+      emptyHistMsg = '◈ No paid orders in history yet';
     } else {
-      const bk = bookings.find(b => b.id === restSelectedBooking);
+      const bk = bookings.find(function(b) { return b.id === restSelectedBooking; });
       if (!bk) {
         paidOrders = [];
-        emptyHistMsg = '◈ Select a room/guest above to see their past orders';
+        hintHtml = 'Select a valid guest.';
+        emptyHistMsg = '◈ Select a room/guest above';
       } else {
-        paidOrders = paidOrders.filter(o => restOrderMatchesSelectedBooking(o, bk));
-        emptyHistMsg = '◈ No past paid orders for Room ' + bk.roomNumber + ' — ' + bk.guestName;
+        paidOrders = paidOrders.filter(function(o) { return restOrderMatchesSelectedBooking(o, bk); });
+        hintHtml = 'Paid orders for <strong>Room ' + String(bk.roomNumber) + '</strong> — ' + String(bk.guestName) + '.';
+        emptyHistMsg = '◈ No past paid orders for this guest';
       }
     }
   } else {
-    const tbl = String(restTableNumber || '').trim();
-    paidOrders = paidOrders.filter(o => String(o.tableNumber || '').trim() === tbl);
-    emptyHistMsg = tbl ? ('◈ No past orders for ' + restTableNumber) : '◈ Select a table above to see past orders';
+    if (restFocusAllTables) {
+      hintHtml = 'Showing <strong>all tables</strong> (tap a table tile to filter).';
+      emptyHistMsg = '◈ No past paid table orders yet';
+    } else {
+      const tbl = String(restTableNumber || '').trim();
+      paidOrders = paidOrders.filter(function(o) { return String(o.tableNumber || '').trim() === tbl; });
+      hintHtml = 'Paid orders for <strong>' + tbl + '</strong> only.';
+      emptyHistMsg = tbl ? ('◈ No past paid orders for ' + tbl) : '◈ Select a table or tap <strong>Show all</strong>';
+    }
   }
-  paidOrders.sort((a, b) => { try { return new Date(b.timestamp) - new Date(a.timestamp); } catch (e) { return 0; } });
+  paidOrders.sort(function(a, b) { try { return new Date(b.timestamp) - new Date(a.timestamp); } catch (e) { return 0; } });
+  var hintEl = document.getElementById('restHistoryHint');
+  if (hintEl) hintEl.innerHTML = hintHtml;
   new XGrid('restHistoryGrid', {
     columns: [
       {field:'orderNumber',label:'Order #',filterable:true,width:'90px'},
@@ -4474,7 +4508,12 @@ window.filterRestHistory = function() {
     emptyMessage: emptyHistMsg,
   });
 };
-window.restSetOrderType = function(type) { restOrderType = type; restSelectedBooking = null; renderRestaurant(); };
+window.restSetOrderType = function(type) {
+  restOrderType = type;
+  restSelectedBooking = null;
+  if (type === 'Table') restFocusAllTables = true;
+  renderRestaurant();
+};
 window.restSelectBooking = function(bkId) { restSelectedBooking = bkId || null; renderRestaurant(); };
 window.restFilterGuestCards = function(q) {
   var v = (q || '').toLowerCase().trim();
