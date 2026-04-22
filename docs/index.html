@@ -4918,15 +4918,49 @@ function renderMiniMart() {
   const checkedIn = bookings.filter(b => b.arrivalStatus === 'Checked-in');
   const taxRate = parseFloat(settings.surcharge) || 7;
 
-  let topHtml = '<div class="pos-top"><div class="form-group" style="margin-bottom:0;"><label style="font-weight:700;font-size:0.85rem;">Customer</label>';
-  topHtml += '<select class="form-control" id="martCustSelect" onchange="martSelectCustomer(this.value)"><option value="walkin"' + (martIsWalkin ? ' selected' : '') + '>Walk-in Customer</option>';
-  checkedIn.forEach(b => { topHtml += '<option value="' + b.id + '"' + (martSelectedBooking === b.id ? ' selected' : '') + '>Room ' + b.roomNumber + ' - ' + b.guestName + '</option>'; });
-  topHtml += '</select></div>';
-  if (martSelectedBooking && !martIsWalkin) {
-    const b = bookings.find(x => x.id === martSelectedBooking);
-    if (b) topHtml += '<div class="pos-guest-info"><span>👤 ' + b.guestName + '</span><span>🚪 Room ' + b.roomNumber + '</span></div>';
-  }
-  topHtml += '</div>';
+  const esc = function(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); };
+  const ini = function(nm) {
+    const t = String(nm || '').trim().split(/\s+/).filter(Boolean);
+    if (!t.length) return '?';
+    return (t[0][0] + (t.length > 1 ? t[t.length - 1][0] : '')).toUpperCase();
+  };
+  const martNoGuest = (martIsWalkin || !martSelectedBooking);
+  let guestCardsMm = '';
+  checkedIn.forEach(function(b) {
+    const idSafe = String(b.id).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    const searchHay = (String(b.roomNumber) + ' ' + String(b.guestName) + ' ' + String(b.bookingId)).toLowerCase();
+    const searchAttr = String(searchHay).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+    const isSel = !martIsWalkin && martSelectedBooking === b.id;
+    const selCls = isSel ? ' selected' : '';
+    guestCardsMm += '<button type="button" class="rest-guest-card' + selCls + '" data-search="' + searchAttr + '" onclick="martSelectCustomer(\'' + idSafe + '\')">' +
+      '<span class="rgc-avatar">' + esc(ini(b.guestName)) + '</span>' +
+      '<div class="rgc-body">' +
+      '<span class="rgc-room">Room ' + esc(b.roomNumber) + '</span>' +
+      '<span class="rgc-name">' + esc(b.guestName) + '</span>' +
+      '<span class="rgc-bid">' + esc(b.bookingId) + '</span>' +
+      '</div>' +
+      '<span class="rgc-check">' + (isSel ? '✓' : '') + '</span>' +
+      '</button>';
+  });
+  const selHtml =
+    '<div class="rest-guest-picker">' +
+    '<label class="rest-guest-label" for="martGuestSearch">Mini-mart — who is this order for?</label>' +
+    '<input type="search" class="form-control rest-guest-search" id="martGuestSearch" placeholder="Search by room, guest, or booking ID…" autocomplete="off" oninput="martFilterGuestCards(this.value)" />' +
+    '<div class="rest-guest-cards" id="martGuestCards">' +
+    '<button type="button" class="rest-guest-card rest-guest-card-clear' + (martNoGuest ? ' selected' : '') + '" onclick="martSelectCustomer(\'walkin\')">' +
+    '<span class="rgc-clear-icon">◈</span>' +
+    '<div class="rgc-body">' +
+    '<span class="rgc-main">No guest selected</span>' +
+    '<span class="rgc-sub">Choose a checked-in room below to attach orders and room charges.</span>' +
+    '</div>' +
+    '<span class="rgc-check">' + (martNoGuest ? '✓' : '') + '</span>' +
+    '</button>' +
+    guestCardsMm +
+    '</div>' +
+    '<p class="rest-guest-hint">Showing <strong>' + checkedIn.length + '</strong> checked-in ' + (checkedIn.length === 1 ? 'guest' : 'guests') + '. Use <strong>no guest</strong> for walk-in; select a <strong>room</strong> for <strong>Charge to room</strong>.</p>' +
+    '</div>';
+
+  const newOrderCard = '<div class="card"><div class="card-header"><h2>New Order</h2></div><div class="card-body">' + selHtml + '</div></div>';
 
   let searchHtml = '<div style="margin-bottom:0.75rem;"><input type="text" class="form-control" placeholder="Search items..." value="' + martSearchTerm + '" oninput="martSearchTerm=this.value;renderMiniMart();" style="width:100%;"></div>';
 
@@ -4953,7 +4987,7 @@ function renderMiniMart() {
   const canCheckout = martCart.length > 0;
   const canChargeRoom = !martIsWalkin && martSelectedBooking;
 
-  let html = topHtml;
+  let html = newOrderCard;
   html += '<div class="card"><div class="card-header"><h2>Store Items</h2><span style="font-size:0.78rem;color:var(--text-light);">' + filtered.length + ' items</span></div><div class="card-body">' + searchHtml + gridHtml + '</div></div>';
   html += '<div class="pos-cart"><div class="pos-cart-header">🛒 Cart (' + martCart.length + ' items)</div><div class="pos-cart-items">' + cartHtml + '</div>';
   html += '<div class="pos-totals"><div class="total-row"><span>Subtotal</span><span>' + fmt$(subtotal) + '</span></div><div class="total-row"><span>Tax (' + taxRate + '%)</span><span>' + fmt$(tax) + '</span></div><div class="total-row grand"><span>Grand Total</span><span>' + fmt$(grandTotal) + '</span></div></div></div>';
@@ -4994,6 +5028,16 @@ window.martSelectCustomer = function(val) {
   if (val === 'walkin') { martIsWalkin = true; martSelectedBooking = null; }
   else { martIsWalkin = false; martSelectedBooking = val; }
   renderMiniMart();
+};
+
+window.martFilterGuestCards = function(q) {
+  var v = (q || '').toLowerCase().trim();
+  var root = document.getElementById('martGuestCards');
+  if (!root) return;
+  root.querySelectorAll('.rest-guest-card[data-search]').forEach(function(el) {
+    var hay = el.getAttribute('data-search') || '';
+    el.style.display = !v || hay.indexOf(v) !== -1 ? '' : 'none';
+  });
 };
 
 window.martAddToCart = function(storeItemId) {
@@ -5731,7 +5775,7 @@ function openCsel(sel) {
   document.getElementById('cselSearch').value = '';
   const actDiv = document.getElementById('cselActions');
   const lbl = labelRaw.toLowerCase();
-  const noEditIds = ['mBkRoom','eBkRoom','mSvcSelect','gpSvcSelect','mSrRoom','mSrService','mSrAssign','eSrAssign','posRoomSelect','restRoomSelect','restTableSelect','martCustSelect','mMsgBooking','mRptRoom','mTkRoom','eGBL','mGBL','mMiAvail','eMiAvail'];
+  const noEditIds = ['mBkRoom','eBkRoom','mSvcSelect','gpSvcSelect','mSrRoom','mSrService','mSrAssign','eSrAssign','posRoomSelect','restRoomSelect','restTableSelect','mMsgBooking','mRptRoom','mTkRoom','eGBL','mGBL','mMiAvail','eMiAvail'];
   const noEditLabels = ['room','select service','service','blacklist','available','assigned to','table number','booking / guest','room / booking'];
   const isNoEdit = noEditIds.includes(sel.id) || noEditLabels.includes(lbl);
   const isBoolOpts = sel.options.length <= 2 && Array.from(sel.options).every(o => ['yes','no','true','false','0','1'].includes(o.textContent.toLowerCase().trim()));
