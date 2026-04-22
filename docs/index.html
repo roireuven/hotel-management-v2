@@ -14,6 +14,7 @@
   (function () { try { var st = localStorage.getItem('hotel_mgr_uiLocale') || 'en'; if (!/^(en|he|th|lo|es|fr)$/.test(st)) st = 'en'; document.documentElement.setAttribute('lang', st); document.documentElement.setAttribute('dir', st === 'he' ? 'rtl' : 'ltr'); } catch (e) {} })();
   </script>
   <style>
+    .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --primary: #1a73e8;
@@ -37,6 +38,15 @@
     [dir="rtl"] .topbar { flex-direction: row-reverse; }
     [dir="rtl"] .topbar-left, [dir="rtl"] .topbar-right { flex-direction: row-reverse; }
     [dir="rtl"] .topbar h1, [dir="rtl"] .sidebar-header, [dir="rtl"] .sidebar-nav a, [dir="rtl"] th, [dir="rtl"] td { text-align: start; }
+    .topbar .topbar-locale-pick { display: flex; flex-direction: column; align-items: flex-end; gap: 0.15rem; flex-shrink: 0; max-width: min(42vw, 12.5rem); }
+    @media (min-width: 480px) { .topbar .topbar-locale-pick { flex-direction: row; align-items: center; align-self: center; } }
+    .topbar .topbar-locale-lbl { display: block; font-size: 0.65rem; font-weight: 800; color: rgba(255,255,255,0.95); text-transform: uppercase; letter-spacing: 0.06em; line-height: 1.2; white-space: nowrap; }
+    .topbar .topbar-locale-sel { position: relative; z-index: 201; min-height: 40px; min-width: 8.5rem; width: 100%; max-width: 12.5rem; padding: 0.35rem 2.1rem 0.35rem 0.5rem; font-size: 0.78rem; font-weight: 600; line-height: 1.2; color: #fff; background: rgba(255,255,255,0.22) !important; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") !important; background-repeat: no-repeat !important; background-position: right 0.5rem center !important; background-size: 12px !important; border: 1px solid rgba(255,255,255,0.5) !important; border-radius: 8px; cursor: pointer; -webkit-tap-highlight-color: transparent; appearance: none; -webkit-appearance: none; box-shadow: 0 1px 0 rgba(0,0,0,0.12); }
+    .topbar .topbar-locale-sel:focus { outline: none; box-shadow: 0 0 0 2px rgba(255,255,255,0.55), 0 1px 0 rgba(0,0,0,0.12); }
+    .topbar .topbar-locale-sel:hover { background-color: rgba(255,255,255,0.3) !important; }
+    .topbar .topbar-locale-sel option { color: #1c1e21; background: #fff; font-weight: 500; }
+    body.dark-mode .topbar .topbar-locale-sel { color: #fff !important; background: rgba(255,255,255,0.24) !important; border-color: rgba(255,255,255,0.55) !important; }
+    #loginLocaleSelect.login-locale-sel, select.login-locale-sel#loginLocaleSelect { min-height: 46px; font-size: 1rem; font-weight: 600; }
     .topbar .btn-lang { position: relative; z-index: 2; min-height: 40px; min-width: 44px; background: rgba(255,255,255,0.2); color: #fff; border: 1px solid rgba(255,255,255,0.4); border-radius: 8px; padding: 0.3rem 0.55rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.3rem; flex-shrink: 0; -webkit-tap-highlight-color: transparent; }
     .topbar .btn-lang:hover, .topbar .btn-lang:focus { background: rgba(255,255,255,0.32); }
     .lang-menu-wrap { position: relative; z-index: 1; flex-shrink: 0; }
@@ -552,6 +562,161 @@
   </style>
 </head>
 <body>
+  <script type="application/json" id="i18n-en-embedded">
+{
+  "app": {
+    "title": "Hotel Management System",
+    "shortName": "Hotel Manager",
+    "tagline": "Management System"
+  },
+  "nav": {
+    "sectionMain": "Main",
+    "sectionOperations": "Operations",
+    "sectionServices": "Services",
+    "sectionFnB": "F&B",
+    "sectionGuest": "Guest",
+    "sectionAdmin": "Admin",
+    "dashboard": "Dashboard",
+    "rooms": "Rooms",
+    "bookings": "Bookings",
+    "guests": "Guests",
+    "housekeeping": "Housekeeping",
+    "maintenance": "Maintenance",
+    "services": "Services",
+    "invoices": "Invoices",
+    "inventory": "Inventory",
+    "pos": "POS",
+    "restaurant": "Restaurant",
+    "kitchen": "Kitchen",
+    "minimart": "Mini-Mart",
+    "menuitems": "Menu Items",
+    "storeitems": "Store Items",
+    "orderhistory": "Order History",
+    "guestportal": "Guest Portal",
+    "reports": "Reports",
+    "accounts": "Accounts",
+    "transactions": "Transactions",
+    "messagelog": "Messages",
+    "auditlog": "Audit Log",
+    "dropdowns": "Dropdown Lists",
+    "settings": "Settings"
+  },
+  "pageTitle": {
+    "dashboard": "Dashboard",
+    "rooms": "Room Management",
+    "bookings": "Bookings",
+    "guests": "Guest Directory",
+    "housekeeping": "Housekeeping",
+    "maintenance": "Maintenance Tickets",
+    "services": "Services",
+    "invoices": "Invoices",
+    "guestportal": "Guest Portal",
+    "reports": "Reports & Analytics",
+    "accounts": "User Accounts",
+    "auditlog": "Audit Log",
+    "settings": "Settings & Regulations",
+    "inventory": "Inventory Management",
+    "pos": "Point of Sale",
+    "restaurant": "Restaurant",
+    "minimart": "Mini-Mart",
+    "menuitems": "Menu Items",
+    "storeitems": "Store Items",
+    "orderhistory": "Order History",
+    "alltransactions": "Transactions",
+    "messagelog": "Messages",
+    "dropdowns": "Dropdown Lists"
+  },
+  "topbar": {
+    "logout": "Logout",
+    "language": "Language",
+    "localization": "Localization",
+    "localizationTitle": "Change language and region",
+    "chooseLanguage": "Choose language",
+    "localePicker": "Interface language (quick pick)"
+  },
+  "bnav": {
+    "dashboard": "Dashboard",
+    "pos": "POS",
+    "bookings": "Bookings",
+    "menu": "Menu"
+  },
+  "login": {
+    "title": "Hotel Manager",
+    "subtitle": "Management System — Please sign in",
+    "username": "Username (Email)",
+    "password": "Password",
+    "passwordPh": "Enter password",
+    "signIn": "Sign In",
+    "demoCredentials": "Demo Credentials",
+    "role": "Role",
+    "emailUser": "Email (Username)",
+    "pwd": "PWD",
+    "tapEmail": "Tap an email to auto-fill the username field"
+  },
+  "settings": {
+    "languageSection": "App language",
+    "appLanguage": "Interface language",
+    "languageHint": "Applies to menus and common labels. Same as the language control in the top bar.",
+    "currencyInvalidReset": "Hotel currency was reset to the first option in the list (it no longer matched dropdown labels).",
+    "laoKipHint": "Lao interface: set hotel reporting currency to Lao kip (LAK) if you operate in Laos.",
+    "useLakCurrency": "Use LAK for hotel currency"
+  },
+  "minimart": {
+    "guestPickerLabel": "Mini-mart — who is this order for?",
+    "searchGuestPlaceholder": "Search by room, guest, or booking ID…",
+    "noGuestTitle": "No guest selected",
+    "noGuestSub": "Choose a checked-in room below to attach orders and room charges.",
+    "guestHint": "Showing {count} checked-in guests. Use no guest for walk-in; select a room to add items to a room bill before posting to folio.",
+    "newOrder": "New Order",
+    "storeItems": "Store Items",
+    "searchItems": "Search items...",
+    "itemsCount": "{n} items",
+    "stock": "Stock: {n}",
+    "noItemsFound": "No items found",
+    "cart": "Cart ({n} items)",
+    "cartEmpty": "Cart is empty — tap items to add",
+    "subtotal": "Subtotal",
+    "tax": "Tax ({rate}%)",
+    "grandTotal": "Grand Total",
+    "addToRoomBill": "Add to room bill",
+    "chargeToRoomSettle": "Post to folio (pay)",
+    "cash": "Cash",
+    "creditCard": "Credit Card",
+    "totalActiveLabel": "Total to settle:",
+    "payTotalRoom": "Pay total — Room",
+    "payTotalCash": "Pay total — Cash",
+    "payTotalCard": "Pay total — Card",
+    "activeOrders": "Active Orders",
+    "allCustomers": "All Customers",
+    "selectedGuest": "Selected Guest",
+    "roomGuestFmt": "Room {room} — {name}",
+    "showAll": "Show all",
+    "pastOrders": "Past Orders",
+    "activeScope": "Scope: {scope} · your cart appears as one open order; room bills stay unpaid until you post to folio.",
+    "pastOrdersTitle": "Past Orders",
+    "hide": "Hide",
+    "changeLog": "Mini-Mart Change Log",
+    "orderOpen": "MM-OPEN",
+    "orderPending": "MM-TAB",
+    "walkIn": "Walk-in",
+    "statusOpen": "Open",
+    "statusRoomTab": "Room bill",
+    "payPending": "Unposted",
+    "toastTabAdded": "Added to room bill — {total} (not posted yet)",
+    "toastSettled": "Posted — {total} ({txn})",
+    "toastSelectRoom": "Select a room first",
+    "roomPrefix": "Room {n}",
+    "selectedGuestScope": "Selected guest",
+    "allCustomersScope": "All customers (walk-in or not filtered)",
+    "emptyActiveCart": "No open cart — add items in Store Items above",
+    "histHintAll": "Showing all posted mini-mart sales (pick a guest above to filter).",
+    "histHintGuest": "Posted sales for Room {room} — {name}.",
+    "emptyPastAll": "No past mini-mart sales yet",
+    "emptyPastGuest": "No past sales for this guest",
+    "selectValidGuest": "Select a room/guest above"
+  }
+}
+  </script>
   <div id="setupOverlay" class="hidden">
     <div class="setup-card">
       <div class="setup-logo" style="font-size:2.5rem;background:linear-gradient(135deg,#1a3a5c,#1a73e8);color:#fff;width:64px;height:64px;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 0.5rem;font-weight:700;">H</div>
@@ -602,14 +767,17 @@
       <p class="login-sub" data-i18n="login.subtitle">Management System — Please sign in</p>
       <div class="form-group"><label data-i18n="login.username">Username (Email)</label><input type="text" class="form-control" id="loginUsername" placeholder="e.g. admin@hotel.com" style="text-transform:lowercase;" oninput="this.value=this.value.toLowerCase()"></div>
       <div class="form-group"><label data-i18n="login.password">Password</label><input type="password" class="form-control" id="loginPassword" data-i18n-placeholder="login.passwordPh" placeholder="Enter password" value="1234"></div>
-      <div class="login-lang-row" id="loginLangRow" aria-label="Language">
-        <span style="font-size:0.75rem;opacity:0.85;" data-i18n="topbar.language">Language</span>
-        <button type="button" class="btn btn-sm btn-outline" style="color:#1a3a5c;border-color:#1a73e8;" onclick="setAppLocale('en')">English</button>
-        <button type="button" class="btn btn-sm btn-outline" style="color:#1a3a5c;border-color:#1a73e8;" onclick="setAppLocale('he')">עברית</button>
-        <button type="button" class="btn btn-sm btn-outline" style="color:#1a3a5c;border-color:#1a73e8;" onclick="setAppLocale('th')">ไทย (Thai)</button>
-        <button type="button" class="btn btn-sm btn-outline" style="color:#1a3a5c;border-color:#1a73e8;" onclick="setAppLocale('lo')">ລາວ (Lao)</button>
-        <button type="button" class="btn btn-sm btn-outline" style="color:#1a3a5c;border-color:#1a73e8;" onclick="setAppLocale('es')">Español</button>
-        <button type="button" class="btn btn-sm btn-outline" style="color:#1a3a5c;border-color:#1a73e8;" onclick="setAppLocale('fr')">Français</button>
+      <div class="form-group" style="margin-top:0.5rem;" id="loginLangRow">
+        <label for="loginLocaleSelect" data-i18n="settings.appLanguage" style="font-size:0.9rem;font-weight:700;color:var(--text);">Interface language</label>
+        <select id="loginLocaleSelect" class="form-control login-locale-sel" data-locale-select="1" data-native-select="1" onchange="setAppLocale(this.value)">
+          <option value="en" selected>English</option>
+          <option value="he">עברית (Hebrew)</option>
+          <option value="th">ไทย (Thai)</option>
+          <option value="lo">ລາວ (Lao)</option>
+          <option value="es">Español (Spanish)</option>
+          <option value="fr">Français (French)</option>
+        </select>
+        <p style="font-size:0.7rem;color:#999;margin:0.35rem 0 0;line-height:1.35;" data-i18n="settings.languageHint">Applies to labels on this screen and the app after sign in.</p>
       </div>
       <button class="btn btn-primary btn-login" onclick="doLogin()" data-i18n="login.signIn">Sign In</button>
       <div class="login-error" id="loginError"></div>
@@ -669,7 +837,7 @@
     <div class="topbar">
       <div class="topbar-left">
         <button class="menu-toggle" id="menuToggle">☰</button>
-        <div class="lang-menu-wrap topbar-locale-wrap">
+        <div class="lang-menu-wrap topbar-locale-wrap" id="topbarLangMenuWrap">
           <button type="button" class="btn-lang" id="langMenuBtn" onclick="toggleLangMenu(event)" aria-haspopup="true" aria-expanded="false" data-i18n-title="topbar.localizationTitle" title="Change language and region" aria-label="Localization">
             <span class="lang-btn-ico" aria-hidden="true">🌐</span>
             <span id="langMenuBtnLabel" data-i18n="topbar.localization">Localization</span>
@@ -687,6 +855,17 @@
         <h1 id="pageTitle">Dashboard</h1>
       </div>
       <div class="topbar-right">
+        <div class="topbar-locale-pick" id="topbarLocalePick">
+        <span class="topbar-locale-lbl" data-i18n="topbar.language">Language</span>
+        <select id="topbarLocaleSelect" class="topbar-locale-sel" data-locale-select="1" data-native-select="1" data-testid="topbar-locale" aria-label="Interface language" title="Change interface language" onchange="setAppLocale(this.value)">
+          <option value="en" selected>EN — English</option>
+          <option value="he">HE — עברית</option>
+          <option value="th">TH — ไทย</option>
+          <option value="lo">LO — ລາວ</option>
+          <option value="es">ES — Español</option>
+          <option value="fr">FR — Français</option>
+        </select>
+        </div>
         <button class="dark-toggle" id="darkToggle" onclick="toggleDarkMode()" title="Toggle Dark Mode">◐</button>
         <div class="topbar-user"><div><div class="user-name" id="topbarUserName"></div><div class="user-role-tag" id="topbarUserRole"></div></div><div class="avatar" id="userAvatar">A</div></div>
         <button class="btn-logout" id="logoutBtn" onclick="doLogout()" data-i18n="topbar.logout">Logout</button>
@@ -845,7 +1024,7 @@ function deleteOne(key, id) {
 function genId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 5); }
 function getRoomTypes() { return (settings.roomTypes || 'Single,Double,Deluxe,Suite,Penthouse').split(',').map(s=>s.trim()).filter(Boolean); }
 function getBedConfigs() { return (settings.bedConfigs || 'King,Twin,Queen+Single').split(',').map(s=>s.trim()).filter(Boolean); }
-function getCurrencies() { return (settings.currencies || 'USD,EUR,GBP,THB').split(',').map(s=>s.trim()).filter(Boolean); }
+function getCurrencies() { return (settings.currencies || defaultSettings.currencies || 'USD,EUR,GBP,THB').split(',').map(s=>s.trim()).filter(Boolean); }
 function getBookingSources() { return (settings.bookingSources || 'Direct,Booking.com,Expedia,Walk-in').split(',').map(s=>s.trim()).filter(Boolean); }
 function getArrivalStatuses() { return (settings.arrivalStatuses || 'Expected,Checked-in,Checked-out,No-show').split(',').map(s=>s.trim()).filter(Boolean); }
 function getPaymentMethods() { return (settings.paymentMethods || 'Credit Card,Cash,Bank Transfer,Room Charge').split(',').map(s=>s.trim()).filter(Boolean); }
@@ -1300,7 +1479,7 @@ const defaultInvoices = [
   {id:genId(),invoiceNumber:'INV-2039',bookingId:'BK-1049',guestName:'Akira Tanaka',roomNumber:'402',subtotal:1950,discountAmount:0,taxTotal:136.50,grandTotal:2086.50,paymentStatus:'Unpaid',paymentTransactionId:'',currency:'THB',billingAddress:'456 Sakura Ave, Tokyo, Japan',services:[{name:'Thai Massage',unitPrice:80,quantity:1,icon:'◎'},{name:'Pool Day Pass',unitPrice:10,quantity:2,icon:'●'}],date:'2026-04-06'},
   {id:genId(),invoiceNumber:'INV-2040',bookingId:'BK-1051',guestName:'Lucas Santos',roomNumber:'204',subtotal:1800,discountAmount:0,taxTotal:126.00,grandTotal:1926.00,paymentStatus:'Unpaid',paymentTransactionId:'',currency:'USD',billingAddress:'300 Copacabana Ave, Rio de Janeiro, Brazil',services:[],date:'2026-04-06'},
 ];
-const defaultSettings = {hotelName:'Grand Hotel Management',email:'info@grandhotel.com',phone:'+1 555-0100',currency:'USD ($)',address:'123 Hotel Street, City, Country',maxGuests:3,surcharge:25,checkinTime:'14:00',checkoutTime:'12:00',darkMode:false,roomTypes:'Single,Double,Deluxe,Suite,Penthouse',bedConfigs:'King,Twin,Queen+Single,Double,King+Sofa',currencies:'USD,EUR,GBP,THB,ILS,JPY,CNY,AUD,CAD,CHF',currencyLabels:'USD ($),EUR (€),GBP (£),THB (฿)',bookingSources:'Direct,Booking.com,Expedia,Walk-in,Agoda,Airbnb',arrivalStatuses:'Expected,Checked-in,Checked-out,No-show',paymentMethods:'Credit Card,Cash,Bank Transfer,Room Charge',serviceCategories:'Room Service,Laundry,Airport Transfer,Mini-bar,Spa,Pool',invoiceStatuses:'Unpaid,Partially Paid,Fully Paid',ticketPriorities:'Low,Medium,High,Urgent',ticketStatuses:'Open,In Progress,Resolved',inventoryCategories:'Linen,Toiletries,F&B,Supplies',menuCategories:'Appetizer,Main Course,Dessert,Beverage,Side',storeCategories:'Drinks,Snacks,Toiletries,Souvenirs,Sundries',orderStatuses:'New,Preparing,Ready,Served,Paid',paymentTypes:'Pending,Cash,Credit Card,Room Charge',userRoles:'Admin,Manager,Receptionist,Housekeeper,Restaurant,Kitchen',requestStatuses:'Pending,In Progress,Completed,Cancelled',housekeepingStatuses:'Clean,Dirty,Inspected,Out of Service',occupancyStatuses:'Available,Occupied,Reserved',cancellationPolicies:'Free cancellation,Non-refundable',messageTypes:'Welcome,Invoice,Reminder,Notification',messageChannels:'Email,SMS,WhatsApp,In-App',transactionStatuses:'Completed,Refunded,Pending'};
+const defaultSettings = {hotelName:'Grand Hotel Management',email:'info@grandhotel.com',phone:'+1 555-0100',currency:'USD ($)',address:'123 Hotel Street, City, Country',maxGuests:3,surcharge:25,checkinTime:'14:00',checkoutTime:'12:00',darkMode:false,roomTypes:'Single,Double,Deluxe,Suite,Penthouse',bedConfigs:'King,Twin,Queen+Single,Double,King+Sofa',currencies:'USD,EUR,GBP,THB,LAK,ILS,JPY,CNY,AUD,CAD,CHF,SGD,HKD,NZD,INR,KRW,AED,SAR,MXN',currencyLabels:'USD ($),EUR (€),GBP (£),THB (฿),LAK (₭),ILS (₪),JPY (¥),CNY (¥),AUD (A$),CAD (C$),CHF (CHF),SGD (S$),HKD (HK$),NZD (NZ$),INR (₹),KRW (₩),AED (د.إ),SAR (ر.س),MXN (MX$)',bookingSources:'Direct,Booking.com,Expedia,Walk-in,Agoda,Airbnb',arrivalStatuses:'Expected,Checked-in,Checked-out,No-show',paymentMethods:'Credit Card,Cash,Bank Transfer,Room Charge',serviceCategories:'Room Service,Laundry,Airport Transfer,Mini-bar,Spa,Pool',invoiceStatuses:'Unpaid,Partially Paid,Fully Paid',ticketPriorities:'Low,Medium,High,Urgent',ticketStatuses:'Open,In Progress,Resolved',inventoryCategories:'Linen,Toiletries,F&B,Supplies',menuCategories:'Appetizer,Main Course,Dessert,Beverage,Side',storeCategories:'Drinks,Snacks,Toiletries,Souvenirs,Sundries',orderStatuses:'New,Preparing,Ready,Served,Paid',paymentTypes:'Pending,Cash,Credit Card,Room Charge',userRoles:'Admin,Manager,Receptionist,Housekeeper,Restaurant,Kitchen',requestStatuses:'Pending,In Progress,Completed,Cancelled',housekeepingStatuses:'Clean,Dirty,Inspected,Out of Service',occupancyStatuses:'Available,Occupied,Reserved',cancellationPolicies:'Free cancellation,Non-refundable',messageTypes:'Welcome,Invoice,Reminder,Notification',messageChannels:'Email,SMS,WhatsApp,In-App',transactionStatuses:'Completed,Refunded,Pending'};
 const defaultTickets = [
   {id:genId(),roomNumber:'201',issue:'AC not cooling properly',priority:'High',status:'In Progress',reportedBy:'Receptionist',reportedAt:'2026-04-03T14:30:00',resolvedAt:'',notes:'Technician dispatched, waiting for replacement compressor'},
   {id:genId(),roomNumber:'302',issue:'Leaky faucet in bathroom',priority:'Medium',status:'Open',reportedBy:'Housekeeper',reportedAt:'2026-04-04T09:15:00',resolvedAt:'',notes:'Constant drip from hot water tap'},
@@ -1482,6 +1661,38 @@ let auditLog = load('auditLog', []);
 if (!settings.roomTypes) { settings.roomTypes = defaultSettings.roomTypes; save('settings', settings); }
 if (!settings.bedConfigs) { settings.bedConfigs = defaultSettings.bedConfigs; save('settings', settings); }
 if (!settings.currencies) { settings.currencies = defaultSettings.currencies; save('settings', settings); }
+(function ensureCurrencyLabelParity() {
+  try {
+    const codes = (settings.currencies || defaultSettings.currencies).split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+    if (codes.length === 0) return;
+    const defC = defaultSettings.currencies.split(',').map(function(s) { return s.trim(); });
+    const defL = (defaultSettings.currencyLabels || '').split(',').map(function(s) { return s.trim(); });
+    const fallback = {};
+    defC.forEach(function(c, i) { if (c) fallback[c] = defL[i] && defL[i] !== '' ? defL[i] : c; });
+    const parts = (settings.currencyLabels || '').split(',').map(function(s) { return s.trim(); });
+    const out = codes.map(function(code, i) {
+      if (parts[i] && parts[i] !== '') return parts[i];
+      return fallback[code] || code;
+    });
+    if ((settings.currencyLabels || '') !== out.join(',')) { settings.currencyLabels = out.join(','); save('settings', settings); }
+  } catch (e) { console.warn('currency label parity', e); }
+})();
+(function addLakCurrencyIfMissing() {
+  try {
+    const codes = (settings.currencies || defaultSettings.currencies).split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+    if (codes.indexOf('LAK') >= 0) return;
+    const next = codes.concat(['LAK']);
+    settings.currencies = next.join(',');
+    const defC = defaultSettings.currencies.split(',').map(function(s) { return s.trim(); });
+    const defL = (defaultSettings.currencyLabels || '').split(',').map(function(s) { return s.trim(); });
+    const fallback = {};
+    defC.forEach(function(c, i) { if (c) fallback[c] = defL[i] && defL[i] !== '' ? defL[i] : c; });
+    const parts = (settings.currencyLabels || '').split(',').map(function(s) { return s.trim(); });
+    const out = next.map(function(code, i) { if (parts[i] && parts[i] !== '') return parts[i]; return fallback[code] || code; });
+    settings.currencyLabels = out.join(',');
+    save('settings', settings);
+  } catch (e) { console.warn('add LAK currency', e); }
+})();
 if (!settings.bookingSources) { settings.bookingSources = defaultSettings.bookingSources; save('settings', settings); }
 if (!settings.arrivalStatuses) { settings.arrivalStatuses = defaultSettings.arrivalStatuses; save('settings', settings); }
 if (!settings.paymentMethods) { settings.paymentMethods = defaultSettings.paymentMethods; save('settings', settings); }
@@ -1662,10 +1873,54 @@ let i18nData = null;
 /** Skips the custom full-screen select picker (language must use native or simple change). */
 function isLocaleOrNativeSelect(sel) {
   if (!sel || sel.tagName !== 'SELECT') return false;
-  if (sel.id === 'settingsLocaleSelect' || sel.getAttribute('data-locale-select') === '1') return true;
+  if (sel.id === 'settingsLocaleSelect' || sel.id === 'topbarLocaleSelect' || sel.id === 'loginLocaleSelect' || sel.getAttribute('data-locale-select') === '1' || sel.getAttribute('data-native-select') === '1') return true;
   return false;
 }
-function i18nAssetUrl(name) { return new URL('assets/locales/' + name, document.baseURI || (window.location && window.location.href) || 'http://localhost/').toString(); }
+function readEmbeddedI18nEn() {
+  var el = document.getElementById('i18n-en-embedded');
+  if (!el || !el.textContent) return null;
+  try { return JSON.parse(el.textContent); } catch (e) { return null; }
+}
+function ensureLocalePicks() {
+  var cur = getCurrentUiLocale();
+  if (!{ en:1, he:1, th:1, lo:1, es:1, fr:1 }[cur]) cur = 'en';
+  ['topbarLocaleSelect', 'loginLocaleSelect'].forEach(function(id) {
+    var sel = document.getElementById(id);
+    if (!sel) return;
+    if (sel.options.length !== I18N_LOCALE_LIST.length) {
+      sel.innerHTML = I18N_LOCALE_LIST.map(function (o) {
+        return '<option value="' + o.code + '">' + o.label + '</option>';
+      }).join('');
+    }
+    sel.value = cur;
+  });
+}
+function normalizeHotelCurrency() {
+  var labels = getCurrencyLabels();
+  if (labels.length === 0) return false;
+  if (labels.indexOf(settings.currency) < 0) {
+    settings.currency = labels[0];
+    save('settings', settings);
+    return true;
+  }
+  return false;
+}
+window.setHotelCurrencyLak = function() {
+  var labels = getCurrencyLabels();
+  var lak = null;
+  for (var i = 0; i < labels.length; i++) { if (String(labels[i]).indexOf('LAK') >= 0) { lak = labels[i]; break; } }
+  if (!lak) { if (typeof toast === 'function') toast('LAK not in currency list — add it in Dropdown lists.'); return; }
+  settings.currency = lak;
+  try { localStorage.setItem('hotel_lastSuggestLak', '1'); } catch (e) {}
+  save('settings', settings);
+  logAudit('Update', 'Settings', 'Hotel currency set to Lao kip (LAK)');
+  if (typeof renderSettings === 'function' && document.getElementById('page-settings') && document.getElementById('page-settings').classList.contains('active')) renderSettings();
+  if (typeof toast === 'function') toast('Hotel currency: ' + lak);
+};
+function i18nAssetUrl(name) {
+  var base = (typeof document !== 'undefined' && document.baseURI) || (typeof location !== 'undefined' && location.href) || 'http://localhost/';
+  return new URL('assets/locales/' + name, base).toString();
+}
 function i18nDeepGet(obj, key) { if (!obj || !key) return null; return key.split('.').reduce(function(o, k) { return o && o[k] !== undefined ? o[k] : undefined; }, obj); }
 function t(key, params) {
   var s = i18nDeepGet(i18nData, key);
@@ -1697,6 +1952,7 @@ function applyShellI18n() {
   if (hint) hint.textContent = t('topbar.chooseLanguage');
   document.querySelectorAll('#bottomNav [data-i18n]').forEach(function(el) { var k = el.getAttribute('data-i18n'); if (k) el.textContent = t(k); });
   document.title = t('app.title');
+  ensureLocalePicks();
   if (typeof applyRBAC === 'function') applyRBAC();
 }
 function syncLangMenuHighlight() {
@@ -1733,10 +1989,16 @@ window.setAppLocale = function(lang) {
   applyDocumentLocale(lang);
   function end() { finishLocaleSwitch(); }
   function loadLang(l) {
-    fetch(i18nAssetUrl(l + '.json')).then(function(r) { return r.json(); }).then(function(d) { i18nData = d; end(); }).catch(function() { i18nData = i18nEn; end(); });
+    fetch(i18nAssetUrl(l + '.json'))
+      .then(function(r) { if (!r || !r.ok) throw new Error('locale'); return r.json(); })
+      .then(function(d) { i18nData = d; end(); })
+      .catch(function() { i18nData = i18nEn || readEmbeddedI18nEn() || {}; end(); });
   }
-  if (!i18nEn) {
-    fetch(i18nAssetUrl('en.json')).then(function(r) { return r.json(); }).then(function(d) { i18nEn = d; if (lang === 'en') { i18nData = d; end(); } else loadLang(lang); }).catch(function() { end(); });
+  if (!i18nEn || (typeof i18nEn === 'object' && Object.keys(i18nEn).length === 0)) {
+    fetch(i18nAssetUrl('en.json'))
+      .then(function(r) { if (r && r.ok) return r.json(); return readEmbeddedI18nEn() || {}; })
+      .catch(function() { return readEmbeddedI18nEn() || {}; })
+      .then(function(d) { i18nEn = d || readEmbeddedI18nEn() || {}; if (lang === 'en') { i18nData = i18nEn; end(); } else loadLang(lang); });
     return;
   }
   if (lang === 'en') { i18nData = i18nEn; end(); return; }
@@ -1748,8 +2010,15 @@ function initI18n() {
   applyDocumentLocale(want);
   document.addEventListener('click', function(ev) {
     var m = document.getElementById('langMenu');
-    var w = document.querySelector('.lang-menu-wrap');
+    var w = document.getElementById('topbarLangMenuWrap');
     if (m && m.classList.contains('open') && w && !w.contains(ev.target)) { m.style.display = 'none'; m.classList.remove('open'); var b2 = document.getElementById('langMenuBtn'); if (b2) b2.setAttribute('aria-expanded', 'false'); }
+  });
+  document.addEventListener('keydown', function(ev) {
+    if (ev.key !== 'Escape') return;
+    var m = document.getElementById('langMenu');
+    if (!m || !m.classList.contains('open')) return;
+    m.style.display = 'none'; m.classList.remove('open');
+    var b = document.getElementById('langMenuBtn'); if (b) b.setAttribute('aria-expanded', 'false');
   });
   function afterLoad() {
     applyShellI18n();
@@ -1760,19 +2029,24 @@ function initI18n() {
     if (l) { var p = l.getAttribute('data-page'); if (p) { var pt = document.getElementById('pageTitle'); if (pt) pt.textContent = getPageTitleString(p); renderPage(p); } }
   }
   return fetch(i18nAssetUrl('en.json'))
-    .then(function(r) { if (!r.ok) throw new Error('en fetch'); return r.json(); })
+    .then(function(r) { if (r && r.ok) return r.json(); return readEmbeddedI18nEn() || {}; })
+    .catch(function() { return readEmbeddedI18nEn() || {}; })
     .then(function(d) {
+      if (!d || (typeof d === 'object' && d !== null && !Object.keys(d).length)) d = readEmbeddedI18nEn() || {};
       i18nEn = d;
       if (want === 'en') i18nData = d;
       return want;
     })
     .then(function(w) {
       if (w === 'en') return;
-      return fetch(i18nAssetUrl(w + '.json')).then(function(r) { if (!r.ok) throw new Error(w); return r.json(); }).then(function(d) { i18nData = d; }).catch(function() { i18nData = i18nEn; });
+      return fetch(i18nAssetUrl(w + '.json'))
+        .then(function(r) { if (r && r.ok) return r.json(); throw new Error(w); })
+        .then(function(d) { i18nData = d; })
+        .catch(function() { i18nData = i18nEn; });
     })
     .then(function() { afterLoad(); })
     .catch(function() {
-      if (!i18nEn) i18nEn = {};
+      if (!i18nEn || (typeof i18nEn === 'object' && Object.keys(i18nEn).length === 0)) i18nEn = readEmbeddedI18nEn() || {};
       if (!i18nData) i18nData = i18nEn;
       afterLoad();
     });
@@ -3075,6 +3349,9 @@ function getDbCounts() {
 }
 
 function renderSettings() {
+  if (typeof normalizeHotelCurrency === 'function' && normalizeHotelCurrency()) {
+    if (typeof toast === 'function') { try { toast(t('settings.currencyInvalidReset')); } catch (e) { toast('Hotel currency was updated to match the list.'); } }
+  }
   const s = settings;
   const counts = getDbCounts();
   const dbType = isAndroid ? '🟢 SQLite Database (hotel_manager.db)' : '🔵 Browser localStorage';
@@ -3082,6 +3359,12 @@ function renderSettings() {
   const localeOptionsHtml = I18N_LOCALE_LIST.map(function (o) {
     return '<option value="' + o.code + '"' + (o.code === curLoc ? ' selected' : '') + '>' + o.label + '</option>';
   }).join('');
+  const lakLaoRow = curLoc === 'lo' ? (
+    '<div class="form-group" style="margin:-0.25rem 0 0.5rem;">' +
+      '<p style="font-size:0.8rem;color:var(--text-light);margin:0 0 0.4rem;">' + t('settings.laoKipHint') + '</p>' +
+      '<button type="button" class="btn btn-sm btn-outline" style="min-height:36px;" onclick="setHotelCurrencyLak()">' + t('settings.useLakCurrency') + '</button>' +
+    '</div>'
+  ) : '';
   document.getElementById('page-settings').innerHTML = `
     <div class="card"><div class="card-header"><h2>Hotel Settings</h2></div><div class="card-body">
       <h3 style="margin:0 0 0.75rem;font-size:1rem;">${t('settings.languageSection')}</h3>
@@ -3093,7 +3376,8 @@ function renderSettings() {
         <p style="font-size:0.8rem;color:var(--text-light);margin:0.35rem 0 0;">${t('settings.languageHint')}</p>
       </div>
       <div class="form-row"><div class="form-group"><label>Hotel Name</label><input type="text" class="form-control" id="sName" value="${s.hotelName}"></div><div class="form-group"><label>Contact Email</label><input type="email" class="form-control" id="sEmail" value="${s.email}"></div></div>
-      <div class="form-row"><div class="form-group"><label>Phone Number</label><input type="tel" class="form-control" id="sPhone" value="${s.phone}"></div><div class="form-group"><label>Currency${adminEditBtn('currencyLabels')}</label><select class="form-control" id="sCurrency">${getCurrencyLabels().map(c=>`<option ${c===s.currency?'selected':''}>${c}</option>`).join('')}</select></div></div>
+      <div class="form-row"><div class="form-group"><label>Phone Number</label><input type="tel" class="form-control" id="sPhone" value="${s.phone}"></div><div class="form-group"><label>Currency${adminEditBtn('currencyLabels')}</label><select class="form-control" id="sCurrency" data-native-select="1">${getCurrencyLabels().map(c=>`<option ${c===s.currency?'selected':''}>${c}</option>`).join('')}</select></div></div>
+      ${lakLaoRow}
       <div class="form-group"><label>Address</label><input type="text" class="form-control" id="sAddr" value="${s.address}"></div>
       <h3 style="margin:1.5rem 0 1rem;font-size:1rem;">Regulations</h3>
       <div class="form-row"><div class="form-group"><label>Max Guests Per Room</label><input type="number" class="form-control" id="sMaxG" value="${s.maxGuests}"></div><div class="form-group"><label>Surcharge Rate (%)</label><input type="number" class="form-control" id="sSur" value="${s.surcharge}"></div></div>
@@ -5913,6 +6197,7 @@ window.doLogout = function() {
   document.getElementById('loginUsername').value = '';
   document.getElementById('loginPassword').value = '';
   document.getElementById('loginError').textContent = '';
+  if (typeof applyShellI18n === 'function') try { applyShellI18n(); } catch (e) {}
 };
 
 function updateTopbarUser() {
@@ -6048,6 +6333,7 @@ window.completeSetup = function() {
 })();
 
 initI18n().catch(function() {});
+try { if (typeof ensureLocalePicks === 'function') ensureLocalePicks(); } catch (e) {}
 updateBadges();
 
 // ===== CUSTOM SELECT PICKER =====

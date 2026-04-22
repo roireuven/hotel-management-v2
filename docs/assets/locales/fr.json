@@ -66,7 +66,8 @@
     "language": "Langue",
     "localization": "Langue & région",
     "localizationTitle": "Changer de langue et de région",
-    "chooseLanguage": "Choisir la langue"
+    "chooseLanguage": "Choisir la langue",
+    "localePicker": "Langue de l’interface (sélection rapide)"
   },
   "bnav": {
     "dashboard": "Tableau de bord",
@@ -90,7 +91,10 @@
   "settings": {
     "languageSection": "Langue de l’app",
     "appLanguage": "Langue de l’interface",
-    "languageHint": "S’applique aux menus et libellés courants. Identique au sélecteur de la barre supérieure."
+    "languageHint": "S’applique aux menus et libellés courants. Identique au sélecteur de la barre supérieure.",
+    "currencyInvalidReset": "La devise de l’hôtel a été réinitialisée sur la première option (elle ne correspondait plus à la liste).",
+    "laoKipHint": "Interface en lao : si vous travaillez au Laos, définissez le kip (LAK) pour les rapports.",
+    "useLakCurrency": "Utiliser LAK comme devise de l’hôtel"
   },
   "minimart": {
     "guestPickerLabel": "Mini-marché — commande pour qui ?",

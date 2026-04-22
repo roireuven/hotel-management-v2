@@ -66,7 +66,8 @@
     "language": "ພາສາ",
     "localization": "ພາສາ & ພູມມິພາກ",
     "localizationTitle": "ປ່ຽນພາສາ ແລະ ພູມມິພາກ",
-    "chooseLanguage": "ເລືອກພາສາ"
+    "chooseLanguage": "ເລືອກພາສາ",
+    "localePicker": "ເລືອກພາສາໜ້າຈໍ (ໄວ)"
   },
   "bnav": {
     "dashboard": "ແດຊບອດ",
@@ -90,7 +91,10 @@
   "settings": {
     "languageSection": "ພາສາແອັບ",
     "appLanguage": "ພາສາໜ້າຈໍ",
-    "languageHint": "ໃຊ້ກັບເມນູແລະຂໍ້ຄວາມ — ຄືກັນກັບການເລືອກພາສາໃນແຖບເທິງ"
+    "languageHint": "ໃຊ້ກັບເມນູແລະຂໍ້ຄວາມ — ຄືກັນກັບການເລືອກພາສາໃນແຖບເທິງ",
+    "currencyInvalidReset": "ລາຍການສະກຸນເງິນໂຮງແຣມຖືກຕັ້ງໃໝ່ (ບໍ່ກົງກັບລາຍການໃນ dropdown).",
+    "laoKipHint": "ຖ້າເຮັດວຽກຢູ່ລາວ: ແນະໃຫ້ຕັ້ງສະກຸນເງິນໂຮງແຣມເປັນ ກີບ (LAK).",
+    "useLakCurrency": "ໃຊ້ LAK ເປັນສະກຸນເງິນໂຮງແຣມ"
   },
   "minimart": {
     "guestPickerLabel": "ມິນິມາເດີ — ສັ່ງໃຫ້ໃຜ?",

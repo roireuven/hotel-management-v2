@@ -66,7 +66,8 @@
     "language": "Idioma",
     "localization": "Localización",
     "localizationTitle": "Cambiar idioma y región",
-    "chooseLanguage": "Elegir idioma"
+    "chooseLanguage": "Elegir idioma",
+    "localePicker": "Idioma de la interfaz (selección rápida)"
   },
   "bnav": {
     "dashboard": "Panel",
@@ -90,7 +91,10 @@
   "settings": {
     "languageSection": "Idioma de la app",
     "appLanguage": "Idioma de la interfaz",
-    "languageHint": "Afecta a menús y textos comunes. Es el mismo control que en la barra superior."
+    "languageHint": "Afecta a menús y textos comunes. Es el mismo control que en la barra superior.",
+    "currencyInvalidReset": "Se restableció la moneda del hotel a la primera opción de la lista (ya no coincidía con las etiquetas).",
+    "laoKipHint": "Interfaz en lao: si opera en Laos, puede usar LAK (kip laosiano) como moneda de informes.",
+    "useLakCurrency": "Usar LAK como moneda del hotel"
   },
   "minimart": {
     "guestPickerLabel": "Minimarket — ¿Para quién es el pedido?",

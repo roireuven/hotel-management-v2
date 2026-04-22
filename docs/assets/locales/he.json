@@ -66,7 +66,8 @@
     "language": "שפה",
     "localization": "הגדרות שפה",
     "localizationTitle": "החלפת שפה ואזור",
-    "chooseLanguage": "בחר שפה"
+    "chooseLanguage": "בחר שפה",
+    "localePicker": "שפת ממשק (בחירה מהירה)"
   },
   "bnav": {
     "dashboard": "לוח בקרה",
@@ -90,7 +91,10 @@
   "settings": {
     "languageSection": "שפת המערכת",
     "appLanguage": "שפת ממשק",
-    "languageHint": "חל על תפריטים ותוויות נפוצות. זהה לבחירת השפה בסרך העליון."
+    "languageHint": "חל על תפריטים ותוויות נפוצות. זהה לבחירת השפה בסרך העליון.",
+    "currencyInvalidReset": "מטבע המלון אופס לאפשרות הראשונה ברשימה (לא היה תואם לרשימת המטבעות).",
+    "laoKipHint": "ממשק בלאו: אפשר להגדיר את מטבע הדיווח לקיפ לאו (LAK) אם עובדים בלאוס.",
+    "useLakCurrency": "השתמש ב־LAK כמטבע המלון"
   },
   "minimart": {
     "guestPickerLabel": "מיני-מרט — עבור מי ההזמנה?",
