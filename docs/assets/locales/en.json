@@ -117,7 +117,17 @@
     "clean": "Clean",
     "yourTasksToday": "Your Tasks Today",
     "tasksLine": "You have {dirty} rooms that need cleaning and {oos} rooms out of service.",
-    "goHousekeeping": "Go to Housekeeping Board"
+    "goHousekeeping": "Go to Housekeeping Board",
+    "recentActivity": "Recent Activity",
+    "communicationLog": "Communication Log",
+    "noRecentActivity": "No recent activity",
+    "noMessagesYet": "No messages yet",
+    "bookingsCount": "Bookings ({n})",
+    "invoicesCount": "Invoices ({n})",
+    "noBookingsForDate": "No active bookings for this date",
+    "noInvoicesForDate": "No invoices for this date",
+    "barChartLegend1": "Rooms",
+    "barChartLegend2": "Services"
   },
   "rooms": {
     "roomOverview": "Room Overview",
@@ -230,7 +240,9 @@
     "passportId": "Passport / ID",
     "nationality": "Nationality",
     "blacklist": "Blacklist",
-    "visits": "Visits"
+    "visits": "Visits",
+    "module": "Module",
+    "itemId": "Item ID"
   },
   "guest": {
     "emptyGrid": "No guests yet. Add your first guest!"
@@ -255,6 +267,28 @@
     "restaurant": "Restaurant change log",
     "dropdowns": "Dropdowns change log",
     "posTxnHist": "Transaction history",
-    "posPostedLog": "POS transaction log"
+    "posPostedLog": "POS transaction log",
+    "emptyChanges": "◳ No changes recorded yet"
+  },
+  "grid": {
+    "addRow": "Add Row",
+    "exportCsv": "EXPORT CSV",
+    "importCsv": "IMPORT CSV",
+    "searchAllPlaceholder": "Search across all columns...",
+    "rowOne": "1 row",
+    "rowMany": "{n} rows",
+    "actions": "Actions",
+    "noData": "📄 No data",
+    "filterLabel": "Filter {col}",
+    "total": "TOTAL",
+    "pageOf": "Page {current} of {total}",
+    "perPage": "{n}/page",
+    "csvStarted": "CSV download started",
+    "csvEmpty": "CSV file is empty",
+    "csvImported": "{n} rows imported",
+    "csvReadError": "Error reading CSV: {message}"
+  },
+  "inv": {
+    "invoiceNumber": "Invoice #"
   }
 }

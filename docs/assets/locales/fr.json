@@ -117,7 +117,17 @@
     "clean": "Propres",
     "yourTasksToday": "Vos tâches aujourd’hui",
     "tasksLine": "Vous avez {dirty} chambres à nettoyer et {oos} chambres hors service.",
-    "goHousekeeping": "Aller au tableau ménage"
+    "goHousekeeping": "Aller au tableau ménage",
+    "recentActivity": "Activité récente",
+    "communicationLog": "Journal de communication",
+    "noRecentActivity": "Aucune activité récente",
+    "noMessagesYet": "Aucun message pour l’instant",
+    "bookingsCount": "Réservations ({n})",
+    "invoicesCount": "Factures ({n})",
+    "noBookingsForDate": "Aucune réservation active à cette date",
+    "noInvoicesForDate": "Aucune facture à cette date",
+    "barChartLegend1": "Chambres",
+    "barChartLegend2": "Services"
   },
   "rooms": {
     "roomOverview": "Aperçu des chambres",
@@ -230,7 +240,9 @@
     "passportId": "Passeport / ID",
     "nationality": "Nationalité",
     "blacklist": "Liste noire",
-    "visits": "Visites"
+    "visits": "Visites",
+    "module": "Module",
+    "itemId": "ID article"
   },
   "guest": {
     "emptyGrid": "Aucun client. Ajoutez le premier !"
@@ -255,6 +267,28 @@
     "restaurant": "Journal des modifications — Restaurant",
     "dropdowns": "Journal des modifications — Listes",
     "posTxnHist": "Historique des transactions",
-    "posPostedLog": "Journal d’enregistrement PDV"
+    "posPostedLog": "Journal d’enregistrement PDV",
+    "emptyChanges": "◳ Aucun changement enregistré"
+  },
+  "grid": {
+    "addRow": "Ajouter une ligne",
+    "exportCsv": "EXPORTER CSV",
+    "importCsv": "IMPORTER CSV",
+    "searchAllPlaceholder": "Rechercher dans toutes les colonnes…",
+    "rowOne": "1 ligne",
+    "rowMany": "{n} lignes",
+    "actions": "Actions",
+    "noData": "📄 Aucune donnée",
+    "filterLabel": "Filtrer {col}",
+    "total": "TOTAL",
+    "pageOf": "Page {current} sur {total}",
+    "perPage": "{n}/page",
+    "csvStarted": "Téléchargement CSV lancé",
+    "csvEmpty": "Fichier CSV vide",
+    "csvImported": "{n} lignes importées",
+    "csvReadError": "Erreur de lecture CSV : {message}"
+  },
+  "inv": {
+    "invoiceNumber": "N° de facture"
   }
 }

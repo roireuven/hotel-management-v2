@@ -117,7 +117,17 @@
     "clean": "สะอาด",
     "yourTasksToday": "งานของคุณวันนี้",
     "tasksLine": "คุณมี {dirty} ห้องที่รอทำความสะอาด และ {oos} ห้องที่งดให้บริการ",
-    "goHousekeeping": "ไปกระดานแม่บ้าน"
+    "goHousekeeping": "ไปกระดานแม่บ้าน",
+    "recentActivity": "กิจกรรมล่าสุด",
+    "communicationLog": "บันทึกการสื่อสาร",
+    "noRecentActivity": "ยังไม่มีกิจกรรม",
+    "noMessagesYet": "ยังไม่มีข้อความ",
+    "bookingsCount": "การจอง ({n})",
+    "invoicesCount": "ใบแจ้งหนี้ ({n})",
+    "noBookingsForDate": "ไม่มีการจองสำหรับวันที่นี้",
+    "noInvoicesForDate": "ไม่มีใบแจ้งหนี้สำหรับวันที่นี้",
+    "barChartLegend1": "ห้อง",
+    "barChartLegend2": "บริการ"
   },
   "rooms": {
     "roomOverview": "ภาพรวมห้อง",
@@ -230,7 +240,9 @@
     "passportId": "หนังสือเดินทาง / บัตร",
     "nationality": "สัญชาติ",
     "blacklist": "บัญชีดำ",
-    "visits": "จำนวนครั้งที่มา"
+    "visits": "จำนวนครั้งที่มา",
+    "module": "โมดูล",
+    "itemId": "รหัสรายการ"
   },
   "guest": {
     "emptyGrid": "ยังไม่มีแขก เพิ่มแขกคนแรก!"
@@ -255,6 +267,28 @@
     "restaurant": "บันทึกการเปลี่ยนแปลง — ร้านอาหาร",
     "dropdowns": "บันทึกการเปลี่ยนแปลง — รายการดรอปดาวน์",
     "posTxnHist": "ประวัติธุรกรรม",
-    "posPostedLog": "บันทึกรายการ POS ที่ลงบัญชี"
+    "posPostedLog": "บันทึกรายการ POS ที่ลงบัญชี",
+    "emptyChanges": "◳ ยังไม่มีบันทึกการเปลี่ยนแปลง"
+  },
+  "grid": {
+    "addRow": "เพิ่มแถว",
+    "exportCsv": "ส่งออก CSV",
+    "importCsv": "นำเข้า CSV",
+    "searchAllPlaceholder": "ค้นหาในทุกคอลัมน์...",
+    "rowOne": "1 แถว",
+    "rowMany": "{n} แถว",
+    "actions": "การดำเนินการ",
+    "noData": "📄 ไม่มีข้อมูล",
+    "filterLabel": "กรอง {col}",
+    "total": "รวม",
+    "pageOf": "หน้า {current} จาก {total}",
+    "perPage": "{n}/หน้า",
+    "csvStarted": "เริ่มดาวน์โหลด CSV",
+    "csvEmpty": "ไฟล์ CSV ว่าง",
+    "csvImported": "นำเข้า {n} แถว",
+    "csvReadError": "อ่าน CSV ผิดพลาด: {message}"
+  },
+  "inv": {
+    "invoiceNumber": "ใบแจ้งหนี้ #"
   }
 }

@@ -117,7 +117,17 @@
     "clean": "ສະອາດ",
     "yourTasksToday": "ວຽກວັນນີ້",
     "tasksLine": "ມີ {dirty} ຫ້ອງຕ້ອງປິ້ນ ແລະ {oos} ຫ້ອງຢຸດບໍລິການ",
-    "goHousekeeping": "ໄປກະດານແມ່ບ້ານ"
+    "goHousekeeping": "ໄປກະດານແມ່ບ້ານ",
+    "recentActivity": "ກິດຈະກຳຫຼ້າສຸດ",
+    "communicationLog": "ບັນທຶກການສື່ສານ",
+    "noRecentActivity": "ຍັງບໍ່ມີກິດຈະກຳ",
+    "noMessagesYet": "ຍັງບໍ່ມີຂໍ້ຄວາມ",
+    "bookingsCount": "ການຈອງ ({n})",
+    "invoicesCount": "ໃບແຈ້ງໜີ້ ({n})",
+    "noBookingsForDate": "ບໍ່ມີການຈອງວັນນີ້",
+    "noInvoicesForDate": "ບໍ່ມີໃບແຈ້ງໜີ້ວັນນີ້",
+    "barChartLegend1": "ຫ້ອງ",
+    "barChartLegend2": "ບໍລິການ"
   },
   "rooms": {
     "roomOverview": "ພາບລວມຫ້ອງ",
@@ -230,7 +240,9 @@
     "passportId": "ໜັງສື / ບັດ",
     "nationality": "ສັນຊາດ",
     "blacklist": "ບັນຊີດຳ",
-    "visits": "ຄັ້ງທີ່ມາ"
+    "visits": "ຄັ້ງທີ່ມາ",
+    "module": "ໂມດູນ",
+    "itemId": "ລະຫັດລາຍການ"
   },
   "guest": {
     "emptyGrid": "ຍັງບໍ່ມີແຂກ — ເພີ່ມຄົນແລກ!"
@@ -255,6 +267,28 @@
     "restaurant": "ບັນທຶກ — ຮ້ານອາຫານ",
     "dropdowns": "ບັນທຶກ — ລາຍການ",
     "posTxnHist": "ປະຫວັດທຸລະກຳ",
-    "posPostedLog": "ລາຍການ POS"
+    "posPostedLog": "ລາຍການ POS",
+    "emptyChanges": "◳ ຍັງບໍ່ມີການປ່ຽນແປງ"
+  },
+  "grid": {
+    "addRow": "ເພີ່ມແຖວ",
+    "exportCsv": "ສົ່ງອກ CSV",
+    "importCsv": "ນໍາເຂົ້າ CSV",
+    "searchAllPlaceholder": "ຄົ້ນຫາໃນທຸກຖັນ...",
+    "rowOne": "1 ແຖວ",
+    "rowMany": "{n} ແຖວ",
+    "actions": "ຄຳສັ່ງ",
+    "noData": "📄 ບໍ່ມີຂໍ້ມູນ",
+    "filterLabel": "ກອງ {col}",
+    "total": "ລວມ",
+    "pageOf": "ໜ້າ {current} ຈາກ {total}",
+    "perPage": "{n}/ໜ້າ",
+    "csvStarted": "ເລີ່ມດາວໂຫຼດ CSV",
+    "csvEmpty": "ໄຟລ໌ CSV ວ່າງ",
+    "csvImported": "ນໍາເຂົ້າ {n} ແຖວ",
+    "csvReadError": "ອ່ານ CSV ບໍ່ສຳເລັດ: {message}"
+  },
+  "inv": {
+    "invoiceNumber": "ໃບແຈ້ງໜີ້ #"
   }
 }

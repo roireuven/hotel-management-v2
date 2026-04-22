@@ -117,7 +117,17 @@
     "clean": "נקי",
     "yourTasksToday": "המשימות שלך היום",
     "tasksLine": "יש {dirty} חדרים הדורשים ניקוי ו-{oos} חדרים מחוץ לשירות.",
-    "goHousekeeping": "מעבר ללוח בית המלון (ניקיון)"
+    "goHousekeeping": "מעבר ללוח בית המלון (ניקיון)",
+    "recentActivity": "פעילות אחרונה",
+    "communicationLog": "יומן תקשורת",
+    "noRecentActivity": "אין פעילות אחרונה",
+    "noMessagesYet": "אין הודעות עדיין",
+    "bookingsCount": "הזמנות ({n})",
+    "invoicesCount": "חשבוניות ({n})",
+    "noBookingsForDate": "אין הזמנות פעילות לתאריך זה",
+    "noInvoicesForDate": "אין חשבוניות לתאריך זה",
+    "barChartLegend1": "חדרים",
+    "barChartLegend2": "שירותים"
   },
   "rooms": {
     "roomOverview": "סקירת חדרים",
@@ -230,7 +240,9 @@
     "passportId": "דרכון / מזהה",
     "nationality": "אזרחות",
     "blacklist": "רשימה שחורה",
-    "visits": "ביקורים"
+    "visits": "ביקורים",
+    "module": "מודול",
+    "itemId": "מזהה פריט"
   },
   "guest": {
     "emptyGrid": "אין אורחים. הוסיפו אורח ראשון!"
@@ -255,6 +267,28 @@
     "restaurant": "יומן שינויים — מסעדה",
     "dropdowns": "יומן שינויים — רשימות",
     "posTxnHist": "היסטוריית עסקאות",
-    "posPostedLog": "יומן רישום עסקאות POS"
+    "posPostedLog": "יומן רישום עסקאות POS",
+    "emptyChanges": "◳ אין שינויים רשומים"
+  },
+  "grid": {
+    "addRow": "הוסף שורה",
+    "exportCsv": "ייצא CSV",
+    "importCsv": "ייבא CSV",
+    "searchAllPlaceholder": "חיפוש בכל העמודות...",
+    "rowOne": "שורה אחת",
+    "rowMany": "{n} שורות",
+    "actions": "פעולות",
+    "noData": "📄 אין נתונים",
+    "filterLabel": "סנן {col}",
+    "total": "סה״כ",
+    "pageOf": "עמוד {current} מתוך {total}",
+    "perPage": "{n}/עמוד",
+    "csvStarted": "הורדת CSV התחילה",
+    "csvEmpty": "קובץ CSV ריק",
+    "csvImported": "יובאו {n} שורות",
+    "csvReadError": "שגיאה בקריאת CSV: {message}"
+  },
+  "inv": {
+    "invoiceNumber": "חשבונית #"
   }
 }

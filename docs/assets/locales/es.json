@@ -117,7 +117,17 @@
     "clean": "Limpio",
     "yourTasksToday": "Sus tareas hoy",
     "tasksLine": "Tiene {dirty} habitaciones por limpiar y {oos} fuera de servicio.",
-    "goHousekeeping": "Ir a limpieza"
+    "goHousekeeping": "Ir a limpieza",
+    "recentActivity": "Actividad reciente",
+    "communicationLog": "Registro de comunicación",
+    "noRecentActivity": "Sin actividad reciente",
+    "noMessagesYet": "Aún no hay mensajes",
+    "bookingsCount": "Reservas ({n})",
+    "invoicesCount": "Facturas ({n})",
+    "noBookingsForDate": "No hay reservas activas para esta fecha",
+    "noInvoicesForDate": "No hay facturas para esta fecha",
+    "barChartLegend1": "Habitaciones",
+    "barChartLegend2": "Servicios"
   },
   "rooms": {
     "roomOverview": "Resumen de habitaciones",
@@ -230,7 +240,9 @@
     "passportId": "Pasaporte / ID",
     "nationality": "Nacionalidad",
     "blacklist": "Lista de bloqueo",
-    "visits": "Visitas"
+    "visits": "Visitas",
+    "module": "Módulo",
+    "itemId": "ID de elemento"
   },
   "guest": {
     "emptyGrid": "Aún no hay huéspedes. Añada el primero."
@@ -255,6 +267,28 @@
     "restaurant": "Registro de cambios — Restaurante",
     "dropdowns": "Registro de cambios — Listas",
     "posTxnHist": "Historial de transacciones",
-    "posPostedLog": "Registro TPV (publicado)"
+    "posPostedLog": "Registro TPV (publicado)",
+    "emptyChanges": "◳ No hay cambios registrados"
+  },
+  "grid": {
+    "addRow": "Añadir fila",
+    "exportCsv": "EXPORTAR CSV",
+    "importCsv": "IMPORTAR CSV",
+    "searchAllPlaceholder": "Buscar en todas las columnas...",
+    "rowOne": "1 fila",
+    "rowMany": "{n} filas",
+    "actions": "Acciones",
+    "noData": "📄 Sin datos",
+    "filterLabel": "Filtrar {col}",
+    "total": "TOTAL",
+    "pageOf": "Página {current} de {total}",
+    "perPage": "{n}/pág.",
+    "csvStarted": "Descarga de CSV iniciada",
+    "csvEmpty": "El archivo CSV está vacío",
+    "csvImported": "{n} filas importadas",
+    "csvReadError": "Error al leer el CSV: {message}"
+  },
+  "inv": {
+    "invoiceNumber": "Factura n.º"
   }
 }

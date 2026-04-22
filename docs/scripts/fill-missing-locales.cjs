@@ -8,6 +8,9 @@ const path = require('path');
 
 const localesDir = path.join(__dirname, '..', 'assets', 'locales');
 const en = JSON.parse(fs.readFileSync(path.join(localesDir, 'en.json'), 'utf8'));
+const GRID_PATCH = JSON.parse(
+  fs.readFileSync(path.join(__dirname, 'grid-locale-patch.json'), 'utf8')
+);
 
 function i18nDeepMerge(base, over) {
   if (!over || typeof over !== 'object' || over === null) {
@@ -453,7 +456,10 @@ const EXTRA = {
     return;
   }
   const current = JSON.parse(fs.readFileSync(p, 'utf8'));
-  const withDefaults = i18nDeepMerge(JSON.parse(JSON.stringify(en)), EXTRA[code] || {});
+  const withDefaults = i18nDeepMerge(
+    i18nDeepMerge(JSON.parse(JSON.stringify(en)), EXTRA[code] || {}),
+    GRID_PATCH[code] || {}
+  );
   const out = i18nDeepMerge(withDefaults, current);
   fs.writeFileSync(p, JSON.stringify(out, null, 2) + '\n');
   console.log('wrote', code, 'top-level keys', Object.keys(out).length);
