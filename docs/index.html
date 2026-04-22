@@ -7,6 +7,12 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <title>Hotel Management System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;500;600&family=Noto+Sans+Lao:wght@400;500;600&family=Noto+Sans+Thai:wght@400;500;600&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script>
+  (function () { try { var st = localStorage.getItem('hotel_mgr_uiLocale') || 'en'; document.documentElement.setAttribute('lang', st); document.documentElement.setAttribute('dir', st === 'he' ? 'rtl' : 'ltr'); } catch (e) {} })();
+  </script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -25,7 +31,24 @@
       --danger: #e74c3c;
     }
     html, body { width: 100%; height: 100%; overflow: hidden; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; width: 100%; }
+    body { font-family: "Noto Sans", "Noto Sans Hebrew", "Noto Sans Thai", "Noto Sans Lao", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; width: 100%; }
+    [dir="rtl"] .sidebar { left: auto; right: 0; transform: translateX(100%); }
+    [dir="rtl"] .sidebar.open { transform: translateX(0); }
+    [dir="rtl"] .topbar { flex-direction: row-reverse; }
+    [dir="rtl"] .topbar-left, [dir="rtl"] .topbar-right { flex-direction: row-reverse; }
+    [dir="rtl"] .topbar h1, [dir="rtl"] .sidebar-header, [dir="rtl"] .sidebar-nav a, [dir="rtl"] th, [dir="rtl"] td { text-align: start; }
+    .topbar .btn-lang { position: relative; z-index: 2; min-height: 40px; min-width: 44px; background: rgba(255,255,255,0.2); color: #fff; border: 1px solid rgba(255,255,255,0.4); border-radius: 8px; padding: 0.3rem 0.55rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.3rem; flex-shrink: 0; -webkit-tap-highlight-color: transparent; }
+    .topbar .btn-lang:hover, .topbar .btn-lang:focus { background: rgba(255,255,255,0.32); }
+    .lang-menu-wrap { position: relative; z-index: 1; flex-shrink: 0; }
+    .lang-menu { display: none; position: absolute; inset-block-start: 100%; inset-inline-end: 0; margin-top: 6px; min-width: 220px; max-height: min(70vh, 420px); overflow-y: auto; background: var(--card-bg); color: var(--text); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); z-index: 5000; padding: 0.35rem; }
+    .lang-menu.open { display: block; }
+    .lang-menu-hint { font-size: 0.7rem; color: var(--text-light); padding: 0.35rem 0.5rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .lang-menu .lang-opt { display: block; width: 100%; text-align: start; padding: 0.55rem 0.6rem; margin: 2px 0; border: none; background: transparent; font: inherit; color: var(--text); font-size: 0.88rem; font-weight: 500; border-radius: 6px; cursor: pointer; }
+    .lang-menu .lang-opt:hover, .lang-menu .lang-opt:focus { background: #e8f0fe; }
+    .lang-menu .lang-opt[aria-pressed="true"] { background: #e3f2fd; color: var(--primary); font-weight: 700; }
+    [dir="rtl"] .main .lang-menu { inset-inline-end: auto; inset-inline-start: 0; }
+    .login-lang-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0.3rem; margin-top: 0.4rem; margin-bottom: 0.15rem; max-width: 100%; }
+    .login-lang-row .btn { padding: 0.25rem 0.45rem; min-height: 30px; font-size: 0.68rem; }
     .sidebar { width: 280px; background: linear-gradient(180deg, #0a1628 0%, #1a3a5c 50%, #1a73e8 100%); color: #ecf0f1; min-height: 100vh; position: fixed; left: 0; top: 0; bottom: 0; overflow-y: auto; z-index: 100; transition: transform 0.3s ease; transform: translateX(-100%); }
     .sidebar.open { transform: translateX(0); }
     .sidebar-header { padding: 1.5rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.15); display: flex; align-items: center; gap: 0.75rem; background: rgba(0,0,0,0.2); }
@@ -40,15 +63,14 @@
     .sidebar-nav a .icon { font-size: 1.1rem; width: 28px; text-align: center; opacity: 0.85; }
     .sidebar-nav a .badge { margin-left: auto; background: var(--danger); color: #fff; font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: 10px; font-weight: 600; }
     .main { margin-left: 0; flex: 1; min-height: 100vh; width: 100%; display: flex; flex-direction: column; }
-    .topbar { background: linear-gradient(135deg, #1a3a5c 0%, #1a73e8 100%); border-bottom: none; padding: 0 1rem; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; color: #fff; }
-    .topbar h1 { color: #fff; }
-    .topbar-left { display: flex; align-items: center; gap: 0.75rem; }
-    .menu-toggle { display: block; background: rgba(255,255,255,0.15); border: none; font-size: 1.3rem; cursor: pointer; padding: 0.4rem 0.6rem; border-radius: 8px; color: #fff; }
-    .topbar h1 { font-size: 1.2rem; font-weight: 600; }
-    .topbar-right { display: flex; align-items: center; gap: 1rem; }
+    .topbar { background: linear-gradient(135deg, #1a3a5c 0%, #1a73e8 100%); border-bottom: none; padding: 0 1rem; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 200; color: #fff; overflow: visible; }
+    .topbar-left { display: flex; align-items: center; gap: 0.75rem; min-width: 0; flex: 1 1 auto; }
+    .topbar h1 { color: #fff; font-size: 1.2rem; font-weight: 600; min-width: 0; flex: 1 1 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .menu-toggle { display: block; background: rgba(255,255,255,0.15); border: none; font-size: 1.3rem; cursor: pointer; padding: 0.4rem 0.6rem; border-radius: 8px; color: #fff; flex-shrink: 0; }
+    .topbar-right { display: flex; align-items: center; gap: 0.5rem; flex: 0 0 auto; flex-wrap: nowrap; }
     .topbar-right .user-info { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; }
     .avatar { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.2); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.8rem; border: 2px solid rgba(255,255,255,0.4); }
-    .content { padding: 0.75rem; flex: 1; overflow-y: auto; height: calc(100vh - 56px); }
+    .content { padding: 0.75rem; flex: 1; overflow-y: auto; height: calc(100vh - 56px); position: relative; z-index: 0; }
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
     .stat-card { background: var(--card-bg); border-radius: 12px; padding: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.06); display: flex; align-items: center; gap: 0.75rem; border: 1px solid var(--border); }
     .stat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
@@ -257,22 +279,24 @@
     .msg-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; }
     .msg-icon.welcome { background: #e8f5e9; } .msg-icon.invoice { background: #e3f2fd; } .msg-icon.reminder { background: #fff3e0; }
     .msg-text { flex: 1; } .msg-meta { font-size: 0.72rem; color: var(--text-light); margin-top: 0.15rem; }
-    /* Login Overlay */
-    #loginOverlay { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #2c3e50 0%, #1a73e8 100%); }
+    /* Login Overlay — scrollable on short viewports so full credentials fit */
+    #loginOverlay { position: fixed; inset: 0; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding: max(0.5rem, env(safe-area-inset-top, 0px)) 0.75rem max(1rem, env(safe-area-inset-bottom, 8px)); box-sizing: border-box; background: linear-gradient(135deg, #2c3e50 0%, #1a73e8 100%); min-height: 100dvh; }
     #loginOverlay.hidden { display: none; }
-    .login-card { background: #fff; border-radius: 16px; padding: 2.5rem; width: 90%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); text-align: center; }
-    .login-card .login-logo { font-size: 3rem; margin-bottom: 0.5rem; }
-    .login-card h1 { font-size: 1.5rem; font-weight: 700; color: #2c3e50; margin-bottom: 0.25rem; }
-    .login-card .login-sub { font-size: 0.85rem; color: #65676b; margin-bottom: 1.5rem; }
-    .login-card .form-group { text-align: left; }
-    .login-card .login-error { color: #c0392b; font-size: 0.88rem; font-weight: 600; margin-top: 0.5rem; min-height: 1.35em; line-height: 1.35; padding: 0.35rem 0; }
-    .login-card .btn-login { width: 100%; padding: 0.75rem; font-size: 1rem; margin-top: 0.5rem; }
+    .login-card { background: #fff; border-radius: 16px; padding: 1.15rem 1.1rem 1rem; width: 100%; max-width: min(460px, calc(100vw - 1.5rem)); box-shadow: 0 20px 60px rgba(0,0,0,0.3); text-align: center; margin: 0.5rem auto 1.25rem; flex-shrink: 0; }
+    .login-card .login-logo { font-size: 2.5rem; margin-bottom: 0.35rem; }
+    .login-card h1 { font-size: 1.35rem; font-weight: 700; color: #2c3e50; margin-bottom: 0.2rem; }
+    .login-card .login-sub { font-size: 0.8rem; color: #65676b; margin-bottom: 0.75rem; line-height: 1.35; }
+    .login-card .form-group { text-align: left; margin-bottom: 0.55rem; }
+    .login-card .form-group label { font-size: 0.8rem; margin-bottom: 0.2rem; }
+    .login-card .form-control { padding: 0.5rem 0.65rem; }
+    .login-card .login-error { color: #c0392b; font-size: 0.82rem; font-weight: 600; margin-top: 0.25rem; min-height: 1.1em; line-height: 1.3; padding: 0.2rem 0; }
+    .login-card .btn-login { width: 100%; padding: 0.6rem; font-size: 0.95rem; margin-top: 0.35rem; }
     .login-card .login-hint { font-size: 0.78rem; color: #65676b; margin-top: 1.25rem; line-height: 1.5; }
-    .login-creds { margin-top: 1.5rem; text-align: left; border-top: 1px solid #e0e0e0; padding-top: 1rem; margin-left: -20px; }
-    .login-creds h3 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: #65676b; margin-bottom: 0.6rem; text-align: center; }
-    .login-creds table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
-    .login-creds th { background: #f5f6f8; padding: 0.4rem 0.5rem; text-align: left; font-size: 0.7rem; text-transform: uppercase; color: #65676b; border-bottom: 1px solid #e0e0e0; }
-    .login-creds td { padding: 0.4rem 0.5rem; border-bottom: 1px solid #f0f0f0; }
+    .login-creds { margin-top: 0.6rem; text-align: left; border-top: 1px solid #e0e0e0; padding-top: 0.55rem; margin-left: 0; }
+    .login-creds h3 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: #65676b; margin-bottom: 0.4rem; text-align: center; }
+    .login-creds table { width: 100%; border-collapse: collapse; font-size: 0.7rem; }
+    .login-creds th { background: #f5f6f8; padding: 0.25rem 0.35rem; text-align: left; font-size: 0.65rem; text-transform: uppercase; color: #65676b; border-bottom: 1px solid #e0e0e0; }
+    .login-creds td { padding: 0.25rem 0.35rem; border-bottom: 1px solid #f0f0f0; }
     .login-creds .cred-role { font-weight: 600; white-space: nowrap; }
     .login-creds .cred-email { font-family: monospace; font-size: 0.75rem; color: #1a73e8; cursor: pointer; }
     .login-creds .cred-access { font-size: 0.7rem; color: #65676b; }
@@ -288,6 +312,11 @@
     body.dark-mode .login-card { background: #16213e; }
     body.dark-mode .login-card h1 { color: #e0e0e0; }
     body.dark-mode .login-card .login-sub, body.dark-mode .login-card .login-hint { color: #a0a0a0; }
+    @media (max-height: 720px) {
+      #loginOverlay { padding-top: 0.35rem; }
+      .login-card { padding: 0.85rem 0.9rem 0.75rem; margin-top: 0.25rem; }
+      .login-creds th, .login-creds td { padding: 0.2rem 0.3rem; }
+    }
     /* Housekeeper large buttons */
     .hk-card.hk-large { min-height: 100px; padding: 1.25rem; }
     .hk-card.hk-large .hk-room { font-size: 1.6rem; }
@@ -563,18 +592,27 @@
   </div>
 
   <div id="loginOverlay">
-    <div class="login-card" style="max-width:460px;">
-      <div class="login-logo" style="font-size:2.5rem;background:linear-gradient(135deg,#1a3a5c,#1a73e8);color:#fff;width:64px;height:64px;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 0.5rem;font-weight:700;">H</div>
-      <h1>Hotel Manager</h1>
-      <p class="login-sub">Management System — Please sign in</p>
-      <div class="form-group"><label>Username (Email)</label><input type="text" class="form-control" id="loginUsername" placeholder="e.g. admin@hotel.com" style="text-transform:lowercase;" oninput="this.value=this.value.toLowerCase()"></div>
-      <div class="form-group"><label>Password</label><input type="password" class="form-control" id="loginPassword" placeholder="Enter password" value="1234"></div>
-      <button class="btn btn-primary btn-login" onclick="doLogin()">Sign In</button>
+    <div class="login-card">
+      <div class="login-logo" style="font-size:2rem;background:linear-gradient(135deg,#1a3a5c,#1a73e8);color:#fff;width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 0.35rem;font-weight:700;">H</div>
+      <h1 data-i18n="login.title">Hotel Manager</h1>
+      <p class="login-sub" data-i18n="login.subtitle">Management System — Please sign in</p>
+      <div class="form-group"><label data-i18n="login.username">Username (Email)</label><input type="text" class="form-control" id="loginUsername" placeholder="e.g. admin@hotel.com" style="text-transform:lowercase;" oninput="this.value=this.value.toLowerCase()"></div>
+      <div class="form-group"><label data-i18n="login.password">Password</label><input type="password" class="form-control" id="loginPassword" data-i18n-placeholder="login.passwordPh" placeholder="Enter password" value="1234"></div>
+      <div class="login-lang-row" id="loginLangRow" aria-label="Language">
+        <span style="font-size:0.75rem;opacity:0.85;" data-i18n="topbar.language">Language</span>
+        <button type="button" class="btn btn-sm btn-outline" style="color:#1a3a5c;border-color:#1a73e8;" onclick="setAppLocale('en')">English</button>
+        <button type="button" class="btn btn-sm btn-outline" style="color:#1a3a5c;border-color:#1a73e8;" onclick="setAppLocale('he')">עברית</button>
+        <button type="button" class="btn btn-sm btn-outline" style="color:#1a3a5c;border-color:#1a73e8;" onclick="setAppLocale('th')">ไทย (Thai)</button>
+        <button type="button" class="btn btn-sm btn-outline" style="color:#1a3a5c;border-color:#1a73e8;" onclick="setAppLocale('lo')">ລາວ (Lao)</button>
+        <button type="button" class="btn btn-sm btn-outline" style="color:#1a3a5c;border-color:#1a73e8;" onclick="setAppLocale('es')">Español</button>
+        <button type="button" class="btn btn-sm btn-outline" style="color:#1a3a5c;border-color:#1a73e8;" onclick="setAppLocale('fr')">Français</button>
+      </div>
+      <button class="btn btn-primary btn-login" onclick="doLogin()" data-i18n="login.signIn">Sign In</button>
       <div class="login-error" id="loginError"></div>
       <div class="login-creds">
-        <h3>Demo Credentials</h3>
+        <h3 data-i18n="login.demoCredentials">Demo Credentials</h3>
         <table>
-          <thead><tr><th>Role</th><th>Email (Username)</th><th>PWD</th></tr></thead>
+          <thead><tr><th data-i18n="login.role">Role</th><th data-i18n="login.emailUser">Email (Username)</th><th data-i18n="login.pwd">PWD</th></tr></thead>
           <tbody>
             <tr data-tip="Full system control, settings, accounts, audit"><td class="cred-role">◆ Admin</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">admin@hotel.com</td><td class="cred-pw">1234</td></tr>
             <tr data-tip="Reports, inventory, overrides, analytics"><td class="cred-role">◫ Manager</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">mike@hotel.com</td><td class="cred-pw">1234</td></tr>
@@ -584,49 +622,49 @@
             <tr data-tip="Kitchen: live order queue (same data as Restaurant; prep / ready / served only)"><td class="cred-role">◆ Kitchen</td><td class="cred-email" onclick="document.getElementById('loginUsername').value=this.textContent">kitchen@hotel.com</td><td class="cred-pw">1234</td></tr>
           </tbody>
         </table>
-        <p style="text-align:center;margin-top:0.6rem;font-size:0.72rem;color:#999;">Tap an email to auto-fill the username field</p>
+        <p class="login-tap-hint" style="text-align:center;margin-top:0.4rem;font-size:0.68rem;color:#999;line-height:1.35;" data-i18n="login.tapEmail">Tap an email to auto-fill the username field</p>
       </div>
     </div>
   </div>
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
   <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header"><div class="logo" style="font-size:1.6rem;background:rgba(255,255,255,0.1);width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;">H</div><div><h2>Hotel Manager</h2><span>Management System</span></div></div>
+    <div class="sidebar-header"><div class="logo" style="font-size:1.6rem;background:rgba(255,255,255,0.1);width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;">H</div><div><h2 data-i18n="app.shortName">Hotel Manager</h2><span data-i18n="app.tagline">Management System</span></div></div>
     <nav class="sidebar-nav" id="sidebarNav">
-      <div class="nav-section">Main</div>
-      <a class="active" data-page="dashboard"><span class="icon">⊞</span> Dashboard</a>
-      <a data-page="rooms"><span class="icon">▣</span> Rooms <span class="badge" id="badgeMaint">0</span></a>
-      <a data-page="bookings"><span class="icon">▤</span> Bookings</a>
-      <a data-page="guests"><span class="icon">◉</span> Guests</a>
-      <div class="nav-section">Operations</div>
-      <a data-page="housekeeping"><span class="icon">◧</span> Housekeeping</a>
-      <a data-page="maintenance"><span class="icon">⚡</span> Maintenance</a>
-      <div class="nav-section">Services</div>
-      <a data-page="services"><span class="icon">◈</span> Services</a>
-      <a data-page="invoices"><span class="icon">▥</span> Invoices</a>
-      <a data-page="inventory"><span class="icon">⬡</span> Inventory</a>
-      <a data-page="pos"><span class="icon">◈</span> POS</a>
-      <div class="nav-section">F&amp;B</div>
-      <a data-page="restaurant"><span class="icon">◈</span> Restaurant</a>
-      <a data-page="minimart"><span class="icon">◈</span> Mini-Mart</a>
-      <a data-page="menuitems"><span class="icon">◈</span> Menu Items</a>
-      <a data-page="storeitems"><span class="icon">◈</span> Store Items</a>
-      <a data-page="orderhistory"><span class="icon">◈</span> Order History</a>
-      <div class="nav-section">Guest</div>
-      <a data-page="guestportal"><span class="icon">◎</span> Guest Portal</a>
-      <div class="nav-section">Admin</div>
-      <a data-page="dashboard"><span class="icon">◫</span> Reports</a>
-      <a data-page="accounts"><span class="icon">◔</span> Accounts</a>
-      <a data-page="alltransactions"><span class="icon">◈</span> Transactions</a>
-      <a data-page="messagelog"><span class="icon">◈</span> Messages</a>
-      <a data-page="auditlog"><span class="icon">◳</span> Audit Log</a>
-      <a data-page="dropdowns"><span class="icon">◈</span> Dropdowns</a>
-      <a data-page="settings"><span class="icon">⊕</span> Settings</a>
+      <div class="nav-section" data-i18n="nav.sectionMain">Main</div>
+      <a class="active" data-page="dashboard"><span class="icon">⊞</span><span class="nav-txt" data-i18n="nav.dashboard">Dashboard</span></a>
+      <a data-page="rooms"><span class="icon">▣</span><span class="nav-txt" data-i18n="nav.rooms">Rooms</span> <span class="badge" id="badgeMaint">0</span></a>
+      <a data-page="bookings"><span class="icon">▤</span><span class="nav-txt" data-i18n="nav.bookings">Bookings</span></a>
+      <a data-page="guests"><span class="icon">◉</span><span class="nav-txt" data-i18n="nav.guests">Guests</span></a>
+      <div class="nav-section" data-i18n="nav.sectionOperations">Operations</div>
+      <a data-page="housekeeping"><span class="icon">◧</span><span class="nav-txt" data-i18n="nav.housekeeping">Housekeeping</span></a>
+      <a data-page="maintenance"><span class="icon">⚡</span><span class="nav-txt" data-i18n="nav.maintenance">Maintenance</span></a>
+      <div class="nav-section" data-i18n="nav.sectionServices">Services</div>
+      <a data-page="services"><span class="icon">◈</span><span class="nav-txt" data-i18n="nav.services">Services</span></a>
+      <a data-page="invoices"><span class="icon">▥</span><span class="nav-txt" data-i18n="nav.invoices">Invoices</span></a>
+      <a data-page="inventory"><span class="icon">⬡</span><span class="nav-txt" data-i18n="nav.inventory">Inventory</span></a>
+      <a data-page="pos"><span class="icon">◈</span><span class="nav-txt" data-i18n="nav.pos">POS</span></a>
+      <div class="nav-section" data-i18n="nav.sectionFnB">F&amp;B</div>
+      <a data-page="restaurant"><span class="icon">◈</span><span class="nav-txt" data-i18n="nav.restaurant">Restaurant</span></a>
+      <a data-page="minimart"><span class="icon">◈</span><span class="nav-txt" data-i18n="nav.minimart">Mini-Mart</span></a>
+      <a data-page="menuitems"><span class="icon">◈</span><span class="nav-txt" data-i18n="nav.menuitems">Menu Items</span></a>
+      <a data-page="storeitems"><span class="icon">◈</span><span class="nav-txt" data-i18n="nav.storeitems">Store Items</span></a>
+      <a data-page="orderhistory"><span class="icon">◈</span><span class="nav-txt" data-i18n="nav.orderhistory">Order History</span></a>
+      <div class="nav-section" data-i18n="nav.sectionGuest">Guest</div>
+      <a data-page="guestportal"><span class="icon">◎</span><span class="nav-txt" data-i18n="nav.guestportal">Guest Portal</span></a>
+      <div class="nav-section" data-i18n="nav.sectionAdmin">Admin</div>
+      <a data-page="dashboard"><span class="icon">◫</span><span class="nav-txt" data-i18n="nav.reports">Reports</span></a>
+      <a data-page="accounts"><span class="icon">◔</span><span class="nav-txt" data-i18n="nav.accounts">Accounts</span></a>
+      <a data-page="alltransactions"><span class="icon">◈</span><span class="nav-txt" data-i18n="nav.transactions">Transactions</span></a>
+      <a data-page="messagelog"><span class="icon">◈</span><span class="nav-txt" data-i18n="nav.messagelog">Messages</span></a>
+      <a data-page="auditlog"><span class="icon">◳</span><span class="nav-txt" data-i18n="nav.auditlog">Audit Log</span></a>
+      <a data-page="dropdowns"><span class="icon">◈</span><span class="nav-txt" data-i18n="nav.dropdowns">Dropdown Lists</span></a>
+      <a data-page="settings"><span class="icon">⊕</span><span class="nav-txt" data-i18n="nav.settings">Settings</span></a>
     </nav>
   </aside>
   <div class="main">
     <div class="topbar">
       <div class="topbar-left"><button class="menu-toggle" id="menuToggle">☰</button><h1 id="pageTitle">Dashboard</h1></div>
-      <div class="topbar-right"><button class="dark-toggle" id="darkToggle" onclick="toggleDarkMode()" title="Toggle Dark Mode">◐</button><div class="topbar-user"><div><div class="user-name" id="topbarUserName"></div><div class="user-role-tag" id="topbarUserRole"></div></div><div class="avatar" id="userAvatar">A</div></div><button class="btn-logout" id="logoutBtn" onclick="doLogout()">Logout</button></div>
+      <div class="topbar-right"><div class="lang-menu-wrap"><button type="button" class="btn-lang" id="langMenuBtn" onclick="toggleLangMenu(event)" aria-haspopup="true" aria-expanded="false" title="Language">🌐<span id="langMenuBtnLabel" data-i18n="topbar.language">Language</span></button><div class="lang-menu" id="langMenu" role="menu" aria-label="Language"><div class="lang-menu-hint" data-i18n="topbar.chooseLanguage">Choose language</div><button type="button" class="lang-opt" role="menuitem" data-lang="en" onclick="setAppLocale('en')">English</button><button type="button" class="lang-opt" role="menuitem" data-lang="he" onclick="setAppLocale('he')">עברית (Hebrew)</button><button type="button" class="lang-opt" role="menuitem" data-lang="th" onclick="setAppLocale('th')">ไทย (Thai)</button><button type="button" class="lang-opt" role="menuitem" data-lang="lo" onclick="setAppLocale('lo')">ລາວ (Lao)</button><button type="button" class="lang-opt" role="menuitem" data-lang="es" onclick="setAppLocale('es')">Español (Spanish)</button><button type="button" class="lang-opt" role="menuitem" data-lang="fr" onclick="setAppLocale('fr')">Français (French)</button></div></div><button class="dark-toggle" id="darkToggle" onclick="toggleDarkMode()" title="Toggle Dark Mode">◐</button><div class="topbar-user"><div><div class="user-name" id="topbarUserName"></div><div class="user-role-tag" id="topbarUserRole"></div></div><div class="avatar" id="userAvatar">A</div></div><button class="btn-logout" id="logoutBtn" onclick="doLogout()" data-i18n="topbar.logout">Logout</button></div>
     </div>
     <div class="content">
       <div class="page active" id="page-dashboard"></div>
@@ -1576,6 +1614,106 @@ mergePosTransactionsIntoUnified();
 // ===== NAVIGATION =====
 const pageTitles = {dashboard:'Dashboard',rooms:'Room Management',bookings:'Bookings',guests:'Guest Directory',housekeeping:'Housekeeping',maintenance:'Maintenance Tickets',services:'Services',invoices:'Invoices',guestportal:'Guest Portal',reports:'Reports & Analytics',accounts:'User Accounts',auditlog:'Audit Log',settings:'Settings & Regulations',inventory:'Inventory Management',pos:'Point of Sale',restaurant:'Restaurant',minimart:'Mini-Mart',menuitems:'Menu Items',storeitems:'Store Items',orderhistory:'Order History',alltransactions:'Transactions',messagelog:'Messages',dropdowns:'Dropdown Lists'};
 
+// ===== I18N (en / he / th) =====
+const I18N_KEY = DB_KEY + 'uiLocale';
+let i18nEn = null;
+let i18nData = null;
+function i18nAssetUrl(name) { return new URL('assets/locales/' + name, document.baseURI || (window.location && window.location.href) || 'http://localhost/').toString(); }
+function i18nDeepGet(obj, key) { if (!obj || !key) return null; return key.split('.').reduce(function(o, k) { return o && o[k] !== undefined ? o[k] : undefined; }, obj); }
+function t(key, params) {
+  var s = i18nDeepGet(i18nData, key);
+  if (typeof s !== 'string') s = i18nDeepGet(i18nEn, key);
+  if (typeof s !== 'string' && key.indexOf('pageTitle.') === 0) s = pageTitles[key.slice(10)];
+  if (typeof s !== 'string') s = key;
+  if (params && typeof s === 'string') s = s.replace(/\{(\w+)\}/g, function(_, w) { return params[w] != null ? String(params[w]) : '{' + w + '}'; });
+  return s;
+}
+function getPageTitleString(page) {
+  if (page === 'restaurant' && typeof currentRole !== 'undefined' && currentRole === 'Kitchen') return t('nav.kitchen');
+  return t('pageTitle.' + page) || pageTitles[page] || page;
+}
+function applyDocumentLocale(lang) {
+  document.documentElement.setAttribute('lang', lang);
+  document.documentElement.setAttribute('dir', lang === 'he' ? 'rtl' : 'ltr');
+}
+function applyShellI18n() {
+  if (!i18nEn) return;
+  document.querySelectorAll('[data-i18n]').forEach(function(el) { var k = el.getAttribute('data-i18n'); if (k) el.textContent = t(k); });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) { var k = el.getAttribute('data-i18n-placeholder'); if (k) el.setAttribute('placeholder', t(k)); });
+  var out = document.getElementById('logoutBtn');
+  if (out) out.textContent = t('topbar.logout');
+  var lml = document.getElementById('langMenuBtnLabel');
+  if (lml) lml.textContent = t('topbar.language');
+  var hint = document.querySelector('.lang-menu .lang-menu-hint');
+  if (hint) hint.textContent = t('topbar.chooseLanguage');
+  document.title = t('app.title');
+  if (typeof applyRBAC === 'function') applyRBAC();
+}
+function syncLangMenuHighlight() {
+  var cur = (function() { try { return localStorage.getItem(I18N_KEY); } catch (e) { return 'en'; } }()) || 'en';
+  document.querySelectorAll('.lang-opt').forEach(function(b) { b.setAttribute('aria-pressed', b.getAttribute('data-lang') === cur ? 'true' : 'false'); });
+}
+function finishLocaleSwitch() {
+  var m = document.getElementById('langMenu');
+  if (m) { m.style.display = 'none'; m.classList.remove('open'); }
+  var b = document.getElementById('langMenuBtn');
+  if (b) b.setAttribute('aria-expanded', 'false');
+  applyShellI18n();
+  syncLangMenuHighlight();
+  var lo = document.getElementById('loginOverlay');
+  if (lo && !lo.classList.contains('hidden')) return;
+  var l = document.querySelector('#sidebarNav a.active');
+  if (l) {
+    var page = l.getAttribute('data-page');
+    if (page) { document.getElementById('pageTitle').textContent = getPageTitleString(page); renderPage(page); }
+  }
+}
+window.toggleLangMenu = function(e) {
+  e.stopPropagation();
+  var m = document.getElementById('langMenu');
+  var btn = document.getElementById('langMenuBtn');
+  if (!m) return;
+  var open = m.classList.contains('open');
+  if (open) { m.style.display = 'none'; m.classList.remove('open'); if (btn) btn.setAttribute('aria-expanded', 'false'); }
+  else { m.style.display = 'block'; m.classList.add('open'); if (btn) btn.setAttribute('aria-expanded', 'true'); }
+};
+window.setAppLocale = function(lang) {
+  if (!{ en:1, he:1, th:1, lo:1, es:1, fr:1 }[lang]) return;
+  try { localStorage.setItem(I18N_KEY, lang); } catch (e) {}
+  applyDocumentLocale(lang);
+  function end() { finishLocaleSwitch(); }
+  function loadLang(l) {
+    fetch(i18nAssetUrl(l + '.json')).then(function(r) { return r.json(); }).then(function(d) { i18nData = d; end(); }).catch(function() { i18nData = i18nEn; end(); });
+  }
+  if (!i18nEn) {
+    fetch(i18nAssetUrl('en.json')).then(function(r) { return r.json(); }).then(function(d) { i18nEn = d; if (lang === 'en') { i18nData = d; end(); } else loadLang(lang); }).catch(function() { end(); });
+    return;
+  }
+  if (lang === 'en') { i18nData = i18nEn; end(); return; }
+  loadLang(lang);
+};
+function initI18n() {
+  var want = (function() { try { return localStorage.getItem(I18N_KEY); } catch (e) { return null; } }()) || 'en';
+  applyDocumentLocale(want);
+  document.addEventListener('click', function(ev) {
+    var m = document.getElementById('langMenu');
+    var w = document.querySelector('.lang-menu-wrap');
+    if (m && m.classList.contains('open') && w && !w.contains(ev.target)) { m.style.display = 'none'; m.classList.remove('open'); var b2 = document.getElementById('langMenuBtn'); if (b2) b2.setAttribute('aria-expanded', 'false'); }
+  });
+  return fetch(i18nAssetUrl('en.json'))
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      i18nEn = d;
+      if (want === 'en') i18nData = d;
+      return want;
+    })
+    .then(function(w) {
+      if (w === 'en') return;
+      return fetch(i18nAssetUrl(w + '.json')).then(function(r) { return r.json(); }).then(function(d) { i18nData = d; }).catch(function() { i18nData = i18nEn; });
+    })
+    .then(function() { applyShellI18n(); syncLangMenuHighlight(); var lo = document.getElementById('loginOverlay'); if (lo && !lo.classList.contains('hidden')) return; var l = document.querySelector('#sidebarNav a.active'); if (l) { var p = l.getAttribute('data-page'); if (p) { document.getElementById('pageTitle').textContent = getPageTitleString(p); renderPage(p); } } });
+}
+
 document.querySelectorAll('#sidebarNav a[data-page]').forEach(link => {
   link.addEventListener('click', () => {
     const page = link.dataset.page;
@@ -1583,7 +1721,7 @@ document.querySelectorAll('#sidebarNav a[data-page]').forEach(link => {
     link.classList.add('active');
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById('page-' + page).classList.add('active');
-    document.getElementById('pageTitle').textContent = (page === 'restaurant' && typeof currentRole !== 'undefined' && currentRole === 'Kitchen') ? 'Kitchen' : (pageTitles[page] || page);
+    document.getElementById('pageTitle').textContent = getPageTitleString(page);
     document.getElementById('sidebar').classList.remove('open');
     document.getElementById('sidebarOverlay').classList.remove('open');
     renderPage(page);
@@ -4243,7 +4381,7 @@ function renderRestaurant() {
   if (isKitchen) {
     const navRest = document.querySelector('#sidebarNav a[data-page="restaurant"]');
     if (navRest && navRest.classList.contains('active')) {
-      document.getElementById('pageTitle').textContent = 'Kitchen';
+      document.getElementById('pageTitle').textContent = (i18nEn ? t('nav.kitchen') : 'Kitchen');
     }
     const syncBanner = '<div class="card" style="margin-bottom:1rem;border-left:4px solid #1a73e8;"><div class="card-body" style="padding:0.75rem 1rem;font-size:0.82rem;line-height:1.45;"><strong>Synced with Restaurant</strong> — Everyone uses the same saved orders. This screen updates when orders change here, in another tab, or when front-of-house edits the queue.</div></div>';
     const kitchenQueue = restaurantOrders.filter(function(o) {
@@ -5755,8 +5893,8 @@ function applyRBAC() {
   }
   const restNav = document.querySelector('#sidebarNav a[data-page="restaurant"]');
   if (restNav) {
-    if (currentRole === 'Kitchen') restNav.innerHTML = '<span class="icon">◆</span> Kitchen';
-    else restNav.innerHTML = '<span class="icon">◈</span> Restaurant';
+    if (currentRole === 'Kitchen') restNav.innerHTML = '<span class="icon">◆</span><span class="nav-txt" data-i18n="nav.kitchen">' + (i18nEn ? t('nav.kitchen') : 'Kitchen') + '</span>';
+    else restNav.innerHTML = '<span class="icon">◈</span><span class="nav-txt" data-i18n="nav.restaurant">' + (i18nEn ? t('nav.restaurant') : 'Restaurant') + '</span>';
   }
 }
 
@@ -5827,6 +5965,7 @@ window.completeSetup = function() {
   document.getElementById('loginOverlay').classList.remove('hidden');
 })();
 
+initI18n().catch(function() {});
 updateBadges();
 
 // ===== CUSTOM SELECT PICKER =====
