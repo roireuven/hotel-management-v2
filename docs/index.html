@@ -202,7 +202,7 @@
     .xgrid-wrap { overflow: auto; border: 1px solid var(--border); border-radius: 8px; }
     .xgrid { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
     .xgrid th, .xgrid td { border: 1px solid #e0e0e0; padding: 0; position: relative; }
-    .xgrid th { background: #f5f6f8; padding: 0; position: sticky; top: 0; z-index: 2; user-select: none; }
+    .xgrid th { background: #f5f6f8; padding: 0; position: sticky; top: 0; z-index: 2; user-select: none; text-transform: none; letter-spacing: normal; }
     .xgrid th .th-inner { display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0.6rem; gap: 0.3rem; cursor: pointer; min-height: 36px; }
     .xgrid th .th-inner:hover { background: #ebedf0; }
     .xgrid th .sort-icon { font-size: 0.7rem; opacity: 0.4; } .xgrid th .sort-icon.active { opacity: 1; color: var(--primary); }
@@ -818,6 +818,98 @@
     "emptyPastGuest": "No past sales for this guest",
     "selectValidGuest": "Select a room/guest above"
   },
+  "restaurant": {
+    "syncBanner": "Synced with Restaurant — everyone uses the same saved orders. This screen updates when orders change here, in another tab, or when front-of-house edits the queue.",
+    "kitchenQueueEmpty": "No tickets in the kitchen queue (nothing at New, Preparing, or Ready).",
+    "kitchenQueueTitle": "Kitchen queue",
+    "kitchenQueueSub": "Oldest first — advance status as you cook",
+    "allActiveOrdersTitle": "All active orders",
+    "allActiveOrdersSub": "Same list as Restaurant — payment actions are hidden for Kitchen.",
+    "orderTypeRoom": "Room Service",
+    "orderTypeTable": "Table / Walk-in",
+    "guestPickerLabel": "Room service — who is this order for?",
+    "roomLine": "Room {n}",
+    "guestSingular": "guest",
+    "guestPlural": "guests",
+    "checkedInHint": "Showing {count} checked-in {guests}. Use Table / Walk-in for non-room orders.",
+    "tableFloorTitle": "Table floor — status at a glance",
+    "wordFree": "free",
+    "wordLive": "live",
+    "wordPay": "pay",
+    "ttFree": "Tables with no open bill",
+    "ttBusy": "Active order / kitchen",
+    "ttDue": "Served, payment pending",
+    "legendFree": "Green — free seat",
+    "legendOpen": "Red — open order",
+    "legendPay": "Amber — pay check",
+    "tableFloorGroup": "Restaurant table tiles",
+    "tagOpen": "OPEN",
+    "tagPay": "PAY",
+    "tagLive": "LIVE",
+    "hintSeatGuests": "Seat guests",
+    "hintBillDue": "Bill due",
+    "hintOrderOnTab": "Order on tab",
+    "tileTitleAvail": "{name} — available, no bill",
+    "tileTitlePay": "{name} — payment pending, tap to close",
+    "tileTitleLive": "{name} — open order, tap for bill",
+    "tableFloorHelp": "Colors show state instantly: {free} = take a new order; {live} = food service in progress (tap opens bill); {pay} = check printed, settle payment. Tap red or amber to open the tab.",
+    "filterAll": "All",
+    "noItemsCategory": "No items in this category",
+    "cartEmptyMenu": "Cart is empty — tap menu items to add",
+    "menu": "Menu",
+    "addProduct": "+ Add product",
+    "menuItemsLink": "Menu items",
+    "inventoryLink": "Inventory",
+    "menuToolbarHint": "{n} items — use + Add product or Menu items; link F&B stock in Inventory",
+    "orderCart": "Order cart",
+    "orderNotes": "Order notes",
+    "orderNotesPh": "Special instructions…",
+    "sendToKitchen": "Send to Kitchen",
+    "sendToRoom": "Send to Room",
+    "sendToRoomTitle": "Same as Send to Kitchen, but the order is created as Ready",
+    "chargeToRoom": "Charge to room",
+    "chargeToTableTitle": "Uses the table above. Posts the tab and adds this order to Active orders.",
+    "taxLine": "Tax ({n}%)",
+    "creditCard": "Credit card",
+    "activeOrders": "Active orders",
+    "showAll": "Show all",
+    "showAllTitle": "Show every open order (all guests or all tables)",
+    "pastOrders": "Past orders",
+    "scopeLine": "Scope: {scope} — non-paid statuses (New → Served) appear here.",
+    "totalActiveLabel": "Total active order:",
+    "payTotalRoom": "Pay total — Room",
+    "payTotalCash": "Pay total — Cash",
+    "payTotalCard": "Pay total — Card",
+    "restHistoryTitle": "Past orders",
+    "changeLog": "Restaurant change log",
+    "kitchenView": "Kitchen view",
+    "emptyActiveOrders": "No active orders",
+    "emptyActiveForGuest": "No active orders for this guest",
+    "emptyActiveForTable": "No active orders for {table}",
+    "emptyActiveAnyTable": "No active orders on any table",
+    "emptyKitchenStrip": "No tickets at New / Preparing / Ready",
+    "actPrep": "🔥 Prep",
+    "actReady": "✅ Ready",
+    "actServed": "🍽️ Served",
+    "payRoom": "Room",
+    "actDone": "✓ Done",
+    "kStartPrep": "🔥 Start prep",
+    "kMarkReady": "✅ Mark ready",
+    "kMarkServed": "🍽️ Mark served",
+    "selectedGuest": "Selected guest",
+    "allTables": "All tables",
+    "tableWord": "Table",
+    "allGuests": "All guests",
+    "allRoomsUnfiltered": "All rooms (not filtered)",
+    "roomGuestDash": "Room {room} - {name}",
+    "openBill": "{name} — Open bill",
+    "close": "Close",
+    "stNew": "New",
+    "stPreparing": "Preparing",
+    "stReady": "Ready",
+    "stServed": "Served",
+    "stPaid": "Paid"
+  },
   "book": {
     "emptyGrid": "No bookings yet. Create your first booking!",
     "addNew": "Add New Booking",
@@ -833,12 +925,31 @@
     "delete": "Delete",
     "edit": "Edit",
     "add": "Add",
-    "search": "Search"
+    "search": "Search",
+    "toggle": "Toggle",
+    "resolve": "Resolve",
+    "refund": "Refund",
+    "start": "Start",
+    "done": "Done",
+    "addRequest": "Add Request",
+    "addNewItem": "Add New Item",
+    "addMenuItem": "Add Menu Item",
+    "addStoreItem": "Add Store Item",
+    "clearLog": "Clear Log",
+    "sendMessage": "Send message",
+    "lookUp": "Look up",
+    "onePlus": "+1",
+    "oneMinus": "-1",
+    "active": "Active",
+    "inactive": "Inactive",
+    "pay": "Pay",
+    "view": "View"
   },
   "g": {
     "bookingId": "Booking #",
     "guest": "Guest",
     "room": "Room",
+    "roomNumber": "Room",
     "status": "Status",
     "checkIn": "Check-in",
     "checkOut": "Check-out",
@@ -866,7 +977,72 @@
     "blacklist": "Blacklist",
     "visits": "Visits",
     "module": "Module",
-    "itemId": "Item ID"
+    "itemId": "Item ID",
+    "notes": "Notes",
+    "icon": "Icon",
+    "serviceName": "Service name",
+    "category": "Category",
+    "service": "Service",
+    "unitPrice": "Unit price",
+    "taxRatePct": "Tax %",
+    "defaultQty": "Default qty",
+    "requested": "Requested",
+    "assigned": "Assigned",
+    "scheduled": "Scheduled",
+    "charge": "Charge",
+    "issue": "Issue",
+    "priority": "Priority",
+    "reportedBy": "Reported by",
+    "reported": "Reported",
+    "resolved": "Resolved",
+    "itemName": "Item name",
+    "quantity": "Quantity",
+    "reorderLevel": "Reorder level",
+    "lastOrdered": "Last ordered",
+    "barcode": "Barcode",
+    "description": "Description",
+    "available": "Available",
+    "unitsPerServing": "Units / serving",
+    "inventoryStock": "Inventory stock",
+    "price": "Price",
+    "stock": "Stock",
+    "orderNumber": "Order #",
+    "orderTime": "Time",
+    "tableOrRoom": "Table / room",
+    "staff": "Staff",
+    "refund": "Refund",
+    "message": "Message",
+    "channel": "Channel",
+    "txnId": "Txn ID",
+    "discount": "Discount",
+    "grandTotal": "Grand total",
+    "currency": "Currency",
+    "invoiceNumber": "Invoice #",
+    "paymentStatus": "Status",
+    "role": "Role",
+    "accountName": "User"
+  },
+  "ui": {
+    "hotelServices": "Hotel Services",
+    "serviceRequests": "Service requests",
+    "invoicesH2": "Invoices",
+    "guestSelfService": "Guest self-service portal",
+    "enterBookingId": "Enter your booking ID",
+    "bookingIdPlaceholder": "e.g. BK-1001",
+    "changeLogChit": "◆ {title}",
+    "masterAuditLog": "Master Audit Log"
+  },
+  "empty": {
+    "noServices": "◈ No services configured yet",
+    "noServiceRequests": "◈ No service requests yet",
+    "noInvoices": "▥ No invoices generated yet",
+    "noUsers": "◔ No user accounts yet",
+    "noTickets": "⚡ No maintenance tickets. Everything is running smoothly.",
+    "noInventory": "⬡ Your inventory is empty. Add your first item.",
+    "noAudit": "◳ No audit entries yet. Actions will be logged here.",
+    "noMenuItems": "🍽️ No menu items yet. Add your first menu item.",
+    "noStoreItems": "🛒 No store items yet. Add your first item.",
+    "noOrders": "No orders yet."
   },
   "guest": {
     "emptyGrid": "No guests yet. Add your first guest!"
@@ -881,6 +1057,7 @@
     "services": "Services change log",
     "maintenance": "Maintenance change log",
     "inventory": "Inventory change log",
+    "inventoryAudit": "Inventory audit log",
     "accounts": "Accounts change log",
     "guestportal": "Guest portal change log",
     "messages": "Messages change log",
@@ -992,7 +1169,7 @@
   },
   "bnav": {
     "dashboard": "Tableau de bord",
-    "pos": "POS",
+    "pos": "Point de vente",
     "bookings": "Réservations",
     "menu": "Menu"
   },
@@ -1173,6 +1350,98 @@
     "emptyPastGuest": "Aucune vente pour ce client",
     "selectValidGuest": "Sélectionnez un client ci-dessus"
   },
+  "restaurant": {
+    "syncBanner": "Synchronisé avec le restaurant : les commandes enregistrées sont partagées. Cet écran se met à jour ici, dans un autre onglet ou quand l’équipe modifie la file.",
+    "kitchenQueueEmpty": "Aucun ticket en cuisine (aucun en Nouveau, En préparation ou Prêt).",
+    "kitchenQueueTitle": "File cuisine",
+    "kitchenQueueSub": "Le plus ancien d’abord — faites avancer le statut en cuisinant",
+    "allActiveOrdersTitle": "Toutes les commandes actives",
+    "allActiveOrdersSub": "Même liste qu’au restaurant — le rôle Cuisine masque le paiement.",
+    "orderTypeRoom": "Service chambre",
+    "orderTypeTable": "Table / client direct",
+    "guestPickerLabel": "Service chambre — pour quelle chambre ?",
+    "roomLine": "Ch. {n}",
+    "guestSingular": "client enregistré",
+    "guestPlural": "clients enregistrés",
+    "checkedInHint": "Affichage de {count} {guests} en enregistrement. Utilisez Table / client direct pour les commandes sans chambre.",
+    "tableFloorTitle": "Salle — état en un coup d’œil",
+    "wordFree": "libre",
+    "wordLive": "en cours",
+    "wordPay": "règlement",
+    "ttFree": "Tables sans addition ouverte",
+    "ttBusy": "Commande / cuisine en cours",
+    "ttDue": "Servi, règlement en attente",
+    "legendFree": "Vert — place libre",
+    "legendOpen": "Rouge — commande en cours",
+    "legendPay": "Ambre — règlement d’addition",
+    "tableFloorGroup": "Grille des tables (restaurant)",
+    "tagOpen": "OUVERT",
+    "tagPay": "PAYER",
+    "tagLive": "LIVE",
+    "hintSeatGuests": "A table",
+    "hintBillDue": "Règlement dû",
+    "hintOrderOnTab": "Commande sur l’onglet",
+    "tileTitleAvail": "{name} — libre, pas d’addition",
+    "tileTitlePay": "{name} — règlement en attente, appuyer pour clôturer",
+    "tileTitleLive": "{name} — commande en cours, appuyer pour l’addition",
+    "tableFloorHelp": "Les couleurs indiquent l’état : {free} = nouvelle commande ; {live} = service en cours (toucher pour l’addition) ; {pay} = addition prête, à encaisser. Touchez le rouge ou l’ambre pour ouvrir l’onglet.",
+    "filterAll": "Tout",
+    "noItemsCategory": "Aucun article dans cette catégorie",
+    "cartEmptyMenu": "Panier vide — touchez le menu pour ajouter",
+    "menu": "Menu",
+    "addProduct": "+ Ajouter un produit",
+    "menuItemsLink": "Articles (menu)",
+    "inventoryLink": "Stock",
+    "menuToolbarHint": "{n} article(s) — + Ajouter un produit ou Articles (menu) ; liez le stock F&B dans Stock",
+    "orderCart": "Panier de commande",
+    "orderNotes": "Remarques",
+    "orderNotesPh": "Instructions spéciales…",
+    "sendToKitchen": "Envoyer en cuisine",
+    "sendToRoom": "Envoyer (prêt) en chambre",
+    "sendToRoomTitle": "Comme « Envoyer en cuisine », avec la commande en statut Prête",
+    "chargeToRoom": "Mettre en compte chambre",
+    "chargeToTableTitle": "Utilise la table ci-dessus. Passe l’onglet en commande active.",
+    "taxLine": "TVA ({n}%)",
+    "creditCard": "Carte bancaire",
+    "activeOrders": "Commandes actives",
+    "showAll": "Tout afficher",
+    "showAllTitle": "Toutes les commandes ouvertes (tous les clients ou toutes les tables)",
+    "pastOrders": "Anciennes commandes",
+    "scopeLine": "Périmètre : {scope} — statuts non payés (Nouveau → Servi) ici.",
+    "totalActiveLabel": "Total commandes actives :",
+    "payTotalRoom": "Tout payer — Chambre",
+    "payTotalCash": "Tout payer — Espèces",
+    "payTotalCard": "Tout payer — Carte",
+    "restHistoryTitle": "Historique des commandes",
+    "changeLog": "Historique des changements — Restaurant",
+    "kitchenView": "Vue cuisine",
+    "emptyActiveOrders": "Aucune commande active",
+    "emptyActiveForGuest": "Aucune commande active pour ce client",
+    "emptyActiveForTable": "Aucune commande active pour {table}",
+    "emptyActiveAnyTable": "Aucune commande sur les tables",
+    "emptyKitchenStrip": "Aucun ticket (Nouveau / En préparation / Prêt)",
+    "actPrep": "🔥 Prépa",
+    "actReady": "✅ Prêt",
+    "actServed": "🍽️ Servi",
+    "payRoom": "Chambre",
+    "actDone": "✓ Terminé",
+    "kStartPrep": "🔥 Démarrer la prépa",
+    "kMarkReady": "✅ Marquer prêt",
+    "kMarkServed": "🍽️ Marquer servi",
+    "selectedGuest": "Client sélectionné",
+    "allTables": "Toutes les tables",
+    "tableWord": "Table",
+    "allGuests": "Tous les clients",
+    "allRoomsUnfiltered": "Toutes les chambres (non filtrées)",
+    "roomGuestDash": "Ch. {room} - {name}",
+    "openBill": "{name} — Addition ouverte",
+    "close": "Fermer",
+    "stNew": "Nouveau",
+    "stPreparing": "En préparation",
+    "stReady": "Prêt",
+    "stServed": "Servi",
+    "stPaid": "Payé"
+  },
   "book": {
     "emptyGrid": "Aucune réservation. Créez la première !",
     "addNew": "Nouvelle réservation",
@@ -1188,12 +1457,31 @@
     "delete": "Supprimer",
     "edit": "Modifier",
     "add": "Ajouter",
-    "search": "Rechercher"
+    "search": "Rechercher",
+    "toggle": "Toggle",
+    "resolve": "Resolve",
+    "refund": "Refund",
+    "start": "Start",
+    "done": "Done",
+    "addRequest": "Add Request",
+    "addNewItem": "Add New Item",
+    "addMenuItem": "Add menu item",
+    "addStoreItem": "Add store item",
+    "clearLog": "Clear Log",
+    "sendMessage": "Send message",
+    "lookUp": "Look up",
+    "onePlus": "+1",
+    "oneMinus": "-1",
+    "active": "Active",
+    "inactive": "Inactive",
+    "pay": "Pay",
+    "view": "View"
   },
   "g": {
     "bookingId": "N° réservation",
     "guest": "Client",
     "room": "Chambre",
+    "roomNumber": "Chambre",
     "status": "Statut",
     "checkIn": "Arrivée",
     "checkOut": "Départ",
@@ -1221,7 +1509,72 @@
     "blacklist": "Liste noire",
     "visits": "Visites",
     "module": "Module",
-    "itemId": "ID article"
+    "itemId": "ID article",
+    "notes": "Notes",
+    "icon": "Icon",
+    "serviceName": "Service name",
+    "category": "Category",
+    "service": "Service",
+    "unitPrice": "Unit price",
+    "taxRatePct": "Tax %",
+    "defaultQty": "Default qty",
+    "requested": "Requested",
+    "assigned": "Assigned",
+    "scheduled": "Scheduled",
+    "charge": "Charge",
+    "issue": "Issue",
+    "priority": "Priority",
+    "reportedBy": "Reported by",
+    "reported": "Reported",
+    "resolved": "Resolved",
+    "itemName": "Item name",
+    "quantity": "Quantity",
+    "reorderLevel": "Reorder level",
+    "lastOrdered": "Last ordered",
+    "barcode": "Barcode",
+    "description": "Description",
+    "available": "Available",
+    "unitsPerServing": "Units / serving",
+    "inventoryStock": "Inventory stock",
+    "price": "Price",
+    "stock": "Stock",
+    "orderNumber": "Order #",
+    "orderTime": "Time",
+    "tableOrRoom": "Table / room",
+    "staff": "Staff",
+    "refund": "Refund",
+    "message": "Message",
+    "channel": "Channel",
+    "txnId": "Txn ID",
+    "discount": "Discount",
+    "grandTotal": "Grand total",
+    "currency": "Currency",
+    "invoiceNumber": "Invoice #",
+    "paymentStatus": "Status",
+    "role": "Role",
+    "accountName": "User"
+  },
+  "ui": {
+    "hotelServices": "Hotel Services",
+    "serviceRequests": "Service requests",
+    "invoicesH2": "Invoices",
+    "guestSelfService": "Guest self-service portal",
+    "enterBookingId": "Enter your booking ID",
+    "bookingIdPlaceholder": "e.g. BK-1001",
+    "changeLogChit": "◆ {title}",
+    "masterAuditLog": "Master audit log"
+  },
+  "empty": {
+    "noServices": "◈ No services configured yet",
+    "noServiceRequests": "◈ No service requests yet",
+    "noInvoices": "▥ No invoices generated yet",
+    "noUsers": "◔ No user accounts yet",
+    "noTickets": "⚡ No maintenance tickets. Everything is running smoothly.",
+    "noInventory": "⬡ Your inventory is empty. Add your first item.",
+    "noAudit": "◳ No audit entries yet. Actions will be logged here.",
+    "noMenuItems": "🍽️ No menu items yet. Add your first menu item.",
+    "noStoreItems": "🛒 No store items yet. Add your first item.",
+    "noOrders": "No orders yet."
   },
   "guest": {
     "emptyGrid": "Aucun client. Ajoutez le premier !"
@@ -1236,6 +1589,7 @@
     "services": "Journal des modifications — Services",
     "maintenance": "Journal des modifications — Entretien",
     "inventory": "Journal des modifications — Stock",
+    "inventoryAudit": "Inventory audit log",
     "accounts": "Journal des modifications — Comptes",
     "guestportal": "Journal des modifications — Portail client",
     "messages": "Journal des modifications — Messages",
@@ -1528,6 +1882,98 @@
     "emptyPastGuest": "Nada para este huésped",
     "selectValidGuest": "Elija un huésped arriba"
   },
+  "restaurant": {
+    "syncBanner": "Synced with Restaurant — everyone uses the same saved orders. This screen updates when orders change here, in another tab, or when front-of-house edits the queue.",
+    "kitchenQueueEmpty": "No tickets in the kitchen queue (nothing at New, Preparing, or Ready).",
+    "kitchenQueueTitle": "Kitchen queue",
+    "kitchenQueueSub": "Oldest first — advance status as you cook",
+    "allActiveOrdersTitle": "All active orders",
+    "allActiveOrdersSub": "Same list as Restaurant — payment actions are hidden for Kitchen.",
+    "orderTypeRoom": "Room Service",
+    "orderTypeTable": "Table / Walk-in",
+    "guestPickerLabel": "Room service — who is this order for?",
+    "roomLine": "Room {n}",
+    "guestSingular": "guest",
+    "guestPlural": "guests",
+    "checkedInHint": "Showing {count} checked-in {guests}. Use Table / Walk-in for non-room orders.",
+    "tableFloorTitle": "Table floor — status at a glance",
+    "wordFree": "free",
+    "wordLive": "live",
+    "wordPay": "pay",
+    "ttFree": "Tables with no open bill",
+    "ttBusy": "Active order / kitchen",
+    "ttDue": "Served, payment pending",
+    "legendFree": "Green — free seat",
+    "legendOpen": "Red — open order",
+    "legendPay": "Amber — pay check",
+    "tableFloorGroup": "Restaurant table tiles",
+    "tagOpen": "OPEN",
+    "tagPay": "PAY",
+    "tagLive": "LIVE",
+    "hintSeatGuests": "Seat guests",
+    "hintBillDue": "Bill due",
+    "hintOrderOnTab": "Order on tab",
+    "tileTitleAvail": "{name} — available, no bill",
+    "tileTitlePay": "{name} — payment pending, tap to close",
+    "tileTitleLive": "{name} — open order, tap for bill",
+    "tableFloorHelp": "Colors show state instantly: {free} = take a new order; {live} = food service in progress (tap opens bill); {pay} = check printed, settle payment. Tap red or amber to open the tab.",
+    "filterAll": "All",
+    "noItemsCategory": "No items in this category",
+    "cartEmptyMenu": "Cart is empty — tap menu items to add",
+    "menu": "Menu",
+    "addProduct": "+ Add product",
+    "menuItemsLink": "Menu items",
+    "inventoryLink": "Inventory",
+    "menuToolbarHint": "{n} items — use + Add product or Menu items; link F&B stock in Inventory",
+    "orderCart": "Order cart",
+    "orderNotes": "Order notes",
+    "orderNotesPh": "Special instructions…",
+    "sendToKitchen": "Send to Kitchen",
+    "sendToRoom": "Send to Room",
+    "sendToRoomTitle": "Same as Send to Kitchen, but the order is created as Ready",
+    "chargeToRoom": "Charge to room",
+    "chargeToTableTitle": "Uses the table above. Posts the tab and adds this order to Active orders.",
+    "taxLine": "Tax ({n}%)",
+    "creditCard": "Credit card",
+    "activeOrders": "Active orders",
+    "showAll": "Show all",
+    "showAllTitle": "Show every open order (all guests or all tables)",
+    "pastOrders": "Past orders",
+    "scopeLine": "Scope: {scope} — non-paid statuses (New → Served) appear here.",
+    "totalActiveLabel": "Total active order:",
+    "payTotalRoom": "Pay total — Room",
+    "payTotalCash": "Pay total — Cash",
+    "payTotalCard": "Pay total — Card",
+    "restHistoryTitle": "Past orders",
+    "changeLog": "Restaurant change log",
+    "kitchenView": "Kitchen view",
+    "emptyActiveOrders": "No active orders",
+    "emptyActiveForGuest": "No active orders for this guest",
+    "emptyActiveForTable": "No active orders for {table}",
+    "emptyActiveAnyTable": "No active orders on any table",
+    "emptyKitchenStrip": "No tickets at New / Preparing / Ready",
+    "actPrep": "🔥 Prep",
+    "actReady": "✅ Ready",
+    "actServed": "🍽️ Served",
+    "payRoom": "Room",
+    "actDone": "✓ Done",
+    "kStartPrep": "🔥 Start prep",
+    "kMarkReady": "✅ Mark ready",
+    "kMarkServed": "🍽️ Mark served",
+    "selectedGuest": "Selected guest",
+    "allTables": "All tables",
+    "tableWord": "Table",
+    "allGuests": "All guests",
+    "allRoomsUnfiltered": "All rooms (not filtered)",
+    "roomGuestDash": "Room {room} - {name}",
+    "openBill": "{name} — Open bill",
+    "close": "Close",
+    "stNew": "New",
+    "stPreparing": "Preparing",
+    "stReady": "Ready",
+    "stServed": "Served",
+    "stPaid": "Paid"
+  },
   "book": {
     "emptyGrid": "Aún no hay reservas. Cree la primera.",
     "addNew": "Nueva reserva",
@@ -1543,12 +1989,31 @@
     "delete": "Eliminar",
     "edit": "Editar",
     "add": "Añadir",
-    "search": "Buscar"
+    "search": "Buscar",
+    "toggle": "Toggle",
+    "resolve": "Resolve",
+    "refund": "Refund",
+    "start": "Start",
+    "done": "Done",
+    "addRequest": "Add Request",
+    "addNewItem": "Add New Item",
+    "addMenuItem": "Add menu item",
+    "addStoreItem": "Add store item",
+    "clearLog": "Clear Log",
+    "sendMessage": "Send message",
+    "lookUp": "Look up",
+    "onePlus": "+1",
+    "oneMinus": "-1",
+    "active": "Active",
+    "inactive": "Inactive",
+    "pay": "Pay",
+    "view": "View"
   },
   "g": {
     "bookingId": "Reserva n.º",
     "guest": "Huésped",
     "room": "Habitación",
+    "roomNumber": "Room",
     "status": "Estado",
     "checkIn": "Entrada",
     "checkOut": "Salida",
@@ -1576,7 +2041,72 @@
     "blacklist": "Lista de bloqueo",
     "visits": "Visitas",
     "module": "Módulo",
-    "itemId": "ID de elemento"
+    "itemId": "ID de elemento",
+    "notes": "Notes",
+    "icon": "Icon",
+    "serviceName": "Service name",
+    "category": "Category",
+    "service": "Service",
+    "unitPrice": "Unit price",
+    "taxRatePct": "Tax %",
+    "defaultQty": "Default qty",
+    "requested": "Requested",
+    "assigned": "Assigned",
+    "scheduled": "Scheduled",
+    "charge": "Charge",
+    "issue": "Issue",
+    "priority": "Priority",
+    "reportedBy": "Reported by",
+    "reported": "Reported",
+    "resolved": "Resolved",
+    "itemName": "Item name",
+    "quantity": "Quantity",
+    "reorderLevel": "Reorder level",
+    "lastOrdered": "Last ordered",
+    "barcode": "Barcode",
+    "description": "Description",
+    "available": "Available",
+    "unitsPerServing": "Units / serving",
+    "inventoryStock": "Inventory stock",
+    "price": "Price",
+    "stock": "Stock",
+    "orderNumber": "Order #",
+    "orderTime": "Time",
+    "tableOrRoom": "Table / room",
+    "staff": "Staff",
+    "refund": "Refund",
+    "message": "Message",
+    "channel": "Channel",
+    "txnId": "Txn ID",
+    "discount": "Discount",
+    "grandTotal": "Grand total",
+    "currency": "Currency",
+    "invoiceNumber": "Invoice #",
+    "paymentStatus": "Status",
+    "role": "Role",
+    "accountName": "User"
+  },
+  "ui": {
+    "hotelServices": "Hotel Services",
+    "serviceRequests": "Service requests",
+    "invoicesH2": "Invoices",
+    "guestSelfService": "Guest self-service portal",
+    "enterBookingId": "Enter your booking ID",
+    "bookingIdPlaceholder": "e.g. BK-1001",
+    "changeLogChit": "◆ {title}",
+    "masterAuditLog": "Master audit log"
+  },
+  "empty": {
+    "noServices": "◈ No services configured yet",
+    "noServiceRequests": "◈ No service requests yet",
+    "noInvoices": "▥ No invoices generated yet",
+    "noUsers": "◔ No user accounts yet",
+    "noTickets": "⚡ No maintenance tickets. Everything is running smoothly.",
+    "noInventory": "⬡ Your inventory is empty. Add your first item.",
+    "noAudit": "◳ No audit entries yet. Actions will be logged here.",
+    "noMenuItems": "🍽️ No menu items yet. Add your first menu item.",
+    "noStoreItems": "🛒 No store items yet. Add your first item.",
+    "noOrders": "No orders yet."
   },
   "guest": {
     "emptyGrid": "Aún no hay huéspedes. Añada el primero."
@@ -1591,6 +2121,7 @@
     "services": "Registro de cambios — Servicios",
     "maintenance": "Registro de cambios — Mantenimiento",
     "inventory": "Registro de cambios — Inventario",
+    "inventoryAudit": "Inventory audit log",
     "accounts": "Registro de cambios — Cuentas",
     "guestportal": "Registro de cambios — Portal",
     "messages": "Registro de cambios — Mensajes",
@@ -1884,6 +2415,98 @@
     "emptyPastGuest": "אין מכירות עבור אורח זה",
     "selectValidGuest": "בחר אורח למעלה"
   },
+  "restaurant": {
+    "syncBanner": "Synced with Restaurant — everyone uses the same saved orders. This screen updates when orders change here, in another tab, or when front-of-house edits the queue.",
+    "kitchenQueueEmpty": "No tickets in the kitchen queue (nothing at New, Preparing, or Ready).",
+    "kitchenQueueTitle": "Kitchen queue",
+    "kitchenQueueSub": "Oldest first — advance status as you cook",
+    "allActiveOrdersTitle": "All active orders",
+    "allActiveOrdersSub": "Same list as Restaurant — payment actions are hidden for Kitchen.",
+    "orderTypeRoom": "Room Service",
+    "orderTypeTable": "Table / Walk-in",
+    "guestPickerLabel": "Room service — who is this order for?",
+    "roomLine": "Room {n}",
+    "guestSingular": "guest",
+    "guestPlural": "guests",
+    "checkedInHint": "Showing {count} checked-in {guests}. Use Table / Walk-in for non-room orders.",
+    "tableFloorTitle": "Table floor — status at a glance",
+    "wordFree": "free",
+    "wordLive": "live",
+    "wordPay": "pay",
+    "ttFree": "Tables with no open bill",
+    "ttBusy": "Active order / kitchen",
+    "ttDue": "Served, payment pending",
+    "legendFree": "Green — free seat",
+    "legendOpen": "Red — open order",
+    "legendPay": "Amber — pay check",
+    "tableFloorGroup": "Restaurant table tiles",
+    "tagOpen": "OPEN",
+    "tagPay": "PAY",
+    "tagLive": "LIVE",
+    "hintSeatGuests": "Seat guests",
+    "hintBillDue": "Bill due",
+    "hintOrderOnTab": "Order on tab",
+    "tileTitleAvail": "{name} — available, no bill",
+    "tileTitlePay": "{name} — payment pending, tap to close",
+    "tileTitleLive": "{name} — open order, tap for bill",
+    "tableFloorHelp": "Colors show state instantly: {free} = take a new order; {live} = food service in progress (tap opens bill); {pay} = check printed, settle payment. Tap red or amber to open the tab.",
+    "filterAll": "All",
+    "noItemsCategory": "No items in this category",
+    "cartEmptyMenu": "Cart is empty — tap menu items to add",
+    "menu": "Menu",
+    "addProduct": "+ Add product",
+    "menuItemsLink": "Menu items",
+    "inventoryLink": "Inventory",
+    "menuToolbarHint": "{n} items — use + Add product or Menu items; link F&B stock in Inventory",
+    "orderCart": "Order cart",
+    "orderNotes": "Order notes",
+    "orderNotesPh": "Special instructions…",
+    "sendToKitchen": "Send to Kitchen",
+    "sendToRoom": "Send to Room",
+    "sendToRoomTitle": "Same as Send to Kitchen, but the order is created as Ready",
+    "chargeToRoom": "Charge to room",
+    "chargeToTableTitle": "Uses the table above. Posts the tab and adds this order to Active orders.",
+    "taxLine": "Tax ({n}%)",
+    "creditCard": "Credit card",
+    "activeOrders": "Active orders",
+    "showAll": "Show all",
+    "showAllTitle": "Show every open order (all guests or all tables)",
+    "pastOrders": "Past orders",
+    "scopeLine": "Scope: {scope} — non-paid statuses (New → Served) appear here.",
+    "totalActiveLabel": "Total active order:",
+    "payTotalRoom": "Pay total — Room",
+    "payTotalCash": "Pay total — Cash",
+    "payTotalCard": "Pay total — Card",
+    "restHistoryTitle": "Past orders",
+    "changeLog": "Restaurant change log",
+    "kitchenView": "Kitchen view",
+    "emptyActiveOrders": "No active orders",
+    "emptyActiveForGuest": "No active orders for this guest",
+    "emptyActiveForTable": "No active orders for {table}",
+    "emptyActiveAnyTable": "No active orders on any table",
+    "emptyKitchenStrip": "No tickets at New / Preparing / Ready",
+    "actPrep": "🔥 Prep",
+    "actReady": "✅ Ready",
+    "actServed": "🍽️ Served",
+    "payRoom": "Room",
+    "actDone": "✓ Done",
+    "kStartPrep": "🔥 Start prep",
+    "kMarkReady": "✅ Mark ready",
+    "kMarkServed": "🍽️ Mark served",
+    "selectedGuest": "Selected guest",
+    "allTables": "All tables",
+    "tableWord": "Table",
+    "allGuests": "All guests",
+    "allRoomsUnfiltered": "All rooms (not filtered)",
+    "roomGuestDash": "Room {room} - {name}",
+    "openBill": "{name} — Open bill",
+    "close": "Close",
+    "stNew": "New",
+    "stPreparing": "Preparing",
+    "stReady": "Ready",
+    "stServed": "Served",
+    "stPaid": "Paid"
+  },
   "book": {
     "emptyGrid": "אין הזמנות עדיין. צרו את ההזמנה הראשונה!",
     "addNew": "הזמנה חדשה",
@@ -1899,12 +2522,31 @@
     "delete": "מחק",
     "edit": "ערוך",
     "add": "הוסף",
-    "search": "חפש"
+    "search": "חפש",
+    "toggle": "Toggle",
+    "resolve": "Resolve",
+    "refund": "Refund",
+    "start": "Start",
+    "done": "Done",
+    "addRequest": "Add Request",
+    "addNewItem": "Add New Item",
+    "addMenuItem": "Add menu item",
+    "addStoreItem": "Add store item",
+    "clearLog": "Clear Log",
+    "sendMessage": "Send message",
+    "lookUp": "Look up",
+    "onePlus": "+1",
+    "oneMinus": "-1",
+    "active": "Active",
+    "inactive": "Inactive",
+    "pay": "Pay",
+    "view": "View"
   },
   "g": {
     "bookingId": "הזמנה #",
     "guest": "אורח",
     "room": "חדר",
+    "roomNumber": "Room",
     "status": "סטטוס",
     "checkIn": "צ'ק-אין",
     "checkOut": "צ'ק-אאוט",
@@ -1932,7 +2574,72 @@
     "blacklist": "רשימה שחורה",
     "visits": "ביקורים",
     "module": "מודול",
-    "itemId": "מזהה פריט"
+    "itemId": "מזהה פריט",
+    "notes": "Notes",
+    "icon": "Icon",
+    "serviceName": "Service name",
+    "category": "Category",
+    "service": "Service",
+    "unitPrice": "Unit price",
+    "taxRatePct": "Tax %",
+    "defaultQty": "Default qty",
+    "requested": "Requested",
+    "assigned": "Assigned",
+    "scheduled": "Scheduled",
+    "charge": "Charge",
+    "issue": "Issue",
+    "priority": "Priority",
+    "reportedBy": "Reported by",
+    "reported": "Reported",
+    "resolved": "Resolved",
+    "itemName": "Item name",
+    "quantity": "Quantity",
+    "reorderLevel": "Reorder level",
+    "lastOrdered": "Last ordered",
+    "barcode": "Barcode",
+    "description": "Description",
+    "available": "Available",
+    "unitsPerServing": "Units / serving",
+    "inventoryStock": "Inventory stock",
+    "price": "Price",
+    "stock": "Stock",
+    "orderNumber": "Order #",
+    "orderTime": "Time",
+    "tableOrRoom": "Table / room",
+    "staff": "Staff",
+    "refund": "Refund",
+    "message": "Message",
+    "channel": "Channel",
+    "txnId": "Txn ID",
+    "discount": "Discount",
+    "grandTotal": "Grand total",
+    "currency": "Currency",
+    "invoiceNumber": "Invoice #",
+    "paymentStatus": "Status",
+    "role": "Role",
+    "accountName": "User"
+  },
+  "ui": {
+    "hotelServices": "Hotel Services",
+    "serviceRequests": "Service requests",
+    "invoicesH2": "Invoices",
+    "guestSelfService": "Guest self-service portal",
+    "enterBookingId": "Enter your booking ID",
+    "bookingIdPlaceholder": "e.g. BK-1001",
+    "changeLogChit": "◆ {title}",
+    "masterAuditLog": "Master audit log"
+  },
+  "empty": {
+    "noServices": "◈ No services configured yet",
+    "noServiceRequests": "◈ No service requests yet",
+    "noInvoices": "▥ No invoices generated yet",
+    "noUsers": "◔ No user accounts yet",
+    "noTickets": "⚡ No maintenance tickets. Everything is running smoothly.",
+    "noInventory": "⬡ Your inventory is empty. Add your first item.",
+    "noAudit": "◳ No audit entries yet. Actions will be logged here.",
+    "noMenuItems": "🍽️ No menu items yet. Add your first menu item.",
+    "noStoreItems": "🛒 No store items yet. Add your first item.",
+    "noOrders": "No orders yet."
   },
   "guest": {
     "emptyGrid": "אין אורחים. הוסיפו אורח ראשון!"
@@ -1947,6 +2654,7 @@
     "services": "יומן שינויים — שירותים",
     "maintenance": "יומן שינויים — תחזוקה",
     "inventory": "יומן שינויים — מלאי",
+    "inventoryAudit": "Inventory audit log",
     "accounts": "יומן שינויים — חשבונות",
     "guestportal": "יומן שינויים — פורטל אורח",
     "messages": "יומן שינויים — הודעות",
@@ -2240,6 +2948,98 @@
     "emptyPastGuest": "ไม่มียอดสำหรับแขกนี้",
     "selectValidGuest": "เลือกแขกด้านบน"
   },
+  "restaurant": {
+    "syncBanner": "Synced with Restaurant — everyone uses the same saved orders. This screen updates when orders change here, in another tab, or when front-of-house edits the queue.",
+    "kitchenQueueEmpty": "No tickets in the kitchen queue (nothing at New, Preparing, or Ready).",
+    "kitchenQueueTitle": "Kitchen queue",
+    "kitchenQueueSub": "Oldest first — advance status as you cook",
+    "allActiveOrdersTitle": "All active orders",
+    "allActiveOrdersSub": "Same list as Restaurant — payment actions are hidden for Kitchen.",
+    "orderTypeRoom": "Room Service",
+    "orderTypeTable": "Table / Walk-in",
+    "guestPickerLabel": "Room service — who is this order for?",
+    "roomLine": "Room {n}",
+    "guestSingular": "guest",
+    "guestPlural": "guests",
+    "checkedInHint": "Showing {count} checked-in {guests}. Use Table / Walk-in for non-room orders.",
+    "tableFloorTitle": "Table floor — status at a glance",
+    "wordFree": "free",
+    "wordLive": "live",
+    "wordPay": "pay",
+    "ttFree": "Tables with no open bill",
+    "ttBusy": "Active order / kitchen",
+    "ttDue": "Served, payment pending",
+    "legendFree": "Green — free seat",
+    "legendOpen": "Red — open order",
+    "legendPay": "Amber — pay check",
+    "tableFloorGroup": "Restaurant table tiles",
+    "tagOpen": "OPEN",
+    "tagPay": "PAY",
+    "tagLive": "LIVE",
+    "hintSeatGuests": "Seat guests",
+    "hintBillDue": "Bill due",
+    "hintOrderOnTab": "Order on tab",
+    "tileTitleAvail": "{name} — available, no bill",
+    "tileTitlePay": "{name} — payment pending, tap to close",
+    "tileTitleLive": "{name} — open order, tap for bill",
+    "tableFloorHelp": "Colors show state instantly: {free} = take a new order; {live} = food service in progress (tap opens bill); {pay} = check printed, settle payment. Tap red or amber to open the tab.",
+    "filterAll": "All",
+    "noItemsCategory": "No items in this category",
+    "cartEmptyMenu": "Cart is empty — tap menu items to add",
+    "menu": "Menu",
+    "addProduct": "+ Add product",
+    "menuItemsLink": "Menu items",
+    "inventoryLink": "Inventory",
+    "menuToolbarHint": "{n} items — use + Add product or Menu items; link F&B stock in Inventory",
+    "orderCart": "Order cart",
+    "orderNotes": "Order notes",
+    "orderNotesPh": "Special instructions…",
+    "sendToKitchen": "Send to Kitchen",
+    "sendToRoom": "Send to Room",
+    "sendToRoomTitle": "Same as Send to Kitchen, but the order is created as Ready",
+    "chargeToRoom": "Charge to room",
+    "chargeToTableTitle": "Uses the table above. Posts the tab and adds this order to Active orders.",
+    "taxLine": "Tax ({n}%)",
+    "creditCard": "Credit card",
+    "activeOrders": "Active orders",
+    "showAll": "Show all",
+    "showAllTitle": "Show every open order (all guests or all tables)",
+    "pastOrders": "Past orders",
+    "scopeLine": "Scope: {scope} — non-paid statuses (New → Served) appear here.",
+    "totalActiveLabel": "Total active order:",
+    "payTotalRoom": "Pay total — Room",
+    "payTotalCash": "Pay total — Cash",
+    "payTotalCard": "Pay total — Card",
+    "restHistoryTitle": "Past orders",
+    "changeLog": "Restaurant change log",
+    "kitchenView": "Kitchen view",
+    "emptyActiveOrders": "No active orders",
+    "emptyActiveForGuest": "No active orders for this guest",
+    "emptyActiveForTable": "No active orders for {table}",
+    "emptyActiveAnyTable": "No active orders on any table",
+    "emptyKitchenStrip": "No tickets at New / Preparing / Ready",
+    "actPrep": "🔥 Prep",
+    "actReady": "✅ Ready",
+    "actServed": "🍽️ Served",
+    "payRoom": "Room",
+    "actDone": "✓ Done",
+    "kStartPrep": "🔥 Start prep",
+    "kMarkReady": "✅ Mark ready",
+    "kMarkServed": "🍽️ Mark served",
+    "selectedGuest": "Selected guest",
+    "allTables": "All tables",
+    "tableWord": "Table",
+    "allGuests": "All guests",
+    "allRoomsUnfiltered": "All rooms (not filtered)",
+    "roomGuestDash": "Room {room} - {name}",
+    "openBill": "{name} — Open bill",
+    "close": "Close",
+    "stNew": "New",
+    "stPreparing": "Preparing",
+    "stReady": "Ready",
+    "stServed": "Served",
+    "stPaid": "Paid"
+  },
   "book": {
     "emptyGrid": "ยังไม่มีการจอง สร้างการจองแรกของคุณ!",
     "addNew": "เพิ่มการจองใหม่",
@@ -2255,12 +3055,31 @@
     "delete": "ลบ",
     "edit": "แก้ไข",
     "add": "เพิ่ม",
-    "search": "ค้นหา"
+    "search": "ค้นหา",
+    "toggle": "Toggle",
+    "resolve": "Resolve",
+    "refund": "Refund",
+    "start": "Start",
+    "done": "Done",
+    "addRequest": "Add Request",
+    "addNewItem": "Add New Item",
+    "addMenuItem": "Add menu item",
+    "addStoreItem": "Add store item",
+    "clearLog": "Clear Log",
+    "sendMessage": "Send message",
+    "lookUp": "Look up",
+    "onePlus": "+1",
+    "oneMinus": "-1",
+    "active": "Active",
+    "inactive": "Inactive",
+    "pay": "Pay",
+    "view": "View"
   },
   "g": {
     "bookingId": "รหัสจอง #",
     "guest": "แขก",
     "room": "ห้อง",
+    "roomNumber": "Room",
     "status": "สถานะ",
     "checkIn": "เช็กอิน",
     "checkOut": "เช็กเอาต์",
@@ -2288,7 +3107,72 @@
     "blacklist": "บัญชีดำ",
     "visits": "จำนวนครั้งที่มา",
     "module": "โมดูล",
-    "itemId": "รหัสรายการ"
+    "itemId": "รหัสรายการ",
+    "notes": "Notes",
+    "icon": "Icon",
+    "serviceName": "Service name",
+    "category": "Category",
+    "service": "Service",
+    "unitPrice": "Unit price",
+    "taxRatePct": "Tax %",
+    "defaultQty": "Default qty",
+    "requested": "Requested",
+    "assigned": "Assigned",
+    "scheduled": "Scheduled",
+    "charge": "Charge",
+    "issue": "Issue",
+    "priority": "Priority",
+    "reportedBy": "Reported by",
+    "reported": "Reported",
+    "resolved": "Resolved",
+    "itemName": "Item name",
+    "quantity": "Quantity",
+    "reorderLevel": "Reorder level",
+    "lastOrdered": "Last ordered",
+    "barcode": "Barcode",
+    "description": "Description",
+    "available": "Available",
+    "unitsPerServing": "Units / serving",
+    "inventoryStock": "Inventory stock",
+    "price": "Price",
+    "stock": "Stock",
+    "orderNumber": "Order #",
+    "orderTime": "Time",
+    "tableOrRoom": "Table / room",
+    "staff": "Staff",
+    "refund": "Refund",
+    "message": "Message",
+    "channel": "Channel",
+    "txnId": "Txn ID",
+    "discount": "Discount",
+    "grandTotal": "Grand total",
+    "currency": "Currency",
+    "invoiceNumber": "Invoice #",
+    "paymentStatus": "Status",
+    "role": "Role",
+    "accountName": "User"
+  },
+  "ui": {
+    "hotelServices": "Hotel Services",
+    "serviceRequests": "Service requests",
+    "invoicesH2": "Invoices",
+    "guestSelfService": "Guest self-service portal",
+    "enterBookingId": "Enter your booking ID",
+    "bookingIdPlaceholder": "e.g. BK-1001",
+    "changeLogChit": "◆ {title}",
+    "masterAuditLog": "Master audit log"
+  },
+  "empty": {
+    "noServices": "◈ No services configured yet",
+    "noServiceRequests": "◈ No service requests yet",
+    "noInvoices": "▥ No invoices generated yet",
+    "noUsers": "◔ No user accounts yet",
+    "noTickets": "⚡ No maintenance tickets. Everything is running smoothly.",
+    "noInventory": "⬡ Your inventory is empty. Add your first item.",
+    "noAudit": "◳ No audit entries yet. Actions will be logged here.",
+    "noMenuItems": "🍽️ No menu items yet. Add your first menu item.",
+    "noStoreItems": "🛒 No store items yet. Add your first item.",
+    "noOrders": "No orders yet."
   },
   "guest": {
     "emptyGrid": "ยังไม่มีแขก เพิ่มแขกคนแรก!"
@@ -2303,6 +3187,7 @@
     "services": "บันทึกการเปลี่ยนแปลง — บริการ",
     "maintenance": "บันทึกการเปลี่ยนแปลง — ซ่อม",
     "inventory": "บันทึกการเปลี่ยนแปลง — สต็อก",
+    "inventoryAudit": "Inventory audit log",
     "accounts": "บันทึกการเปลี่ยนแปลง — บัญชี",
     "guestportal": "บันทึกการเปลี่ยนแปลง — พอร์ทัล",
     "messages": "บันทึกการเปลี่ยนแปลง — ข้อความ",
@@ -2596,6 +3481,98 @@
     "emptyPastGuest": "ບໍ່ມີຍອດສຳລັບແຂກນີ້",
     "selectValidGuest": "ເລືອກແຂກເທິງ"
   },
+  "restaurant": {
+    "syncBanner": "Synced with Restaurant — everyone uses the same saved orders. This screen updates when orders change here, in another tab, or when front-of-house edits the queue.",
+    "kitchenQueueEmpty": "No tickets in the kitchen queue (nothing at New, Preparing, or Ready).",
+    "kitchenQueueTitle": "Kitchen queue",
+    "kitchenQueueSub": "Oldest first — advance status as you cook",
+    "allActiveOrdersTitle": "All active orders",
+    "allActiveOrdersSub": "Same list as Restaurant — payment actions are hidden for Kitchen.",
+    "orderTypeRoom": "Room Service",
+    "orderTypeTable": "Table / Walk-in",
+    "guestPickerLabel": "Room service — who is this order for?",
+    "roomLine": "Room {n}",
+    "guestSingular": "guest",
+    "guestPlural": "guests",
+    "checkedInHint": "Showing {count} checked-in {guests}. Use Table / Walk-in for non-room orders.",
+    "tableFloorTitle": "Table floor — status at a glance",
+    "wordFree": "free",
+    "wordLive": "live",
+    "wordPay": "pay",
+    "ttFree": "Tables with no open bill",
+    "ttBusy": "Active order / kitchen",
+    "ttDue": "Served, payment pending",
+    "legendFree": "Green — free seat",
+    "legendOpen": "Red — open order",
+    "legendPay": "Amber — pay check",
+    "tableFloorGroup": "Restaurant table tiles",
+    "tagOpen": "OPEN",
+    "tagPay": "PAY",
+    "tagLive": "LIVE",
+    "hintSeatGuests": "Seat guests",
+    "hintBillDue": "Bill due",
+    "hintOrderOnTab": "Order on tab",
+    "tileTitleAvail": "{name} — available, no bill",
+    "tileTitlePay": "{name} — payment pending, tap to close",
+    "tileTitleLive": "{name} — open order, tap for bill",
+    "tableFloorHelp": "Colors show state instantly: {free} = take a new order; {live} = food service in progress (tap opens bill); {pay} = check printed, settle payment. Tap red or amber to open the tab.",
+    "filterAll": "All",
+    "noItemsCategory": "No items in this category",
+    "cartEmptyMenu": "Cart is empty — tap menu items to add",
+    "menu": "Menu",
+    "addProduct": "+ Add product",
+    "menuItemsLink": "Menu items",
+    "inventoryLink": "Inventory",
+    "menuToolbarHint": "{n} items — use + Add product or Menu items; link F&B stock in Inventory",
+    "orderCart": "Order cart",
+    "orderNotes": "Order notes",
+    "orderNotesPh": "Special instructions…",
+    "sendToKitchen": "Send to Kitchen",
+    "sendToRoom": "Send to Room",
+    "sendToRoomTitle": "Same as Send to Kitchen, but the order is created as Ready",
+    "chargeToRoom": "Charge to room",
+    "chargeToTableTitle": "Uses the table above. Posts the tab and adds this order to Active orders.",
+    "taxLine": "Tax ({n}%)",
+    "creditCard": "Credit card",
+    "activeOrders": "Active orders",
+    "showAll": "Show all",
+    "showAllTitle": "Show every open order (all guests or all tables)",
+    "pastOrders": "Past orders",
+    "scopeLine": "Scope: {scope} — non-paid statuses (New → Served) appear here.",
+    "totalActiveLabel": "Total active order:",
+    "payTotalRoom": "Pay total — Room",
+    "payTotalCash": "Pay total — Cash",
+    "payTotalCard": "Pay total — Card",
+    "restHistoryTitle": "Past orders",
+    "changeLog": "Restaurant change log",
+    "kitchenView": "Kitchen view",
+    "emptyActiveOrders": "No active orders",
+    "emptyActiveForGuest": "No active orders for this guest",
+    "emptyActiveForTable": "No active orders for {table}",
+    "emptyActiveAnyTable": "No active orders on any table",
+    "emptyKitchenStrip": "No tickets at New / Preparing / Ready",
+    "actPrep": "🔥 Prep",
+    "actReady": "✅ Ready",
+    "actServed": "🍽️ Served",
+    "payRoom": "Room",
+    "actDone": "✓ Done",
+    "kStartPrep": "🔥 Start prep",
+    "kMarkReady": "✅ Mark ready",
+    "kMarkServed": "🍽️ Mark served",
+    "selectedGuest": "Selected guest",
+    "allTables": "All tables",
+    "tableWord": "Table",
+    "allGuests": "All guests",
+    "allRoomsUnfiltered": "All rooms (not filtered)",
+    "roomGuestDash": "Room {room} - {name}",
+    "openBill": "{name} — Open bill",
+    "close": "Close",
+    "stNew": "New",
+    "stPreparing": "Preparing",
+    "stReady": "Ready",
+    "stServed": "Served",
+    "stPaid": "Paid"
+  },
   "book": {
     "emptyGrid": "ຍັງບໍ່ມີການຈອງ. ສ້າງການຈອງທຳອິດ!",
     "addNew": "ຈອງໃຫມ່",
@@ -2611,12 +3588,31 @@
     "delete": "ລຶບ",
     "edit": "ແກ້ໄຂ",
     "add": "ເພີ່ມ",
-    "search": "ຄົ້ນຫາ"
+    "search": "ຄົ້ນຫາ",
+    "toggle": "Toggle",
+    "resolve": "Resolve",
+    "refund": "Refund",
+    "start": "Start",
+    "done": "Done",
+    "addRequest": "Add Request",
+    "addNewItem": "Add New Item",
+    "addMenuItem": "Add menu item",
+    "addStoreItem": "Add store item",
+    "clearLog": "Clear Log",
+    "sendMessage": "Send message",
+    "lookUp": "Look up",
+    "onePlus": "+1",
+    "oneMinus": "-1",
+    "active": "Active",
+    "inactive": "Inactive",
+    "pay": "Pay",
+    "view": "View"
   },
   "g": {
     "bookingId": "ຈອງ #",
     "guest": "ແຂກ",
     "room": "ຫ້ອງ",
+    "roomNumber": "Room",
     "status": "ສະຖານະ",
     "checkIn": "ເຊັກອິນ",
     "checkOut": "ເຊັກເອົາ",
@@ -2644,7 +3640,72 @@
     "blacklist": "ບັນຊີດຳ",
     "visits": "ຄັ້ງທີ່ມາ",
     "module": "ໂມດູນ",
-    "itemId": "ລະຫັດລາຍການ"
+    "itemId": "ລະຫັດລາຍການ",
+    "notes": "Notes",
+    "icon": "Icon",
+    "serviceName": "Service name",
+    "category": "Category",
+    "service": "Service",
+    "unitPrice": "Unit price",
+    "taxRatePct": "Tax %",
+    "defaultQty": "Default qty",
+    "requested": "Requested",
+    "assigned": "Assigned",
+    "scheduled": "Scheduled",
+    "charge": "Charge",
+    "issue": "Issue",
+    "priority": "Priority",
+    "reportedBy": "Reported by",
+    "reported": "Reported",
+    "resolved": "Resolved",
+    "itemName": "Item name",
+    "quantity": "Quantity",
+    "reorderLevel": "Reorder level",
+    "lastOrdered": "Last ordered",
+    "barcode": "Barcode",
+    "description": "Description",
+    "available": "Available",
+    "unitsPerServing": "Units / serving",
+    "inventoryStock": "Inventory stock",
+    "price": "Price",
+    "stock": "Stock",
+    "orderNumber": "Order #",
+    "orderTime": "Time",
+    "tableOrRoom": "Table / room",
+    "staff": "Staff",
+    "refund": "Refund",
+    "message": "Message",
+    "channel": "Channel",
+    "txnId": "Txn ID",
+    "discount": "Discount",
+    "grandTotal": "Grand total",
+    "currency": "Currency",
+    "invoiceNumber": "Invoice #",
+    "paymentStatus": "Status",
+    "role": "Role",
+    "accountName": "User"
+  },
+  "ui": {
+    "hotelServices": "Hotel Services",
+    "serviceRequests": "Service requests",
+    "invoicesH2": "Invoices",
+    "guestSelfService": "Guest self-service portal",
+    "enterBookingId": "Enter your booking ID",
+    "bookingIdPlaceholder": "e.g. BK-1001",
+    "changeLogChit": "◆ {title}",
+    "masterAuditLog": "Master audit log"
+  },
+  "empty": {
+    "noServices": "◈ No services configured yet",
+    "noServiceRequests": "◈ No service requests yet",
+    "noInvoices": "▥ No invoices generated yet",
+    "noUsers": "◔ No user accounts yet",
+    "noTickets": "⚡ No maintenance tickets. Everything is running smoothly.",
+    "noInventory": "⬡ Your inventory is empty. Add your first item.",
+    "noAudit": "◳ No audit entries yet. Actions will be logged here.",
+    "noMenuItems": "🍽️ No menu items yet. Add your first menu item.",
+    "noStoreItems": "🛒 No store items yet. Add your first item.",
+    "noOrders": "No orders yet."
   },
   "guest": {
     "emptyGrid": "ຍັງບໍ່ມີແຂກ — ເພີ່ມຄົນແລກ!"
@@ -2659,6 +3720,7 @@
     "services": "ບັນທຶກ — ບໍລິການ",
     "maintenance": "ບັນທຶກ — ຊ່ອມ",
     "inventory": "ບັນທຶກ — ສະຕັອກ",
+    "inventoryAudit": "Inventory audit log",
     "accounts": "ບັນທຶກ — ບັນຊີ",
     "guestportal": "ບັນທຶກ — ພໍທແຂກ",
     "messages": "ບັນທຶກ — ຂໍ້ຄວາມ",
@@ -3091,6 +4153,16 @@ function toast(msg) { const t = document.getElementById('toast'); t.textContent 
 function daysBetween(a, b) { return Math.max(1, Math.ceil((new Date(b) - new Date(a)) / 86400000)); }
 
 // ===== EXCEL-LIKE GRID ENGINE =====
+function xgridColLabel(col) {
+  if (!col) return '';
+  if (col.labelKey && typeof t === 'function') { try { return t(col.labelKey); } catch (e) { /* fall through */ } }
+  return col.label != null ? col.label : (col.field || '');
+}
+function xgridActionLabel(a) {
+  if (!a) return '';
+  if (a.labelKey && typeof t === 'function') { try { return t(a.labelKey); } catch (e) { /* */ } }
+  return a.label != null ? a.label : '';
+}
 class XGrid {
   constructor(containerId, opts) {
     this.container = document.getElementById(containerId);
@@ -3101,6 +4173,7 @@ class XGrid {
     this.onAdd = opts.onAdd || null;
     this.onImport = opts.onImport || null;
     this.addLabel = opts.addLabel;
+    this.addLabelKey = opts.addLabelKey || null;
     this.actions = opts.actions || [];
     this.hideExport = opts.hideExport || false;
     this.rowClass = opts.rowClass || null;
@@ -3141,7 +4214,7 @@ class XGrid {
   exportCSV() {
     const rows = this.getFiltered();
     const strip = s => String(s).replace(/<[^>]*>/g, '').trim();
-    const hdr = this.columns.filter(c => !c.hidden).map(c => '"' + c.label + '"').join(',');
+    const hdr = (this.columns.filter(c => !c.hidden).map(c => '"' + String(xgridColLabel(c)).replace(/"/g, '""') + '"')).join(',');
     const body = rows.map(r => this.columns.filter(c => !c.hidden).map(c => {
       let v = c.format ? strip(c.format(r[c.field], r)) : (r[c.field] ?? '');
       return '"' + String(v).replace(/"/g, '""') + '"';
@@ -3202,7 +4275,9 @@ class XGrid {
   render() {
     const paged = this.getPaged(); const filtered = this.getFiltered();
     const totalPages = this.getTotalPages();
-    const _al = (this.addLabel != null && this.addLabel !== '') ? this.addLabel : (typeof t === 'function' ? t('grid.addRow') : 'Add Row');
+    const _al = (this.addLabel != null && this.addLabel !== '')
+      ? this.addLabel
+      : (this.addLabelKey && typeof t === 'function' ? t(this.addLabelKey) : (typeof t === 'function' ? t('grid.addRow') : 'Add Row'));
     const addBtn = this.onAdd ? `<button class="btn btn-sm btn-primary" onclick="window._xg_${this.container.id}.onAdd()">+ ${_al}</button>` : '';
     const ex = typeof t === 'function' ? t('grid.exportCsv') : 'EXPORT CSV';
     const im = typeof t === 'function' ? t('grid.importCsv') : 'IMPORT CSV';
@@ -3227,9 +4302,10 @@ class XGrid {
       if (col.hidden) return;
       const isSort = this.sortCol === ci;
       const arrow = isSort ? (this.sortDir === 'asc' ? '▲' : '▼') : '⇅';
-      html += `<th style="${col.width ? 'width:' + col.width : ''}"><div class="th-inner" onclick="window._xg_${this.container.id}.toggleSort(${ci})"><span>${col.label}</span><span class="sort-icon ${isSort ? 'active' : ''}">${arrow}</span></div>`;
+      const _cLab = xgridColLabel(col);
+      html += `<th style="${col.width ? 'width:' + col.width : ''}"><div class="th-inner" onclick="window._xg_${this.container.id}.toggleSort(${ci})"><span>${_cLab}</span><span class="sort-icon ${isSort ? 'active' : ''}">${arrow}</span></div>`;
       if (col.filterable !== false) {
-        const _fl = typeof t === 'function' ? t('grid.filterLabel', { col: String(col.label) }) : ('Filter ' + col.label);
+        const _fl = typeof t === 'function' ? t('grid.filterLabel', { col: String(_cLab) }) : ('Filter ' + _cLab);
         html += `<input class="col-filter" placeholder="${String(_fl).replace(/"/g, '&quot;')}" value="${this.filters[col.field] || ''}" oninput="window._xg_${this.container.id}.setFilter('${col.field}',this.value)">`;
       }
       html += `</th>`;
@@ -3274,7 +4350,8 @@ class XGrid {
         if (this.actions.length) {
           html += `<td><div class="cell-actions">${this.actions.map(a => {
             if (a.condition && !a.condition(row)) return '';
-            return `<button class="btn btn-sm ${a.cls || 'btn-outline'}" onclick="event.stopPropagation();window._xg_${this.container.id}.doAction('${a.name}','${row.id}')">${a.label}</button>`;
+            const _alb = xgridActionLabel(a);
+            return `<button class="btn btn-sm ${a.cls || 'btn-outline'}" onclick="event.stopPropagation();window._xg_${this.container.id}.doAction('${a.name}','${row.id}')">${_alb}</button>`;
           }).join('')}</div></td>`;
         }
         html += `</tr>`;
@@ -5082,16 +6159,16 @@ window.deleteGuest = function(id) {
 let serviceGrid;
 function renderServices() {
   document.getElementById('page-services').innerHTML = `
-    <div class="card"><div class="card-header"><h2>Hotel Services</h2></div><div class="card-body"><div id="serviceGrid"></div></div></div>
-    <div class="card"><div class="card-header"><h2>◆ Service Requests</h2></div><div class="card-body"><div id="svcReqGrid"></div></div></div>
-    <div class="card"><div class="card-header"><h2>◆ Services Change Log</h2></div><div class="card-body"><div id="serviceLogGrid"></div></div></div>`;
+    <div class="card"><div class="card-header"><h2>${t('ui.hotelServices')}</h2></div><div class="card-body"><div id="serviceGrid"></div></div></div>
+    <div class="card"><div class="card-header"><h2>${t('ui.changeLogChit', { title: t('ui.serviceRequests') })}</h2></div><div class="card-body"><div id="svcReqGrid"></div></div></div>
+    <div class="card"><div class="card-header"><h2>${t('ui.changeLogChit', { title: t('logs.services') })}</h2></div><div class="card-body"><div id="serviceLogGrid"></div></div></div>`;
   const svcCols = [
-    {field:'icon',label:'Icon',editable:true,width:'55px',filterable:false},
-    {field:'name',label:'Service Name',editable:true,filterable:true},
-    {field:'serviceCategory',label:'Category',editable:true,editType:'select',editOptions:getServiceCategories(),filterable:true},
-    {field:'unitPrice',label:'Unit Price',format:v=>fmt$(v),editable:true,editType:'number',filterable:true},
-    {field:'taxRate',label:'Tax %',editable:true,editType:'number',width:'65px'},
-    {field:'quantity',label:'Default Qty',editable:true,editType:'number',width:'80px'},
+    {field:'icon',label:t('g.icon'),editable:true,width:'55px',filterable:false},
+    {field:'name',label:t('g.serviceName'),editable:true,filterable:true},
+    {field:'serviceCategory',label:t('g.category'),editable:true,editType:'select',editOptions:getServiceCategories(),filterable:true},
+    {field:'unitPrice',label:t('g.unitPrice'),format:v=>fmt$(v),editable:true,editType:'number',filterable:true},
+    {field:'taxRate',label:t('g.taxRatePct'),editable:true,editType:'number',width:'65px'},
+    {field:'quantity',label:t('g.defaultQty'),editable:true,editType:'number',width:'80px'},
   ];
   if (currentRole === 'Housekeeper') { svcCols.splice(3, 2); }
   serviceGrid = new XGrid('serviceGrid', {
@@ -5099,32 +6176,32 @@ function renderServices() {
     data: services,
     summaryRow: {name:'label', unitPrice:'sum'},
     showSearch: true,
-    emptyMessage: '◈ No services configured yet',
+    emptyMessage: t('empty.noServices'),
     hideExport: currentRole === 'Receptionist' || currentRole === 'Housekeeper',
     onAdd: () => showAddService(),
     onImport: (rows) => { rows.forEach(r=>{if(!services.find(s=>s.id===r.id))services.push(r);}); save('services',services); logAudit('Import','Service','Imported '+rows.length+' rows'); renderServices(); },
     onEdit: (row, field, val) => { const s = services.find(x=>x.id===row.id); if(s){s[field]=val;save('services',services);logAudit('Update','Service','Updated '+s.name);toast(s.name+' updated');} },
     actions: [
-      {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditService(id)},
+      {name:'edit',labelKey:'common.edit',cls:'btn-outline',handler:id=>showEditService(id)},
       {name:'delete',label:'✕',cls:'btn-danger',handler:id=>deleteService(id)},
     ]
   });
   new XGrid('svcReqGrid', {
     columns: [
-      {field:'timestamp',label:'Requested',format:v=>{try{const d=new Date(v);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}catch(e){return v;}},filterable:true,width:'120px'},
-      {field:'roomNumber',label:'Room',filterable:true,width:'65px'},
-      {field:'guestName',label:'Guest',filterable:true},
-      {field:'serviceName',label:'Service',filterable:true},
-      {field:'assignedTo',label:'Assigned',editable:true,filterable:true,width:'90px'},
-      {field:'scheduledTime',label:'Scheduled',format:v=>v||'—',editable:true,editType:'text',width:'90px'},
-      {field:'status',label:'Status',format:v=>{const cls=v==='Pending'?'pending':v==='In Progress'?'preparing':v==='Completed'?'active':'maintenance';return '<span class="status status-'+cls+'">'+v+'</span>';},editable:true,editType:'select',editOptions:getRequestStatuses(),filterable:true,width:'100px'},
-      {field:'charge',label:'Charge',format:v=>fmt$(v),editable:true,editType:'number',width:'80px',filterable:true},
-      {field:'notes',label:'Notes',editable:true,filterable:true},
+      {field:'timestamp',label:t('g.requested'),format:v=>{try{const d=new Date(v);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}catch(e){return v;}},filterable:true,width:'120px'},
+      {field:'roomNumber',label:t('g.roomNumber'),filterable:true,width:'65px'},
+      {field:'guestName',label:t('g.guest'),filterable:true},
+      {field:'serviceName',label:t('g.service'),filterable:true},
+      {field:'assignedTo',label:t('g.assigned'),editable:true,filterable:true,width:'90px'},
+      {field:'scheduledTime',label:t('g.scheduled'),format:v=>v||'—',editable:true,editType:'text',width:'90px'},
+      {field:'status',label:t('g.status'),format:v=>{const cls=v==='Pending'?'pending':v==='In Progress'?'preparing':v==='Completed'?'active':'maintenance';return '<span class="status status-'+cls+'">'+v+'</span>';},editable:true,editType:'select',editOptions:getRequestStatuses(),filterable:true,width:'100px'},
+      {field:'charge',label:t('g.charge'),format:v=>fmt$(v),editable:true,editType:'number',width:'80px',filterable:true},
+      {field:'notes',label:t('g.notes'),editable:true,filterable:true},
     ],
     data: [...serviceRequests].reverse(),
     summaryRow: {serviceName:'label', charge:'sum'},
-    emptyMessage: '◈ No service requests yet',
-    onAdd: () => showAddServiceRequest(), addLabel: 'Add Request',
+    emptyMessage: t('empty.noServiceRequests'),
+    onAdd: () => showAddServiceRequest(), addLabelKey: 'common.addRequest',
     onEdit: (row, field, val, oldVal) => {
       const sr = serviceRequests.find(x=>x.id===row.id); if(!sr) return;
       sr[field] = val;
@@ -5149,9 +6226,9 @@ function renderServices() {
       renderServices();
     },
     actions: [
-      {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditServiceRequest(id)},
-      {name:'progress',label:'▶ Start',cls:'btn-warning',condition:r=>r.status==='Pending',handler:id=>{const sr=serviceRequests.find(x=>x.id===id);if(sr){sr.status='In Progress';sr.inProgressTime=new Date().toISOString();save('serviceRequests',serviceRequests);logAudit('Update','Service Request',sr.id,'Started: '+sr.serviceName);toast('Service request in progress');renderServices();}}},
-      {name:'complete',label:'✓ Done',cls:'btn-success',condition:r=>r.status==='In Progress',handler:id=>{const sr=serviceRequests.find(x=>x.id===id);if(sr){sr.status='Completed';sr.completedTime=new Date().toISOString();const charge=parseFloat(sr.charge)||0;if(charge>0){const bk=sr.bookingId?bookings.find(x=>x.bookingId===sr.bookingId||x.id===sr.bookingId):null;processSale({source:'Service',paymentMethod:bk?'Room Charge':'Cash',roomNumber:sr.roomNumber||'',guestName:sr.guestName||'',bookingId:sr.bookingId||'',items:[{itemId:sr.id,name:sr.serviceName,qty:1,unitPrice:charge}],taxRate:parseFloat(settings.serviceTax||settings.taxRate)||7});}save('serviceRequests',serviceRequests);logAudit('Update','Service Request',sr.id,'Completed: '+sr.serviceName);toast('Service request completed');renderServices();}}},
+      {name:'edit',labelKey:'common.edit',cls:'btn-outline',handler:id=>showEditServiceRequest(id)},
+      {name:'progress',label:'▶ ' + t('common.start'),cls:'btn-warning',condition:r=>r.status==='Pending',handler:id=>{const sr=serviceRequests.find(x=>x.id===id);if(sr){sr.status='In Progress';sr.inProgressTime=new Date().toISOString();save('serviceRequests',serviceRequests);logAudit('Update','Service Request',sr.id,'Started: '+sr.serviceName);toast('Service request in progress');renderServices();}}},
+      {name:'complete',label:'✓ ' + t('common.done'),cls:'btn-success',condition:r=>r.status==='In Progress',handler:id=>{const sr=serviceRequests.find(x=>x.id===id);if(sr){sr.status='Completed';sr.completedTime=new Date().toISOString();const charge=parseFloat(sr.charge)||0;if(charge>0){const bk=sr.bookingId?bookings.find(x=>x.bookingId===sr.bookingId||x.id===sr.bookingId):null;processSale({source:'Service',paymentMethod:bk?'Room Charge':'Cash',roomNumber:sr.roomNumber||'',guestName:sr.guestName||'',bookingId:sr.bookingId||'',items:[{itemId:sr.id,name:sr.serviceName,qty:1,unitPrice:charge}],taxRate:parseFloat(settings.serviceTax||settings.taxRate)||7});}save('serviceRequests',serviceRequests);logAudit('Update','Service Request',sr.id,'Completed: '+sr.serviceName);toast('Service request completed');renderServices();}}},
       {name:'delete',label:'✕',cls:'btn-danger',handler:id=>{if(!confirm('Delete?'))return;serviceRequests=serviceRequests.filter(x=>x.id!==id);save('serviceRequests',serviceRequests);logAudit('Delete','Service Request',id,'Deleted');renderServices();toast('Request deleted');}},
     ]
   });
@@ -5249,24 +6326,24 @@ window.deleteService = function(id) { if(!confirm('Delete?')) return; const s=se
 let invoiceGrid;
 function renderInvoices() {
   document.getElementById('page-invoices').innerHTML = `
-    <div class="card"><div class="card-header"><h2>Invoices</h2></div><div class="card-body"><div id="invoiceGrid"></div></div></div>
-    <div class="card"><div class="card-header"><h2>◆ Invoice Change Log</h2></div><div class="card-body"><div id="invoiceLogGrid"></div></div></div>`;
+    <div class="card"><div class="card-header"><h2>${t('ui.invoicesH2')}</h2></div><div class="card-body"><div id="invoiceGrid"></div></div></div>
+    <div class="card"><div class="card-header"><h2>${t('ui.changeLogChit', { title: t('logs.invoices') })}</h2></div><div class="card-body"><div id="invoiceLogGrid"></div></div></div>`;
   invoiceGrid = new XGrid('invoiceGrid', {
     columns: [
-      {field:'invoiceNumber',label:'Invoice #',filterable:true,width:'100px'},
-      {field:'date',label:'Date',format:v=>fmtDate(v),editable:true,editType:'date',filterable:true},
-      {field:'guestName',label:'Guest',editable:true,filterable:true},
-      {field:'roomNumber',label:'Room',editable:true,filterable:true,width:'70px'},
-      {field:'subtotal',label:'Subtotal',format:v=>fmt$(v),editable:true,editType:'number'},
-      {field:'discountAmount',label:'Discount',format:v=>fmt$(v),editable:true,editType:'number'},
-      {field:'taxTotal',label:'Tax',format:v=>fmt$(v),editable:true,editType:'number'},
-      {field:'grandTotal',label:'Grand Total',format:v=>'<strong>'+fmt$(v)+'</strong>'},
-      {field:'paymentStatus',label:'Status',format:v=>{const cls=v==='Fully Paid'?'paid':v==='Partially Paid'?'pending':'maintenance';return `<span class="status status-${cls}">${v}</span>`;},editable:true,editType:'select',editOptions:getInvoiceStatuses(),filterable:true},
-      {field:'currency',label:'Currency',editable:true,editType:'select',editOptions:getCurrencies(),width:'75px'},
+      {field:'invoiceNumber',label:t('g.invoiceNumber'),filterable:true,width:'100px'},
+      {field:'date',label:t('g.date'),format:v=>fmtDate(v),editable:true,editType:'date',filterable:true},
+      {field:'guestName',label:t('g.guest'),editable:true,filterable:true},
+      {field:'roomNumber',label:t('g.roomNumber'),editable:true,filterable:true,width:'70px'},
+      {field:'subtotal',label:t('g.subtotal'),format:v=>fmt$(v),editable:true,editType:'number'},
+      {field:'discountAmount',label:t('g.discount'),format:v=>fmt$(v),editable:true,editType:'number'},
+      {field:'taxTotal',label:t('g.tax'),format:v=>fmt$(v),editable:true,editType:'number'},
+      {field:'grandTotal',label:t('g.grandTotal'),format:v=>'<strong>'+fmt$(v)+'</strong>'},
+      {field:'paymentStatus',label:t('g.paymentStatus'),format:v=>{const cls=v==='Fully Paid'?'paid':v==='Partially Paid'?'pending':'maintenance';return `<span class="status status-${cls}">${v}</span>`;},editable:true,editType:'select',editOptions:getInvoiceStatuses(),filterable:true},
+      {field:'currency',label:t('g.currency'),editable:true,editType:'select',editOptions:getCurrencies(),width:'75px'},
     ],
     data: invoices,
     showSearch: true,
-    emptyMessage: '▥ No invoices generated yet',
+    emptyMessage: t('empty.noInvoices'),
     rowClass: function(row) {
       if (row.paymentStatus === 'Fully Paid') return 'row-status-success';
       if (row.paymentStatus === 'Partially Paid') return 'row-status-warning';
@@ -5286,9 +6363,9 @@ function renderInvoices() {
       save('invoices',invoices); logAudit('Update','Invoice','Updated '+inv.invoiceNumber); toast('Invoice updated'); renderInvoices();
     },
     actions: [
-      {name:'pay',label:'Pay',cls:'btn-success',condition:r=>r.paymentStatus!=='Fully Paid',handler:id=>{ payInvoice(id); renderInvoices(); }},
-      {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditInvoice(id)},
-      {name:'view',label:'View',cls:'btn-outline',handler:id=>showInvoiceDetail(id)},
+      {name:'pay',labelKey:'common.pay',cls:'btn-success',condition:r=>r.paymentStatus!=='Fully Paid',handler:id=>{ payInvoice(id); renderInvoices(); }},
+      {name:'edit',labelKey:'common.edit',cls:'btn-outline',handler:id=>showEditInvoice(id)},
+      {name:'view',labelKey:'common.view',cls:'btn-outline',handler:id=>showInvoiceDetail(id)},
       {name:'delete',label:'✕',cls:'btn-danger',handler:id=>deleteInvoice(id)},
     ]
   });
@@ -5405,25 +6482,25 @@ function renderReports() {
 let accountGrid;
 function renderAccounts() {
   document.getElementById('page-accounts').innerHTML = `
-    <div class="card"><div class="card-header"><h2>User Accounts</h2></div><div class="card-body"><div id="accountGrid"></div></div></div>
-    <div class="card"><div class="card-header"><h2>◆ User Accounts Change Log</h2></div><div class="card-body"><div id="accountLogGrid"></div></div></div>`;
+    <div class="card"><div class="card-header"><h2>${t('pageTitle.accounts')}</h2></div><div class="card-body"><div id="accountGrid"></div></div></div>
+    <div class="card"><div class="card-header"><h2>${t('ui.changeLogChit', { title: t('logs.accounts') })}</h2></div><div class="card-body"><div id="accountLogGrid"></div></div></div>`;
   accountGrid = new XGrid('accountGrid', {
     columns: [
-      {field:'name',label:'User',editable:true,filterable:true},
-      {field:'email',label:'Email',editable:true,filterable:true},
-      {field:'role',label:'Role',editable:true,editType:'select',editOptions:getUserRoles(),filterable:true},
-      {field:'status',label:'Status',format:v=>`<span class="status status-${v}">${v==='active'?'Active':'Inactive'}</span>`,editable:true,editType:'select',editOptions:['active','inactive'],filterable:true},
+      {field:'name',label:t('g.accountName'),editable:true,filterable:true},
+      {field:'email',label:t('g.email'),editable:true,filterable:true},
+      {field:'role',label:t('g.role'),editable:true,editType:'select',editOptions:getUserRoles(),filterable:true},
+      {field:'status',label:t('g.status'),format:v=>`<span class="status status-${v}">${v==='active'?t('common.active'):t('common.inactive')}</span>`,editable:true,editType:'select',editOptions:['active','inactive'],filterable:true},
     ],
     data: accounts,
     showSearch: true,
     summaryRow: {name:'count'},
-    emptyMessage: '◔ No user accounts yet',
+    emptyMessage: t('empty.noUsers'),
     onAdd: () => showAddAccount(),
     onImport: (rows) => { rows.forEach(r=>{if(!accounts.find(a=>a.id===r.id))accounts.push(r);}); save('accounts',accounts); logAudit('Import','Account','Imported '+rows.length+' rows'); renderAccounts(); },
     onEdit: (row, field, val) => { const a = accounts.find(x=>x.id===row.id); if(a){a[field]=val;save('accounts',accounts);logAudit('Update','Account','Updated account '+a.name);toast('Account updated');} },
     actions: [
-      {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditAccount(id)},
-      {name:'toggle',label:'Toggle',cls:'btn-warning',handler:id=>{ toggleAccount(id); renderAccounts(); }},
+      {name:'edit',labelKey:'common.edit',cls:'btn-outline',handler:id=>showEditAccount(id)},
+      {name:'toggle',labelKey:'common.toggle',cls:'btn-warning',handler:id=>{ toggleAccount(id); renderAccounts(); }},
       {name:'delete',label:'✕',cls:'btn-danger',handler:id=>{ deleteAccount(id); }},
     ]
   });
@@ -5465,19 +6542,19 @@ window.deleteAccount = function(id) { if(!confirm('Delete this account?')) retur
 // ===== AUDIT LOG =====
 function renderAuditLog() {
   document.getElementById('page-auditlog').innerHTML = `
-    <div class="card"><div class="card-header"><h2>◆ Master Audit Log</h2><button class="btn btn-danger btn-sm" onclick="clearAuditLog()">Clear Log</button></div><div class="card-body"><div id="masterLogGrid"></div></div></div>`;
+    <div class="card"><div class="card-header"><h2>${t('ui.changeLogChit', { title: t('ui.masterAuditLog') })}</h2><button class="btn btn-danger btn-sm" onclick="clearAuditLog()">${t('common.clearLog')}</button></div><div class="card-body"><div id="masterLogGrid"></div></div></div>`;
   new XGrid('masterLogGrid', {
     columns: [
-      {field:'timestamp',label:'Timestamp',format:v=>{try{const d=new Date(v);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});}catch(e){return v;}},filterable:true,width:'150px'},
-      {field:'module',label:'Module',filterable:true,width:'90px'},
-      {field:'user',label:'User',filterable:true,width:'80px'},
-      {field:'action',label:'Action',filterable:true,width:'80px'},
-      {field:'itemId',label:'Item ID',filterable:true,width:'100px'},
-      {field:'details',label:'Details',filterable:true},
+      {field:'timestamp',label:t('g.timestamp'),format:v=>{try{const d=new Date(v);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});}catch(e){return v;}},filterable:true,width:'150px'},
+      {field:'module',label:t('g.module'),filterable:true,width:'90px'},
+      {field:'user',label:t('g.user'),filterable:true,width:'80px'},
+      {field:'action',label:t('g.action'),filterable:true,width:'80px'},
+      {field:'itemId',label:t('g.itemId'),filterable:true,width:'100px'},
+      {field:'details',label:t('g.details'),filterable:true},
     ],
     data: [...auditLog].reverse(),
     showSearch: true,
-    emptyMessage: '◳ No audit entries yet. Actions will be logged here.',
+    emptyMessage: t('empty.noAudit'),
   });
 }
 window.clearAuditLog = function() {
@@ -5908,22 +6985,22 @@ window.cycleHousekeeping = function(id) {
 let ticketGrid;
 function renderMaintenance() {
   document.getElementById('page-maintenance').innerHTML = `
-    <div class="card"><div class="card-header"><h2>Maintenance Tickets</h2></div><div class="card-body"><div id="ticketGrid"></div></div></div>
-    <div class="card"><div class="card-header"><h2>◆ Maintenance Tickets Change Log</h2></div><div class="card-body"><div id="maintLogGrid"></div></div></div>`;
+    <div class="card"><div class="card-header"><h2>${t('pageTitle.maintenance')}</h2></div><div class="card-body"><div id="ticketGrid"></div></div></div>
+    <div class="card"><div class="card-header"><h2>${t('ui.changeLogChit', { title: t('logs.maintenance') })}</h2></div><div class="card-body"><div id="maintLogGrid"></div></div></div>`;
   ticketGrid = new XGrid('ticketGrid', {
     columns: [
-      {field:'roomNumber',label:'Room',editable:true,filterable:true,width:'70px'},
-      {field:'issue',label:'Issue',editable:true,filterable:true},
-      {field:'priority',label:'Priority',format:v=>{const c=v==='Urgent'||v==='High'?'maintenance':v==='Medium'?'pending':'active';return `<span class="status status-${c}">${v}</span>`;},editable:true,editType:'select',editOptions:getTicketPriorities(),filterable:true},
-      {field:'status',label:'Status',format:v=>{const c=v==='Open'?'maintenance':v==='In Progress'?'pending':'active';return `<span class="status status-${c}">${v}</span>`;},editable:true,editType:'select',editOptions:getTicketStatuses(),filterable:true},
-      {field:'reportedBy',label:'Reported By',editable:true,filterable:true},
-      {field:'reportedAt',label:'Reported',format:v=>v?new Date(v).toLocaleString():'',filterable:true},
-      {field:'resolvedAt',label:'Resolved',format:v=>v?new Date(v).toLocaleString():'—'},
-      {field:'notes',label:'Notes',editable:true,filterable:true},
+      {field:'roomNumber',label:t('g.roomNumber'),editable:true,filterable:true,width:'70px'},
+      {field:'issue',label:t('g.issue'),editable:true,filterable:true},
+      {field:'priority',label:t('g.priority'),format:v=>{const c=v==='Urgent'||v==='High'?'maintenance':v==='Medium'?'pending':'active';return `<span class="status status-${c}">${v}</span>`;},editable:true,editType:'select',editOptions:getTicketPriorities(),filterable:true},
+      {field:'status',label:t('g.status'),format:v=>{const c=v==='Open'?'maintenance':v==='In Progress'?'pending':'active';return `<span class="status status-${c}">${v}</span>`;},editable:true,editType:'select',editOptions:getTicketStatuses(),filterable:true},
+      {field:'reportedBy',label:t('g.reportedBy'),editable:true,filterable:true},
+      {field:'reportedAt',label:t('g.reported'),format:v=>v?new Date(v).toLocaleString():'',filterable:true},
+      {field:'resolvedAt',label:t('g.resolved'),format:v=>v?new Date(v).toLocaleString():'—'},
+      {field:'notes',label:t('g.notes'),editable:true,filterable:true},
     ],
     data: tickets,
     showSearch: true,
-    emptyMessage: '⚡ No maintenance tickets. Everything is running smoothly!',
+    emptyMessage: t('empty.noTickets'),
     rowClass: function(row) {
       if (row.status === 'Open') return 'row-status-error';
       if (row.status === 'In Progress') return 'row-status-warning';
@@ -5934,21 +7011,21 @@ function renderMaintenance() {
     onAdd: () => showAddTicket(),
     onImport: (rows) => { rows.forEach(r=>{if(!tickets.find(t=>t.id===r.id))tickets.push(r);}); save('tickets',tickets); logAudit('Import','Ticket','Imported '+rows.length+' rows'); renderMaintenance(); },
     onEdit: (row, field, val, oldVal) => {
-      const t = tickets.find(x=>x.id===row.id); if(!t) return;
-      t[field] = val;
+      const tk = tickets.find(x=>x.id===row.id); if(!tk) return;
+      tk[field] = val;
       if (field === 'status' && val === 'Resolved' && oldVal !== 'Resolved') {
-        t.resolvedAt = new Date().toISOString();
-        const rm = rooms.find(r=>String(r.roomNumber)===String(t.roomNumber));
+        tk.resolvedAt = new Date().toISOString();
+        const rm = rooms.find(r=>String(r.roomNumber)===String(tk.roomNumber));
         if (rm) { rm.housekeepingStatus = 'Dirty'; save('rooms', rooms); }
       }
       if (field === 'status' && val === 'Open' && oldVal !== 'Open') {
-        const rm = rooms.find(r=>String(r.roomNumber)===String(t.roomNumber));
+        const rm = rooms.find(r=>String(r.roomNumber)===String(tk.roomNumber));
         if (rm) { rm.housekeepingStatus = 'Out of Service'; save('rooms', rooms); }
       }
-      save('tickets', tickets); logAudit('Updated','Ticket',t.id,'Updated '+field); toast('Ticket updated'); renderMaintenance();
+      save('tickets', tickets); logAudit('Updated','Ticket',tk.id,'Updated '+field); toast('Ticket updated'); renderMaintenance();
     },
     actions: [
-      {name:'resolve',label:'Resolve',cls:'btn-success',condition:r=>r.status!=='Resolved',handler:id=>{
+      {name:'resolve',labelKey:'common.resolve',cls:'btn-success',condition:r=>r.status!=='Resolved',handler:id=>{
         const t = tickets.find(x=>x.id===id); if(!t) return;
         t.status = 'Resolved'; t.resolvedAt = new Date().toISOString();
         const rm = rooms.find(r=>String(r.roomNumber)===String(t.roomNumber));
@@ -5987,11 +7064,11 @@ window.addTicket = function() {
 // ===== GUEST PORTAL =====
 function renderGuestPortal() {
   document.getElementById('page-guestportal').innerHTML = `
-    <div class="card"><div class="card-header"><h2>🏷️ Guest Self-Service Portal</h2></div><div class="card-body">
-      <div class="form-group"><label>Enter your Booking ID</label><div style="display:flex;gap:0.5rem;"><input type="text" class="form-control" id="gpBookingId" placeholder="e.g. BK-1001" style="max-width:250px;"><button class="btn btn-primary" onclick="lookupBooking()">Look Up</button></div></div>
+    <div class="card"><div class="card-header"><h2>🏷️ ${t('ui.guestSelfService')}</h2></div><div class="card-body">
+      <div class="form-group"><label>${t('ui.enterBookingId')}</label><div style="display:flex;gap:0.5rem;"><input type="text" class="form-control" id="gpBookingId" placeholder="${String(t('ui.bookingIdPlaceholder')).replace(/"/g, '&quot;')}" style="max-width:250px;"><button class="btn btn-primary" onclick="lookupBooking()">${t('common.lookUp')}</button></div></div>
       <div id="gpResult"></div>
     </div></div>
-    <div class="card"><div class="card-header"><h2>◆ Guest Portal Change Log</h2></div><div class="card-body"><div id="gpChangeLogGrid"></div></div></div>`;
+    <div class="card"><div class="card-header"><h2>${t('ui.changeLogChit', { title: t('logs.guestportal') })}</h2></div><div class="card-body"><div id="gpChangeLogGrid"></div></div></div>`;
   renderChangeLog('gpChangeLogGrid', ['Guest Portal','guestportal','Booking']);
 }
 window.lookupBooking = function() {
@@ -6047,28 +7124,28 @@ function logInv(action, itemName, field, oldVal, newVal, details) {
 function renderInventory() {
   inventory.forEach(it => { it.status = inventoryStatus(it); });
   document.getElementById('page-inventory').innerHTML = `
-    <div class="card"><div class="card-header"><h2>◆ Inventory Management</h2></div><div class="card-body"><div id="inventoryGrid"></div></div></div>
-    <div class="card"><div class="card-header"><h2>◆ Inventory Change Log</h2></div><div class="card-body"><div id="invLogGrid"></div></div></div>
-    <div class="card"><div class="card-header"><h2>◆ Inventory Audit Log</h2></div><div class="card-body"><div id="invChangeLogGrid"></div></div></div>`;
+    <div class="card"><div class="card-header"><h2>${t('ui.changeLogChit', { title: t('pageTitle.inventory') })}</h2></div><div class="card-body"><div id="inventoryGrid"></div></div></div>
+    <div class="card"><div class="card-header"><h2>${t('ui.changeLogChit', { title: t('logs.inventory') })}</h2></div><div class="card-body"><div id="invLogGrid"></div></div></div>
+    <div class="card"><div class="card-header"><h2>${t('ui.changeLogChit', { title: t('logs.inventoryAudit') })}</h2></div><div class="card-body"><div id="invChangeLogGrid"></div></div></div>`;
   inventoryGrid = new XGrid('inventoryGrid', {
     columns: [
-      {field:'itemName',label:'Item Name',editable:true,filterable:true},
-      {field:'category',label:'Category',editable:true,editType:'select',editOptions:getInventoryCategories(),filterable:true},
-      {field:'quantity',label:'Quantity',editable:true,editType:'number',width:'80px',filterable:true},
-      {field:'reorderLevel',label:'Reorder Level',editable:true,editType:'number',width:'100px'},
-      {field:'lastOrdered',label:'Last Ordered',format:v=>fmtDate(v),editable:true,editType:'date',filterable:true},
-      {field:'status',label:'Status',format:(v,r)=>{const st=inventoryStatus(r);const cls=st==='In Stock'?'active':st==='Low'?'pending':'maintenance';return `<span class="status status-${cls}">${st}</span>`;},filterable:true},
+      {field:'itemName',label:t('g.itemName'),editable:true,filterable:true},
+      {field:'category',label:t('g.category'),editable:true,editType:'select',editOptions:getInventoryCategories(),filterable:true},
+      {field:'quantity',label:t('g.quantity'),editable:true,editType:'number',width:'80px',filterable:true},
+      {field:'reorderLevel',label:t('g.reorderLevel'),editable:true,editType:'number',width:'100px'},
+      {field:'lastOrdered',label:t('g.lastOrdered'),format:v=>fmtDate(v),editable:true,editType:'date',filterable:true},
+      {field:'status',label:t('g.status'),format:(v,r)=>{const st=inventoryStatus(r);const cls=st==='In Stock'?'active':st==='Low'?'pending':'maintenance';return `<span class="status status-${cls}">${st}</span>`;},filterable:true},
     ],
     data: inventory,
     showSearch: true,
-    emptyMessage: '⬡ Your inventory is empty. Add your first item!',
+    emptyMessage: t('empty.noInventory'),
     rowClass: function(row) {
       if ((parseInt(row.quantity) || 0) <= 0) return 'row-danger';
       if ((parseInt(row.quantity) || 0) <= (parseInt(row.reorderLevel) || 0)) return 'row-warning';
       return '';
     },
     summaryRow: {itemName:'label', quantity:'sum'},
-    onAdd: () => showAddInventory(), addLabel: 'Add New Item',
+    onAdd: () => showAddInventory(), addLabelKey: 'common.addNewItem',
     onImport: (rows) => { rows.forEach(r=>{if(!inventory.find(i=>i.id===r.id))inventory.push(r);}); save('inventory',inventory); logAudit('Import','Inventory','Imported '+rows.length+' rows'); renderInventory(); },
     onEdit: (row, field, val) => {
       const it = inventory.find(x=>x.id===row.id); if(!it) return;
@@ -6078,9 +7155,9 @@ function renderInventory() {
       save('inventory',inventory); logAudit('Update','Inventory','Updated '+it.itemName); toast('Inventory updated'); renderInventory();
     },
     actions: [
-      {name:'plus',label:'+1',cls:'btn-success',handler:id=>{ const it=inventory.find(x=>x.id===id); if(it){const old=it.quantity;it.quantity=(parseInt(it.quantity)||0)+1;it.status=inventoryStatus(it);logInv('+1',it.itemName,'quantity',old,it.quantity);save('inventory',inventory);renderInventory();} }},
-      {name:'minus',label:'-1',cls:'btn-warning',handler:id=>{ const it=inventory.find(x=>x.id===id); if(it){const old=it.quantity;it.quantity=Math.max(0,(parseInt(it.quantity)||0)-1);it.status=inventoryStatus(it);logInv('-1',it.itemName,'quantity',old,it.quantity);save('inventory',inventory);renderInventory();} }},
-      {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditInventory(id)},
+      {name:'plus',labelKey:'common.onePlus',cls:'btn-success',handler:id=>{ const it=inventory.find(x=>x.id===id); if(it){const old=it.quantity;it.quantity=(parseInt(it.quantity)||0)+1;it.status=inventoryStatus(it);logInv('+1',it.itemName,'quantity',old,it.quantity);save('inventory',inventory);renderInventory();} }},
+      {name:'minus',labelKey:'common.oneMinus',cls:'btn-warning',handler:id=>{ const it=inventory.find(x=>x.id===id); if(it){const old=it.quantity;it.quantity=Math.max(0,(parseInt(it.quantity)||0)-1);it.status=inventoryStatus(it);logInv('-1',it.itemName,'quantity',old,it.quantity);save('inventory',inventory);renderInventory();} }},
+      {name:'edit',labelKey:'common.edit',cls:'btn-outline',handler:id=>showEditInventory(id)},
       {name:'delete',label:'✕',cls:'btn-danger',handler:id=>{
         if(!confirm('Delete this item?')) return;
         const it = inventory.find(x=>x.id===id);
@@ -6848,6 +7925,15 @@ function restStatusClassForTile(st) {
   return 'paid';
 }
 
+function restI18nOrderStatus(s) {
+  if (s === 'New') return t('restaurant.stNew');
+  if (s === 'Preparing') return t('restaurant.stPreparing');
+  if (s === 'Ready') return t('restaurant.stReady');
+  if (s === 'Served') return t('restaurant.stServed');
+  if (s === 'Paid') return t('restaurant.stPaid');
+  return s || '';
+}
+
 window.restTableFloorClick = function(tableName) {
   restFocusAllTables = false;
   restTableNumber = tableName;
@@ -6867,27 +7953,27 @@ window.restOpenTableBillModal = function(tableName) {
     const stCls = restStatusClassForTile(o.status);
     body += '<div style="border:1px solid var(--border);border-radius:10px;padding:0.75rem;margin-bottom:0.6rem;background:var(--card-bg);">';
     body += '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.35rem;"><strong>' + o.orderNumber + '</strong>';
-    body += '<span class="status status-' + stCls + '">' + (o.status || '') + '</span></div>';
+    body += '<span class="status status-' + stCls + '">' + restI18nOrderStatus(o.status) + '</span></div>';
     body += '<div style="font-size:0.82rem;margin:0.35rem 0;color:var(--text);">' + itemsStr + '</div>';
     body += '<div style="font-weight:700;margin:0.25rem 0;">' + fmt$(o.grandTotal) + '</div>';
     if (o.notes) body += '<div style="font-size:0.78rem;color:var(--text-light);margin-bottom:0.35rem;">📝 ' + o.notes + '</div>';
     body += '<div style="display:flex;flex-wrap:wrap;gap:0.35rem;margin-top:0.45rem;">';
-    if (o.status === 'New') body += '<button class="btn btn-sm btn-warning" onclick="closeModal();restUpdateStatus(\'' + o.id + '\',\'Preparing\')">🔥 Prep</button>';
-    if (o.status === 'Preparing') body += '<button class="btn btn-sm btn-success" onclick="closeModal();restUpdateStatus(\'' + o.id + '\',\'Ready\')">✅ Ready</button>';
-    if (o.status === 'Ready') body += '<button class="btn btn-sm btn-outline" onclick="closeModal();restUpdateStatus(\'' + o.id + '\',\'Served\')">🍽️ Served</button>';
+    if (o.status === 'New') body += '<button class="btn btn-sm btn-warning" onclick="closeModal();restUpdateStatus(\'' + o.id + '\',\'Preparing\')">' + t('restaurant.actPrep') + '</button>';
+    if (o.status === 'Preparing') body += '<button class="btn btn-sm btn-success" onclick="closeModal();restUpdateStatus(\'' + o.id + '\',\'Ready\')">' + t('restaurant.actReady') + '</button>';
+    if (o.status === 'Ready') body += '<button class="btn btn-sm btn-outline" onclick="closeModal();restUpdateStatus(\'' + o.id + '\',\'Served\')">' + t('restaurant.actServed') + '</button>';
     if (restOrderIsPayableLine(o) && String(o.roomNumber || '').trim() !== '' && String(o.bookingId || '').trim() !== '') {
-      body += '<button class="btn btn-sm btn-primary" onclick="closeModal();restPayOrder(\'' + o.id + '\',\'Room Charge\')">🏨 Room</button>';
+      body += '<button class="btn btn-sm btn-primary" onclick="closeModal();restPayOrder(\'' + o.id + '\',\'Room Charge\')">🏨 ' + t('restaurant.payRoom') + '</button>';
     }
     if (restOrderIsPayableLine(o)) {
-      body += '<button class="btn btn-sm btn-success" onclick="closeModal();restPayOrder(\'' + o.id + '\',\'Cash\')">💵 Cash</button>';
-      body += '<button class="btn btn-sm btn-warning" onclick="closeModal();restPayOrder(\'' + o.id + '\',\'Credit Card\')">💳 Card</button>';
+      body += '<button class="btn btn-sm btn-success" onclick="closeModal();restPayOrder(\'' + o.id + '\',\'Cash\')">💵 ' + t('minimart.cash') + '</button>';
+      body += '<button class="btn btn-sm btn-warning" onclick="closeModal();restPayOrder(\'' + o.id + '\',\'Credit Card\')">💳 ' + t('minimart.creditCard') + '</button>';
     }
     if (o.status === 'Served' && o.paidBy === 'Table' && o.transactionId) {
-      body += '<button class="btn btn-sm btn-outline" onclick="closeModal();restMarkTableServedDone(\'' + o.id + '\')">✓ Done</button>';
+      body += '<button class="btn btn-sm btn-outline" onclick="closeModal();restMarkTableServedDone(\'' + o.id + '\')">' + t('restaurant.actDone') + '</button>';
     }
     body += '</div></div>';
   });
-  openModal('<div class="modal-header"><h2>' + tableName + ' — Open bill</h2><button class="modal-close" onclick="closeModal()">&times;</button></div><div class="modal-body" style="max-height:70vh;overflow-y:auto;">' + body + '</div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Close</button></div>');
+  openModal('<div class="modal-header"><h2>' + t('restaurant.openBill', { name: tableName }) + '</h2><button class="modal-close" onclick="closeModal()">&times;</button></div><div class="modal-body" style="max-height:70vh;overflow-y:auto;">' + body + '</div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">' + t('restaurant.close') + '</button></div>');
 };
 
 function renderRestaurant() {
@@ -6901,13 +7987,13 @@ function renderRestaurant() {
     if (navRest && navRest.classList.contains('active')) {
       document.getElementById('pageTitle').textContent = (i18nEn ? t('nav.kitchen') : 'Kitchen');
     }
-    const syncBanner = '<div class="card" style="margin-bottom:1rem;border-left:4px solid #1a73e8;"><div class="card-body" style="padding:0.75rem 1rem;font-size:0.82rem;line-height:1.45;"><strong>Synced with Restaurant</strong> — Everyone uses the same saved orders. This screen updates when orders change here, in another tab, or when front-of-house edits the queue.</div></div>';
+    const syncBanner = '<div class="card" style="margin-bottom:1rem;border-left:4px solid #1a73e8;"><div class="card-body" style="padding:0.75rem 1rem;font-size:0.82rem;line-height:1.45;">' + t('restaurant.syncBanner') + '</div></div>';
     const kitchenQueue = restaurantOrders.filter(function(o) {
       return o && (o.status === 'New' || o.status === 'Preparing' || o.status === 'Ready');
     }).sort(function(a, b) { try { return new Date(a.timestamp) - new Date(b.timestamp); } catch (e) { return 0; } });
     let kvHtml = '';
     if (kitchenQueue.length === 0) {
-      kvHtml = '<div style="text-align:center;padding:2rem;color:var(--text-light);">No tickets in the kitchen queue (nothing at New, Preparing, or Ready)</div>';
+      kvHtml = '<div style="text-align:center;padding:2rem;color:var(--text-light);">' + t('restaurant.kitchenQueueEmpty') + '</div>';
     } else {
       kitchenQueue.forEach(function(o) {
         const borderColor = o.status === 'New' ? '#1565c0' : (o.status === 'Preparing' ? '#e65100' : '#2e7d32');
@@ -6917,43 +8003,43 @@ function renderRestaurant() {
         if (o.notes) kvHtml += '<div style="font-size:0.8rem;color:var(--text-light);margin-bottom:0.5rem;">📝 ' + o.notes + '</div>';
         kvHtml += '<div style="font-size:0.78rem;color:var(--text-light);">' + (o.tableNumber || '') + (o.guestName ? ' · ' + o.guestName : '') + '</div>';
         kvHtml += '<div class="kc-actions" style="margin-top:0.5rem;">';
-        if (o.status === 'New') kvHtml += '<button class="btn btn-sm btn-warning" onclick="restUpdateStatus(\'' + idS + '\',\'Preparing\')">🔥 Start prep</button>';
-        if (o.status === 'Preparing') kvHtml += '<button class="btn btn-sm btn-success" onclick="restUpdateStatus(\'' + idS + '\',\'Ready\')">✅ Mark ready</button>';
-        if (o.status === 'Ready') kvHtml += '<button class="btn btn-sm btn-outline" onclick="restUpdateStatus(\'' + idS + '\',\'Served\')">🍽️ Mark served</button>';
+        if (o.status === 'New') kvHtml += '<button class="btn btn-sm btn-warning" onclick="restUpdateStatus(\'' + idS + '\',\'Preparing\')">' + t('restaurant.kStartPrep') + '</button>';
+        if (o.status === 'Preparing') kvHtml += '<button class="btn btn-sm btn-success" onclick="restUpdateStatus(\'' + idS + '\',\'Ready\')">' + t('restaurant.kMarkReady') + '</button>';
+        if (o.status === 'Ready') kvHtml += '<button class="btn btn-sm btn-outline" onclick="restUpdateStatus(\'' + idS + '\',\'Served\')">' + t('restaurant.kMarkServed') + '</button>';
         kvHtml += '</div></div>';
       });
     }
     const activeOrdersKitchen = restaurantOrders.filter(restOrderIsActive);
     let html = syncBanner;
-    html += '<div class="card"><div class="card-header"><h2 style="margin:0;">Kitchen queue</h2><p style="font-size:0.75rem;color:var(--text-light);margin:0.35rem 0 0;line-height:1.35;">Oldest first · advance status as you cook</p></div><div class="card-body">' + kvHtml + '</div></div>';
-    html += '<div class="card" style="margin-top:1rem;"><div class="card-header" style="flex-direction:column;align-items:stretch;"><h2 style="margin:0;">All active orders</h2><p style="font-size:0.72rem;color:var(--text-light);margin:0.35rem 0 0;line-height:1.35;">Same list as Restaurant — payment actions are hidden for Kitchen.</p></div><div class="card-body"><div id="restOrderGrid"></div></div></div>';
+    html += '<div class="card"><div class="card-header"><h2 style="margin:0;">' + t('restaurant.kitchenQueueTitle') + '</h2><p style="font-size:0.75rem;color:var(--text-light);margin:0.35rem 0 0;line-height:1.35;">' + t('restaurant.kitchenQueueSub') + '</p></div><div class="card-body">' + kvHtml + '</div></div>';
+    html += '<div class="card" style="margin-top:1rem;"><div class="card-header" style="flex-direction:column;align-items:stretch;"><h2 style="margin:0;">' + t('restaurant.allActiveOrdersTitle') + '</h2><p style="font-size:0.72rem;color:var(--text-light);margin:0.35rem 0 0;line-height:1.35;">' + t('restaurant.allActiveOrdersSub') + '</p></div><div class="card-body"><div id="restOrderGrid"></div></div></div>';
     document.getElementById('page-restaurant').innerHTML = html;
     new XGrid('restOrderGrid', {
       columns: [
-        {field:'orderNumber',label:'Order #',filterable:true,width:'90px'},
-        {field:'timestamp',label:'Time',format:function(v){try{var d=new Date(v);return d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}catch(e){return v;}},width:'75px'},
-        {field:'tableNumber',label:'Table/Room',filterable:true,width:'100px'},
-        {field:'guestName',label:'Guest',filterable:true},
-        {field:'items',label:'Items',format:function(v){return Array.isArray(v)?v.map(function(i){return i.name+' x'+i.qty;}).join(', '):'';}},
-        {field:'grandTotal',label:'Total',format:function(v){return '<strong>'+fmt$(v)+'</strong>';},width:'80px'},
-        {field:'status',label:'Status',format:function(v){var cls=v==='New'?'new':v==='Preparing'?'preparing':v==='Ready'?'ready':v==='Served'?'served':'paid';return '<span class="status status-'+cls+'">'+v+'</span>';},filterable:true,width:'95px'},
-        {field:'paidBy',label:'Payment',filterable:true,width:'95px'},
+        {field:'orderNumber',label:t('g.orderNumber'),filterable:true,width:'90px'},
+        {field:'timestamp',label:t('g.orderTime'),format:function(v){try{var d=new Date(v);return d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}catch(e){return v;}},width:'75px'},
+        {field:'tableNumber',label:t('g.tableOrRoom'),filterable:true,width:'100px'},
+        {field:'guestName',label:t('g.guest'),filterable:true},
+        {field:'items',label:t('g.items'),format:function(v){return Array.isArray(v)?v.map(function(i){return i.name+' x'+i.qty;}).join(', '):'';}},
+        {field:'grandTotal',label:t('g.total'),format:function(v){return '<strong>'+fmt$(v)+'</strong>';},width:'80px'},
+        {field:'status',label:t('g.status'),format:function(v){var cls=v==='New'?'new':v==='Preparing'?'preparing':v==='Ready'?'ready':v==='Served'?'served':'paid';return '<span class="status status-'+cls+'">'+v+'</span>';},filterable:true,width:'95px'},
+        {field:'paidBy',label:t('g.payment'),filterable:true,width:'95px'},
       ],
       data: activeOrdersKitchen,
       summaryRow: {orderNumber:'label', grandTotal:'sum'},
-      emptyMessage: '🍽️ No active orders',
+      emptyMessage: t('restaurant.emptyActiveOrders'),
       actions: [
-        {name:'preparing',label:'🔥 Prep',cls:'btn-warning',condition:function(r){return r.status==='New';},handler:function(id){restUpdateStatus(id,'Preparing');}},
-        {name:'ready',label:'✅ Ready',cls:'btn-success',condition:function(r){return r.status==='Preparing';},handler:function(id){restUpdateStatus(id,'Ready');}},
-        {name:'served',label:'🍽️ Served',cls:'btn-outline',condition:function(r){return r.status==='Ready';},handler:function(id){restUpdateStatus(id,'Served');}},
+        {name:'preparing',label:t('restaurant.actPrep'),cls:'btn-warning',condition:function(r){return r.status==='New';},handler:function(id){restUpdateStatus(id,'Preparing');}},
+        {name:'ready',label:t('restaurant.actReady'),cls:'btn-success',condition:function(r){return r.status==='Preparing';},handler:function(id){restUpdateStatus(id,'Ready');}},
+        {name:'served',label:t('restaurant.actServed'),cls:'btn-outline',condition:function(r){return r.status==='Ready';},handler:function(id){restUpdateStatus(id,'Served');}},
       ],
     });
     return;
   }
 
   let orderTypeHtml = '<div class="rest-order-type">' +
-    '<button class="btn ' + (restOrderType === 'Room Service' ? 'btn-primary' : 'btn-outline') + '" onclick="restSetOrderType(\'Room Service\')">🏨 Room Service</button>' +
-    '<button class="btn ' + (restOrderType === 'Table' ? 'btn-primary' : 'btn-outline') + '" onclick="restSetOrderType(\'Table\')">🍽️ Table / Walk-in</button></div>';
+    '<button class="btn ' + (restOrderType === 'Room Service' ? 'btn-primary' : 'btn-outline') + '" onclick="restSetOrderType(\'Room Service\')">🏨 ' + t('restaurant.orderTypeRoom') + '</button>' +
+    '<button class="btn ' + (restOrderType === 'Table' ? 'btn-primary' : 'btn-outline') + '" onclick="restSetOrderType(\'Table\')">🍽️ ' + t('restaurant.orderTypeTable') + '</button></div>';
 
   let selHtml = '';
   if (restOrderType === 'Room Service') {
@@ -6972,29 +8058,30 @@ function renderRestaurant() {
       guestCards += '<button type="button" class="rest-guest-card' + selCls + '" data-search="' + searchAttr + '" onclick="restSelectBooking(\'' + idSafe + '\')">' +
         '<span class="rgc-avatar">' + esc(ini(b.guestName)) + '</span>' +
         '<div class="rgc-body">' +
-        '<span class="rgc-room">Room ' + esc(b.roomNumber) + '</span>' +
+        '<span class="rgc-room">' + t('restaurant.roomLine', { n: String(esc(b.roomNumber)) }) + '</span>' +
         '<span class="rgc-name">' + esc(b.guestName) + '</span>' +
         '<span class="rgc-bid">' + esc(b.bookingId) + '</span>' +
         '</div>' +
         '<span class="rgc-check">' + (restSelectedBooking === b.id ? '✓' : '') + '</span>' +
         '</button>';
     });
+    const guestsWord = (checkedIn.length === 1) ? t('restaurant.guestSingular') : t('restaurant.guestPlural');
     selHtml =
       '<div class="rest-guest-picker">' +
-      '<label class="rest-guest-label" for="restGuestSearch">Room service — who is this order for?</label>' +
-      '<input type="search" class="form-control rest-guest-search" id="restGuestSearch" placeholder="Search by room, guest, or booking ID…" autocomplete="off" oninput="restFilterGuestCards(this.value)" />' +
+      '<label class="rest-guest-label" for="restGuestSearch">' + t('restaurant.guestPickerLabel') + '</label>' +
+      '<input type="search" class="form-control rest-guest-search" id="restGuestSearch" placeholder="' + String(t('minimart.searchGuestPlaceholder')).replace(/"/g, '&quot;') + '" autocomplete="off" oninput="restFilterGuestCards(this.value)" />' +
       '<div class="rest-guest-cards" id="restGuestCards">' +
       '<button type="button" class="rest-guest-card rest-guest-card-clear' + (!restSelectedBooking ? ' selected' : '') + '" onclick="restSelectBooking(\'\')">' +
       '<span class="rgc-clear-icon">◈</span>' +
       '<div class="rgc-body">' +
-      '<span class="rgc-main">No guest selected</span>' +
-      '<span class="rgc-sub">Choose a checked-in room below to attach orders and room charges.</span>' +
+      '<span class="rgc-main">' + t('minimart.noGuestTitle') + '</span>' +
+      '<span class="rgc-sub">' + t('minimart.noGuestSub') + '</span>' +
       '</div>' +
       '<span class="rgc-check">' + (!restSelectedBooking ? '✓' : '') + '</span>' +
       '</button>' +
       guestCards +
       '</div>' +
-      '<p class="rest-guest-hint">Showing <strong>' + checkedIn.length + '</strong> checked-in ' + (checkedIn.length === 1 ? 'guest' : 'guests') + '. Use <strong>Table / Walk-in</strong> for non-room orders.</p>' +
+      '<p class="rest-guest-hint">' + t('restaurant.checkedInHint', { count: String(checkedIn.length), guests: guestsWord }) + '</p>' +
       '</div>';
   } else {
     let nAvail = 0, nOcc = 0, nPend = 0;
@@ -7006,34 +8093,34 @@ function renderRestaurant() {
     }
     let floorHtml = '<div class="rest-floor-wrap">';
     floorHtml += '<div class="rest-floor-head">';
-    floorHtml += '<h3>Table floor · status at a glance</h3>';
+    floorHtml += '<h3>' + t('restaurant.tableFloorTitle') + '</h3>';
     floorHtml += '<div class="rest-floor-summary" role="status" aria-live="polite">';
-    floorHtml += '<span class="rfs rfs-free" title="Tables with no open bill"><strong>' + nAvail + '</strong> free</span>';
-    floorHtml += '<span class="rfs rfs-busy" title="Active order / kitchen"><strong>' + nOcc + '</strong> live</span>';
-    floorHtml += '<span class="rfs rfs-due" title="Served, payment pending"><strong>' + nPend + '</strong> pay</span>';
+    floorHtml += '<span class="rfs rfs-free" title="' + String(t('restaurant.ttFree')).replace(/"/g, '&quot;') + '"><strong>' + nAvail + '</strong> ' + t('restaurant.wordFree') + '</span>';
+    floorHtml += '<span class="rfs rfs-busy" title="' + String(t('restaurant.ttBusy')).replace(/"/g, '&quot;') + '"><strong>' + nOcc + '</strong> ' + t('restaurant.wordLive') + '</span>';
+    floorHtml += '<span class="rfs rfs-due" title="' + String(t('restaurant.ttDue')).replace(/"/g, '&quot;') + '"><strong>' + nPend + '</strong> ' + t('restaurant.wordPay') + '</span>';
     floorHtml += '</div></div>';
     floorHtml += '<div class="rest-floor-legend">' +
-      '<span><span class="rest-floor-dot avail" aria-hidden="true"></span>Green · free seat</span>' +
-      '<span><span class="rest-floor-dot occ" aria-hidden="true"></span>Red · open order</span>' +
-      '<span><span class="rest-floor-dot pend" aria-hidden="true"></span>Amber · pay check</span>' +
+      '<span><span class="rest-floor-dot avail" aria-hidden="true"></span>' + t('restaurant.legendFree') + '</span>' +
+      '<span><span class="rest-floor-dot occ" aria-hidden="true"></span>' + t('restaurant.legendOpen') + '</span>' +
+      '<span><span class="rest-floor-dot pend" aria-hidden="true"></span>' + t('restaurant.legendPay') + '</span>' +
       '</div>';
-    floorHtml += '<div class="rest-table-floor" role="group" aria-label="Restaurant table tiles">';
+    floorHtml += '<div class="rest-table-floor" role="group" aria-label="' + String(t('restaurant.tableFloorGroup')).replace(/"/g, '&quot;') + '">';
     for (let i = 1; i <= 10; i++) {
       const tName = 'Table ' + i;
       const st = restGetTableFloorState(tName);
       let tag, hint, title;
       if (st === 'available') {
-        tag = 'OPEN';
-        hint = 'Seat guests';
-        title = tName + ' — available, no bill';
+        tag = t('restaurant.tagOpen');
+        hint = t('restaurant.hintSeatGuests');
+        title = t('restaurant.tileTitleAvail', { name: tName });
       } else if (st === 'pending') {
-        tag = 'PAY';
-        hint = 'Bill due';
-        title = tName + ' — payment pending, tap to close';
+        tag = t('restaurant.tagPay');
+        hint = t('restaurant.hintBillDue');
+        title = t('restaurant.tileTitlePay', { name: tName });
       } else {
-        tag = 'LIVE';
-        hint = 'Order on tab';
-        title = tName + ' — open order, tap for bill';
+        tag = t('restaurant.tagLive');
+        hint = t('restaurant.hintOrderOnTab');
+        title = t('restaurant.tileTitleLive', { name: tName });
       }
       const sel = restTableNumber === tName ? ' selected' : '';
       const aria = title.replace(/"/g, '&quot;');
@@ -7044,12 +8131,16 @@ function renderRestaurant() {
         '</button>';
     }
     floorHtml += '</div>';
-    floorHtml += '<p style="font-size:0.76rem;color:var(--text-light);margin:0.45rem 0 0;line-height:1.45;">Colors show state instantly: <strong style="color:#2e7d32;">free</strong> = take a new order; <strong style="color:#c62828;">live</strong> = food service in progress (tap opens bill); <strong style="color:#e65100;">pay</strong> = check printed, settle payment. Tap red or amber to open the tab.</p></div>';
+    floorHtml += '<p style="font-size:0.76rem;color:var(--text-light);margin:0.45rem 0 0;line-height:1.45;">' + t('restaurant.tableFloorHelp', { free: '<strong style="color:#2e7d32;">' + t('restaurant.wordFree') + '</strong>', live: '<strong style="color:#c62828;">' + t('restaurant.wordLive') + '</strong>', pay: '<strong style="color:#e65100;">' + t('restaurant.wordPay') + '</strong>' }) + '</p></div>';
     selHtml = floorHtml;
   }
 
-  const categories = ['All'].concat(getMenuCategories());
-  let tabsHtml = '<div class="rest-menu-tabs">' + categories.map(c => '<button class="btn btn-sm ' + (restMenuFilter === c ? 'btn-primary' : 'btn-outline') + '" onclick="restMenuFilter=\'' + c + '\';renderRestaurant()">' + c + '</button>').join('') + '</div>';
+  const _restAll = 'All';
+  const categories = [_restAll].concat(getMenuCategories());
+  let tabsHtml = '<div class="rest-menu-tabs">' + categories.map(function(c) {
+    const lab = (c === _restAll) ? t('restaurant.filterAll') : c;
+    return '<button class="btn btn-sm ' + (restMenuFilter === c ? 'btn-primary' : 'btn-outline') + '" onclick="restMenuFilter=\'' + c + '\';renderRestaurant()">' + lab + '</button>';
+  }).join('') + '</div>';
 
   const filtered = restMenuFilter === 'All' ? menuItems : menuItems.filter(m => m.category === restMenuFilter);
   let menuHtml = '<div class="rest-menu-grid">';
@@ -7057,7 +8148,7 @@ function renderRestaurant() {
     const avCls = m.available ? '' : ' unavailable';
     menuHtml += '<div class="rest-menu-card' + avCls + '" onclick="restAddToCart(\'' + m.id + '\')"><div class="rmc-name">' + m.name + '</div><div class="rmc-cat">' + m.category + '</div><div class="rmc-price">' + fmt$(m.price) + '</div><div class="rmc-desc">' + (m.description || '') + '</div></div>';
   });
-  if (!filtered.length) menuHtml += '<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-light);">No items in this category</div>';
+  if (!filtered.length) menuHtml += '<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-light);">' + t('restaurant.noItemsCategory') + '</div>';
   menuHtml += '</div>';
 
   let cartHtml = '';
@@ -7067,7 +8158,7 @@ function renderRestaurant() {
     subtotal += lineTotal;
     cartHtml += '<div class="pos-cart-row"><span class="cart-name">' + ci.name + '</span><div class="cart-qty-controls"><button onclick="restCartQty(' + idx + ',-1)">−</button><span class="cart-qty">' + ci.qty + '</span><button onclick="restCartQty(' + idx + ',1)">+</button></div><span class="cart-price">' + fmt$(lineTotal) + '</span><button class="cart-remove" onclick="restCartRemove(' + idx + ')">✕</button></div>';
   });
-  if (!cartHtml) cartHtml = '<div style="padding:1.5rem;text-align:center;color:var(--text-light);font-size:0.85rem;">Cart is empty — tap menu items to add</div>';
+  if (!cartHtml) cartHtml = '<div style="padding:1.5rem;text-align:center;color:var(--text-light);font-size:0.85rem;">' + t('restaurant.cartEmptyMenu') + '</div>';
 
   const tax = Math.round(subtotal * taxRate) / 100;
   const grandTotal = Math.round((subtotal + tax) * 100) / 100;
@@ -7076,94 +8167,94 @@ function renderRestaurant() {
   const chargeRoomDisabled = !canSend || (restOrderType === 'Room Service' && !restSelectedBooking);
   let chargeMainBtn = '';
   if (restOrderType === 'Table') {
-    chargeMainBtn = '<button class="btn btn-success" ' + (!canSend ? 'disabled style="opacity:0.5;"' : '') + ' onclick="restChargeToTableWalkIn()" title="Uses Table # above. Posts the tab and adds this order to Active Orders.">🏨 Charge to Room</button>';
+    chargeMainBtn = '<button class="btn btn-success" ' + (!canSend ? 'disabled style="opacity:0.5;"' : '') + ' onclick="restChargeToTableWalkIn()" title="' + String(t('restaurant.chargeToTableTitle')).replace(/"/g, '&quot;') + '">🏨 ' + t('restaurant.chargeToRoom') + '</button>';
   } else {
-    chargeMainBtn = '<button class="btn btn-success" ' + (chargeRoomDisabled ? 'disabled style="opacity:0.5;"' : '') + ' onclick="restCheckout(\'Room Charge\')">🏨 Charge to Room</button>';
+    chargeMainBtn = '<button class="btn btn-success" ' + (chargeRoomDisabled ? 'disabled style="opacity:0.5;"' : '') + ' onclick="restCheckout(\'Room Charge\')">🏨 ' + t('restaurant.chargeToRoom') + '</button>';
   }
 
-  let notesHtml = '<div class="form-group" style="margin-top:0.5rem;"><label>Order Notes</label><input type="text" class="form-control" id="restOrderNotes" placeholder="Special instructions..."></div>';
+  let notesHtml = '<div class="form-group" style="margin-top:0.5rem;"><label>' + t('restaurant.orderNotes') + '</label><input type="text" class="form-control" id="restOrderNotes" placeholder="' + String(t('restaurant.orderNotesPh')).replace(/"/g, '&quot;') + '"></div>';
 
   let actionsHtml = '<div class="pos-actions">' +
-    '<button class="btn btn-primary" ' + (!canSend || needsGuestForKitchen ? 'disabled style="opacity:0.5;"' : '') + ' onclick="restSendToKitchen()">🔥 Send to Kitchen</button>' +
-    '<button class="btn btn-outline" ' + (!canSend || needsGuestForKitchen ? 'disabled style="opacity:0.5;"' : '') + ' onclick="restSendToRoom()" title="Same as Send to Kitchen, but the order is created as Ready">🏨 Send to Room</button>' +
+    '<button class="btn btn-primary" ' + (!canSend || needsGuestForKitchen ? 'disabled style="opacity:0.5;"' : '') + ' onclick="restSendToKitchen()">🔥 ' + t('restaurant.sendToKitchen') + '</button>' +
+    '<button class="btn btn-outline" ' + (!canSend || needsGuestForKitchen ? 'disabled style="opacity:0.5;"' : '') + ' onclick="restSendToRoom()" title="' + String(t('restaurant.sendToRoomTitle')).replace(/"/g, '&quot;') + '">🏨 ' + t('restaurant.sendToRoom') + '</button>' +
     chargeMainBtn +
     '</div><div class="pos-actions" style="margin-top:0;">' +
-    '<button class="btn btn-outline" ' + (!canSend ? 'disabled style="opacity:0.5;"' : '') + ' onclick="restCheckout(\'Credit Card\')">💳 Credit Card</button>' +
+    '<button class="btn btn-outline" ' + (!canSend ? 'disabled style="opacity:0.5;"' : '') + ' onclick="restCheckout(\'Credit Card\')">💳 ' + t('restaurant.creditCard') + '</button>' +
     '</div>';
 
-  let html = '<div class="card"><div class="card-header"><h2>New Order</h2></div><div class="card-body">' + orderTypeHtml + selHtml + '</div></div>';
+  let html = '<div class="card"><div class="card-header"><h2>' + t('minimart.newOrder') + '</h2></div><div class="card-body">' + orderTypeHtml + selHtml + '</div></div>';
   const restMenuToolbar =
     '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:0.35rem;margin-left:auto;">' +
-    '<button type="button" class="btn btn-sm btn-primary" onclick="if(window.showAddMenuItem)showAddMenuItem()" title="Create a dish and link it to F&amp;B inventory stock">+ Add product</button>' +
-    '<button type="button" class="btn btn-sm btn-outline" onclick="(function(){var l=document.querySelector(\'#sidebarNav a[data-page=menuitems]\');if(l)l.click();else toast(\'Menu Items page not available for this role\');})()">Menu items</button>' +
-    '<button type="button" class="btn btn-sm btn-outline" onclick="(function(){var l=document.querySelector(\'#sidebarNav a[data-page=inventory]\');if(l)l.click();else toast(\'Inventory not available for this role\');})()">Inventory</button></div>';
-  const restMenuHint = filtered.length + ' items · use + Add product or Menu Items; link F&amp;B stock in Inventory';
-  html += '<div class="card"><div class="card-header" style="flex-wrap:wrap;gap:0.5rem;"><h2 style="margin:0;">Menu</h2>' + restMenuToolbar +
+    '<button type="button" class="btn btn-sm btn-primary" onclick="if(window.showAddMenuItem)showAddMenuItem()" title="Create a dish and link it to F&amp;B inventory stock">' + t('restaurant.addProduct') + '</button>' +
+    '<button type="button" class="btn btn-sm btn-outline" onclick="(function(){var l=document.querySelector(\'#sidebarNav a[data-page=menuitems]\');if(l)l.click();else toast(\'Menu Items page not available for this role\');})()">' + t('restaurant.menuItemsLink') + '</button>' +
+    '<button type="button" class="btn btn-sm btn-outline" onclick="(function(){var l=document.querySelector(\'#sidebarNav a[data-page=inventory]\');if(l)l.click();else toast(\'Inventory not available for this role\');})()">' + t('restaurant.inventoryLink') + '</button></div>';
+  const restMenuHint = t('restaurant.menuToolbarHint', { n: String(filtered.length) });
+  html += '<div class="card"><div class="card-header" style="flex-wrap:wrap;gap:0.5rem;"><h2 style="margin:0;">' + t('restaurant.menu') + '</h2>' + restMenuToolbar +
     '<span style="font-size:0.78rem;color:var(--text-light);width:100%;">' + restMenuHint + '</span></div><div class="card-body">' + tabsHtml + menuHtml + '</div></div>';
-  html += '<div class="pos-cart"><div class="pos-cart-header">🛒 Order Cart (' + restCart.length + ' items)</div><div class="pos-cart-items">' + cartHtml + '</div>';
-  html += '<div class="pos-totals"><div class="total-row"><span>Subtotal</span><span>' + fmt$(subtotal) + '</span></div><div class="total-row"><span>Tax (' + taxRate + '%)</span><span>' + fmt$(tax) + '</span></div><div class="total-row grand"><span>Grand Total</span><span>' + fmt$(grandTotal) + '</span></div></div></div>';
+  html += '<div class="pos-cart"><div class="pos-cart-header">🛒 ' + t('minimart.cart', { n: String(restCart.length) }) + '</div><div class="pos-cart-items">' + cartHtml + '</div>';
+  html += '<div class="pos-totals"><div class="total-row"><span>' + t('g.subtotal') + '</span><span>' + fmt$(subtotal) + '</span></div><div class="total-row"><span>' + t('restaurant.taxLine', { n: String(taxRate) }) + '</span><span>' + fmt$(tax) + '</span></div><div class="total-row grand"><span>' + t('g.grandTotal') + '</span><span>' + fmt$(grandTotal) + '</span></div></div></div>';
   html += notesHtml + actionsHtml;
 
   const filterLabel = restSelectedBooking
-    ? (function() { const bk = bookings.find(function(b) { return b.id === restSelectedBooking; }); return bk ? ('Room ' + bk.roomNumber + ' - ' + bk.guestName) : 'Selected Guest'; })()
-    : (restOrderType === 'Table' ? (restFocusAllTables ? 'All tables' : (restTableNumber || 'Table')) : 'All guests');
+    ? (function() { const bk = bookings.find(function(b) { return b.id === restSelectedBooking; }); return bk ? t('restaurant.roomGuestDash', { room: String(bk.roomNumber), name: String(bk.guestName) }) : t('minimart.selectedGuest'); })()
+    : (restOrderType === 'Table' ? (restFocusAllTables ? t('restaurant.allTables') : (restTableNumber || t('restaurant.tableWord'))) : t('restaurant.allGuests'));
 
   const activeOrdersPreview = restApplyActiveOrderFilter(restaurantOrders);
   const totalActiveOrderAmt = Math.round(activeOrdersPreview.reduce((s, o) => s + (parseFloat(o.grandTotal) || 0), 0) * 100) / 100;
   const canPayTotalsEnabled = totalActiveOrderAmt > 0;
   const payTotalBar = '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:0.5rem;margin-top:0.35rem;width:100%;">' +
-    '<span style="font-size:0.85rem;color:var(--text-light);">Total Active Order:</span>' +
+    '<span style="font-size:0.85rem;color:var(--text-light);">' + t('restaurant.totalActiveLabel') + '</span>' +
     '<strong style="font-size:1rem;">' + fmt$(totalActiveOrderAmt) + '</strong>' +
-    '<button type="button" class="btn btn-sm btn-primary" style="display:none" ' + (!canPayTotalsEnabled ? 'disabled ' : '') + ' onclick="restPayActiveOrdersTotal(\'Room Charge\')">🏨 Pay total — Room</button>' +
-    '<button type="button" class="btn btn-sm btn-success" ' + (!canPayTotalsEnabled ? 'disabled style="opacity:0.5;"' : '') + ' onclick="restPayActiveOrdersTotal(\'Cash\')">💵 Pay total — Cash</button>' +
-    '<button type="button" class="btn btn-sm btn-outline" ' + (!canPayTotalsEnabled ? 'disabled style="opacity:0.5;"' : '') + ' onclick="restPayActiveOrdersTotal(\'Credit Card\')">💳 Pay total — Card</button>' +
+    '<button type="button" class="btn btn-sm btn-primary" style="display:none" ' + (!canPayTotalsEnabled ? 'disabled ' : '') + ' onclick="restPayActiveOrdersTotal(\'Room Charge\')">🏨 ' + t('minimart.payTotalRoom') + '</button>' +
+    '<button type="button" class="btn btn-sm btn-success" ' + (!canPayTotalsEnabled ? 'disabled style="opacity:0.5;"' : '') + ' onclick="restPayActiveOrdersTotal(\'Cash\')">💵 ' + t('minimart.payTotalCash') + '</button>' +
+    '<button type="button" class="btn btn-sm btn-outline" ' + (!canPayTotalsEnabled ? 'disabled style="opacity:0.5;"' : '') + ' onclick="restPayActiveOrdersTotal(\'Credit Card\')">💳 ' + t('minimart.payTotalCard') + '</button>' +
     '</div>';
 
   const scopeHint = (function() {
     if (restOrderType === 'Room Service' && restSelectedBooking) {
       const bk = bookings.find(function(b) { return b.id === restSelectedBooking; });
-      return bk ? ('Room ' + bk.roomNumber + ' · ' + bk.guestName) : 'Selected guest';
+      return bk ? t('minimart.roomGuestFmt', { room: String(bk.roomNumber), name: String(bk.guestName) }) : t('restaurant.selectedGuest');
     }
     if (restOrderType === 'Table') {
-      return restFocusAllTables ? 'All tables' : (restTableNumber || 'Table');
+      return restFocusAllTables ? t('restaurant.allTables') : (restTableNumber || t('restaurant.tableWord'));
     }
-    return 'All rooms (not filtered)';
+    return t('restaurant.allRoomsUnfiltered');
   })();
-  html += '<div class="card" style="margin-top:1rem;"><div class="card-header" style="flex-direction:column;align-items:stretch;"><div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:0.5rem;"><h2 style="margin:0;">Active Orders <span style="font-size:0.75rem;color:var(--primary);font-weight:400;">('+filterLabel+')</span></h2><div style="display:flex;flex-wrap:wrap;gap:0.4rem;"><button type="button" class="btn btn-sm btn-outline" onclick="restSelectedBooking=null;restFocusAllTables=true;renderRestaurant()" title="Show every open order (all guests or all tables)">Show all</button><button type="button" class="btn btn-sm btn-outline" onclick="toggleRestHistory()">◳ Past Orders</button></div></div><p style="font-size:0.72rem;color:var(--text-light);margin:0.25rem 0 0;line-height:1.35;">Scope: <strong>' + scopeHint + '</strong> · non-paid statuses (New → Served) appear here.</p>' + payTotalBar + '</div><div class="card-body"><div id="restOrderGrid"></div></div></div>';
-  html += '<div class="card" id="restHistoryCard" style="' + (restHistoryPanelOpen ? '' : 'display:none;') + '"><div class="card-header"><h2>◆ Past Orders <span style="font-size:0.75rem;color:var(--primary);font-weight:400;">('+filterLabel+')</span></h2><button type="button" class="btn btn-sm btn-outline" onclick="toggleRestHistory()">Hide</button></div><div class="card-body"><p id="restHistoryHint" style="font-size:0.78rem;color:var(--text-light);margin:0 0 0.75rem;line-height:1.35;"></p><div id="restHistoryGrid"></div></div></div>';
+  html += '<div class="card" style="margin-top:1rem;"><div class="card-header" style="flex-direction:column;align-items:stretch;"><div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:0.5rem;"><h2 style="margin:0;">' + t('restaurant.activeOrders') + ' <span style="font-size:0.75rem;color:var(--primary);font-weight:400;">(' + filterLabel + ')</span></h2><div style="display:flex;flex-wrap:wrap;gap:0.4rem;"><button type="button" class="btn btn-sm btn-outline" onclick="restSelectedBooking=null;restFocusAllTables=true;renderRestaurant()" title="' + String(t('restaurant.showAllTitle')).replace(/"/g, '&quot;') + '">' + t('restaurant.showAll') + '</button><button type="button" class="btn btn-sm btn-outline" onclick="toggleRestHistory()">◳ ' + t('restaurant.pastOrders') + '</button></div></div><p style="font-size:0.72rem;color:var(--text-light);margin:0.25rem 0 0;line-height:1.35;">' + t('restaurant.scopeLine', { scope: scopeHint }) + '</p>' + payTotalBar + '</div><div class="card-body"><div id="restOrderGrid"></div></div></div>';
+  html += '<div class="card" id="restHistoryCard" style="' + (restHistoryPanelOpen ? '' : 'display:none;') + '"><div class="card-header"><h2>' + t('ui.changeLogChit', { title: t('restaurant.restHistoryTitle') }) + ' <span style="font-size:0.75rem;color:var(--primary);font-weight:400;">(' + filterLabel + ')</span></h2><button type="button" class="btn btn-sm btn-outline" onclick="toggleRestHistory()">' + t('minimart.hide') + '</button></div><div class="card-body"><p id="restHistoryHint" style="font-size:0.78rem;color:var(--text-light);margin:0 0 0.75rem;line-height:1.35;"></p><div id="restHistoryGrid"></div></div></div>';
 
-  html += '<div class="card"><div class="card-header"><h2>Kitchen View</h2></div><div class="card-body"><div id="restKitchenView"></div></div></div>';
-  html += '<div class="card"><div class="card-header"><h2>◆ Restaurant Change Log</h2></div><div class="card-body"><div id="restChangeLogGrid"></div></div></div>';
+  html += '<div class="card"><div class="card-header"><h2>' + t('restaurant.kitchenView') + '</h2></div><div class="card-body"><div id="restKitchenView"></div></div></div>';
+  html += '<div class="card"><div class="card-header"><h2>' + t('ui.changeLogChit', { title: t('logs.restaurant') }) + '</h2></div><div class="card-body"><div id="restChangeLogGrid"></div></div></div>';
 
   document.getElementById('page-restaurant').innerHTML = html;
 
   const activeOrders = restApplyActiveOrderFilter(restaurantOrders);
-  let emptyActMsg = '🍽️ No active orders';
-  if (restOrderType === 'Room Service' && restSelectedBooking) emptyActMsg = '🍽️ No active orders for this guest';
-  else if (restOrderType === 'Table' && !restFocusAllTables) emptyActMsg = '🍽️ No active orders for ' + (restTableNumber || 'this table');
-  else if (restOrderType === 'Table') emptyActMsg = '🍽️ No active orders on any table';
+  let emptyActMsg = t('restaurant.emptyActiveOrders');
+  if (restOrderType === 'Room Service' && restSelectedBooking) emptyActMsg = t('restaurant.emptyActiveForGuest');
+  else if (restOrderType === 'Table' && !restFocusAllTables) emptyActMsg = t('restaurant.emptyActiveForTable', { table: (restTableNumber || t('restaurant.tableWord')) });
+  else if (restOrderType === 'Table') emptyActMsg = t('restaurant.emptyActiveAnyTable');
   new XGrid('restOrderGrid', {
     columns: [
-      {field:'orderNumber',label:'Order #',filterable:true,width:'90px'},
-      {field:'timestamp',label:'Time',format:v=>{try{const d=new Date(v);return d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}catch(e){return v;}},width:'75px'},
-      {field:'tableNumber',label:'Table/Room',filterable:true,width:'100px'},
-      {field:'guestName',label:'Guest',filterable:true},
-      {field:'items',label:'Items',format:(v)=>Array.isArray(v)?v.map(i=>i.name+' x'+i.qty).join(', '):''},
-      {field:'grandTotal',label:'Total',format:v=>'<strong>'+fmt$(v)+'</strong>',width:'80px'},
-      {field:'status',label:'Status',format:v=>{const cls=v==='New'?'new':v==='Preparing'?'preparing':v==='Ready'?'ready':v==='Served'?'served':'paid';return '<span class="status status-'+cls+'">'+v+'</span>';},filterable:true,width:'95px'},
-      {field:'paidBy',label:'Payment',filterable:true,width:'95px'},
+      {field:'orderNumber',label:t('g.orderNumber'),filterable:true,width:'90px'},
+      {field:'timestamp',label:t('g.orderTime'),format:v=>{try{const d=new Date(v);return d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}catch(e){return v;}},width:'75px'},
+      {field:'tableNumber',label:t('g.tableOrRoom'),filterable:true,width:'100px'},
+      {field:'guestName',label:t('g.guest'),filterable:true},
+      {field:'items',label:t('g.items'),format:(v)=>Array.isArray(v)?v.map(i=>i.name+' x'+i.qty).join(', '):''},
+      {field:'grandTotal',label:t('g.total'),format:v=>'<strong>'+fmt$(v)+'</strong>',width:'80px'},
+      {field:'status',label:t('g.status'),format:v=>{const cls=v==='New'?'new':v==='Preparing'?'preparing':v==='Ready'?'ready':v==='Served'?'served':'paid';return '<span class="status status-'+cls+'">'+v+'</span>';},filterable:true,width:'95px'},
+      {field:'paidBy',label:t('g.payment'),filterable:true,width:'95px'},
     ],
     data: activeOrders,
     summaryRow: {orderNumber:'label', grandTotal:'sum'},
     emptyMessage: emptyActMsg,
     actions: [
-      {name:'preparing',label:'🔥 Prep',cls:'btn-warning',condition:r=>r.status==='New',handler:id=>restUpdateStatus(id,'Preparing')},
-      {name:'ready',label:'✅ Ready',cls:'btn-success',condition:r=>r.status==='Preparing',handler:id=>restUpdateStatus(id,'Ready')},
-      {name:'served',label:'🍽️ Served',cls:'btn-outline',condition:r=>r.status==='Ready',handler:id=>restUpdateStatus(id,'Served')},
-      {name:'payRoom',label:'🏨 Room',cls:'btn-primary',condition:r=>restOrderIsPayableLine(r)&&String(r.roomNumber||'').trim()!==''&&String(r.bookingId||'').trim()!=='',handler:id=>restPayOrder(id,'Room Charge')},
+      {name:'preparing',label:t('restaurant.actPrep'),cls:'btn-warning',condition:r=>r.status==='New',handler:id=>restUpdateStatus(id,'Preparing')},
+      {name:'ready',label:t('restaurant.actReady'),cls:'btn-success',condition:r=>r.status==='Preparing',handler:id=>restUpdateStatus(id,'Ready')},
+      {name:'served',label:t('restaurant.actServed'),cls:'btn-outline',condition:r=>r.status==='Ready',handler:id=>restUpdateStatus(id,'Served')},
+      {name:'payRoom',label:'🏨 ' + t('restaurant.payRoom'),cls:'btn-primary',condition:r=>restOrderIsPayableLine(r)&&String(r.roomNumber||'').trim()!==''&&String(r.bookingId||'').trim()!=='',handler:id=>restPayOrder(id,'Room Charge')},
       {name:'payCash',label:'💵',cls:'btn-success',condition:r=>restOrderIsPayableLine(r),handler:id=>restPayOrder(id,'Cash')},
       {name:'payCard',label:'💳',cls:'btn-warning',condition:r=>restOrderIsPayableLine(r),handler:id=>restPayOrder(id,'Credit Card')},
-      {name:'donePrepaid',label:'✓ Done',cls:'btn-outline',condition:r=>r.status==='Served'&&!!r.transactionId&&r.paidBy==='Table',handler:id=>restMarkTableServedDone(id)},
+      {name:'donePrepaid',label:t('restaurant.actDone'),cls:'btn-outline',condition:r=>r.status==='Served'&&!!r.transactionId&&r.paidBy==='Table',handler:id=>restMarkTableServedDone(id)},
     ],
   });
 
@@ -7171,7 +8262,7 @@ function renderRestaurant() {
     .sort(function(a, b) { try { return new Date(a.timestamp) - new Date(b.timestamp); } catch (e) { return 0; } });
   const kvEl = document.getElementById('restKitchenView');
   if (kitchenOrders.length === 0) {
-    kvEl.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-light);">No tickets at New / Preparing / Ready</div>';
+    kvEl.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-light);">' + t('restaurant.emptyKitchenStrip') + '</div>';
   } else {
     let kvHtml = '';
     kitchenOrders.forEach(function(o) {
@@ -7182,9 +8273,9 @@ function renderRestaurant() {
       if (o.notes) kvHtml += '<div style="font-size:0.8rem;color:var(--text-light);margin-bottom:0.5rem;">📝 ' + o.notes + '</div>';
       kvHtml += '<div style="font-size:0.78rem;color:var(--text-light);">' + o.tableNumber + (o.guestName ? ' · ' + o.guestName : '') + '</div>';
       kvHtml += '<div class="kc-actions" style="margin-top:0.5rem;">';
-      if (o.status === 'New') kvHtml += '<button class="btn btn-sm btn-warning" onclick="restUpdateStatus(\'' + idS + '\',\'Preparing\')">🔥 Start prep</button>';
-      if (o.status === 'Preparing') kvHtml += '<button class="btn btn-sm btn-success" onclick="restUpdateStatus(\'' + idS + '\',\'Ready\')">✅ Mark Ready</button>';
-      if (o.status === 'Ready') kvHtml += '<button class="btn btn-sm btn-outline" onclick="restUpdateStatus(\'' + idS + '\',\'Served\')">🍽️ Mark Served</button>';
+      if (o.status === 'New') kvHtml += '<button class="btn btn-sm btn-warning" onclick="restUpdateStatus(\'' + idS + '\',\'Preparing\')">' + t('restaurant.kStartPrep') + '</button>';
+      if (o.status === 'Preparing') kvHtml += '<button class="btn btn-sm btn-success" onclick="restUpdateStatus(\'' + idS + '\',\'Ready\')">' + t('restaurant.kMarkReady') + '</button>';
+      if (o.status === 'Ready') kvHtml += '<button class="btn btn-sm btn-outline" onclick="restUpdateStatus(\'' + idS + '\',\'Served\')">' + t('restaurant.kMarkServed') + '</button>';
       kvHtml += '</div></div>';
     });
     kvEl.innerHTML = kvHtml;
@@ -7878,27 +8969,27 @@ window.martCheckout = function(paidBy) {
 // ===== MENU ITEMS CRUD =====
 function renderMenuItems() {
   document.getElementById('page-menuitems').innerHTML = `
-    <div class="card"><div class="card-header"><h2>Menu Items</h2></div><div class="card-body"><div id="menuItemsGrid"></div></div></div>
-    <div class="card"><div class="card-header"><h2>◆ Menu Items Change Log</h2></div><div class="card-body"><div id="menuItemsLogGrid"></div></div></div>`;
+    <div class="card"><div class="card-header"><h2>${t('pageTitle.menuitems')}</h2></div><div class="card-body"><div id="menuItemsGrid"></div></div></div>
+    <div class="card"><div class="card-header"><h2>${t('ui.changeLogChit', { title: t('logs.menuitems') })}</h2></div><div class="card-body"><div id="menuItemsLogGrid"></div></div></div>`;
   new XGrid('menuItemsGrid', {
     columns: [
-      {field:'name',label:'Name',editable:true,filterable:true},
-      {field:'category',label:'Category',editable:true,editType:'select',editOptions:getMenuCategories(),filterable:true},
-      {field:'price',label:'Price',format:v=>fmt$(v),editable:true,editType:'number',width:'80px'},
-      {field:'inventoryItemId',label:'Inventory stock',format:function(v) {
+      {field:'name',label:t('g.name'),editable:true,filterable:true},
+      {field:'category',label:t('g.category'),editable:true,editType:'select',editOptions:getMenuCategories(),filterable:true},
+      {field:'price',label:t('g.price'),format:v=>fmt$(v),editable:true,editType:'number',width:'80px'},
+      {field:'inventoryItemId',label:t('g.inventoryStock'),format:function(v) {
         if (!v) return '<span style="color:var(--text-light);font-size:0.82rem">—</span>';
         const inv = inventory.find(function(x) { return x.id === v; });
         return inv ? ('<span style="font-size:0.85rem" title="' + escapeHtml(inv.category) + '">' + escapeHtml(inv.itemName) + '</span>') : '<span style="color:var(--text-light)">Missing</span>';
       },filterable:true},
-      {field:'invQtyPerSale',label:'Units/serving',format:function(v) { var n = parseFloat(v); return (!isNaN(n) && n > 0) ? String(n) : '1'; },width:'88px'},
-      {field:'available',label:'Available',format:v=>v?'<span class="status status-active">Yes</span>':'<span class="status status-maintenance">No</span>',editable:true,editType:'select',editOptions:['true','false'],filterable:true,width:'90px'},
-      {field:'description',label:'Description',editable:true,filterable:true},
+      {field:'invQtyPerSale',label:t('g.unitsPerServing'),format:function(v) { var n = parseFloat(v); return (!isNaN(n) && n > 0) ? String(n) : '1'; },width:'88px'},
+      {field:'available',label:t('g.available'),format:v=>v?'<span class="status status-active">Yes</span>':'<span class="status status-maintenance">No</span>',editable:true,editType:'select',editOptions:['true','false'],filterable:true,width:'90px'},
+      {field:'description',label:t('g.description'),editable:true,filterable:true},
     ],
     data: menuItems,
     showSearch: true,
     summaryRow: {name:'label', price:'sum'},
-    emptyMessage: '🍽️ No menu items yet. Add your first menu item!',
-    onAdd: () => showAddMenuItem(), addLabel: 'Add Menu Item',
+    emptyMessage: t('empty.noMenuItems'),
+    onAdd: () => showAddMenuItem(), addLabelKey: 'common.addMenuItem',
     onImport: (rows) => { rows.forEach(r=>{if(!menuItems.find(m=>m.id===r.id))menuItems.push(r);}); save('menuItems',menuItems); logAudit('Import','MenuItem','Imported '+rows.length+' rows'); renderMenuItems(); },
     onEdit: (row, field, val) => {
       const m = menuItems.find(x=>x.id===row.id); if(!m) return;
@@ -7910,7 +9001,7 @@ function renderMenuItems() {
       toast(m.name+' updated');
     },
     actions: [
-      {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditMenuItem(id)},
+      {name:'edit',labelKey:'common.edit',cls:'btn-outline',handler:id=>showEditMenuItem(id)},
       {name:'delete',label:'✕',cls:'btn-danger',handler:id=>{
         if(!confirm('Delete this menu item?')) return;
         const m=menuItems.find(x=>x.id===id);
@@ -7976,26 +9067,26 @@ window.updateMenuItem = function(id) {
 // ===== STORE ITEMS CRUD =====
 function renderStoreItems() {
   document.getElementById('page-storeitems').innerHTML = `
-    <div class="card"><div class="card-header"><h2>Store Items</h2></div><div class="card-body"><div id="storeItemsGrid"></div></div></div>
-    <div class="card"><div class="card-header"><h2>◆ Store Items Change Log</h2></div><div class="card-body"><div id="storeItemsLogGrid"></div></div></div>`;
+    <div class="card"><div class="card-header"><h2>${t('pageTitle.storeitems')}</h2></div><div class="card-body"><div id="storeItemsGrid"></div></div></div>
+    <div class="card"><div class="card-header"><h2>${t('ui.changeLogChit', { title: t('logs.storeitems') })}</h2></div><div class="card-body"><div id="storeItemsLogGrid"></div></div></div>`;
   new XGrid('storeItemsGrid', {
     columns: [
-      {field:'name',label:'Name',editable:true,filterable:true},
-      {field:'category',label:'Category',editable:true,editType:'select',editOptions:getStoreCategories(),filterable:true},
-      {field:'price',label:'Price',format:v=>fmt$(v),editable:true,editType:'number',width:'80px'},
-      {field:'stock',label:'Stock',editable:true,editType:'number',width:'70px',filterable:true},
-      {field:'barcode',label:'Barcode',editable:true,filterable:true,width:'100px'},
+      {field:'name',label:t('g.name'),editable:true,filterable:true},
+      {field:'category',label:t('g.category'),editable:true,editType:'select',editOptions:getStoreCategories(),filterable:true},
+      {field:'price',label:t('g.price'),format:v=>fmt$(v),editable:true,editType:'number',width:'80px'},
+      {field:'stock',label:t('g.stock'),editable:true,editType:'number',width:'70px',filterable:true},
+      {field:'barcode',label:t('g.barcode'),editable:true,filterable:true,width:'100px'},
     ],
     data: storeItems,
     showSearch: true,
     summaryRow: {name:'label', price:'sum', stock:'sum'},
-    emptyMessage: '🛒 No store items yet. Add your first item!',
+    emptyMessage: t('empty.noStoreItems'),
     rowClass: function(row) {
       if ((parseInt(row.stock)||0) <= 0) return 'row-danger';
       if ((parseInt(row.stock)||0) <= 5) return 'row-warning';
       return '';
     },
-    onAdd: () => showAddStoreItem(), addLabel: 'Add Store Item',
+    onAdd: () => showAddStoreItem(), addLabelKey: 'common.addStoreItem',
     onImport: (rows) => { rows.forEach(r=>{if(!storeItems.find(s=>s.id===r.id))storeItems.push(r);}); save('storeItems',storeItems); logAudit('Import','StoreItem','Imported '+rows.length+' rows'); renderStoreItems(); },
     onEdit: (row, field, val) => {
       const s = storeItems.find(x=>x.id===row.id); if(!s) return;
@@ -8006,9 +9097,9 @@ function renderStoreItems() {
       toast(s.name+' updated');
     },
     actions: [
-      {name:'plus',label:'+1',cls:'btn-success',handler:id=>{ const s=storeItems.find(x=>x.id===id); if(s){s.stock=(parseInt(s.stock)||0)+1;save('storeItems',storeItems);logAudit('Update','Store Item',s.id,'+1 stock on '+s.name);renderStoreItems();} }},
-      {name:'minus',label:'-1',cls:'btn-warning',handler:id=>{ const s=storeItems.find(x=>x.id===id); if(s){s.stock=Math.max(0,(parseInt(s.stock)||0)-1);save('storeItems',storeItems);logAudit('Update','Store Item',s.id,'-1 stock on '+s.name);renderStoreItems();} }},
-      {name:'edit',label:'Edit',cls:'btn-outline',handler:id=>showEditStoreItem(id)},
+      {name:'plus',labelKey:'common.onePlus',cls:'btn-success',handler:id=>{ const s=storeItems.find(x=>x.id===id); if(s){s.stock=(parseInt(s.stock)||0)+1;save('storeItems',storeItems);logAudit('Update','Store Item',s.id,'+1 stock on '+s.name);renderStoreItems();} }},
+      {name:'minus',labelKey:'common.oneMinus',cls:'btn-warning',handler:id=>{ const s=storeItems.find(x=>x.id===id); if(s){s.stock=Math.max(0,(parseInt(s.stock)||0)-1);save('storeItems',storeItems);logAudit('Update','Store Item',s.id,'-1 stock on '+s.name);renderStoreItems();} }},
+      {name:'edit',labelKey:'common.edit',cls:'btn-outline',handler:id=>showEditStoreItem(id)},
       {name:'delete',label:'✕',cls:'btn-danger',handler:id=>{
         if(!confirm('Delete this store item?')) return;
         const s=storeItems.find(x=>x.id===id);
