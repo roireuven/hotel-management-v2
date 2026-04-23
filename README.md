@@ -10,7 +10,7 @@ Direct links from [GitHub Releases](https://github.com/roireuven/hotel-managemen
 
 | Build | Link |
 | --- | --- |
-| **Release (v6.8)** | [HotelManager-v2.0-release.apk](https://github.com/roireuven/hotel-management-v2/releases/download/v6.8/HotelManager-v2.0-release.apk) |
+| **Release (v8.4)** | [HotelManager-v8.4-release.apk](https://github.com/roireuven/hotel-management-v2/releases/download/v8.4/HotelManager-v8.4-release.apk) |
 | **Latest debug (CI, prerelease)** | [HotelManager-debug.apk](https://github.com/roireuven/hotel-management-v2/releases/download/apk-latest/HotelManager-debug.apk) |
 
 For other versions, open the [Releases](https://github.com/roireuven/hotel-management-v2/releases) page and download the `.apk` under **Assets**.
