@@ -7,12 +7,12 @@ Contents
 
 APK download
 ------------
-  The landing page downloads the release build from GitHub:
+  The landing page uses the latest GitHub Release asset:
 
-    https://github.com/roireuven/hotel-management-v2/releases/download/v8.4/HotelManager-v8.4-release.apk
+    https://github.com/roireuven/hotel-management-v2/releases/latest/download/HotelManager-v2.0-release.apk
 
-  Publish a Release tagged v8.4 on hotel-management-v2 and attach
-  HotelManager-v8.4-release.apk (signed build from your current sources).
+  New releases must include an asset with that exact name, or edit
+  index.html to match your uploaded .apk filename.
 
 GitHub Pages
 ------------
