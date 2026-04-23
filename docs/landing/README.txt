@@ -5,14 +5,14 @@ Contents
 --------
   index.html      Static landing page (Tailwind + Font Awesome via CDN)
 
-APK download
-------------
-  The landing page uses the latest GitHub Release asset:
+APK download (v9.0)
+-------------------
+  Landing + Download buttons use the tagged release:
 
-    https://github.com/roireuven/hotel-management-v2/releases/latest/download/HotelManager-v2.0-release.apk
+    https://github.com/roireuven/hotel-management-v2/releases/download/v9.0/HotelManager-v9.0-release.apk
 
-  New releases must include an asset with that exact name, or edit
-  index.html to match your uploaded .apk filename.
+  Create GitHub Release tag v9.0 and upload HotelManager-v9.0-release.apk,
+  or edit index.html to change the version and filename consistently.
 
 GitHub Pages
 ------------
